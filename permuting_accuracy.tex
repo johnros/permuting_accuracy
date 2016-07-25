@@ -13,8 +13,13 @@
 
 
 
+
 %% OPTIONAL MACRO DEFINITIONS
-\def\s{\sigma}
+%\def\s{\sigma}
+
+
+
+
 %%%%%%%%%%%%
 %% For PNAS Only:
 \url{www.pnas.org/cgi/doi/10.1073/pnas.0709640104}
@@ -27,7 +32,14 @@
 
 \begin{document}
 
-\title{A multivariate revisit to ``Sex beyond the genitalia''}
+%Sketch: 
+%- The conservativeness of the test. 
+%- What does it detect?
+%- Is it remedied in large samples?
+
+
+
+\title{On permutation testing of classification accuracy for signal detection}
 
 \author{Jonathan Rosenblatt \affil{1}{Ben-Gurion University of the Negev, Beer-Sheva, Israel}}
 
@@ -43,38 +55,56 @@ of the United States of America}
 \maketitle
 
 \begin{article}
-%\begin{abstract}
-%{TODO}
-%\end{abstract}
+
+\begin{abstract}
+[TODO]
+\end{abstract}
 
 
-The authors of \cite{joel_sex_2015} discuss the sexual dimorphism in human brains. 
-Using various data sets of imaging data and personality traits, they find that no single variable can separate human males from females. This, in contrast to genitalia related data, which easily separates genders. 
 
-In this comment, we wish to address a known phenomenon in multivariate statistics, by which groups may be perfectly separable, even if no single variable (in the original space) may do so. 
-Figure \ref{fig:overlap} demonstrates this phenomenon. Two groups are perfectly separable when considering both variables, but inseparable when considering only one-variable at a time.
-
-How can one assess the multivariate overlap between groups?
-One simple way, but certainly not unique, is by using a classification approach.
-If a binary classifier has good performance, then clearly, the groups have restricted overlap\footnote{Note the converse does not hold: the data may be well separated, even if a particular classifier is no better then random guessing.}.
-Put differently, a classifier can only achieve perfect classification if the data points are well separated.
-
-By fitting a linear SVM \cite{hastie_elements_2003} to the VBM data reported in \cite{joel_sex_2015} we achieve a cross-validated misclassification rate of about $80\%$ (depending on the random splits).
-We thus conclude that while the univariate brain attributes (voxel morphometry) are bad predictors of gender, the multivariate brain morphometry, is a very good predictor of gender.
-
-Given our empirical evidence and the multivariate intuition depicted above, we cannot help but disagree with the concluding statement in the abstract of \cite{joel_sex_2015}, by which 
-\begin{quote}
-\dots human brains do no belong to one of two distinct categories: male brain/female brain.
-\end{quote}
-or 
-\begin{quote}
-\dots brains do not fall into two classes,one typical of males and the other typical of females \dots
-\end{quote}
-A simple multivariate analysis using the same data, suggests quite the opposite: brains are indeed typically male or typically female.
-
-\keywords{gender differences | brain structure | multivariate statistics}
+\keywords{XXX | YYY | ZZZ }
 
 %\abbreviations{TODO}
+
+\section{Introduction}
+
+A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
+Given that the cross validated accuracy is known to by a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance. 
+Genetic examples include [TODO: elaborate]\cite{jiang_calculating_2008,radmacher_paradigm_2002-1}.
+Neuroscience examples include the recently popularized \emph{multivariate pattern analysis} (MVPA) \cite{kriegeskorte_information-based_2006,varoquaux_assessing_2016,golland_permutation_2003}.
+
+To fix ideas, we will adhere to a Neuroscientific example: 
+In [cite Gilron], the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
+According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+
+This same signal detection task can be also approached as a two-group multivariate test:
+Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
+A practitioner may then call upon a two-group Hotelling test \cite{fujikoshi_multivariate_2011}. 
+If the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of the Hotelling test can be called upon, such as  \cite{srivastava_testing_2013}.
+
+At this point, it becomes unclear which is the preferred avenue. 
+This question was indeed the subject of \cite{ramdas_classification_2016}, which compared the Hotelling test to the classification accuracy of \emph{Fisher's linear discriminant analysis} (LDA) \cite{hastie_elements_2003-1}. 
+Their asymptotic analysis concluded that methods are equivalent with respect to the order of convergence to a consistent test. The same authors did find that the methods differ in the constants governing the convergence.
+
+Those constants, are the focus of this contribution. In particular, which signal detection method is to be preferred in finite samples? 
+Our conclusion is quite simple: signal detection using multivariate tests almost always has more power than using the accuracy test statistic.
+
+The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
+Discrete test statistics are known to be conservative, since they cannot exhaust the permissible type $I$ error rates. 
+For the accuracy test statistic, the degree of discretization is governed by the number of samples. 
+in our running example [cite Gilron], the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
+This number of examples is not unusual if considering this is the number of subject in a genetic study, or the number of trial repeats in an fMRI brain scan. 
+
+The discretization problem is further augmented if the test statistic high highly concentrated. 
+For some intuition to this phenomenon consider the case of the train-accuracy (i.e., not cross validated) test statistic.
+Because the testing problem is high dimensional, the observed train accuracy will be high. But the same will occur in every permutation. The permutation accuracies will tend to concentrate around $1$ with a granularity depending on the sample size. 
+In a very high dimensional setup, the observed accuracy will be indistinguishable than any null permutation, and thus the permutation p-value will be $1$ almost surely. 
+This test will never reject the null, and can thus have no power. 
+
+In the following, we demonstrate this intution in simulation and ...?
+
+
+
 
 
 
@@ -97,19 +127,13 @@ A simple multivariate analysis using the same data, suggests quite the opposite:
 
 
 
-\bibliography{PNAS_III.bib}
-%\bibliographystyle{PNAS.bst}
-\bibliographystyle{abbrv}
+\bibliography{Permuting_Accuracy.bib}
+\bibliographystyle{PNAS.bst}
+%\bibliographystyle{abbvrnat}
 
 \end{article}
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{overlap}
-\caption{Univeriate overlap with multivariate seperation.}
-\label{fig:overlap}
-\end{figure}
 
 
 
