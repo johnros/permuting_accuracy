@@ -1,0 +1,118 @@
+%% PNAStwoS.tex
+%% Sample file to use for PNAS articles prepared in LaTeX
+%% For two column PNAS articles
+%% Version1: Apr 15, 2008
+%% Version2: Oct 04, 2013
+
+%% BASIC CLASS FILE
+\documentclass{pnastwo}
+
+%% ADDITIONAL OPTIONAL STYLE FILES Font specification
+
+%\usepackage{pnastwoF}
+
+
+
+%% OPTIONAL MACRO DEFINITIONS
+\def\s{\sigma}
+%%%%%%%%%%%%
+%% For PNAS Only:
+\url{www.pnas.org/cgi/doi/10.1073/pnas.0709640104}
+\copyrightyear{2008}
+\issuedate{Issue Date}
+\volume{Volume}
+\issuenumber{Issue Number}
+%\setcounter{page}{2687} %Set page number here if desired
+%%%%%%%%%%%%
+
+\begin{document}
+
+\title{A multivariate revisit to ``Sex beyond the genitalia''}
+
+\author{Jonathan Rosenblatt \affil{1}{Ben-Gurion University of the Negev, Beer-Sheva, Israel}}
+
+\contributor{Submitted to Proceedings of the National Academy of Sciences
+of the United States of America}
+
+%%%Newly updated.
+%%% If significance statement need, then can use the below command otherwise just delete it.
+%\significancetext{RJSM and ACAC developed the concept of the study. RJSM conducted the analysis, data interpretation and drafted the manuscript. AGB contributed to the development of the statistical methods, data interpretation and drafting of the manuscript.}
+
+
+
+\maketitle
+
+\begin{article}
+%\begin{abstract}
+%{TODO}
+%\end{abstract}
+
+
+The authors of \cite{joel_sex_2015} discuss the sexual dimorphism in human brains. 
+Using various data sets of imaging data and personality traits, they find that no single variable can separate human males from females. This, in contrast to genitalia related data, which easily separates genders. 
+
+In this comment, we wish to address a known phenomenon in multivariate statistics, by which groups may be perfectly separable, even if no single variable (in the original space) may do so. 
+Figure \ref{fig:overlap} demonstrates this phenomenon. Two groups are perfectly separable when considering both variables, but inseparable when considering only one-variable at a time.
+
+How can one assess the multivariate overlap between groups?
+One simple way, but certainly not unique, is by using a classification approach.
+If a binary classifier has good performance, then clearly, the groups have restricted overlap\footnote{Note the converse does not hold: the data may be well separated, even if a particular classifier is no better then random guessing.}.
+Put differently, a classifier can only achieve perfect classification if the data points are well separated.
+
+By fitting a linear SVM \cite{hastie_elements_2003} to the VBM data reported in \cite{joel_sex_2015} we achieve a cross-validated misclassification rate of about $80\%$ (depending on the random splits).
+We thus conclude that while the univariate brain attributes (voxel morphometry) are bad predictors of gender, the multivariate brain morphometry, is a very good predictor of gender.
+
+Given our empirical evidence and the multivariate intuition depicted above, we cannot help but disagree with the concluding statement in the abstract of \cite{joel_sex_2015}, by which 
+\begin{quote}
+\dots human brains do no belong to one of two distinct categories: male brain/female brain.
+\end{quote}
+or 
+\begin{quote}
+\dots brains do not fall into two classes,one typical of males and the other typical of females \dots
+\end{quote}
+A simple multivariate analysis using the same data, suggests quite the opposite: brains are indeed typically male or typically female.
+
+\keywords{gender differences | brain structure | multivariate statistics}
+
+%\abbreviations{TODO}
+
+
+
+
+
+
+%\begin{acknowledgments}
+%TODO
+%\end{acknowledgments}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bibliography{PNAS_III.bib}
+%\bibliographystyle{PNAS.bst}
+\bibliographystyle{abbrv}
+
+\end{article}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{overlap}
+\caption{Univeriate overlap with multivariate seperation.}
+\label{fig:overlap}
+\end{figure}
+
+
+
+\end{document}
+
+
