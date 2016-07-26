@@ -10,7 +10,7 @@
 %% ADDITIONAL OPTIONAL STYLE FILES Font specification
 
 %\usepackage{pnastwoF}
-
+\usepackage{todonotes}
 
 
 
@@ -200,16 +200,25 @@ Our intuition suggests that since more folds imply a less concentrated estimate,
 
 \section{Controlling the False Positive Rate}
 In the first of our battery of simulations we verify that various test statistics and permutation schemes control the type I error. 
-Figure [TODO] demonstrates that this is indeed the case. 
+Figure~\ref{fig:simulation_1} demonstrates that this is indeed the case. 
 All our candidate tests control the type I error, with varying degrees of conservativeness. 
 In particular:
 (a) if the folds are balanced or not,
 (b) if the labels are permuted or the features, 
 (c) if the test statistic is varied, 
 (d) if the regularization level of the support vector machine classifier (SVM) is varied,
-(e) if the number of folds is varied,
+(e) if the number of folds is varied.
 
 
+
+\begin{figure}
+\centering
+%\includegraphics[width=0.7\linewidth]{}
+\missingfigure[figwidth=6cm]{TODO}
+\caption{
+	\label{fig:simulation_1}
+	TODO}
+\end{figure}
 
 
 
