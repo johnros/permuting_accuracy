@@ -209,24 +209,26 @@ The subset of tests we will be comparing is collected for convenience in Table~\
 
 \begin{table}
 
-\begin{tabular}{c|c|c|c|c}
+\begin{tabular}{|l|c|c|c|r|}
 Name & Basis & CV & Accuracy & Parameters\\ 
 \hline
- & Hotelling & -- & -- & shrink=FALSE\\ 
- & Hotelling & -- & -- & shrink=TRUE \\ 
- & LDA & TRUE & accuracy &  -- \\ 
- & LDA & TRUE & z-accuracy & -- \\ 
- & LDA & FALSE & accuracy &  --\\ 
- & LDA & FALSE & z-accuracy &  --\\ 
- & SD & -- & -- & -- \\ 
- & SVM & TRUE & accuracy & cost=1e1 \\ 
- & SVM & TRUE & accuracy & cost=1e-1 \\ 
- & SVM & TRUE & z-accuracy & cost=1e1 \\ 
- & SVM & TRUE & z-accuracy & cost=1e-1 \\ 
- & SVM & FALSE & accuracy & cost=1e1 \\ 
- & SVM & FALSE & accuracy & cost=1e-1 \\ 
- & SVM & FALSE & z-accuracy & cost=1e1 \\ 
- & SVM & FALSE & z-accuracy & cost=1e-1 
+\hline
+Hotelling & Hotelling & -- & -- & shrink=FALSE\\ 
+Hotelling.shrink & Hotelling & -- & -- & shrink=TRUE \\ 
+lda.CV.1 & LDA & TRUE & accuracy &  -- \\ 
+lda.CV.2 & LDA & TRUE & z-accuracy & -- \\ 
+lda.noCV.1 & LDA & FALSE & accuracy &  --\\ 
+lda.noCV.2 & LDA & FALSE & z-accuracy &  --\\ 
+sd & SD & -- & -- & -- \\ 
+svm.CV.1 & SVM & TRUE & accuracy & cost=1e1 \\ 
+svm.CV.2 & SVM & TRUE & accuracy & cost=1e-1 \\ 
+svm.CV.3 & SVM & TRUE & z-accuracy & cost=1e1 \\ 
+svm.CV.4 & SVM & TRUE & z-accuracy & cost=1e-1 \\ 
+svm.noCV.1 & SVM & FALSE & accuracy & cost=1e1 \\ 
+svm.noCV.2 & SVM & FALSE & accuracy & cost=1e-1 \\ 
+svm.noCV.3 & SVM & FALSE & z-accuracy & cost=1e1 \\ 
+svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
+\hline
 \end{tabular} 
 \caption{TODO}
 \end{table}
