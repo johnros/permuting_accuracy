@@ -36,6 +36,7 @@
 %- The conservativeness of the test. 
 %- What does it detect?
 %- Is it remedied in large samples?
+%- Is conservativeness always there?
 
 
 
@@ -69,12 +70,12 @@ of the United States of America}
 \section{Introduction}
 
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
-Given that the cross validated accuracy is known to by a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance. 
+Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Genetic examples include [TODO: elaborate]\cite{jiang_calculating_2008,radmacher_paradigm_2002-1}.
 Neuroscience examples include the recently popularized \emph{multivariate pattern analysis} (MVPA) \cite{kriegeskorte_information-based_2006,varoquaux_assessing_2016,golland_permutation_2003}.
 
 To fix ideas, we will adhere to a Neuroscientific example: 
-In [cite Gilron], the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
+In \cite{gilron_quantifying_2016}, the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
 According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 
 This same signal detection task can be also approached as a two-group multivariate test:
@@ -92,24 +93,47 @@ Our conclusion is quite simple: signal detection using multivariate tests almost
 The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Discrete test statistics are known to be conservative, since they cannot exhaust the permissible type $I$ error rates. 
 For the accuracy test statistic, the degree of discretization is governed by the number of samples. 
-in our running example [cite Gilron], the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
+in our running example \cite{gilron_quantifying_2016}, the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
 This number of examples is not unusual if considering this is the number of subject in a genetic study, or the number of trial repeats in an fMRI brain scan. 
 
-The discretization problem is further augmented if the test statistic high highly concentrated. 
-For some intuition to this phenomenon consider the case of the train-accuracy (i.e., not cross validated) test statistic.
-Because the testing problem is high dimensional, the observed train accuracy will be high. But the same will occur in every permutation. The permutation accuracies will tend to concentrate around $1$ with a granularity depending on the sample size. 
-In a very high dimensional setup, the observed accuracy will be indistinguishable than any null permutation, and thus the permutation p-value will be $1$ almost surely. 
-This test will never reject the null, and can thus have no power. 
+The discretization effect is further augmented if the test statistic is highly concentrated. 
+For some intuition consider the usage of the train-accuracy test statistic (i.e., not cross validated).
+Because the testing problem is high dimensional, the observed train accuracy will be high. But the same will occur in every permutation. 
+The permutation accuracies will tend to concentrate around $1$ with a granularity depending on the sample size. 
+In a very high dimensional setup, the accuracy will be $1$ for the observed data, but also for any permuted data set. 
+The permutation p-value will thus be $1$ for almost all samples, and the null will never be rejected. 
 
-In the following, we demonstrate this intution in simulation and ...?
+In the following, we look into the conservativeness of signal detection using an the classification accuracy. 
+We start by establishing a best practice for permutation testing using the accuracy test statistic, 
 
-
-
-
-
-
+We discuss the problem characteristics that govern the magnitude of the conservativeness, and try to offer an intuition to the scope of the observation that a multivariate test should always be preferred over a classification approach. 
 
 
+
+\section{How to perform the permutation test?}
+
+To discuss the power of a permutation test with the accuracy, we need to establish some best practices for such a test. 
+The design of the test consists of the following choices: 
+\begin{description}
+\item [What test statistic?] What is the test statistic?
+\item [Cross validated or not?] Is the statistic cross validated or not?
+\item [What folding scheme?] Assuming the statistic is 
+\item [How many folds?]
+\end{description}
+
+
+
+\section{Power}
+fff
+
+
+
+
+
+\section{Discussion}
+% Not all problems are signal detection.
+% 
+fff
 
 %\begin{acknowledgments}
 %TODO
