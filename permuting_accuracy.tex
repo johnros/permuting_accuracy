@@ -142,8 +142,8 @@ The design of the test consists of the following choices:
 \begin{description}
 \item [What test statistic?] 
 \item [Cross validated or not?] Is the statistic cross validated or not?
-\item [Permute labels of features?] Should the $\outcomes$ be permuted or should the $\features$?
 \item [Refolding?] For a K-fold cross validated test statistic: is the data refolded in each permutation? 
+\item [Permute labels of features?] Should the $\outcomes$ be permuted or should the $\features$?
 \item [Balanced folding?] For a K-fold cross validated test statistic: is the data folding balanced? (a.k.a. stratified).
 \item [How many folds?] 
 
@@ -167,6 +167,13 @@ The underlying intuition is that if the exact same computation is performed over
 We will thus be considering both cross validated accuracies, and train accuracies as our test statistics. 
 
 
+\paragraph{Refolding?}
+The standard practice in neuroimaging is to refold the data after each permutation. 
+This is imperative if permuting labels while aiming at balanced data folds. 
+This is not, however, imperative in general. 
+In this work, we will adhere however to the standard practice of refolding the data within each permutation.
+
+
 \paragraph{Permute labels of features?}
 While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
 As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
@@ -174,8 +181,6 @@ After a label permutation, the folds will probably not be balanced, and will thu
 If the features are permuted, then the labels conserve their original fold assignments, and the data need not be refolded. 
 
 
-\paragraph{Refolding?}
-The standard practice, at least in neuroimaging, is to refold the data after each permutation. 
 
 
 
