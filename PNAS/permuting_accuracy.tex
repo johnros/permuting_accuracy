@@ -1,0 +1,373 @@
+%% PNAStwoS.tex
+%% Sample file to use for PNAS articles prepared in LaTeX
+%% For two column PNAS articles
+%% Version1: Apr 15, 2008
+%% Version2: Oct 04, 2013
+
+%% BASIC CLASS FILE
+\documentclass[9pt,twoside]{pnas-new}
+%\documentclass[9pt,twocolumn,twoside,lineno]{pnas-new}
+%\documentclass{pnas-new}
+
+
+\templatetype{pnasresearcharticle} % Choose template 
+% {pnasresearcharticle} = Template for a two-column research article
+% {pnasmathematics} = Template for a one-column mathematics article
+% {pnasinvited} = Template for a PNAS invited submission
+
+%% ADDITIONAL OPTIONAL STYLE FILES Font specification
+
+\usepackage{amssymb,amsfonts,amsmath}
+\usepackage{todonotes}
+
+
+
+%% OPTIONAL MACRO DEFINITIONS
+%\def\s{\sigma}
+\newcommand{\set}[1]{\{ #1 \}} % A set
+\newcommand{\indicator}[1]{I_{\set{#1}}} % The indicator function.
+\newcommand{\reals}{\mathbb{R}} % the set of real numbers
+\newcommand{\features}{x} % The feature space
+\newcommand{\outcomes}{y} % The feature space
+\newcommand{\featureS}{\mathcal{X}} % The feature space
+\newcommand{\outcomeS}{\mathcal{Y}} % The feature space
+\newcommand{\hyp}{f} % A hypothesis
+\newcommand{\hypEstim}{\hat{\hyp}} % A hypothesis
+\newcommand{\hypclass}{\mathcal{F}}
+\newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
+\newcommand{\acc}{T^{acc}} 
+\newcommand{\dominant}{\hat{p}_{max}}
+
+
+\title{Template for preparing your research report submission to PNAS using Overleaf}
+
+% Use letters for affiliations, numbers to show equal authorship (if applicable) and to indicate the corresponding author
+\author[a,c,1]{Author One}
+\author[b,1,2]{Author Two} 
+\author[a]{Author Three}
+
+\affil[a]{Affiliation One}
+\affil[b]{Affiliation Two}
+\affil[c]{Affiliation Three}
+
+% Please give the surname of the lead author for the running footer
+\leadauthor{Rosenblatt} 
+
+% Please add here a significance statement to explain the relevance of your work
+\significancestatement{Authors must submit a 120-word maximum statement about the significance of their research paper written at a level understandable to an undergraduate educated scientist outside their field of speciality. The primary goal of the Significance Statement is to explain the relevance of the work in broad context to a broad readership. The Significance Statement appears in the paper itself and is required for all research papers.}
+
+% Please include corresponding author, author contribution and author declaration information
+\authorcontributions{Please provide details of author contributions here.}
+\authordeclaration{Please declare any conflict of interest here.}
+\equalauthors{\textsuperscript{1}A.O.(Author One) and A.T. (Author Two) contributed equally to this work (remove if not applicable).}
+\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: author.two\@email.com}
+
+% Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
+%\keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
+
+
+
+
+
+
+\begin{abstract}
+[TODO]
+\end{abstract}
+
+\dates{This manuscript was compiled on \today}
+\doi{\url{www.pnas.org/cgi/doi/10.1073/pnas.XXXXXXXXXX}}
+
+
+\begin{document}
+% Optional adjustment to line up main text (after abstract) of first page with line numbers, when using both lineno and twocolumn options.
+% You should only change this length when you've finalised the article contents.
+\verticaladjustment{-2pt}
+
+\maketitle
+\thispagestyle{firststyle}
+\ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
+
+% If your first paragraph (i.e. with the \dropcap) contains a list environment (quote, quotation, theorem, definition, enumerate, itemize...), the line after the list may have some extra indentation. If this is the case, add \parshape=0 to the end of the list environment.
+\dropcap{T}his PNAS journal template is provided to help you write your work in the correct journal format.  Instructions for use are provided below.
+
+Note: please start your introduction without including the word ``Introduction'' as a section heading (except for math articles in the Physical Sciences section); this heading is implied in the first paragraphs. 
+
+
+
+
+%Sketch: 
+%- The conservativeness of the test. 
+%- What does it detect?
+%- Is it remedied in large samples?
+%- Is conservativeness always there?
+
+
+
+%%%% Introduction %%%
+
+A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
+Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
+Genetic examples include [TODO: elaborate]\cite{jiang_calculating_2008,radmacher_paradigm_2002-1}.
+Neuroscience examples include \emph{multivariate pattern analysis} (MVPA) \cite{kriegeskorte_information-based_2006,varoquaux_assessing_2016,golland_permutation_2003}.
+MVPA has become a very popular methodology, as the $956$ citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} of \cite{kriegeskorte_information-based_2006} may attest.
+
+
+To fix ideas, we will adhere to a Neuroscientific example: 
+In \cite{gilron_quantifying_2016}, the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
+According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+We call this an \emph{accuracy test}.
+
+This same signal detection task can be also approached as a two-group multivariate test:
+Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
+A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \cite{fujikoshi_multivariate_2011}.
+Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013}.
+In contrast to \emph{accuracy tests}, we call these \emph{location tests}.
+
+At this point, it becomes unclear which is the preferred test. 
+This question was indeed the subject of \cite{ramdas_classification_2016}, which compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} (LDA) \cite{hastie_elements_2003-1}. 
+Using an asymptotic analysis, the authors of \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they may differ in constants. 
+
+Those constants, governing the power of the tests, are the focus of this contribution. 
+In particular, which test is to be preferred in finite samples? 
+Our conclusion is quite simple: {\em location tests almost always have more power than accuracy tests}.
+
+The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
+Discrete test statistics are known to be conservative, since they cannot exhaust the permissible type $I$ error rates. 
+In accuracy tests, the degree of discretization of the accuracy statistic is governed by the number of samples. 
+In our running example \cite{gilron_quantifying_2016}, the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
+This number of examples is not unusual if considering this is the number of subject in a genetic study, or the number of trial repeats in an fMRI brain scan. 
+
+The discretization effect is aggravated if the test statistic is highly concentrated. 
+For an intuition consider the usage of the train-accuracy test statistic (i.e., not cross validated).
+Because the testing problem is high dimensional, the observed train accuracy will be close to $1$. 
+The same will occur in every permutation, for the same reason. 
+The permutation p-value will thus be $1$ for almost all samples, the null will never be rejected, and the test will have no power. 
+
+Given these considerations, it is quite surprising that signal detection using accuracy tests is so popular in neuroscience and genetics. 
+In the following, we quantify the power loss to be expected in typical studies, and identify the problems' characteristics that govern its severity. 
+We start by establishing a best practice for permutation testing using the accuracy test statistic, 
+We also discuss the problem characteristics that govern the magnitude of the conservativeness, and try to offer an intuition to the scope of the observation that a multivariate test should always be preferred over a classification approach. 
+
+
+
+
+
+
+%%%% Section %%%%
+\section{Problem setup}
+\label{sec:problem_setup}
+
+Adhering to our neuroscientific example, we now formalize terminology and notation. 
+Let $\outcomes \in \outcomeS$ be a class encoding. In our vocal/non-vocal example, using effect coding, we have $\outcomeS=\set{-1,1}$.
+Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
+In our vocal/non-vocal example $p$ is governed by the number of voxels in a regions, which is the number of voxels in each brain region tested. We thus have $\featureS=\reals^{27}$. 
+
+Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., the \emph{testing} approach to localization amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$.
+I.e., the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
+The \emph{classification} approach to the localization problem amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
+The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction $\acc_{\hypEstim}:=\expect{\indicator{\hypEstim(x)=y}}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
+
+
+
+\subsection{Candidate Tests}
+\label{sec:considerations}
+
+The design of a permutation test using the prediction accuracy, requires the following design choices: 
+\begin{description}
+\item [What test statistic?] 
+\item [Cross validated or not?] Is the statistic cross validated or not?
+\item [Refolding?] For a K-fold cross validated test statistic: is the data refolded in each permutation? 
+\item [Permute labels of features?] Should the $\outcomes$ be permuted or should the $\features$?
+\item [Balanced folding?] For a K-fold cross validated test statistic: is the data folding balanced? (a.k.a. stratified).
+\item [How many folds?] 
+
+We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
+
+
+\paragraph{What test statistic?}
+Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
+Then again, very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. We can thus consider some estimate of $|\acc_{\hypEstim}-0.5|$ as the test statistic.
+This, however, implies that if the classes are identical, random guessing has a $0.5$ accuracy. This is not true if the classes are not balanced. 
+The chance level in which case is the prevalence of the dominant class, we denote by $\dominant$.
+This suggests the following test statistic $|\acc_{\hypEstim}-\dominant|$.
+Since we will latter be aggregating these statistic over random data foldings, where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
+We thus also consider a z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
+
+
+\paragraph{Cross validated or not?}
+Were we interested in an unbiased estimator of the prediction error, there is no question that some validation is in order. 
+Since we are merely interested in detecting a difference between groups, a biased error estimate is not an issue provided that it is consistent over all permutations. 
+The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
+We will thus be considering both cross validated accuracies, and train accuracies as our test statistics. 
+
+
+\paragraph{Refolding?}
+The standard practice in neuroimaging is to refold the data after each permutation [TODO:ref].
+This is imperative if permuting labels while aiming at balanced data folds. 
+This is not, however, imperative in general. 
+In this work, we will adhere to the standard practice of refolding the data within each permutation.
+
+
+\paragraph{Permute labels of features?}
+While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
+As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
+After a label permutation, the folds will probably not be balanced, and will thus have to be refolded. 
+If the features are permuted, then the labels conserve their original fold assignments, and the data need not be refolded. 
+Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
+We thus adhere to the more common, albeit less efficient practice, of permuting labels. 
+
+
+\paragraph{Balanced folding?}
+The standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified)[TODO: ref].
+This is well justified when aiming at unbiased accuracy estimation. 
+This also simplifies matter when aiming at signal detection, as can be seen from the above discussion of the appropriate test statistic. 
+Then again, it may complicate matters, as can be seen from the above discussion on label versus feature permutation. 
+In general , it is not imperative in general, and we will indeed be comparing the effect of balanced foldings versus unbalanced. 
+We will thus report results with both balanced and unbalanced data foldings. 
+
+
+\paragraph{How many folds?}
+Different authors suggest different rules for the number of folds. 
+We will be varying the number of folds, since it will affect the concentration of the estimated accuracy, which will have a crucial effect on the conservativeness of the permutation test. 
+Our intuition suggests that since more folds imply a less concentrated estimate, then leave-one-out should be the less conservative, and 2-fold should be the most conservative. 
+
+\end{description}
+
+The reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
+The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
+
+
+\begin{table}[h]
+\centering
+\caption{TODO: explain table + fix caption}
+\label{tab:collected}
+\begin{tabular}{l|c|c|c|r}
+Name & Basis & CV & Accuracy & Parameters\\ 
+\hline
+\hline
+Hotelling & Hotelling & -- & -- & shrink=FALSE\\ 
+Hotelling.shrink & Hotelling & -- & -- & shrink=TRUE \\ 
+lda.CV.1 & LDA & TRUE & accuracy &  -- \\ 
+lda.CV.2 & LDA & TRUE & z-accuracy & -- \\ 
+lda.noCV.1 & LDA & FALSE & accuracy &  --\\ 
+lda.noCV.2 & LDA & FALSE & z-accuracy &  --\\ 
+sd & SD & -- & -- & -- \\ 
+svm.CV.1 & SVM & TRUE & accuracy & cost=1e1 \\ 
+svm.CV.2 & SVM & TRUE & accuracy & cost=1e-1 \\ 
+svm.CV.3 & SVM & TRUE & z-accuracy & cost=1e1 \\ 
+svm.CV.4 & SVM & TRUE & z-accuracy & cost=1e-1 \\ 
+svm.noCV.1 & SVM & FALSE & accuracy & cost=1e1 \\ 
+svm.noCV.2 & SVM & FALSE & accuracy & cost=1e-1 \\ 
+svm.noCV.3 & SVM & FALSE & z-accuracy & cost=1e1 \\ 
+svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
+\end{tabular} 
+\end{table}
+
+
+
+
+
+
+
+%%%% Section %%%%
+\section{Controlling the False Positive Rate}
+\label{sec:type_i}
+
+In the first of our battery of simulations we verify that various test statistics and permutation schemes control the type I error. 
+Figure~\ref{fig:simulation_1} demonstrates that this is indeed the case. 
+All our candidate tests control the type I error, with varying degrees of conservativeness. 
+In particular:
+(a) if the folds are balanced or not,
+(b) if the labels are permuted or the features, 
+(c) if the test statistic is varied, 
+(d) if the regularization level of the support vector machine classifier (SVM) is varied,
+(e) if the number of folds is varied.
+
+
+
+\begin{figure}[ht]
+\centering
+%\includegraphics[width=0.7\linewidth]{}
+\missingfigure[figwidth=6cm]{TODO}
+\caption{
+	\label{fig:simulation_1}
+	TODO}
+\end{figure}
+
+
+
+
+%%%% Section %%%%
+\section{Power}
+\label{sec:power}
+
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- at least when comparing the power of the various classifiers and multivariate tests. 
+The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
+On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
+
+As seen in Figure~\ref{fig:simulation_2}, the use of the accuracy test statistic for signal detection, is underpowered compared to a multivariate test. 
+It is, however, too early to conclude that a multivariate test is to be preferred over the accuracy statistic, as we will later discuss. 
+
+\begin{figure}[ht]
+\centering
+%\includegraphics[width=0.7\linewidth]{}
+\missingfigure[figwidth=6cm]{TODO}
+\caption{
+	\label{fig:simulation_2}
+	TODO}
+\end{figure}
+
+
+
+
+
+\section{A Neuroimaging Example}
+\label{sec:example}
+
+In the previous sections, we have established using simulations that 
+
+% Power of SVM versus SD.
+% Difficulties of implementation.
+
+
+
+
+%%%% Section %%%%
+\section{Discussion}
+\label{sec:discussion}
+
+% Not all problems are signal detection.
+% Implementation difficulty with discrete test statistics.
+% Signal not in location.
+% Heavy tails.
+
+
+fff
+
+
+
+%\begin{acknowledgments}
+%TODO
+%\end{acknowledgments}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bibliography{Permuting_Accuracy.bib}
+%\bibliographystyle{PNAS.bst}
+\bibliographystyle{pnas2011.bst}
+%\bibliographystyle{abbvrnat}
+
+
+\end{document}
+
+
