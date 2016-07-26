@@ -142,6 +142,7 @@ The design of the test consists of the following choices:
 \begin{description}
 \item [What test statistic?] 
 \item [Cross validated or not?] Is the statistic cross validated or not?
+\item [Permute labels of features?] Should the $\outcomes$ be permuted or should the $\features$?
 \item [Refolding?] For a K-fold cross validated test statistic: is the data refolded in each permutation? 
 \item [Balanced folding?] For a K-fold cross validated test statistic: is the data folding balanced? (a.k.a. stratified).
 \item [How many folds?] 
@@ -160,8 +161,23 @@ We thus also consider a z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\
 
 
 \paragraph{Cross validated or not?}
+Were we interested in an unbiased estimator of the prediction error, there is no question that some validation is in order. 
+Since we are merely interested in detecting a difference between groups, a biased error estimate is not an issue provided that it is consistent over all permutations. 
+The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
+We will thus be considering both cross validated accuracies, and train accuracies as our test statistics. 
+
+
+\paragraph{Permute labels of features?}
+While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
+As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
+After a label permutation, the folds will probably not be balanced, and will thus have to be refolded. 
+If the features are permuted, then the labels conserve their original fold assignments, and the data need not be refolded. 
+
 
 \paragraph{Refolding?}
+The standard practice, at least in neuroimaging, is to refold the data after each permutation. 
+
+
 
 \paragraph{Balanced folding?}
 
