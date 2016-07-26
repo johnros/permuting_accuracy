@@ -26,6 +26,7 @@
 \newcommand{\hyp}{f} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
+\newcommand{\acc}{T^{acc}} 
 
 
 
@@ -127,7 +128,7 @@ In our vocal/non-vocal example $p$ is governed by the number of voxels in a regi
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., the \emph{testing} approach to localization amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$.
 I.e., the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 The \emph{classification} approach to the localization problem amounts to learning a predictive model $\hat{\hyp}(\features)$ from some assumed model class $\hat{\hyp}\in \hypclass$. 
-The prediction accuracy is defined as the probability of a given classifier $\hat{\hyp}$ of making a correct prediction $\expect{\indicator{\hat{\hyp}(x)=y}}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
+The prediction accuracy, denoted $\acc_{\hat{\hyp}}$, is defined as the probability of a given classifier $\hat{\hyp}$ of making a correct prediction $\acc_{\hat{\hyp}}:=\expect{\indicator{\hat{\hyp}(x)=y}}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
 
 
 
@@ -135,7 +136,7 @@ The prediction accuracy is defined as the probability of a given classifier $\ha
 
 \section{How to perform the permutation test?}
 
-To discuss the power of a permutation test with the accuracy, we need to establish some best practices for such a test. 
+To discuss the power of a permutation test using the accuracy test statistic, we need to establish some best practices for such a test. 
 The design of the test consists of the following choices: 
 \begin{description}
 \item [What test statistic?] 
