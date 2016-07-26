@@ -5,8 +5,15 @@
 %% Version2: Oct 04, 2013
 
 %% BASIC CLASS FILE
-\documentclass{pnastwo}
+%\documentclass{pnastwo} $ old style
+%\documentclass[9pt,twocolumn,twoside,lineno]{pnas-new}
+\documentclass{pnas-new}
 
+
+\templatetype{pnasresearcharticle} % Choose template 
+% {pnasresearcharticle} = Template for a two-column research article
+% {pnasmathematics} = Template for a one-column mathematics article
+% {pnasinvited} = Template for a PNAS invited submission
 
 %% ADDITIONAL OPTIONAL STYLE FILES Font specification
 
@@ -32,46 +39,53 @@
 \newcommand{\dominant}{\hat{p}_{max}}
 
 
-%%%%%%%%%%%%
-%% For PNAS Only:
-\url{www.pnas.org/cgi/doi/10.1073/pnas.0709640104}
-\copyrightyear{2008}
-\issuedate{Issue Date}
-\volume{Volume}
-\issuenumber{Issue Number}
-%\setcounter{page}{2687} %Set page number here if desired
-%%%%%%%%%%%%
+\title{Template for preparing your research report submission to PNAS using Overleaf}
+
+% Use letters for affiliations, numbers to show equal authorship (if applicable) and to indicate the corresponding author
+\author[a,c,1]{Author One}
+\author[b,1,2]{Author Two} 
+\author[a]{Author Three}
+
+\affil[a]{Affiliation One}
+\affil[b]{Affiliation Two}
+\affil[c]{Affiliation Three}
+
+% Please give the surname of the lead author for the running footer
+\leadauthor{Lead author last name} 
+
+% Please add here a significance statement to explain the relevance of your work
+\significancestatement{Authors must submit a 120-word maximum statement about the significance of their research paper written at a level understandable to an undergraduate educated scientist outside their field of speciality. The primary goal of the Significance Statement is to explain the relevance of the work in broad context to a broad readership. The Significance Statement appears in the paper itself and is required for all research papers.}
+
+% Please include corresponding author, author contribution and author declaration information
+\authorcontributions{Please provide details of author contributions here.}
+\authordeclaration{Please declare any conflict of interest here.}
+\equalauthors{\textsuperscript{1}A.O.(Author One) and A.T. (Author Two) contributed equally to this work (remove if not applicable).}
+\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: author.two\@email.com}
+
+% Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
+\keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
+
+
+
+
+
+
+\begin{abstract}
+[TODO]
+\end{abstract}
+\dates{This manuscript was compiled on \today}
+\doi{\url{www.pnas.org/cgi/doi/10.1073/pnas.XXXXXXXXXX}}
+
+
 
 \begin{document}
+\maketitle
 
 %Sketch: 
 %- The conservativeness of the test. 
 %- What does it detect?
 %- Is it remedied in large samples?
 %- Is conservativeness always there?
-
-
-
-\title{On permutation testing of classification accuracy for signal detection}
-
-\author{Jonathan Rosenblatt \affil{1}{Ben-Gurion University of the Negev, Beer-Sheva, Israel}}
-
-\contributor{Submitted to Proceedings of the National Academy of Sciences
-of the United States of America}
-
-
-\maketitle
-
-\begin{article}
-
-\begin{abstract}
-[TODO]
-\end{abstract}
-
-
-
-%\keywords{TODO | TODO | TODO}
-%\abbreviations{TODO}
 
 
 
@@ -336,10 +350,10 @@ fff
 
 
 \bibliography{Permuting_Accuracy.bib}
-\bibliographystyle{PNAS.bst}
+%\bibliographystyle{PNAS.bst}
+\bibliographystyle{pnas2011.bst}
 %\bibliographystyle{abbvrnat}
 
-\end{article}
 
 \end{document}
 
