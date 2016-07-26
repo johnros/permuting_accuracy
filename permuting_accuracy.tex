@@ -291,47 +291,7 @@ The data was kindly made available by the authors at the OpenfMRI website\footno
 We adhere to the MVPA analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 For completeness we detail the stages of the analysis:
 
-\begin{algorithm}[H]
- \KwData{fMRI scans of $20$ subjects, experimental design.}
- \KwResult{Regions encoding differences between stimuli.}
-  \For{$i \in 1,\dots\,m$}{
- 	 \For{$v \in \text{brain volume}$}{
- 	 
- 	 }
-  }
-  $T_i \leftarrow $ test statistic for subject $i$ \;
- $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
- average test statistic for over subjects\;
- \For{$i \in \text{number of permutation}$}{
-	 \For{$v \in \text{brain volume}$}{
-	 
-	 }
- }
- 
-\caption{Compute group statistic}
-\end{algorithm}
 
-
-\begin{algorithm}[H]
-\caption{Permutation inference}
- \KwData{fMRI scans of $20$ subjects, experimental design.}
- \KwResult{Regions encoding differences between stimuli.}
-  \For{$i \in 1,\dots\,m$}{
- 	 \For{$v \in \text{brain volume}$}{
- 	 
- 	 }
-  }
-  $T_i \leftarrow $ test statistic for subject $i$ \;
- $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
- average test statistic for over subjects\;
- \For{$i \in \text{number of permutation}$}{
-	 \For{$v \in \text{brain volume}$}{
-	 
-	 }
- }
- 
-
-\end{algorithm}
 
 
 
@@ -384,6 +344,57 @@ fff
 \bibliographystyle{abbrvnat}
 \bibliography{Permuting_Accuracy.bib}
 
+\appendix
+
+
+\newpage
+
+\section{Analysis pipeline}
+\label{apx:analysis}
+
+Here is the analysis pipeline of \cite{stelzer_statistical_2013} we for the auditory data in \cite{gilron_quantifying_2016}.
+Denoting by 
+$i=1,\dots,I$ the subject index, and 
+$v=1,\dots,V$ the voxel index.
+Since regions\footnote{\emph{searchlight} or \emph{sphere} in the MVPA parlance} are centred around a unique voxel, the voxel index $v$ also serves as a unique region index.
+Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is compared to its permutation null distribution computed by Algorithm~\ref{algo:permutation}.
+
+
+\begin{algorithm}[H]
+\caption{Compute a group parametric map.}
+\label{algo:statistic}
+
+ \KwData{fMRI scans, and experimental design.}
+ \KwResult{Brain map of group statistics: $\{\bar{T}_v\}_{v=1}^V$}
+	 \For{$v \in 1,\dots,V$}{
+		 \For{$i \in 1,\dots,I$}{
+			 $T_{i,v} \leftarrow$ observed test statistic for subject $i$ in a region centered at $v$.
+			 } 	  
+	  	 $\bar{T}_{v} \leftarrow \frac{1}{I}\sum_{i=1}^I T_{i,v}$.
+ 	 }
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+\caption{Compute a permutation p-value map.} 
+\label{algo:permutation}
+
+ \KwData{fMRI scans of $20$ subjects, experimental design.}
+ \KwResult{Regions encoding differences between stimuli.}
+  \For{$i \in 1,\dots\,m$}{
+ 	 \For{$v \in \text{brain volume}$}{
+ 	 
+ 	 }
+  }
+  $T_i \leftarrow $ test statistic for subject $i$ \;
+ $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
+ average test statistic for over subjects\;
+ \For{$i \in \text{number of permutation}$}{
+	 \For{$v \in \text{brain volume}$}{
+	 
+	 }
+ }
+\end{algorithm}
 
 
 
