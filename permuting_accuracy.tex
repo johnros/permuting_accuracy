@@ -171,7 +171,7 @@ We will thus be considering both cross validated accuracies, and train accuracie
 The standard practice in neuroimaging is to refold the data after each permutation [TODO:ref].
 This is imperative if permuting labels while aiming at balanced data folds. 
 This is not, however, imperative in general. 
-In this work, we will adhere however to the standard practice of refolding the data within each permutation.
+In this work, we will adhere to the standard practice of refolding the data within each permutation.
 
 
 \paragraph{Permute labels of features?}
@@ -179,6 +179,8 @@ While seemingly identical, the compounding of permutations with data foldings re
 As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
 After a label permutation, the folds will probably not be balanced, and will thus have to be refolded. 
 If the features are permuted, then the labels conserve their original fold assignments, and the data need not be refolded. 
+Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
+We thus adhere to the more common, albeit less efficient practice, of permuting labels. 
 
 
 \paragraph{Balanced folding?}
