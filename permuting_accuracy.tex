@@ -7,9 +7,10 @@
 %% BASIC CLASS FILE
 \documentclass{pnastwo}
 
+
 %% ADDITIONAL OPTIONAL STYLE FILES Font specification
 
-%\usepackage{pnastwoF}
+\usepackage{amssymb,amsfonts,amsmath}
 \usepackage{todonotes}
 
 
@@ -121,6 +122,11 @@ We start by establishing a best practice for permutation testing using the accur
 We discuss the problem characteristics that govern the magnitude of the conservativeness, and try to offer an intuition to the scope of the observation that a multivariate test should always be preferred over a classification approach. 
 
 
+
+
+
+
+%%%% Section %%%%
 \section{Problem setup}
 \label{sec:problem_setup}
 
@@ -138,6 +144,9 @@ The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probabili
 
 
 
+
+
+%%%% Section %%%%
 \section{How to Perform the Permutation Test? False positive Considerations}
 \label{sec:considerations}
 
@@ -206,10 +215,11 @@ Our intuition suggests that since more folds imply a less concentrated estimate,
 The reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
 The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
 
-
-\begin{table}
-
-\begin{tabular}{|l|c|c|c|r|}
+\begin{table}[h]
+\centering
+\caption{TODO: explain table + fix caption}
+\label{tab:collected}
+\begin{tabular}{l|c|c|c|r}
 Name & Basis & CV & Accuracy & Parameters\\ 
 \hline
 \hline
@@ -228,12 +238,16 @@ svm.noCV.1 & SVM & FALSE & accuracy & cost=1e1 \\
 svm.noCV.2 & SVM & FALSE & accuracy & cost=1e-1 \\ 
 svm.noCV.3 & SVM & FALSE & z-accuracy & cost=1e1 \\ 
 svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
-\hline
 \end{tabular} 
-\caption{TODO}
 \end{table}
 
 
+
+
+
+
+
+%%%% Section %%%%
 \section{Controlling the False Positive Rate}
 \label{sec:type_i}
 
@@ -261,18 +275,29 @@ In particular:
 
 
 
-
+%%%% Section %%%%
 \section{Power}
 \label{sec:power}
 
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- at least when comparing the power of the various classifiers and multivariate tests. 
 The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
-On the other hand, the results of Section~\ref{sec:considerations} suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
+On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
+
+As seen in Figure~\ref{fig:simulation_2}, the use of the accuracy test statistic for signal detection, is underpowered compared to a multivariate test. 
+It is, however, too early to conclude that a multivariate test is to be preferred over the accuracy statistic, as we will later discuss. 
+
+\begin{figure}[ht]
+\centering
+%\includegraphics[width=0.7\linewidth]{}
+\missingfigure[figwidth=6cm]{TODO}
+\caption{
+	\label{fig:simulation_2}
+	TODO}
+\end{figure}
 
 
 
-
-
+%%%% Section %%%%
 \section{Discussion}
 \label{sec:discussion}
 
@@ -305,10 +330,6 @@ fff
 %\bibliographystyle{abbvrnat}
 
 \end{article}
-
-
-
-
 
 \end{document}
 
