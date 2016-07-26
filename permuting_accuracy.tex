@@ -79,6 +79,7 @@ of the United States of America}
 %\abbreviations{TODO}
 
 \section{Introduction}
+\label{sec:introduction}
 
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
@@ -121,6 +122,8 @@ We discuss the problem characteristics that govern the magnitude of the conserva
 
 
 \section{Problem setup}
+\label{sec:problem_setup}
+
 Adhering to our neuroscientific example, we now formalize terminology and notation. 
 Let $\outcomes \in \outcomeS$ be a class encoding. In our vocal/non-vocal example, using effect coding, we have $\outcomeS=\set{-1,1}$.
 Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
@@ -135,7 +138,8 @@ The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probabili
 
 
 
-\section{How to perform the permutation test?}
+\section{How to Perform the Permutation Test? False positive Considerations}
+\label{sec:considerations}
 
 To discuss the power of a permutation test using the accuracy test statistic, we need to establish some best practices for such a test. 
 The design of the test consists of the following choices: 
@@ -189,6 +193,7 @@ This is well justified when aiming at unbiased accuracy estimation.
 This also simplifies matter when aiming at signal detection, as can be seen from the above discussion of the appropriate test statistic. 
 Then again, it may complicate matters, as can be seen from the above discussion on label versus feature permutation. 
 In general , it is not imperative in general, and we will indeed be comparing the effect of balanced foldings versus unbalanced. 
+We will thus report results with both balanced and unbalanced data foldings. 
 
 
 \paragraph{How many folds?}
@@ -200,7 +205,10 @@ Our intuition suggests that since more folds imply a less concentrated estimate,
 
 
 
+
 \section{Controlling the False Positive Rate}
+\label{sec:type_i}
+
 In the first of our battery of simulations we verify that various test statistics and permutation schemes control the type I error. 
 Figure~\ref{fig:simulation_1} demonstrates that this is indeed the case. 
 All our candidate tests control the type I error, with varying degrees of conservativeness. 
@@ -213,7 +221,7 @@ In particular:
 
 
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 %\includegraphics[width=0.7\linewidth]{}
 \missingfigure[figwidth=6cm]{TODO}
@@ -227,13 +235,19 @@ In particular:
 
 
 \section{Power}
-fff
+\label{sec:power}
+
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power. 
+The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
+On the other hand, the results of Section~\ref{sec:considerations} suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
 
 
 
 
 
 \section{Discussion}
+\label{sec:discussion}
+
 % Not all problems are signal detection.
 % Implementation difficulty with discrete test statistics.
 
