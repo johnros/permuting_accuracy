@@ -5,9 +5,9 @@
 %% Version2: Oct 04, 2013
 
 %% BASIC CLASS FILE
-%\documentclass{pnastwo} $ old style
+\documentclass[9pt,twoside]{pnas-new}
 %\documentclass[9pt,twocolumn,twoside,lineno]{pnas-new}
-\documentclass{pnas-new}
+%\documentclass{pnas-new}
 
 
 \templatetype{pnasresearcharticle} % Choose template 
@@ -51,7 +51,7 @@
 \affil[c]{Affiliation Three}
 
 % Please give the surname of the lead author for the running footer
-\leadauthor{Lead author last name} 
+\leadauthor{Rosenblatt} 
 
 % Please add here a significance statement to explain the relevance of your work
 \significancestatement{Authors must submit a 120-word maximum statement about the significance of their research paper written at a level understandable to an undergraduate educated scientist outside their field of speciality. The primary goal of the Significance Statement is to explain the relevance of the work in broad context to a broad readership. The Significance Statement appears in the paper itself and is required for all research papers.}
@@ -63,7 +63,7 @@
 \correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: author.two\@email.com}
 
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
-\keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
+%\keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
 
 
 
@@ -73,13 +73,27 @@
 \begin{abstract}
 [TODO]
 \end{abstract}
+
 \dates{This manuscript was compiled on \today}
 \doi{\url{www.pnas.org/cgi/doi/10.1073/pnas.XXXXXXXXXX}}
 
 
-
 \begin{document}
+% Optional adjustment to line up main text (after abstract) of first page with line numbers, when using both lineno and twocolumn options.
+% You should only change this length when you've finalised the article contents.
+\verticaladjustment{-2pt}
+
 \maketitle
+\thispagestyle{firststyle}
+\ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
+
+% If your first paragraph (i.e. with the \dropcap) contains a list environment (quote, quotation, theorem, definition, enumerate, itemize...), the line after the list may have some extra indentation. If this is the case, add \parshape=0 to the end of the list environment.
+\dropcap{T}his PNAS journal template is provided to help you write your work in the correct journal format.  Instructions for use are provided below.
+
+Note: please start your introduction without including the word ``Introduction'' as a section heading (except for math articles in the Physical Sciences section); this heading is implied in the first paragraphs. 
+
+
+
 
 %Sketch: 
 %- The conservativeness of the test. 
@@ -89,9 +103,7 @@
 
 
 
-%%%% Section %%%%
-\section{Introduction}
-\label{sec:introduction}
+%%%% Introduction %%%
 
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
@@ -223,6 +235,7 @@ Our intuition suggests that since more folds imply a less concentrated estimate,
 
 The reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
 The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
+
 
 \begin{table}[h]
 \centering
