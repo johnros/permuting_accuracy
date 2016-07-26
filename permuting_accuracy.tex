@@ -213,7 +213,15 @@ svm.noCV.2 & SVM & FALSE & accuracy & cost=1e-1 \\
 svm.noCV.3 & SVM & FALSE & z-accuracy & cost=1e1 \\ 
 svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
 \end{tabular} 
-\caption{TODO: explain table + fix caption}
+\caption{\footnotesize
+This table enumerates the various test statistics we will be studying. 
+Three are location tests: Hotelling, Hotelling.shrink, and sd.
+\textit{Hotelling} is the classical two-group $T^2$ statistic. 
+\textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
+\textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
+The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
+For example, \textit{svm.CV.4}
+}
 \label{tab:collected}
 \end{table}
 
