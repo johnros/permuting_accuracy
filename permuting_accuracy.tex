@@ -74,11 +74,11 @@ We call this an \emph{accuracy test}.
 This same signal detection task can be also approached as a two-group multivariate test:
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
 A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \cite{fujikoshi_multivariate_2011}.
-Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013}.
+Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005}.
 In contrast to \emph{accuracy tests}, we call these \emph{location tests}.
 
 At this point, it becomes unclear which is the preferred test. 
-This question was indeed the subject of \cite{ramdas_classification_2016}, which compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} (LDA) \cite{hastie_elements_2003-1}. 
+This was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003-1}. 
 Using an asymptotic analysis, the authors of \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they may differ in constants. 
 
 Those constants, governing the power of the tests, are the focus of this contribution. 
@@ -354,8 +354,9 @@ fff
 
 Here is the analysis pipeline of \cite{stelzer_statistical_2013} we for the auditory data in \cite{gilron_quantifying_2016}.
 Denoting by 
-$i=1,\dots,I$ the subject index, and 
-$v=1,\dots,V$ the voxel index.
+$i=1,\dots,I$ the subject index, 
+$v=1,\dots,V$ the voxel index, and 
+$s = 1,\dots,S$ the permutation index. 
 Since regions\footnote{\emph{searchlight} or \emph{sphere} in the MVPA parlance} are centred around a unique voxel, the voxel index $v$ also serves as a unique region index.
 Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is compared to its permutation null distribution computed by Algorithm~\ref{algo:permutation}.
 
@@ -368,9 +369,9 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
  \KwResult{Brain map of group statistics: $\{\bar{T}_v\}_{v=1}^V$}
 	 \For{$v \in 1,\dots,V$}{
 		 \For{$i \in 1,\dots,I$}{
-			 $T_{i,v} \leftarrow$ observed test statistic for subject $i$ in a region centered at $v$.
+			 $T_{i,v} \leftarrow$ test statistic for subject $i$ in a region centered at $v$.
 			 } 	  
-	  	 $\bar{T}_{v} \leftarrow \frac{1}{I}\sum_{i=1}^I T_{i,v}$.
+	  	 $\bar{T}_{v} \leftarrow \frac{1}{I}\sum_{i=1}^I T_{i,v}$. 
  	 }
 \end{algorithm}
 
@@ -380,20 +381,12 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \label{algo:permutation}
 
  \KwData{fMRI scans of $20$ subjects, experimental design.}
- \KwResult{Regions encoding differences between stimuli.}
-  \For{$i \in 1,\dots\,m$}{
- 	 \For{$v \in \text{brain volume}$}{
- 	 
- 	 }
-  }
-  $T_i \leftarrow $ test statistic for subject $i$ \;
- $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
- average test statistic for over subjects\;
- \For{$i \in \text{number of permutation}$}{
-	 \For{$v \in \text{brain volume}$}{
-	 
-	 }
- }
+ \KwResult{Brain map of permutation p-values: $\{p_v\}_{v=1}^V$}
+  \For{$s \in 1,\dots\,S$}{
+    	    permute labels\;
+    	    $\bar{T}_{v}^s \leftarrow$ parametric map 
+  
+  	}
 \end{algorithm}
 
 
