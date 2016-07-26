@@ -89,19 +89,21 @@ MVPA has become a very popular methodology, as the $956$ citations\footnote{Base
 To fix ideas, we will adhere to a Neuroscientific example: 
 In \cite{gilron_quantifying_2016}, the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
 According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+We call this an \emph{accuracy test}.
 
 This same signal detection task can be also approached as a two-group multivariate test:
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
-A practitioner may then call upon a two-group Hotelling test \cite{fujikoshi_multivariate_2011}. 
-If the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of the Hotelling test can be called upon, such as  \cite{srivastava_testing_2013}.
+A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \cite{fujikoshi_multivariate_2011}.
+Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013}.
+In contrast to \emph{accuracy tests}, we call these \emph{location tests}.
 
-At this point, it becomes unclear which is the preferred avenue. 
-This question was indeed the subject of \cite{ramdas_classification_2016}, which compared the Hotelling test to the classification accuracy of \emph{Fisher's linear discriminant analysis} (LDA) \cite{hastie_elements_2003-1}. 
-Their asymptotic analysis concluded that methods are equivalent with respect to the order of convergence to a consistent test. The same authors did find that the methods differ in the constants governing the convergence.
+At this point, it becomes unclear which is the preferred test. 
+This question was indeed the subject of \cite{ramdas_classification_2016}, which compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} (LDA) \cite{hastie_elements_2003-1}. 
+Using an asymptotic analysis, the authors of \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they may differ in constants. 
 
-Those constants, are the focus of this contribution. 
-In particular, which signal detection method is to be preferred in finite samples? 
-Our conclusion is quite simple: signal detection using multivariate tests of location almost always has more power than accuracy tests.
+Those constants, governing the power of the tests, are the focus of this contribution. 
+In particular, which test is to be preferred in finite samples? 
+Our conclusion is quite simple: {\em location tests almost always have more power than accuracy tests}.
 
 The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Discrete test statistics are known to be conservative, since they cannot exhaust the permissible type $I$ error rates. 
