@@ -203,7 +203,33 @@ Our intuition suggests that since more folds imply a less concentrated estimate,
 
 \end{description}
 
+The reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
+The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
 
+
+\begin{table}
+
+\begin{tabular}{c|c|c|c|c}
+Name & Basis & CV & Accuracy & Parameters\\ 
+\hline
+ & Hotelling & -- & -- & shrink=FALSE\\ 
+ & Hotelling & -- & -- & shrink=TRUE \\ 
+ & LDA & TRUE & accuracy &  -- \\ 
+ & LDA & TRUE & z-accuracy & -- \\ 
+ & LDA & FALSE & accuracy &  --\\ 
+ & LDA & FALSE & z-accuracy &  --\\ 
+ & SD & -- & -- & -- \\ 
+ & SVM & TRUE & accuracy & cost=1e1 \\ 
+ & SVM & TRUE & accuracy & cost=1e-1 \\ 
+ & SVM & TRUE & z-accuracy & cost=1e1 \\ 
+ & SVM & TRUE & z-accuracy & cost=1e-1 \\ 
+ & SVM & FALSE & accuracy & cost=1e1 \\ 
+ & SVM & FALSE & accuracy & cost=1e-1 \\ 
+ & SVM & FALSE & z-accuracy & cost=1e1 \\ 
+ & SVM & FALSE & z-accuracy & cost=1e-1 
+\end{tabular} 
+\caption{TODO}
+\end{table}
 
 
 \section{Controlling the False Positive Rate}
@@ -237,7 +263,7 @@ In particular:
 \section{Power}
 \label{sec:power}
 
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power. 
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- at least when comparing the power of the various classifiers and multivariate tests. 
 The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
 On the other hand, the results of Section~\ref{sec:considerations} suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
 
