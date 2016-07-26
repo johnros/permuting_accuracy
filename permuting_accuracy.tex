@@ -24,6 +24,7 @@
 \newcommand{\featureS}{\mathcal{X}} % The feature space
 \newcommand{\outcomeS}{\mathcal{Y}} % The feature space
 \newcommand{\hyp}{f} % A hypothesis
+\newcommand{\hypEstim}{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{T^{acc}} 
@@ -127,8 +128,8 @@ In our vocal/non-vocal example $p$ is governed by the number of voxels in a regi
 
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., the \emph{testing} approach to localization amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$.
 I.e., the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
-The \emph{classification} approach to the localization problem amounts to learning a predictive model $\hat{\hyp}(\features)$ from some assumed model class $\hat{\hyp}\in \hypclass$. 
-The prediction accuracy, denoted $\acc_{\hat{\hyp}}$, is defined as the probability of a given classifier $\hat{\hyp}$ of making a correct prediction $\acc_{\hat{\hyp}}:=\expect{\indicator{\hat{\hyp}(x)=y}}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
+The \emph{classification} approach to the localization problem amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
+The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction $\acc_{\hypEstim}:=\expect{\indicator{\hypEstim(x)=y}}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
 
 
 
@@ -145,9 +146,20 @@ The design of the test consists of the following choices:
 \item [Balanced folding?] For a K-fold cross validated test statistic: is the data folding balanced? (a.k.a. stratified).
 \item [How many folds?] 
 
-We will now adress these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
+We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
 
-\paragraph{What test statistic}
+
+\paragraph{What test statistic?}
+Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$
+
+
+\paragraph{Cross validated or not?}
+
+\paragraph{Refolding?}
+
+\paragraph{Balanced folding?}
+
+\paragraph{How many folds?}
 
 
 
