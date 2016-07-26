@@ -7,7 +7,7 @@
 \usepackage{todonotes}
 \usepackage{natbib}
 \usepackage{url}
-\usepackage{algorithm2e}
+\usepackage[boxruled,vlined,linesnumbered]{algorithm2e}
 
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
@@ -294,19 +294,43 @@ For completeness we detail the stages of the analysis:
 \begin{algorithm}[H]
  \KwData{fMRI scans of $20$ subjects, experimental design.}
  \KwResult{Regions encoding differences between stimuli.}
- initialization\;
- \While{not at end of this document}{
-  read current\;
-  \eIf{understand}{
-   go to next section\;
-   current section becomes this one\;
-   }
-   \For{$z \in S_{n+1}$}{
-   ${\tt ConnectState}(z, S_{n+1}, U, P_{n+1}, Q_{n+1}$\;
-   }{
-  go back to the beginning of current section\;}
+  \For{$i \in 1,\dots\,m$}{
+ 	 \For{$v \in \text{brain volume}$}{
+ 	 
+ 	 }
+  }
+  $T_i \leftarrow $ test statistic for subject $i$ \;
+ $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
+ average test statistic for over subjects\;
+ \For{$i \in \text{number of permutation}$}{
+	 \For{$v \in \text{brain volume}$}{
+	 
+	 }
  }
- \caption{How to write algorithms}
+ 
+\caption{Compute group statistic}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+\caption{Permutation inference}
+ \KwData{fMRI scans of $20$ subjects, experimental design.}
+ \KwResult{Regions encoding differences between stimuli.}
+  \For{$i \in 1,\dots\,m$}{
+ 	 \For{$v \in \text{brain volume}$}{
+ 	 
+ 	 }
+  }
+  $T_i \leftarrow $ test statistic for subject $i$ \;
+ $\bar{T} \leftarrow \frac{1}{m} \sum T_i$  \;
+ average test statistic for over subjects\;
+ \For{$i \in \text{number of permutation}$}{
+	 \For{$v \in \text{brain volume}$}{
+	 
+	 }
+ }
+ 
+
 \end{algorithm}
 
 
