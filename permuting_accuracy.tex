@@ -7,6 +7,8 @@
 \usepackage{todonotes}
 \usepackage{natbib}
 \usepackage{url}
+\usepackage{algorithm2e}
+
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
 
@@ -282,8 +284,33 @@ Instead of performing more simulations, we rather return to our neuroimaging exa
 
 Figure~\ref{fig:read_data} is an application of our battery of tests to the data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
-The study was rather large and consisted of about $200$ subjects. 
+Each subject was exposed to $20$ sounds of each type, totalling in $n=40$ trials in each scan.
+The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
+
+We adhere to the MVPA analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
+For completeness we detail the stages of the analysis:
+
+\begin{algorithm}[H]
+ \KwData{fMRI scans of $20$ subjects, experimental design.}
+ \KwResult{Regions encoding differences between stimuli.}
+ initialization\;
+ \While{not at end of this document}{
+  read current\;
+  \eIf{understand}{
+   go to next section\;
+   current section becomes this one\;
+   }
+   \For{$z \in S_{n+1}$}{
+   ${\tt ConnectState}(z, S_{n+1}, U, P_{n+1}, Q_{n+1}$\;
+   }{
+  go back to the beginning of current section\;}
+ }
+ \caption{How to write algorithms}
+\end{algorithm}
+
+
+
 
 \begin{figure}[h]
 \centering
