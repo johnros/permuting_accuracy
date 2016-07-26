@@ -28,7 +28,7 @@
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{T^{acc}} 
-
+\newcommand{\dominant}{\hat{p}_{max}}
 
 
 %%%%%%%%%%%%
@@ -150,7 +150,13 @@ We will now address these questions while bearing in mind that unlike the typica
 
 
 \paragraph{What test statistic?}
-Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$
+Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
+Then again, very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. We can thus consider some estimate of $|\acc_{\hypEstim}-0.5|$ as the test statistic.
+This, however, implies that if the classes are identical, random guessing has a $0.5$ accuracy. This is not true if the classes are not balanced. 
+The chance level in which case is the prevalence of the dominant class, we denote by $\dominant$.
+This suggests the following test statistic $|\acc_{\hypEstim}-\dominant|$.
+Since we will latter be aggregating these statistic over random data foldings, where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
+We thus also consider a z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
 
 
 \paragraph{Cross validated or not?}
