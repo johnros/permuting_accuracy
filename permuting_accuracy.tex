@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{todonotes}
 \usepackage{natbib}
+\usepackage{url}
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
 
@@ -257,7 +258,9 @@ The results of \cite{ramdas_classification_2016} suggest that power should be of
 On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
 
 As seen in Figure~\ref{fig:simulation_2}, the use of the accuracy test statistic for signal detection, is underpowered compared to a multivariate test. 
-It is, however, too early to conclude that a multivariate test is to be preferred over the accuracy statistic, as we will later discuss. 
+It is, however, too early to conclude that a multivariate test is to be preferred over the accuracy statistic. We have only established this for Gaussian data, against a simple shift alternative. 
+The simulation code we provide in [TODO] may easily be adapted to simulate various distributions and effect. 
+Instead of performing more simulations, we rather return to our neuroimaging example, and use it to compare the performance of the various tests. 
 
 \begin{figure}[h]
 \centering
@@ -274,11 +277,26 @@ It is, however, too early to conclude that a multivariate test is to be preferre
 
 \section{Neuroimaging Example}
 \label{sec:example}
-
-In the previous sections, we have established using simulations that 
-
 % Power of SVM versus SD.
 % Difficulties of implementation.
+
+Figure~\ref{fig:read_data} is an application of our battery of tests to the data of \cite{pernet_human_2015}. 
+The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
+The study was rather large and consisted of about $200$ subjects. 
+The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
+
+\begin{figure}[h]
+\centering
+%\includegraphics[width=0.7\linewidth]{}
+\missingfigure[figwidth=6cm]{TODO}
+\caption{
+	\label{fig:read_data}
+	TODO}
+\end{figure}
+
+
+
+
 
 
 
