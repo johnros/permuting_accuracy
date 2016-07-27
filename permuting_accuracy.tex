@@ -362,17 +362,19 @@ This would be the case, for instance, with brain-machine interfaces, where the d
 
 Secondly, there may be cases where the accuracy test does have more power then the location test. 
 Our simulations were unable to point out such a scenario, but the fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, suggest that the accuracy test does have more power for particular types of signal. 
+[TODO: signal in scale? heavy tails?]
 
 A very important point is the ease of implementation. The need for cross validation of the accuracy test greatly increases its computational complexity. 
 Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. Indeed, replacing a weak inequality with a strong inequality may considerably change the results. This is not the case for continuous test statistics. 
 
 
+Given all the above, we find the popularity of accuracy tests quite puzzling. 
+We believe this is due to a reversal of the inference cascade. 
+Researchers first fit a classifier, and then ask if the classes are any different.
+Were they to start by asking if classes are any different, and only then try to classify, then location tests would naturally arise as the preferred method. 
 
 
 
-
-
-fff
 
 
 
