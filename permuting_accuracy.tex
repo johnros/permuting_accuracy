@@ -320,13 +320,16 @@ Having established that accuracy tests are underpowered both in simulation and i
 
 \begin{figure}[th]
 \centering
-%\includegraphics[width=0.7\linewidth]{}
-\missingfigure[figwidth=6cm]{TODO}
+\includegraphics[width=0.7\linewidth]{"art/svm_vs_SD"}
+%\missingfigure[figwidth=6cm]{TODO}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
-Map reports the centres of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.cv.1}) and a location test (\emph{sd}). 
-Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.1$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
-Number of permutations equals TODO. 
+Map reports the centres of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.cv.1}), and a location test (\emph{sd}). 
+\emph{svm.cv.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
+Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
+Number of permutations equals $400$.
+The location test detect $1,232$ regions, and the accuracy test $441$. The overlap is such that $90\%$ of the accuracy test regions, are also detected by the location test. 
+For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron_quantifying_2016}.  
   }
 \label{fig:read_data}
 \end{figure}
