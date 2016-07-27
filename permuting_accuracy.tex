@@ -344,13 +344,32 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 %%%% Section %%%%
 \section{Discussion}
 \label{sec:discussion}
-
-
-
 % Not all problems are signal detection.
 % Implementation difficulty with discrete test statistics.
 % Signal not in location.
 % Heavy tails.
+
+
+We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
+Using simulations, we have concluded that the location tests are preferable. 
+We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
+This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. 
+
+At this point some reservations to the generality of our findings are in order. 
+Firstly, not all accuracy tests are concerned with signal detection.
+Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
+This would be the case, for instance, with brain-machine interfaces, where the detection of a signal is not enough. In such cases, the performance of a particular classifier is the object of study, rendering the accuracy test the appropriate choice. 
+
+Secondly, there may be cases where the accuracy test does have more power then the location test. 
+Our simulations were unable to point out such a scenario, but the fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, suggest that the accuracy test does have more power for particular types of signal. 
+
+A very important point is the ease of implementation. The need for cross validation of the accuracy test greatly increases its computational complexity. 
+Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. Indeed, replacing a weak inequality with a strong inequality may considerably change the results. This is not the case for continuous test statistics. 
+
+
+
+
+
 
 
 fff
@@ -420,6 +439,7 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
   	}
 \end{algorithm}
 
+\newpage
 
 \section{More Simulations}
 
