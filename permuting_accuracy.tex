@@ -254,12 +254,14 @@ In particular:
 \begin{figure}[h]
 \centering
 %\missingfigure[figwidth=6cm]{TODO}
+\label{fig:simulation_1}
 \caption{\footnotesize
 The power of a permutation test with various test statistics. 
 The power on the $x$ axis. 
 Effect are color and shape coded. They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. }	
-\label{fig:simulation_1}
+The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. 
+Simulation code available at [TODO].}	
+
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
@@ -286,21 +288,9 @@ Having established that all of the tests in our battery control the false positi
 The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
 On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
 
-As seen in Figure~\ref{fig:simulation_2}, the use of the accuracy test statistic for signal detection, is underpowered compared to a multivariate test. 
-It is, however, too early to conclude that a multivariate test is to be preferred over the accuracy statistic. We have only established this for Gaussian data, against a simple shift alternative. 
-The simulation code we provide in [TODO] may easily be adapted to simulate various distributions and effect. 
-Instead of performing more simulations, we rather return to our neuroimaging example, and use it to compare the performance of the various tests. 
-
-\begin{figure}[h]
-\centering
-%\includegraphics[width=0.7\linewidth]{}
-\missingfigure[figwidth=6cm]{TODO}
-\caption{
-	\label{fig:simulation_2}
-	TODO}
-\end{figure}
-
-
+As seen in Figure~\ref{fig:simulation_1}, the use of accuracy tests for signal detection is underpowered compared to a location tests. 
+A single simulation, however, can hardly support such a universal statement. 
+We will thus verify on a neuroimaging dataset, and discuss the causes for this phenomenon thus the scope of the statement.
 
 
 
@@ -315,8 +305,8 @@ Each subject was exposed to $20$ sounds of each type, totalling in $n=40$ trials
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
-We adhere to the MVPA analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-For completeness we detail the stages of the analysis:
+To verify the observation that location tests have more power than accuracy tests, we compute our battery of test statistics using the MVPA analysis pipeline of \cite{stelzer_statistical_2013}, also used in \cite{gilron_quantifying_2016}. 
+For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
 
 
 
