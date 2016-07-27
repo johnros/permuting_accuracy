@@ -8,6 +8,8 @@
 \usepackage{natbib}
 \usepackage{url}
 \usepackage[boxruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{caption}
+\usepackage{subcaption}
 
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
@@ -251,11 +253,22 @@ In particular:
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{"art/2016-07-26 20-55-48"}
+
 %\missingfigure[figwidth=6cm]{TODO}
-\caption{
+	
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+	  \includegraphics[width=1\linewidth]{"art/2016-07-26 20-55-48"}
+	  \caption{Imbalanced}  %TODO
 	\label{fig:simulation_1}
-	TODO}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11-42-05"}
+	  \caption{Unbalanced} %TODO
+	\label{fig:simulation_12}
+	\end{subfigure}
+	
 \end{figure}
 
 
