@@ -69,20 +69,21 @@
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Genetic examples include \cite{jiang_calculating_2008,radmacher_paradigm_2002-1} [TODO: elaborate].
-Neuroscience examples include the very popular \emph{multivariate pattern analysis} (MVPA) \citep{golland_permutation_2003,kriegeskorte_information-based_2006,varoquaux_assessing_2016}.
+Neuroscience examples include the very popular \emph{multivariate pattern analysis} (MVPA) \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
+
 The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} attests to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002-1}, as examples. 
 
 
 To fix ideas, we will adhere to a Neuroscientific example: 
 In \cite{gilron_quantifying_2016}, the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
 According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
-We call this an \emph{accuracy test}.
+We call this an \emph{accuracy test}, a.k.a. \emph{class prediction} in \cite{simon_pitfalls_2003}.
 
 This same signal detection task can be also approached as a two-group multivariate test:
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
 A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \cite{fujikoshi_multivariate_2011}.
 Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005}.
-In contrast to \emph{accuracy tests}, we call these \emph{location tests}.
+In contrast to \emph{accuracy tests}, we call these \emph{location tests}, a.k.a. \emph{class comparison} in \cite{simon_pitfalls_2003}.
 
 At this point, it becomes unclear which is the preferred test. 
 This was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003-1}. 
@@ -361,7 +362,8 @@ This also explains why an asymptotic analysis, such as \cite{ramdas_classificati
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
-This would be the case, for instance, with brain-machine interfaces, where the detection of a signal is not enough. In such cases, the performance of a particular classifier is the object of study, rendering the accuracy test the appropriate choice. 
+This would be the case, for instance, with brain-machine interfaces, where the detection of a signal is not enough \citep{olivetti_induction_2012}. 
+In such cases, the performance of a particular classifier is the object of study, rendering the accuracy test the appropriate choice. 
 
 Secondly, there may be cases where the accuracy test does have more power then the location test. 
 Our simulations were unable to point out such a scenario, but the fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, suggest that the accuracy test does have more power for particular types of signal. 
