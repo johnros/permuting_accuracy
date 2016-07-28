@@ -68,15 +68,15 @@
 
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
-Genetic examples include \cite{jiang_calculating_2008,radmacher_paradigm_2002}[TODO: elaborate].
-Neuroscience examples include \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
-The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} attests to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002}, as examples. 
+Examples in the genetics literature include \cite{jiang_calculating_2008,radmacher_paradigm_2002} [TODO: elaborate].
+Example sin the neuroscientific literature include \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
+The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} of these papers attest to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002}, as examples. 
 
 
-To fix ideas, we will adhere to a Neuroscientific example: 
-In \cite{gilron_quantifying_2016}, the authors seek to detect auditory brain regions which distinguish between vocal and non-vocal stimuli. 
+To fix ideas, we will adhere to a neuroscientific example: 
+In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions which encode differences between vocal and non-vocal stimuli. 
 According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
-We call this an \emph{accuracy test}, a.k.a. \emph{class prediction} in \cite{simon_pitfalls_2003}.
+We call this an \emph{accuracy test}, a.k.a.\ \emph{class prediction} in \cite{simon_pitfalls_2003}.
 
 This same signal detection task can be also approached as a two-group multivariate test:
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
@@ -85,10 +85,11 @@ Alternatively, if the size of the brain region is too large compared to the numb
 In contrast to \emph{accuracy tests}, we call these \emph{location tests}, a.k.a. \emph{class comparison} in \cite{simon_pitfalls_2003}.
 
 At this point, it becomes unclear which is the preferred test. 
-This was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003-1}. 
+The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003-1}. 
 Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they may differ in constants. 
+Put differently, the (asymptotic) relative efficiency of the tests is not trivially $0$ nor $\infty$.
 
-Those constants, governing the power of the tests, are crucial when dealing with typical sample sizes in neuroscience and genetics, and thus the focus of this study. 
+The relative efficiency, governing the power of the tests, may prove crucial when dealing with the finite sample sizes in neuroscience and genetics, and thus the focus of this study. 
 In particular, which test is to be preferred in finite samples? 
 Our conclusion is quite simple: {\em location tests almost always have more power than accuracy tests}.
 
