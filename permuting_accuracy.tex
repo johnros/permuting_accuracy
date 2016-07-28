@@ -151,7 +151,7 @@ Since we will be aggregating these statistic over random data sets where the dom
 We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
 
 
-\paragraph{Cross validated or not?}
+\paragraph{Cross validate or not?}
 Were we interested in an unbiased estimator of the prediction error, there is no question that some independent validation is in order. 
 Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
@@ -162,38 +162,38 @@ We will thus be considering both cross validated accuracies, and \emph{train} ac
 The standard practice in neuroimaging is to refold the data after each permutation.
 This is imperative if permuting labels while aiming at balanced data folds. 
 This is not, however, imperative in general. 
-In this work, we will adhere to the standard practice of refolding the data within each permutation.
+For simplicity, we will adhere to the standard practice of refolding the data within each permutation.
 
 
 \paragraph{Permute labels of features?}
 While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
 As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
-After a label permutation, the folds will probably not be balanced, and will thus have to be refolded. 
-If the features are permuted, then the labels conserve their original fold assignments, and the data need not be refolded. 
+After a label permutation, the original folds will probably not be balanced. 
+If the \emph{features} are permuted, then the labels conserve their original fold assignments, and the original folds are balanced after each permutation. 
 Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
 We thus adhere to the more common, albeit less efficient practice, of permuting labels. 
 
 
 \paragraph{Balanced folding?}
-A standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified).
+As already implied, a standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified).
 This is well justified when aiming at unbiased accuracy estimation. 
 This also simplifies matter when aiming at signal detection, as can be seen from the above discussion of the appropriate test statistic. 
-Then again, it may complicate matters, as can be seen from the above discussion on label versus feature permutation. 
-In general , it is not imperative in general, and we will indeed be comparing the effect of balanced foldings versus unbalanced. 
-We will thus report results with both balanced and unbalanced data foldings. 
+On the other hand, it may complicate matters, as can be seen from the above discussion on label versus feature permutation. 
+We will report results with both balanced and unbalanced data foldings, only to discover, it does not really matter. 
 
 
 \paragraph{How many folds?}
 Different authors suggest different rules for the number of folds. 
-We will be varying the number of folds, since it will affect the concentration of the estimated accuracy, which will have a crucial effect on the conservativeness of the permutation test. 
+We will be varying the number of folds.
+This will affect the concentration of permutation distribution of the estimated accuracy, which will have a crucial effect on the conservativeness of the accuracy test. 
 Our intuition suggests that since more folds imply a less concentrated estimate, then leave-one-out should be the less conservative, and 2-fold should be the most conservative. 
 
 
-By now, the reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
+There are indeed many design choices when performing a permutation test using a cross validated statistic. 
 The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
 
 
-\begin{table}[h]
+\begin{table}[th]
 \centering
 \begin{tabular}{l|c|c|c|c}
 Name & Basis & CV & Accuracy & Parameters\\ 
@@ -238,42 +238,38 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the tra
 \section{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-In the first of our battery of simulations we verify that various test statistics and permutation schemes control the type I error. 
+We start by verifying that the battery of tests in Table~\ref{tab:collected} control the false positive rate at the desired $0.05$ level, with varying conservativeness levels. 
 Figure~\ref{fig:simulation_1} demonstrates that this is indeed the case. 
 All our candidate tests control the type I error, with varying degrees of conservativeness. 
 In particular:
 (a) if the folds are balanced or not,
-(b) if the labels are permuted or the features, 
-(c) if the test statistic is varied, 
-(d) if the regularization level of the support vector machine classifier (SVM) is varied,
-(e) if the number of folds is varied.
+(b) if the tuning parameters of some test statistic are varied,
+(d) if the number of folds is varied.
 
 
 
 
 \begin{figure}[h]
 \centering
-\label{fig:simulation_1}
 \caption{\footnotesize
 The power of a permutation test with various test statistics. 
 The power on the $x$ axis. 
 Effect are color and shape coded. They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
 The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. 
 Simulation code available at [TODO].}	
-
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-	  \caption{Unbalanced.}  %TODO
-	\label{fig:simulation_11}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-	  \caption{Balanced.} %TODO
-	\label{fig:simulation_12}
-	\end{subfigure}
-	
+\label{fig:simulation_1}
+\begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
+\caption{Unbalanced.}  %TODO
+\label{fig:simulation_11}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
+\caption{Balanced.} %TODO
+\label{fig:simulation_12}
+\end{subfigure}
 \end{figure}
 
 
@@ -283,15 +279,16 @@ Simulation code available at [TODO].}
 \section{Power}
 \label{sec:power}
 
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- at least when comparing the power of the various classifiers and multivariate tests. 
-The results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power; 
+Especially,when comparing the power of the location tests to the accuracy tests. 
+The theoretical results of \cite{ramdas_classification_2016} suggest that power should be of the same order. 
 On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
 
 [TODO: discuss power of various tests after finishing simulations]
 
 We see by now that the use of accuracy tests for signal detection is underpowered compared to location tests. 
-The above simulations can hardly support such a universal statement. 
-We will thus verify on a neuroimaging dataset, and discuss the causes for this phenomenon thus the scope of the statement.
+Simulations alone cannot, however, support such a universal statement. 
+We will thus verify on a neuroimaging dataset, and discuss the causes for this phenomenon with implications on the scope of our statement.
 
 
 
