@@ -90,25 +90,19 @@ Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that a
 Put differently, the (asymptotic) relative efficiency of the tests is not trivially $0$ nor $\infty$.
 
 The relative efficiency, governing the power of the tests, may prove crucial when dealing with the finite sample sizes in neuroscience and genetics, and thus the focus of this study. 
-In particular, which test is to be preferred in finite samples? 
-Our conclusion is quite simple: {\em location tests almost always have more power than accuracy tests}.
+We thus seek to study which test is to be preferred in finite samples? 
+Our conclusion will be quite simple: {\em location tests almost always have more power than accuracy tests}.
 
 The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Discrete test statistics are known to be conservative \citep{hemerik_exact_2014-1}, since they cannot exhaust the permissible false positive rate. 
-In accuracy tests, the degree of discretization of the accuracy statistic is governed by the number of samples. 
+For accuracy tests, the degree of discretization is governed by the number of samples. 
 In our running neuroscience example \citep{gilron_quantifying_2016}, the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
-This number of examples is not unusual if considering this is the number of subject in a genetic study, or the number of trial repeats in an fMRI brain scan. 
+This number of examples is not unusual if considering this is the number of subject in a genetic study, or the number of trial-repeats in an fMRI brain scan. 
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
-For an intuition consider the usage of the train-accuracy test statistic (i.e., not cross validated).
-Because the testing problem is high dimensional, the observed train accuracy will be close to $1$. 
-The same will occur in every permutation, for the same reason. 
-The permutation p-value will thus be $1$ for almost all data sets, the null will never be rejected, and the test will have no power. 
-
-Given these considerations, it is quite surprising that signal detection using accuracy tests is so popular in neuroscience and genetics. 
-In the following, we quantify the power loss to be expected in typical studies, and identify the problems' characteristics that govern its severity. 
-We start by establishing a best practice for permutation testing using the accuracy test statistic, 
-We also discuss the problem characteristics that govern the magnitude of the conservativeness, and try to offer an intuition to the scope of the observation that a multivariate test should always be preferred over a classification approach. 
+For an intuition consider the usage of the \emph{train} accuracy test statistic (i.e., not cross validated).
+In Section~\ref{sec:power} we then address our main question- which test has more power? 
+Based on the finding that the location test is typically more powerful, we try to offer an intuition for this phenomenon in the Discussion section. 
 
 
 
