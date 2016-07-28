@@ -114,9 +114,9 @@ Based on the finding that the location test is typically more powerful, we try t
 \label{sec:problem_setup}
 
 Adhering to our neuroscientific example, we now formalize terminology and notation. 
-Let $\outcomes \in \outcomeS$ be a class encoding. In our vocal/non-vocal example, using effect coding, we have $\outcomeS=\set{-1,1}$.
+Let $\outcomes \in \outcomeS$ be a class encoding. In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$.
 Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
-In our vocal/non-vocal example $p$ is governed by the number of voxels in a regions, which is the number of voxels in each brain region tested. We thus have $\featureS=\reals^{27}$. 
+In our vocal/non-vocal example $p$ is the number of voxels in a brain region. We thus have $\featureS=\reals^{27}$. 
 
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., the \emph{testing} approach to localization amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$.
 I.e., the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
