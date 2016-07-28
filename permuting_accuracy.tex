@@ -303,12 +303,12 @@ Each subject was exposed to $20$ sounds of each type, totalling in $n=40$ trials
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
-To verify the observation that location tests have more power than accuracy tests, we perform permutation inference using the pipeline of \cite{stelzer_statistical_2013}, which was also used in \cite{gilron_quantifying_2016}. 
+We perform permutation inference using the pipeline of \cite{stelzer_statistical_2013}, which was also used in \cite{gilron_quantifying_2016}. 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
 To demonstrate our point, we compare the \emph{sd} location test with the \emph{svm.cv.1} accuracy test (see Table~\ref{tab:collected} for the definition of these statistics). 
 
-In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions that encode information discriminating between vocal and non-vocal stimuli when compared to an accuracy test (\emph{svm.cv.1}).
-The former discovers $1,232$ regions, while the latter only $441$, $399$ of which are common to both as reported in Figure~\ref{fig:read_data}.
+In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
+The former discovers $1,232$ regions, while the latter only $441$, as reported in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
 Having established that accuracy tests are underpowered both in simulation and in application, we wish to identify the conditions under which this will occur, and discuss implications on the practice of accuracy tests. 
@@ -323,7 +323,7 @@ Map reports the centres of $27$-voxel sized spherical regions, as discovered by 
 \emph{svm.cv.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
 Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 Number of permutations equals $400$.
-The location test detect $1,232$ regions, and the accuracy test $441$. The overlap is such that $90\%$ of the accuracy test regions, are also detected by the location test. 
+The location test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
 For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron_quantifying_2016}.  
   }
 \label{fig:read_data}
@@ -348,7 +348,7 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
 Using simulations, we have concluded that the location tests are preferable. 
 We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
-This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. 
+This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. [TODO: relate to large sample simulation].
 
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
@@ -361,7 +361,9 @@ Our simulations were unable to point out such a scenario, but the fact that in o
 [TODO: signal in scale? heavy tails?]
 
 A very important point is the ease of implementation. The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. Indeed, replacing a weak inequality with a strong inequality may considerably change the results. This is not the case for continuous test statistics. 
+Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
+Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
+This is not the case for continuous test statistics. 
 
 
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
