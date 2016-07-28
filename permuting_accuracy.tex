@@ -69,8 +69,8 @@
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Genetic examples include \cite{jiang_calculating_2008,radmacher_paradigm_2002-1} [TODO: elaborate].
-Neuroscience examples include the very popular \emph{multivariate pattern analysis} (MVPA) \citep{kriegeskorte_information-based_2006,varoquaux_assessing_2016,golland_permutation_2003}.
-The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} attests to the popularity of the above workflow: =$956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002-1}, as examples. 
+Neuroscience examples include the very popular \emph{multivariate pattern analysis} (MVPA) \citep{golland_permutation_2003,kriegeskorte_information-based_2006,varoquaux_assessing_2016}.
+The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} attests to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002-1}, as examples. 
 
 
 To fix ideas, we will adhere to a Neuroscientific example: 
@@ -375,6 +375,13 @@ Given all the above, we find the popularity of accuracy tests quite puzzling.
 We believe this is due to a reversal of the inference cascade. 
 Researchers first fit a classifier, and then ask if the classes are any different.
 Were they to start by asking if classes are any different, and only then try to classify, then location tests would naturally arise as the preferred method. 
+As put by \cite{ramdas_classification_2016}:
+\begin{quote}
+The recent popularity of machine learning has resulted in the extensive teaching and use
+of prediction in theoretical and applied communities and the relative lack of awareness or
+popularity of the topic of Neyman-Pearson style hypothesis testing in the computer science
+and related ``data science'' communities.
+\end{quote}
 
 
 
