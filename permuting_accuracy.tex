@@ -31,7 +31,7 @@
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{T^{acc}} 
 \newcommand{\dominant}{\hat{p}_{max}}
-\newcommand{\prob}[1]{P\left( #1 \right)} % the probability of an event
+\newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
 
 
 
@@ -129,13 +129,14 @@ A statistically significant ``better than chance'' estimate of $\acc_{\hypEstim}
 \label{sec:considerations}
 
 The design of a permutation test using the prediction accuracy, requires the following design choices: 
-\begin{description}
-\item [What test statistic?] 
-\item [Cross validated or not?] Is the statistic cross validated or not?
-\item [Refolding?] For a K-fold cross validated test statistic: is the data refolded in each permutation? 
-\item [Permute labels of features?] Should the $\outcomes$ be permuted or should the $\features$?
-\item [Balanced folding?] For a K-fold cross validated test statistic: is the data folding balanced? (a.k.a. stratified).
-\item [How many folds?] 
+\begin{enumerate}
+\item How to estimate accuracy?
+\item Is the statistic cross validated or not?
+\item For a K-fold cross validated test statistic: should the data be refolded in each permutation? 
+\item Permute labels of features?
+\item For a K-fold cross validated test statistic: should the data folding balanced? (a.k.a. stratified).
+\item How many folds? 
+\end{enumerate}
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
 
@@ -187,7 +188,6 @@ Different authors suggest different rules for the number of folds.
 We will be varying the number of folds, since it will affect the concentration of the estimated accuracy, which will have a crucial effect on the conservativeness of the permutation test. 
 Our intuition suggests that since more folds imply a less concentrated estimate, then leave-one-out should be the less conservative, and 2-fold should be the most conservative. 
 
-\end{description}
 
 By now, the reader will have observed that there are indeed many ways to perform a permutation test using a cross validated statistic. 
 The subset of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
