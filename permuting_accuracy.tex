@@ -140,22 +140,22 @@ The design of a permutation test using the prediction accuracy, requires the fol
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
 
-
-\paragraph{What test statistic?}
+\paragraph{How to estimate accuracy?}
 Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
-Then again, very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. We can thus consider some estimate of $|\acc_{\hypEstim}-0.5|$ as the test statistic.
+Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
+We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
 This, however, implies that if the classes are identical, random guessing has a $0.5$ accuracy. This is not true if the classes are not balanced. 
 The chance level in which case is the prevalence of the dominant class, we denote by $\dominant$.
 This suggests the following test statistic $|\acc_{\hypEstim}-\dominant|$.
-Since we will latter be aggregating these statistic over random data foldings, where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
-We thus also consider a z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
+Since we will be aggregating these statistic over random data sets where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
+We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
 
 
 \paragraph{Cross validated or not?}
-Were we interested in an unbiased estimator of the prediction error, there is no question that some validation is in order. 
-Since we are merely interested in detecting a difference between groups, a biased error estimate is not an issue provided that it is consistent over all permutations. 
+Were we interested in an unbiased estimator of the prediction error, there is no question that some independent validation is in order. 
+Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
-We will thus be considering both cross validated accuracies, and train accuracies as our test statistics. 
+We will thus be considering both cross validated accuracies, and \emph{train} accuracies as our test statistics. 
 
 
 \paragraph{Refolding?}
