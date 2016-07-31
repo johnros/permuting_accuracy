@@ -145,6 +145,7 @@ The design of a permutation test using the prediction accuracy, requires the fol
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups, leading to a better-than-chance accuracy. 
 
 \paragraph{How to estimate accuracy?}
+\label{sec:estimate_accuracy}
 Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
 Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
 We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
@@ -354,6 +355,12 @@ Using simulations, we have concluded that the location tests are preferable.
 We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
 This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. [TODO: relate to large sample simulation].
 
+\cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
+They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
+We did not include this test in the battery we compared, but we note the following: 
+(a) The independence test of \cite{olivetti_statistical_2014} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
+(b) Some of the drawbacks of accuracy test, which the independence test remedies, can also be remedied by replacing the accuracy statistic with its z-score, as suggested in Section~\ref{sec:estimate_accuracy}.
+
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
@@ -365,11 +372,11 @@ Secondly, there may be cases where the accuracy test does have more power then t
 Our simulations were unable to point out such a scenario, but the fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, suggest that the accuracy test does have more power for particular types of signal. 
 [TODO: signal in scale? heavy tails?]
 
-A very important point is the ease of implementation. The need for cross validation of the accuracy test greatly increases its computational complexity. 
+A very important point is the ease of implementation. 
+The need for cross validation of the accuracy test greatly increases its computational complexity. 
 Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
-
 
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
 We believe this is due to a reversal of the inference cascade. 
