@@ -69,7 +69,7 @@
 A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Examples in the genetics literature include \cite{jiang_calculating_2008,radmacher_paradigm_2002} [TODO: elaborate].
-Example sin the neuroscientific literature include \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
+Examples in the neuroscientific literature include \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
 The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} of these papers attest to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002}, as examples. 
 
 
@@ -368,9 +368,14 @@ This would be the case in decoding applications, like brain-machine interfaces, 
 Clinical diagnosis is another application, where the presence of a medical condition is ``predicted'' from imaging data. \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}
 
 
-Secondly, there may be cases where the accuracy test does have more power then the location test. 
-Our simulations were unable to point out such a scenario, but the fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, suggest that the accuracy test does have more power for particular types of signal. 
+Secondly, not all signals are manifested in a shift of the null distrubiton. 
+Put differently, the preferred alternative to an accuracy test is not always a location test. 
+Indeed, one may consider signal, i.e. effects, as a change in scale, such as the \emph{spiked covariance} model. In this case, other-than-Hotelling type tests are appropriate~[TODO: cite change in covariance alternative].
+Tests have been proposed even when the nature of the difference between populations is left unspecified \citep[e.g.][]{gretton_kernel_2012}.
+The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, is consistent with this observation. 
+On the other hand, the far greater power of the location test, certianly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
 [TODO: signal in scale? heavy tails?]
+
 
 A very important point is the ease of implementation. 
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
