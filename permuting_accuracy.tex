@@ -92,9 +92,9 @@ At this point, it becomes unclear which is the preferred test.
 The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003}. 
 Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they differ in constants. 
 Judging by rate of convergence alone, this result may suggest that not much is (asymptoticaly) lost by using an accuracy test. 
-On the other hand, asymptotic relative efficency measures (ARE) such as \emph{Pitman's}, \emph{Bahadur's}, \emph{Lehman-Sheffe's}, always assume equivalent convergence rates \citep{vaart_asymptotic_1998}. 
+On the other hand, asymptotic relative efficency measures (ARE) such as \emph{Pitman's}, \emph{Bahadur's}, and \emph{Hodges-Lehman's}, always assume equivalent convergence rates \citep{vaart_asymptotic_1998}. 
 
-Using the results of \cite{ramdas_classification_2016}, we derive that when signal is manifested in a location shift, the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
+In \cite{ramdas_classification_2016} setup, the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
 This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
 Clearly, the accuracy test is remarakbly inneficient, even when the discretization effecet has been cancelled by asymptotics. 
 For comparison, the t-test is only $1.04$ more (asymptotically) efficienct than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}. 
@@ -362,9 +362,16 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
 Using simulations, we have concluded that the location tests are preferable. 
 We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
-This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. 
+This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a rate difference. 
+Their results however are limited in that:
+(a) they are asymptotic, thus eschew the discretization effect.
+(b) They assume a half-sample holdout, so that half of the data is available for estimation. 
+(c) They assume a linear classifier.
+
+The linear classifier assumption, (c), is immaterial since for every non-linear clasifier, one may design a non-linear location test. See \cite{gretton_kernel_2012} for an example of a location test in RKHS space.
 [TODO: relate to large sample simulation]
 [TODO: discuss ARE, and holdout versus leave one out effect].
+[TODO: non-linear classification and testing].
 
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
