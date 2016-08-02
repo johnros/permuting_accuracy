@@ -89,9 +89,11 @@ Alternatively, if the size of the brain region is too large compared to the numb
 In contrast to \emph{accuracy tests}, we call these \emph{location tests}, a.k.a. \emph{class comparison} in \cite{simon_pitfalls_2003}.
 
 At this point, it becomes unclear which is the preferred test. 
-The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003-1}. 
-Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they may differ in constants. 
-Put differently, the (asymptotic) relative efficiency of the tests is not trivially $0$ nor $\infty$.
+The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003}. 
+Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they differ in constants. 
+Judging by rate of convergence alone, this result may suggest that not much is (asymptoticaly) lost by using an accuracy test. 
+On the other hand, asymptotic relative efficency measures (ARE) such as \emph{Pitman's}, \emph{Bahadur's}, \emph{Lehman-Sheffe's}, always assume equivalent convergence rates \citep{vaart_asymptotic_1998}. 
+
 
 The relative efficiency, governing the power of the tests, may prove crucial when dealing with the finite sample sizes in neuroscience and genetics, and thus the focus of this study. 
 We thus seek to study which test is to be preferred in finite samples? 
