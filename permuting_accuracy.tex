@@ -94,6 +94,11 @@ Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that a
 Judging by rate of convergence alone, this result may suggest that not much is (asymptoticaly) lost by using an accuracy test. 
 On the other hand, asymptotic relative efficency measures (ARE) such as \emph{Pitman's}, \emph{Bahadur's}, \emph{Lehman-Sheffe's}, always assume equivalent convergence rates \citep{vaart_asymptotic_1998}. 
 
+Using the results of \cite{ramdas_classification_2016}, we derive that when signal is manifested in a location shift, the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test is $\sqrt{2 \pi} \approx 2.5$. 
+This means that Fisher's LDA requires $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
+This means that Fisher's LDA is remarakbly inneficient. 
+For comparison, the t-test is only $1.04$ more (asymptotically) efficienct than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}. 
+
 
 The relative efficiency, governing the power of the tests, may prove crucial when dealing with the finite sample sizes in neuroscience and genetics, and thus the focus of this study. 
 We thus seek to study which test is to be preferred in finite samples? 
