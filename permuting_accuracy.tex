@@ -170,7 +170,7 @@ We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt
 Were we interested in an unbiased estimator of the prediction error, there is no question that some independent validation is in order. 
 Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
-We will thus be considering both cross validated accuracies, and \emph{train} accuracies as our test statistics. 
+We will thus be considering both cross validated accuracies, and \emph{train} accuracies as our test statistics, a.k.a.\ \emph{resubstitution classification} in \cite{ramdas_classification_2016}. 
 
 
 \paragraph{Refolding?}
@@ -364,7 +364,7 @@ Using simulations, we have concluded that the location tests are preferable.
 We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
 This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a qualitative difference. 
 [TODO: relate to large sample simulation]
-[TODO: discuss ARE, and holdout effect].
+[TODO: discuss ARE, and holdout versus leave one out effect].
 
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
