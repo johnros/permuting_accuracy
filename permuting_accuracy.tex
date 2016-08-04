@@ -38,7 +38,7 @@
 
 
 
-\title{Better-than-chance classification for signal detection}
+\title{Better-Than-Chance Classification for Signal Detection}
 
 
 \begin{document}
@@ -61,32 +61,25 @@
 \section{Introduction}
 \label{sec:introduction}
 
-
-
-
-
-
-A common workflow in genetics or neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
+A common workflow in neuroimaging consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
-Examples in the genetics literature include \cite{jiang_calculating_2008,radmacher_paradigm_2002} [TODO: elaborate].
-Examples in the neuroscientific literature include \citep{golland_permutation_2003,kriegeskorte_information-based_2006,pereira_machine_2009,varoquaux_assessing_2016}.
-The number of citations\footnote{Based on GoogleScholar. Accesses on 26.7.2016.} of these papers attest to the popularity of the above workflow: $956$ for \cite{kriegeskorte_information-based_2006}, and $274$ for \cite{radmacher_paradigm_2002}, as examples. 
+Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,varoquaux_assessing_2016}, and especially the recently populirized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
+This practice is also observed in the genetics literature, but to a lesser extent \citep{radmacher_paradigm_2002,jiang_calculating_2008}.
 
-
-To fix ideas, we will adhere to a neuroscientific example: 
+To fix ideas, we will adhere to a concrete example.
 In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions which encode differences between vocal and non-vocal stimuli. 
-According to the MVPA analysis workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern, significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 We call this an \emph{accuracy test}, a.k.a.\ \emph{class prediction} in \cite{simon_pitfalls_2003}, or \emph{pattern discrimination} in \cite{pereira_machine_2009}.
 
-This same signal detection task can be also approached as a two-group multivariate test:
+This same signal detection task can be also approached as a two-group multivariate test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
 As put in \cite{pereira_machine_2009}: 
 \begin{quote}
 ... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
-A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \citep{fujikoshi_multivariate_2011}.
-Alternatively, if the size of the brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005}.
-In contrast to \emph{accuracy tests}, we call these \emph{location tests}, a.k.a. \emph{class comparison} in \cite{simon_pitfalls_2003}.
+A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \citep{anderson_introduction_2003}.
+Alternatively, if the size of a brain region is too large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{schafer_shrinkage_2005} or \cite{srivastava_testing_2013}.
+For breivity, and in contrast to \emph{accuracy tests}, we will call these two-sample multivaraite tests simply \emph{location tests}, also termed \emph{class comparisons} in \cite{simon_pitfalls_2003}.
 
 At this point, it becomes unclear which is the preferred test. 
 The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003}. 
