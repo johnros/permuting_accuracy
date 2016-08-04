@@ -84,10 +84,10 @@ For breivity, and in contrast to \emph{accuracy tests}, we will call these two-s
 At this point, it becomes unclear which is preferable: a location test or an accuracy test?
 The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $959$ citations\footnote{GoogleScholar. Accesed on Aug 4, 2016.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
-The comparison between location and accuracy tests was precisely the topic of \cite{ramdas_classification_2016}, who compared the Hotelling location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA) \citep{hastie_elements_2003}. 
-Using an asymptotic analysis, \cite{ramdas_classification_2016} concluded that accuracy and location tests are equivalent with respect to their order of convergence to a consistent test, while they differ in constants. 
-Judging by rate of convergence alone, this result may suggest that not much is (asymptoticaly) lost by using an accuracy test. 
-On the other hand, asymptotic relative efficency measures (ARE) such as \emph{Pitman's}, \emph{Bahadur's}, and \emph{Hodges-Lehman's}, always assume equivalent convergence rates \citep{vaart_asymptotic_1998}. 
+The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
+By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
+Judging by convergence rates alone, not much is (asymptoticaly) lost by using an accuracy test. 
+Asymptotic relative efficency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
 
 In \cite{ramdas_classification_2016} setup, the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
 This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
