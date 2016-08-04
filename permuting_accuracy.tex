@@ -108,7 +108,7 @@ This number of examples is not unusual if considering this is the number of subj
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
 For an intuition consider the usage of a the \emph{training} accuracy as a test statistic.
-This is the \emph{resubstition accuracy} in \cite{ramdas_classification_2016}, and simply means that the accuracy is not cross validated. 
+This is the \emph{resubstition classification} in \cite{ramdas_classification_2016}, and simply means that the accuracy is not cross validated. 
 If the data is high dimensional, the train accuracy will be very high due to over fitting. 
 In an extreme case, the train accuracy will be $1$ for the observed data, but also for any permutaiton. 
 The concentration of the train accuracy near $1$, and its discreteness, render this test completely useless, with a power of $0$. 
@@ -156,10 +156,10 @@ We will now address these questions while bearing in mind that unlike the typica
 Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
 Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
 We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
-This, however, implies that if the classes are identical, random guessing has a $0.5$ accuracy. This is not true if the classes are not balanced. 
+This, however, implies that if the classes are identical, random guessing has $0.5$ accuracy. This is not true if the classes are not balanced. 
 The chance level in which case is the prevalence of the dominant class, we denote by $\dominant$.
 This suggests the following test statistic $|\acc_{\hypEstim}-\dominant|$.
-Since we will be aggregating these statistic over random data sets where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
+Since we will be aggregating these statistics over random data sets where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
 We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$.
 
 
@@ -167,7 +167,7 @@ We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\dominant|/\sqrt
 Were we interested in an unbiased estimator of the prediction error, there is no question that some independent validation is in order. 
 Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
-We will thus be considering both cross validated accuracies, and \emph{train} accuracies as our test statistics, a.k.a.\ \emph{resubstitution classification} in \cite{ramdas_classification_2016}. 
+We will thus be considering both cross validated accuracies, and \emph{train} accuracies as our test statistics, a.k.a.\ \emph{resubstitution classification}. 
 
 
 \paragraph{Refolding?}
@@ -183,7 +183,7 @@ As an example, consider balanced (stratified) K-fold cross validation where the 
 After a label permutation, the original folds will probably not be balanced. 
 If the \emph{features} are permuted, then the labels conserve their original fold assignments, and the original folds are balanced after each permutation. 
 Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
-We thus adhere to the more common, albeit less efficient practice, of permuting labels. 
+We thus adhere to the more common, albeit computationally less efficient practice of permuting labels. 
 
 
 \paragraph{Balanced folding?}
