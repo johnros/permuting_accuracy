@@ -298,17 +298,18 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 \item Location tests have more power than accuracy tests in all our configurations.
 \item The conservativness decays as the sample grows (Figure~\ref{fig:large_sample}), supporting the statement that discretization is responsible for power loss. 
 \item The power is may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). [TODO:effect of n.folds.]
+\item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
+In the cases where it has any effect, it merely kills power.
+There is really no reason to use it. 
 \item ... [TODO: effect of balancing]
 \item ... [TODO: heavy tails]
 \item ... [TODO: signal in scale]
 \item ... [TODO: correlation between voxels]
-\item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings, where it kills all power.
-There is really no reason to use it. 
 \end{enumerate}
 
-We see by now that the use of accuracy tests for signal detection is underpowered compared to location tests. 
-Simulations alone cannot, however, support such a universal statement. 
-We will thus verify on a neuroimaging dataset, and discuss the causes for this phenomenon with implications on the scope of our statement.
+
+The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to location tests. 
+We now verify this finding on a neuroimaging dataset.
 
 
 
