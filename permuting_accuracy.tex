@@ -291,11 +291,20 @@ Simulation code available at [TODO].}
 \section{Power}
 \label{sec:power}
 
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power; 
-Especially when comparing the power of location tests to accuracy tests. 
-On the other hand, the results of our previous sections suggest that the conservativeness of some of the considered tests can be considerable, rendering them underpowered. 
-
-[TODO: discuss power of various tests after finishing simulations]
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- 
+especially when comparing the power of location tests to accuracy tests. 
+From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
+\begin{enumerate}
+\item Location tests have more power than accuracy tests in all our configurations.
+\item The conservativness decays as the sample grows (Figure~\ref{fig:large_sample}), supporting the statement that discretization is responsible for power loss. 
+\item The power is may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). [TODO:effect of n.folds.]
+\item ... [TODO: effect of balancing]
+\item ... [TODO: heavy tails]
+\item ... [TODO: signal in scale]
+\item ... [TODO: correlation between voxels]
+\item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings, where it kills all power.
+There is really no reason to use it. 
+\end{enumerate}
 
 We see by now that the use of accuracy tests for signal detection is underpowered compared to location tests. 
 Simulations alone cannot, however, support such a universal statement. 
@@ -481,32 +490,57 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 \newpage
 
-\section{More Simulations}
+\section{Simulations}
+\label{apx:simulations}
+
 
 
 \begin{figure}[h]
 \centering
-%\label{fig:simulation_1}
 \caption{\footnotesize [TODO].}	
+\label{fig:n_folds}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-27 21:21:12"}
-	  \caption{2 Folds.}  %TODO
-	\label{fig:2016-07-2721:21:12}
+	  \caption{2 Folds. Balanced}  %TODO
+	\label{fig:n_folds_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
-	  \caption{20 Folds.} %TODO
-%	\label{fig:2016-07-2721:21:12}
+	  \caption{20 Folds.Balanced} %TODO
+	\label{fig:n_folds_2}
 	\end{subfigure}
 \end{figure}
 
 
+
 \begin{figure}[h]
 \centering
-%\label{fig:simulation_1}
 \caption{\footnotesize [TODO].}	
+\label{fig:n_folds_unbalanced}
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+  	  \missingfigure[figwidth=6cm]{TODO}
+%	  \includegraphics[width=1\linewidth]{"art/2016-07-27 21:21:12"}
+	  \caption{2 Folds. Unalanced}  %TODO
+	\label{fig:n_folds_unbalanced_1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	  \centering
+	  \missingfigure[figwidth=6cm]{TODO}
+%	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
+	  \caption{20 Folds. Unbalanced} %TODO
+	\label{fig:n_folds_unbalanced_2}
+	\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[h]
+\centering
+\caption{\footnotesize [TODO].}	
+%\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-30 10:33:05"}
@@ -526,8 +560,8 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 \begin{figure}[h]
 \centering
-%\label{fig:simulation_1}
 \caption{\footnotesize [TODO].}	
+%\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
   	  \missingfigure[figwidth=6cm]{TODO}
@@ -548,19 +582,19 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 \begin{figure}[h]
 \centering
-%\label{fig:simulation_1}
 \caption{\footnotesize [TODO].}	
+\label{fig:large_sample}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05zoom"}
 	  \caption{n=40, zoom}  %TODO
-%	\label{fig:2016-07-2721:21:12}
+	\label{fig:fig:large_sample_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-08-04 13:59:33zoom"}
 	  \caption{n=400, zoom} %TODO
-%	\label{fig:2016-07-2721:21:12}
+	\label{fig:fig:large_sample_2}
 	\end{subfigure}
 \end{figure}
 
@@ -569,8 +603,8 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 \begin{figure}[h]
 \centering
-%\label{fig:simulation_1}
 \caption{\footnotesize [TODO].}	
+%\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  	  \missingfigure[figwidth=6cm]{TODO}
