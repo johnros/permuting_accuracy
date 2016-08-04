@@ -125,14 +125,14 @@ The main findings are reported in Section~\ref{sec:power}, and the intution for 
 \section{Problem setup}
 \label{sec:problem_setup}
 
-Let $\outcomes \in \outcomeS$ be a class encoding. In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$.
+Let $\outcomes \in \outcomeS$ be a class encoding. 
 Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
-In our vocal/non-vocal example $p$ is the number of voxels in a brain region. We thus have $\featureS=\reals^{27}$. 
+In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the number of voxels in a brain region so that $\featureS=\reals^{27}$. 
 
-Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$ (or at least the same location). 
-I.e., the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
+Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
+I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 An accuracy test amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
-The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction $\acc_{\hypEstim}:=\prob{\hypEstim(x)=y}$ when given a new, randomly drawn data point, ($\features,\outcomes$).
+The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction $\acc_{\hypEstim}:=\prob{\hypEstim(x)=y}$ when given a randomly drawn data point, ($\features,\outcomes$).
 A statistically significant ``better than chance'' estimate of $\acc_{\hypEstim}$ is evidence that the classes are distinct. 
 
 
