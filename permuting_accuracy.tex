@@ -373,27 +373,30 @@ We attribute this to several phenomena:
 (b) Inneficient use of the data for the validation set. 
 
 The sensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdout. 
-
 The degree of discretization is govenred by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inneficiency, but will not uncover the discretization effect. 
+The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivaraite test (be it a location test or other), that is more powerful. There is also a good chance that it would be easier to imeplement, since no validation will be involved. 
 
-The linear classifier assumption, (c), is immaterial since for every non-linear clasifier, one may design a non-linear location test. See \cite{gretton_kernel_2012} for an example of a location test in RKHS space.
-[TODO: relate to large sample simulation]
-[TODO: discuss ARE, and holdout versus leave one out effect].
-[TODO: non-linear classification and testing].
+\paragraph{Neyman-Pearson Learning}
+[TODO: optimizing type I or type II errors].
+\cite{scott_neyman-pearson_2005}
 
+\paragraph{A good accuracy test}
+[TODO: discuss other findings in the power section]
+
+\paragraph{Related Literature}
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
 (b) The problem of the accuracy test with unbalanced data-sets, which motivates \cite{olivetti_induction_2012}'s independence test, can also be remedied by replacing the accuracy statistic with its z-score, as suggested in Section~\ref{sec:estimate_accuracy}.
 
+\paragraph{Reservations}
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
 This would be the case in decoding applications, like brain-machine interfaces, where the localization a signal is not enough. 
 Clinical diagnosis is another application, where the presence of a medical condition is ``predicted'' from imaging data. \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}
-
 
 Secondly, not all signals are manifested in a shift of the null distrubiton. 
 Put differently, the preferred alternative to an accuracy test is not always a location test. 
@@ -403,13 +406,14 @@ The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain
 On the other hand, the far greater power of the location test, certianly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
 [TODO: signal in scale? heavy tails?]
 
-
+\paragraph{Ease of implementation}
 A very important point is the ease of implementation. 
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
 Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
 
+\paragraph{Epilogue}
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
 We believe this is due to a reversal of the inference cascade. 
 Researchers first fit a classifier, and then ask if the classes are any different.
