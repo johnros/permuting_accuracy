@@ -92,14 +92,12 @@ Asymptotic relative efficency measures (ARE) are typically used by statisticians
 The ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test in \cite{ramdas_classification_2016} is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
 This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
 In this light, the accuracy test is remarakbly inneficient compared to the location test.  
-For comparison, the t-test is only $1.04$ more (asymptotically) efficienct than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}. 
-Admittidly, \cite{ramdas_classification_2016}'s results hold for LDA with a half-sample holdout. 
-This suggests that the ARE of leave-one-out validation, for instance, will be closer to $1$. 
-We revisit this matter in the discussion section.
+For comparison, the t-test is only $1.04$ more (asymptotically) efficienct than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $2.5$ is strong evidence in favour of the location test. 
 
-
-The relative efficiency, governing the power of the tests, may prove crucial when dealing with the finite sample sizes in neuroscience and genetics, and thus the focus of this study. 
-We thus seek to study which test is to be preferred in finite samples? 
+Before discarding accuracy tests, we recall that \cite{ramdas_classification_2016} analyzed a half-sample holdout. 
+The authors thus conjecture that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
+On the other hand, the analysis in \cite{ramdas_classification_2016} is asymptotic. This eschews the discrete nature of the accuracy statistic, which will shown to have  acrucial impact. 
+Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples? 
 Our conclusion will be quite simple: {\em location tests almost always have more power than accuracy tests}.
 
 The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
