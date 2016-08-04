@@ -89,9 +89,9 @@ By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classif
 Judging by convergence rates alone, not much is (asymptoticaly) lost by using an accuracy test. 
 Asymptotic relative efficency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
 
-In \cite{ramdas_classification_2016} setup, the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
+The ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test in \cite{ramdas_classification_2016} is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
 This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
-Clearly, the accuracy test is remarakbly inneficient, even when the discretization effecet has been cancelled by asymptotics. 
+In this light, the accuracy test is remarakbly inneficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficienct than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}. 
 Admittidly, \cite{ramdas_classification_2016}'s results hold for LDA with a half-sample holdout. 
 This suggests that the ARE of leave-one-out validation, for instance, will be closer to $1$. 
