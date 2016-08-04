@@ -299,12 +299,12 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 \item The conservativness decays as the sample grows (Figure~\ref{fig:large_sample}), supporting the statement that discretization is responsible for power loss. 
 \item The power is may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). [TODO:effect of n.folds.]
 \item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
-In the cases where it has any effect, it merely kills power.
+If the z-scoring has any effect at all, it merely kills power.
 There is really no reason to use it. 
-\item ... [TODO: effect of balancing]
-\item ... [TODO: heavy tails]
-\item ... [TODO: signal in scale]
-\item ... [TODO: correlation between voxels]
+\item ... [TODO: effect of balancing].
+\item ... [TODO: heavy tails].
+\item ... [TODO: signal in scale].
+\item ... [TODO: correlation between voxels].
 \end{enumerate}
 
 
@@ -324,12 +324,12 @@ Each subject was exposed to $20$ sounds of each type, totalling in $n=40$ trials
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
-We perform permutation inference using the pipeline of \cite{stelzer_statistical_2013}, which was also used in \cite{gilron_quantifying_2016}. 
+We perform group inference using within-subjcet permutations using the pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
 To demonstrate our point, we compare the \emph{sd} location test with the \emph{svm.cv.1} accuracy test (see Table~\ref{tab:collected} for the definition of these statistics). 
 
 In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
-The former discovers $1,232$ regions, while the latter only $441$, as reported in Figure~\ref{fig:read_data}.
+The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
 Having established that accuracy tests are underpowered both in simulation and in application, we wish to identify the conditions under which this will occur, and discuss implications on the practice of accuracy tests. 
@@ -368,12 +368,14 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
 Using simulations, we have concluded that the location tests are preferable. 
-We attribute this to the discretization introduced in finite samples by the accuracy test statistic. 
-This also explains why an asymptotic analysis, such as \cite{ramdas_classification_2016}, did not find a rate difference. 
-Their results however are limited in that:
-(a) they are asymptotic, thus eschew the discretization effect.
-(b) They assume a half-sample holdout, so that half of the data is available for estimation. 
-(c) They assume a linear classifier.
+We attribute this to several phenomena: 
+(a) Discretization introduced in finite samples by the accuracy test statistic. 
+(b) Inneficient use of the data for the validation set. 
+
+The sensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdout. 
+
+The degree of discretization is govenred by the sample size. 
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inneficiency, but will not uncover the discretization effect. 
 
 The linear classifier assumption, (c), is immaterial since for every non-linear clasifier, one may design a non-linear location test. See \cite{gretton_kernel_2012} for an example of a location test in RKHS space.
 [TODO: relate to large sample simulation]
