@@ -101,16 +101,21 @@ Since typical sample sizes in neuroscience are not large, we seek to study which
 Our conclusion will be quite simple: {\em location tests almost always have more power than accuracy tests}.
 
 The main argument for our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
-Discrete test statistics are known to be conservative \citep{hemerik_exact_2014-1}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
+Discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
 The degree of discretization is governed by the number of samples. 
 In our neuroscience example from \citep{gilron_quantifying_2016}, the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
 This number of examples is not unusual if considering this is the number of subjects, or the number of trial-repeats in an neuroimaging study. 
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
-For an intuition consider the usage of the \emph{train} accuracy test statistic (i.e., not cross validated).
-In Section~\ref{sec:power} we then address our main question- which test has more power? 
-Based on the finding that the location test is typically more powerful, we try to offer an intuition for this phenomenon in the Discussion section. 
+For an intuition consider the usage of a the \emph{training} accuracy as a test statistic.
+This is the \emph{resubstition accuracy} in \cite{ramdas_classification_2016}, and simply means that the accuracy is not cross validated. 
+If the data is high dimensional, the train accuracy will be very high due to over fitting. 
+In an extreme case, the train accuracy will be $1$ for the observed data, but also for any permutaiton. 
+The concentration of the train accuracy near $1$, and its discreteness, render this test completely useless, with a power of $0$. 
 
+
+To compare the power of accuracy tests and location tests in finite samples, we perform a simulation study of a battery of test statistics. 
+The main findings are reported in Section~\ref{sec:power}, and the intution for our findings is provided in Section~\ref{sec:discussion}, but first, the problem's setup. 
 
 
 
