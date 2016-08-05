@@ -41,7 +41,7 @@
 \newcommand{\Y}{\rv Y} % The random variable y
 \newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The gaussian distribution
 \newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The gaussian distribution
-
+\newcommand{\mycaption}{Simulation details in Appendix~\ref{apx:simulation_details} except the changes in the sub-captions.}
 
 
 
@@ -478,7 +478,7 @@ and related ``data science'' communities.
 
 
 %\begin{acknowledgments}
-%TODO: 
+%TODO
 % isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir
 %\end{acknowledgments}
 
@@ -557,9 +557,10 @@ Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i
 The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$. 
 The sample size $n=40$. 
 The dimension of the data is $p=23$. 
-Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$, unless stated otherwise.
+Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
+For test statistics that require data folding, we used $8$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $400$ such permutations. 
 We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
@@ -577,18 +578,18 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 \label{fig:n_folds}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-27 21:21:12"}
-	  \caption{2 Folds. Balanced}  %TODO
+	  \caption{2-fold cross validation. Balanced folding.}  
 	\label{fig:n_folds_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
-	  \caption{20 Folds.Balanced} %TODO
+	  \caption{20-fold cross validation. Balanced folding} 
 	\label{fig:n_folds_2}
 	\end{subfigure}
 \end{figure}
@@ -597,7 +598,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 \label{fig:n_folds_unbalanced}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
@@ -618,7 +619,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 %\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
@@ -638,7 +639,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 %\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
@@ -660,7 +661,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 \label{fig:large_sample}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
@@ -681,7 +682,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize [TODO].}	
+\caption{\mycaption}	
 %\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
