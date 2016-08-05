@@ -12,6 +12,7 @@
 \usepackage{subcaption}
 \usepackage{lineno}
 \usepackage{tcolorbox}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
 
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
@@ -274,20 +275,22 @@ We return to this matter in the Discussion.
 The power of a permutation test with various test statistics. 
 The power on the $x$ axis. 
 Effect are color and shape coded. 
-The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. 
+The various statistics on the $y$ axis. 
+Their details are given in Table~\ref{tab:collected}. 
 Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-Simulation details in Appendix~\ref{apx:simulation_details}.}	
+Simulation details in Appendix~\ref{apx:simulation_details}.
+Cross-validation was performed with balanced (stratified) and unbalanced data folding. See sub-captions.}	
 \label{fig:simulation_1}
 \begin{subfigure}{.5\textwidth}
 \centering
 \includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-\caption{\textbf{Unbalanced}.}  %TODO
+\caption{\textbf{Unbalanced.}}  
 \label{fig:simulation_11}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
 \centering
 \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-\caption{Balanced.} %TODO
+\caption{\textbf{Balanced.}} 
 \label{fig:simulation_12}
 \end{subfigure}
 \end{figure}
