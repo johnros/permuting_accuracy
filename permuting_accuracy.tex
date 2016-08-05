@@ -301,9 +301,9 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 \item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
 There is really no reason to use it. 
+\item Not suprisingly, if the two groups differ in scale, and not in location, then none of the tests is appropriate (Figure~\ref{fig:scale_change}). 
 \item ... [TODO: effect of balancing].
 \item ... [TODO: heavy tails].
-\item ... [TODO: signal in scale].
 \item ... [TODO: correlation between voxels].
 \item ... [TODO: effect of tunning parameter].
 \end{enumerate}
@@ -431,8 +431,9 @@ Our focus on location tests is misleading. Perhaps \cite{simon_pitfalls_2003}'s 
 Indeed, one may consider signal, i.e. effects, as a change in scale, such as the \emph{spiked covariance} model. In this case, other-than-Hotelling type tests are appropriate \citep[e.g.][]{nadler_finite_2008}.
 Tests have been proposed even when the nature of the difference between populations is left unspecified \citep[e.g.][]{gretton_kernel_2012-1}.
 The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, is consistent with this observation. 
-On the other hand, the far greater power of the location test, certianly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
-[TODO: signal in scale? heavy tails?]
+
+The reservation to the reservation is that the far greater power of the location test, certianly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
+
 
 \subsection{Ease of implementation}
 A very important point is the ease of implementation. 
