@@ -275,9 +275,8 @@ The power of a permutation test with various test statistics.
 The power on the $x$ axis. 
 Effect are color and shape coded. 
 The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. 
-Data generated with $\y_i = \mu_i + \eta_i; i=1,\dots,n; \eta \sim \gaussp{p}{0,I}; n=40; p=23$. 
-They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-Simulation code available at [TODO].}	
+Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+Simulation details in Appendix~\ref{apx:simulation_details}.}	
 \label{fig:simulation_1}
 \begin{subfigure}{.5\textwidth}
 \centering
@@ -543,15 +542,22 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 
 \section{Simulation Details}
+\label{apx:simulation_details}
 
 The follwing details are common to all the reported simulations. 
-Data generated as a $n$ i.i.d. samples from a shift model $\y_i = \mu_i + \eta_i$.
+Each simulation is based on $4,000$ replications, unless stated otherwise. 
+In each replication, we generate $n$ i.i.d. samples from a shift model $\y_i = \mu_i + \eta_i$.
 The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$ unless stated otherwise. 
 The sample size $n=40$ unless stated otherwise. 
 The dimension of the data is $p=23$. 
 Effects, i.e. the shifts $\mu_i$, are equal coordinate $p$-vectors with coordinates that vary over $\mu_i \in \set{0,1/4,1/2}$, unless stated otherwise.
-They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-Simulation code available at [TODO]
+
+Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
+We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
+We perform $400$ such permutations. 
+We then reject the $\mu_j=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
+
+Simulation code available at [TODO].
 
 
 \section{Simulation Results}
