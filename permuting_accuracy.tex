@@ -545,6 +545,8 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \label{apx:simulation_details}
 
 The follwing details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
+The \textsf{R} code for the simulations can be found in [TODO].
+
 Each simulation is based on $4,000$ replications. 
 In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
 Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
@@ -558,9 +560,12 @@ Having generated the data, we compute each of the test statistics in Table~\ref{
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $400$ such permutations. 
 We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
+The reported power is the proportion of replication where the permutation p-value falls below $0.05$.
 
-Simulation code available at [TODO].
 
+
+
+\newpage
 
 \section{Simulation Results}
 \label{apx:simulations}
