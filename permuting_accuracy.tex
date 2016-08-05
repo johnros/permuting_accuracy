@@ -544,18 +544,20 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \section{Simulation Details}
 \label{apx:simulation_details}
 
-The follwing details are common to all the reported simulations. 
-Each simulation is based on $4,000$ replications, unless stated otherwise. 
-In each replication, we generate $n$ i.i.d. samples from a shift model $\y_i = \mu_i + \eta_i$.
-The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$ unless stated otherwise. 
-The sample size $n=40$ unless stated otherwise. 
+The follwing details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
+Each simulation is based on $4,000$ replications. 
+In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
+Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
+Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i=2 y^*_i-1$.
+The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$. 
+The sample size $n=40$. 
 The dimension of the data is $p=23$. 
-Effects, i.e. the shifts $\mu_i$, are equal coordinate $p$-vectors with coordinates that vary over $\mu_i \in \set{0,1/4,1/2}$, unless stated otherwise.
+Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$, unless stated otherwise.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $400$ such permutations. 
-We then reject the $\mu_j=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
+We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
 
 Simulation code available at [TODO].
 
