@@ -386,9 +386,9 @@ There is also a good chance that it would be easier to imeplement, since no vali
 [TODO: optimizing type I or type II errors].
 \cite{scott_neyman-pearson_2005}
 
-\subsection{A good accuracy test}
-[TODO: discuss other findings in the power section]
 
+
+\subsection{A good accuracy test}
 In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
 \begin{enumerate}
@@ -402,12 +402,14 @@ For such cases we collect some conclusions from our simulations on the best prac
 \end{enumerate}
 
 
+
+
 \subsection{Related Literature}
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
-(b) The problem of the accuracy test with unbalanced data-sets, which motivates \cite{olivetti_induction_2012}'s independence test, can also be remedied by replacing the accuracy statistic with its z-score, as suggested in Section~\ref{sec:estimate_accuracy}.
+(b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
 
 
