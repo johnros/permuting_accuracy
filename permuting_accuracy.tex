@@ -12,7 +12,7 @@
 \usepackage{subcaption}
 \usepackage{lineno}
 \usepackage{tcolorbox}
-\usepackage[font=footnotesize,labelfont=bf]{caption}
+\usepackage[font=footnotesize]{caption}
 
 
 \author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
@@ -554,9 +554,10 @@ Each simulation is based on $4,000$ replications.
 In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
 Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
 Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i=2 y^*_i-1$.
-The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$. 
+The noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$. 
 The sample size $n=40$. 
 The dimension of the data is $p=23$. 
+The covariance $\Sigma=I$. 
 Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
@@ -583,13 +584,13 @@ The reported power is the proportion of replication where the permutation p-valu
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-27 21:21:12"}
-	  \caption{2-fold cross validation. Balanced folding.}  
+	  \caption{\textbf{2-fold} cross validation. Balanced folding.}  
 	\label{fig:n_folds_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
-	  \caption{20-fold cross validation. Balanced folding} 
+	  \caption{\textbf{20-fold} cross validation. Balanced folding} 
 	\label{fig:n_folds_2}
 	\end{subfigure}
 \end{figure}
@@ -603,14 +604,14 @@ The reported power is the proportion of replication where the permutation p-valu
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-08-05 09:37:35"}
-	  \caption{2 Folds. Unbalanced}  %TODO
+	  \caption{\textbf{2-fold} cross validation. Unbalanced folding.} 
 	\label{fig:n_folds_unbalanced_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \missingfigure[figwidth=6cm]{TODO}
 %	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
-	  \caption{20 Folds. Unbalanced} %TODO
+	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
 	\label{fig:n_folds_unbalanced_2}
 	\end{subfigure}
 \end{figure}
@@ -624,13 +625,13 @@ The reported power is the proportion of replication where the permutation p-valu
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-30 10:33:05"}
-	  \caption{Scale Change.}  %TODO
+	  \caption{\textbf{Scale Change:} $\x_i =  \eta_i * \mu^ {\y^*_i}$ so that the effect are a scale change.}  
 	\label{fig:scale_change}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-08-04 19:32:17"}
-	  \caption{t Null} %TODO
+	  \caption{\textbf{Heavytailed:} $\eta_i$ is not $p$-variate Gaussia, but rather $p$-variate t, with $3$ degrees of freedom.  } 
 	\label{fig:t_null}
 	\end{subfigure}
 \end{figure}
