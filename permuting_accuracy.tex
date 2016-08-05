@@ -305,6 +305,7 @@ There is really no reason to use it.
 \item ... [TODO: heavy tails].
 \item ... [TODO: signal in scale].
 \item ... [TODO: correlation between voxels].
+\item ... [TODO: effect of tunning parameter].
 \end{enumerate}
 
 
@@ -370,28 +371,36 @@ We have set out to understand which of the tests is more powerful: the accuracy 
 Using simulations, we have concluded that the location tests are preferable. 
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
-(b) Inneficient use of the data for the validation set. 
+(b) Inneficient use of the data for the validation holdout set. 
 
 The sensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdout. 
 The degree of discretization is govenred by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inneficiency, but will not uncover the discretization effect. 
-The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivaraite test (be it a location test or other), that is more powerful. There is also a good chance that it would be easier to imeplement, since no validation will be involved. 
+The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivaraite test (be it a location test or other), that is more powerful than an accuracy test. 
+There is also a good chance that it would be easier to imeplement, since no validation will be involved. 
 
-\paragraph{Neyman-Pearson Learning}
+
+\subsection{Neyman-Pearson Learning}
 [TODO: optimizing type I or type II errors].
 \cite{scott_neyman-pearson_2005}
 
-\paragraph{A good accuracy test}
+\subsection{A good accuracy test}
 [TODO: discuss other findings in the power section]
 
-\paragraph{Related Literature}
+\subsection{Related Literature}
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
 (b) The problem of the accuracy test with unbalanced data-sets, which motivates \cite{olivetti_induction_2012}'s independence test, can also be remedied by replacing the accuracy statistic with its z-score, as suggested in Section~\ref{sec:estimate_accuracy}.
 
-\paragraph{Reservations}
+
+
+\subsection{Non-linear predictors}
+
+
+
+\subsection{Reservations}
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
@@ -406,14 +415,14 @@ The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain
 On the other hand, the far greater power of the location test, certianly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
 [TODO: signal in scale? heavy tails?]
 
-\paragraph{Ease of implementation}
+\subsection{Ease of implementation}
 A very important point is the ease of implementation. 
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
 Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
 
-\paragraph{Epilogue}
+\subsection{Epilogue}
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
 We believe this is due to a reversal of the inference cascade. 
 Researchers first fit a classifier, and then ask if the classes are any different.
@@ -528,7 +537,8 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \label{fig:n_folds_unbalanced}
 	\begin{subfigure}{.5\textwidth}
 	  \centering
-	  \includegraphics[width=1\linewidth]{"art/2016-08-05 06:39:27"}
+	  	  \missingfigure[figwidth=6cm]{TODO}
+%	  \includegraphics[width=1\linewidth]{"art/2016-08-05 06:39:27"}
 	  \caption{2 Folds. Unalanced}  %TODO
 	\label{fig:n_folds_unbalanced_1}
 	\end{subfigure}%
