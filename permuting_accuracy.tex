@@ -45,7 +45,8 @@
 \newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The gaussian distribution
 \newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The gaussian distribution
 \newcommand{\mycaption}{Simulation details in Appendix~\ref{apx:simulation_details} except the changes in the sub-captions.}
-
+\newcommand{\argmin}[2]{\mathop{argmin} _{#1}\set{#2}} % The argmin operator
+\newcommand{\argmax}[2]{\mathop{argmax} _{#1}\set{#2}} % The argmin operator
 
 
 
@@ -399,6 +400,9 @@ There is also a good chance that it would be easier to implement, since no valid
 
 
 \subsection{Neyman-Pearson Learning}
+Classifiers are designed to solve $\argmin{}{FP+FN}$ where $FP$ and $FN$ are the false positive and false negative error rates, or \emph{type I} and \emph{type II} errors, respectively.
+One might thus argue that our simulations are unfair since our simulation benchmark is $\argmax{}{FN s.t. FP \leq \alpha}$, as in the classical Neyman-Pearson framework.
+
 [TODO: optimizing type I or type II errors].
 \cite{scott_neyman-pearson_2005}
 
