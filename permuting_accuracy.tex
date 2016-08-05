@@ -401,10 +401,12 @@ There is also a good chance that it would be easier to implement, since no valid
 
 \subsection{Neyman-Pearson Learning}
 Classifiers are designed to solve $\argmin{}{FP+FN}$ where $FP$ and $FN$ are the false positive and false negative error rates, or \emph{type I} and \emph{type II} errors, respectively.
-One might thus argue that our simulations are unfair since our simulation benchmark is $\argmax{}{FN s.t. FP \leq \alpha}$, as in the classical Neyman-Pearson framework.
+One might thus argue that our simulations are unfair since our simulation benchmark is $\argmax{}{FN \; s.t. \; FP \leq \alpha}$, as in the classical Neyman-Pearson framework for which the location tests are designed. 
+Our view is that this is not the case because, and the comparison is indeed ``fair''. 
+This is because the permutation test ensures that the constrain 
 
-[TODO: optimizing type I or type II errors].
-\cite{scott_neyman-pearson_2005}
+
+%Neyman-Pearson classifier: \cite{scott_neyman-pearson_2005}
 
 
 
