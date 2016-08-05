@@ -391,12 +391,15 @@ There is also a good chance that it would be easier to imeplement, since no vali
 
 In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
-(a) The conservativeness due to discretization decreases with sample size. 
-(b) Permuting features is easier than permuting labels. It allows to preserve balanced folds after a permutation without refolding. 
-(c) z-scoring?
-(d) balance?
-(e) n.folds
-(f) tunning parameter.
+\begin{enumerate}
+\item The conservativeness due to discretization decreases with sample size. 
+\item Cross-validate. For moderate sample sizes, the power loss due to the holdout inneficiency is smaller than the power loss due to the concentration of the train accuracy. 
+\item Permuting features is easier than permuting labels. It allows to preserve balanced folds after a permutation without refolding. 
+\item There is no gain in z-scoring the acccuracy scores. 
+\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon.
+\item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. On the other hand, it increases the concentration of the accuracy statistic. Compunded with the discreteness of the accuracy statistic, this decreases power. 
+\item The value of the tunning parameters of a classifier do not matter. 
+\end{enumerate}
 
 
 \subsection{Related Literature}
@@ -435,6 +438,8 @@ The need for cross validation of the accuracy test greatly increases its computa
 Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
+
+
 
 \subsection{Epilogue}
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
