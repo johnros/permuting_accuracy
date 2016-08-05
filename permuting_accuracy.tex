@@ -299,10 +299,11 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 \item Location tests have more power than accuracy tests in all our configurations.
 \item The conservativeness decays as the sample grows (Figure~\ref{fig:large_sample}), supporting the statement that discretization is responsible for power loss. 
 \item The power is may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). [TODO:effect of n.folds.]
-\item ... The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
+\item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
 There is really no reason to use it. 
-\item Not surprisingly, if the two groups differ in scale, and not in location, then none of the tests is appropriate (Figure~\ref{fig:scale_change}). 
+\item Both accuracy and location tests are innapropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
+This was to be expeted and is reported mostly as a sanity check.
 \item The presence of heavy tails (Figure~\ref{fig:t_null}) may reduce power, but does not quantitatively change results. 
 \item ... [TODO: effect of balancing].
 \item ... [TODO: correlation between voxels].
@@ -434,6 +435,8 @@ Tests have been proposed even when the nature of the difference between populati
 The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, is consistent with this observation. 
 
 The reservation to the reservation is that the far greater power of the location test, certainly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
+
+
 
 
 \subsection{Ease of implementation}
