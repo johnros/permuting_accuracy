@@ -33,7 +33,13 @@
 \newcommand{\acc}{T^{acc}} 
 \newcommand{\dominant}{\hat{p}_{max}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
-
+\newcommand{\rv}[1]{\mathbf{#1}} % A random variable
+\newcommand{\x}{\rv x} % The random variable x 
+\newcommand{\y}{\rv y} % The random variable x 
+\newcommand{\X}{\rv X} % The random variable x 
+\newcommand{\Y}{\rv Y} % The random variable y
+\newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The gaussian distribution
+\newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The gaussian distribution
 
 
 
@@ -267,14 +273,16 @@ We return to this matter in the Discussion.
 \caption{\footnotesize
 The power of a permutation test with various test statistics. 
 The power on the $x$ axis. 
-Effect are color and shape coded. They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+Effect are color and shape coded. 
 The various statistics on the $y$ axis. Their details are given in Table~\ref{tab:collected}. 
+Data generated with $\y_i = \mu_i + \eta_i; i=1,\dots,n; \eta \sim \gaussp{p}{0,I}; n=40; p=23$. 
+They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
 Simulation code available at [TODO].}	
 \label{fig:simulation_1}
 \begin{subfigure}{.5\textwidth}
 \centering
 \includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-\caption{Unbalanced.}  %TODO
+\caption{\textbf{Unbalanced}.}  %TODO
 \label{fig:simulation_11}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
@@ -533,7 +541,20 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 
 \newpage
 
-\section{Simulations}
+
+\section{Simulation Details}
+
+The follwing details are common to all the reported simulations. 
+Data generated as a $n$ i.i.d. samples from a shift model $\y_i = \mu_i + \eta_i$.
+The noise is distributed as $\eta_i \sim \gaussp{p}{0,I}$ unless stated otherwise. 
+The sample size $n=40$ unless stated otherwise. 
+The dimension of the data is $p=23$. 
+Effects, i.e. the shifts $\mu_i$, are equal coordinate $p$-vectors with coordinates that vary over $\mu_i \in \set{0,1/4,1/2}$, unless stated otherwise.
+They are assumed to be equal in all the $23$ dimensions, and vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+Simulation code available at [TODO]
+
+
+\section{Simulation Results}
 \label{apx:simulations}
 
 
