@@ -109,10 +109,10 @@ This number of examples is not unusual if considering this is the number of subj
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
 For an intuition consider the usage of a the \emph{training} accuracy as a test statistic.
-This is the \emph{resubstitution classification} in \cite{ramdas_classification_2016}, and simply means that the accuracy is not cross validated. 
-If the data is high dimensional, the train accuracy will be very high due to over fitting. 
-In an extreme case, the train accuracy will be $1$ for the observed data, but also for any permutation 
-The concentration of the train accuracy near $1$, and its discreteness, render this test completely useless, with a power of $0$. 
+This is the \emph{resubstitution classification}, and simply means that the accuracy is not cross validated. 
+If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
+In an extreme case, the resubstitution accuracy will be $1$ for the observed data, but also for any permutation 
+The concentration of the resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power of $0$. 
 
 
 To compare the power of accuracy tests and location tests in finite samples, we perform a simulation study of a battery of test statistics. 
@@ -235,7 +235,7 @@ Three are location tests: Hotelling, Hotelling.shrink, and sd.
 \textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
 The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
 For example, \textit{svm.CV.4} is a linear SVM, with \textit{libsvm}'s cost parameter set at $0.1$, using the cross validated z-scored accuracy ($|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$, see Section~\ref{sec:considerations}).
-Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the train accuracy, without cross validation, and without z-scoring. 
+Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy, without cross validation, and without z-scoring. 
 }
 \label{tab:collected}
 \end{table}
@@ -394,7 +394,7 @@ In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
 \begin{enumerate}
 \item The conservativeness due to discretization decreases with sample size. 
-\item Cross-validate. For moderate sample sizes, the power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the train accuracy. 
+\item Cross-validate. For moderate sample sizes, the power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the resubstitution accuracy. 
 \item Permuting features is easier than permuting labels. It allows to preserve balanced folds after a permutation without refolding. 
 \item There is no gain in z-scoring the accuracy scores. 
 \item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon.
