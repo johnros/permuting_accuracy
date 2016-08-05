@@ -372,6 +372,8 @@ Using simulations, we have concluded that the location tests are preferable.
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
 (b) Inneficient use of the data for the validation holdout set. 
+In our high dimensional setup, we also confirmed that high-dimensional versions of the $T^2$ test, such as \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005} are preferable over the original $T^2$. 
+
 
 The sensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdout. 
 The degree of discretization is govenred by the sample size. 
@@ -387,6 +389,16 @@ There is also a good chance that it would be easier to imeplement, since no vali
 \subsection{A good accuracy test}
 [TODO: discuss other findings in the power section]
 
+In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
+For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
+(a) The conservativeness due to discretization decreases with sample size. 
+(b) Permuting features is easier than permuting labels. It allows to preserve balanced folds after a permutation without refolding. 
+(c) z-scoring?
+(d) balance?
+(e) n.folds
+(f) tunning parameter.
+
+
 \subsection{Related Literature}
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
@@ -401,6 +413,8 @@ We did not include this test in the battery we compared, but we note the followi
 
 
 \subsection{Reservations}
+\label{sec:reservations}
+
 At this point some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test is a particular classifier is better than chance. 
