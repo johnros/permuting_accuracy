@@ -188,7 +188,7 @@ This suggests the following test statistic $|\acc_{\hypEstim}-\minority|$.
 Since we will be aggregating these statistics over random data sets where $\minority$ may vary, it seems appropriate to standardize the scale of this statistic. 
 We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\minority|/\sqrt{\minority(1-\minority)}$. 
 %TODO: fix all simulations to use minority probability!.
-%TODO: check sensitivity to balance of classes.
+
 
 
 \paragraph{Cross validate or not?}
@@ -449,9 +449,9 @@ We did not include this test in the battery we compared, but we note the followi
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
 \cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around.
-Their simualtion study shows that the balance of the original data has a strong impact on the bias of the permutation test.  %TODO: effect of balane in data?
+Their simualtion study shows that inbalance of the original data set may severely inflate the false alarm rates (Sec 3). 
 Their theoretical results formalize our intuition on the effect of the concentration of the permutatin p-value: 
-The finite Vapnik–Chervonenkis (VC) dimension requirement \cite[Sec 4.3]{golland_permutation_2005} prevents the permutation p-value from concentrating. 
+The finite Vapnik–Chervonenkis (VC) dimension requirement (Sec 4.3) prevents the permutation p-value from concentrating. 
 %TODO: how to permute?
 %TODO: what is the chance level?
 %TODO: why do they repornt anti-conservative findings. 
