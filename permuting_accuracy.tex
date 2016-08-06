@@ -445,12 +445,13 @@ We did not include this test in the battery we compared, but we note the followi
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
-\cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around .
-Their results are inline with ours in that:
-(a) Their requirement that the classifier class be of finite Vapnik–Chervonenkis dimension is a formalization the intuittion that the problem cannot be too ``high-dimensional'' or the permutation test will have no power. 
-(b) %TODO: how to permute?
-(c) %TODO: what is the chance level?
-(d) %TODO: why do they repornt anti-conservative findings. 
+\cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around.
+Their simualtion study shows that the balance of the original data has a strong impact on the bias of the permutation test.  %TODO: effect of balane in data?
+Their theoretical results formalize our intuition on the effect of the concentration of the permutatin p-value: 
+The finite Vapnik–Chervonenkis (VC) dimension requirement \cite[Sec 4.3]{golland_permutation_2005} prevents the permutation p-value from concentrating. 
+%TODO: how to permute?
+%TODO: what is the chance level?
+%TODO: why do they repornt anti-conservative findings. 
 
 \subsection{Non-linear predictors}
 It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors.
