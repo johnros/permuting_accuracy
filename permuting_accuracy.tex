@@ -399,6 +399,7 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
 Using simulations, we have concluded that the location tests are preferable. 
+Their high dimensional versions such as \cite{srivastava_testing_2013} and \cite{schafer_shrinkage_2005} are preferable for typical neuroimaging problems such as MVPA.
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
 (b) Inefficient use of the data for the validation holdout set. 
@@ -444,7 +445,12 @@ We did not include this test in the battery we compared, but we note the followi
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
-
+\cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around .
+Their results are inline with ours in that:
+(a) Their requirement that the classifier class be of finite Vapnik–Chervonenkis dimension is a formalization the intuittion that the problem cannot be too ``high-dimensional'' or the permutation test will have no power. 
+(b) %TODO: how to permute?
+(c) %TODO: what is the chance level?
+(d) %TODO: why do they repornt anti-conservative findings. 
 
 \subsection{Non-linear predictors}
 It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors.
@@ -504,7 +510,7 @@ And more simply by Frank Harrell in the \textsf{CrossValidated} Q\&A site\footno
 
 %\begin{acknowledgments}
 %TODO: acknowledgemens
-% isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, 
+% isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, Jason Stein
 %\end{acknowledgments}
 
 
