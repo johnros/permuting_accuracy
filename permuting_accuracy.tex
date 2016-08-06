@@ -99,16 +99,17 @@ The former with a heritage dating back to \cite{hotelling_generalization_1931}, 
 The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
 By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 Judging by convergence rates alone, not much is (asymptotically) lost by using an accuracy test. 
-Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
 
+Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
 The ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test in \cite{ramdas_classification_2016} is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
 This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $2.5$ is strong evidence in favor of the location test. 
 
-Before discarding accuracy tests, we recall that \cite{ramdas_classification_2016} analyzed a half-sample holdout. 
+Before discarding accuracy tests as innefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
 The authors thus conjecture that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
-On the other hand, the analysis in \cite{ramdas_classification_2016} is asymptotic. This eschews the discrete nature of the accuracy statistic, which will shown to have  crucial impact. 
+Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
+This eschews the discrete nature of the accuracy statistic, which will be shown to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples? 
 Our conclusion will be quite simple: {\em location tests almost always have more power than accuracy tests}.
 
@@ -399,14 +400,8 @@ The practical advice for the practitioner, is that for the purpose of signal det
 There is also a good chance that it would be easier to implement, since no validation will be involved. 
 
 
-\subsection{Neyman-Pearson Learning}
-At the risk of abusing notation, classifiers are designed to solve $\argmin{}{FP+FN}$ where $FP$ and $FN$ are the false positive and false negative error rates, or \emph{type I} and \emph{type II} errors, respectively.
-One might thus argue that our simulations are unfair since our simulation benchmark is $\argmin{}{FN \; s.t. \; FP \leq \alpha}$, as in the classical Neyman-Pearson framework for which the location tests are designed. 
-Our view is that this is not the case because, and the comparison is indeed ``fair''. 
-This is because the permutation test ensures that the constraint $FP \leq \alpha$ is satisfied. 
-
-
-
+\subsection{Neyman-Pearson Classification}
+[TODO]
 %Neyman-Pearson classifier: \cite{scott_neyman-pearson_2005}
 
 
