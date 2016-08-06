@@ -13,6 +13,16 @@
 \usepackage{lineno}
 \usepackage{tcolorbox}
 \usepackage{caption}
+\usepackage{hyperref}
+\AtBeginDocument{\let\textlabel\label}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black,
+}
+
 
 \captionsetup[figure]{labelfont=it,textfont={bf,it}}
 \captionsetup[subfigure]{width=0.8\hsize,labelfont=bf,textfont=footnotesize,singlelinecheck=off,justification=raggedright,format=hang}
