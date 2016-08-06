@@ -421,7 +421,9 @@ In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
 \begin{enumerate}
 \item The conservativeness due to discretization decreases with sample size. 
-\item Cross-validate. For moderate sample sizes, the power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the resubstitution accuracy. 
+\item Cross validating the accuracy statistic increases power in moderate sample sizes. 
+The power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the resubstitution accuracy. 
+For large sample sizes, discretization and concentration have weaker effects, and the cross validated accuracy may be replaced with the computationally more efficiency resubstitution accuracy.
 \item Permuting features is easier than permuting labels. It allows to preserve balanced folds after a permutation without refolding. 
 \item There is no gain in z-scoring the accuracy scores. 
 \item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon.
