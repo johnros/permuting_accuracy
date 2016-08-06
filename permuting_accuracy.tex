@@ -312,7 +312,7 @@ especially when comparing the power of location tests to accuracy tests.
 From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
 \begin{enumerate}
 \item Location tests have more power than accuracy tests in all our configurations.
-\item The conservativeness decays as the sample grows (Figure~\ref{fig:large_sample}), supporting the statement that discretization is responsible for power loss. 
+\item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3}), supporting the statement that discretization is responsible for power loss. 
 \item The power is may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). [TODO:effect of n.folds.]
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
@@ -652,13 +652,13 @@ The reported power is the proportion of replication where the permutation p-valu
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05zoom"}
 	  \caption{\textbf{Low-Dimension:} False positive rates for $n=40$.} 
-	\label{fig:fig:large_sample_1}
+	\label{fig:large_sample_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
 	  \includegraphics[width=1\linewidth]{"art/2016-08-04 13:59:33zoom"}
 	  \caption{\textbf{High-Dimension:} False positive rates for $n=400$.} 
-	\label{fig:fig:large_sample_2}
+	\label{fig:large_sample_2}
 	\end{subfigure}
 \end{figure}
 
@@ -673,7 +673,7 @@ The reported power is the proportion of replication where the permutation p-valu
 	  \missingfigure[figwidth=6cm]{TODO}
 %	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
 	  \caption{\textbf{High-Dimension, local alternative:} $n=400$, $\mu \in \frac{\sqrt{40}}{\sqrt{400}} \times \set{0,1/4,1/2}.$} 
-%	\label{fig:2016-07-2721:21:12}
+	\label{fig:large_sample_3}
 	\end{subfigure}
 		\begin{subfigure}{.5\textwidth}
 		  \centering
