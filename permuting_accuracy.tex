@@ -427,9 +427,9 @@ For large sample sizes, discretization and concentration have weaker effects, an
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 \item There is no gain in z-scoring the accuracy scores. 
-\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon.
+\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO
 \item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
-\item The value of the tunning parameters of a classifier do not matter. 
+\item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
 
