@@ -183,7 +183,7 @@ Given a predictor $\hypEstim$, a natural test statistic is some estimate of its 
 Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
 We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
 This, however, implies that if the classes are identical, random guessing has $0.5$ accuracy. This is not true if the classes are not balanced. 
-The chance level in which case is the minority class, we denote by $\minority$.
+For unbalanced data the chance level is the probability of the minority class, we denote by $\minority$ \citep[ Sec 4.1]{golland_permutation_2005}.
 This suggests the following test statistic $|\acc_{\hypEstim}-\minority|$.
 Since we will be aggregating these statistics over random data sets where the dominant class may have varying frequencies, it seems appropriate to standardize the scale of this statistic. 
 We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\minority|/\sqrt{\minority(1-\minority)}$.
