@@ -451,10 +451,14 @@ We did not include this test in the battery we compared, but we note the followi
 \cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around.
 Their theoretical results formalize our intuition on the effect of the concentration of the permutatin p-value: 
 The finite Vapnik–Chervonenkis (VC) dimension requirement (Sec 4.3) prevents the permutation p-value from concentrating. 
-Their simualtion study shows that inbalance of the original data set may severely inflate the false alarm rates (Sec 3). 
+Their simualtion study shows that imbalance of the original data set may severely inflate the false alarm rates (Sec 3). 
 Like us, they find that if the original data set is balanced, then the resubstitution error (and also the leave-one-out), are very conservative. A fact we attribute to discretization and concentration. 
-\cite{golland_permutation_2005} also study the effect of the balance of the original data set, and find that if the original data set is highly unbalanced (governed by their $p$ parameter), then the permutation tests can severly inflate the false positive rates. 
+They also find that the power decresases with the level of discretization of the statistic. 
+This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
+Since they permute features, and not labels, then all their permutation samples conserve the same balance as the original one, and there is no issue of refolding. 
+\cite{golland_permutation_2005} also study the effect of the balance of the original data set, and find that if the original data set is highly unbalanced (governed by their $p$ parameter), then the permutation tests can severly inflate the false positive rates. We did not perform this analysis. 
 %TODO: how to permute?
+%TODO: why number of folds matters?
 %TODO: verify sensitivity to balance. 
 
 \subsection{Non-linear predictors}
@@ -645,7 +649,7 @@ The reported power is the proportion of replication where the permutation p-valu
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
-	  \missingfigure[figwidth=6cm]{TODO}
+	  \missingfigure[figwidth=6cm]{TODO:figure}
 %	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
 	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
 	\label{fig:n_folds_unbalanced_2}
@@ -701,14 +705,14 @@ The reported power is the proportion of replication where the permutation p-valu
 \caption{\mycaption}	
 	\begin{subfigure}{.5\textwidth}
 	  \centering
-	  \missingfigure[figwidth=6cm]{TODO}
+	  \missingfigure[figwidth=6cm]{TODO:figure}
 %	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
 	  \caption{\textbf{High-Dimension, local alternative:} $n=400$, $\mu \in \frac{\sqrt{40}}{\sqrt{400}} \times \set{0,1/4,1/2}.$} 
 	\label{fig:large_sample_3}
 	\end{subfigure}
 		\begin{subfigure}{.5\textwidth}
 		  \centering
-		  \missingfigure[figwidth=6cm]{TODO}
+		  \missingfigure[figwidth=6cm]{TODO:figure}
 	%	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
 		  \caption{\textbf{AR(1) dependence:} $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
 		\label{fig:ar_1}
