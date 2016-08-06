@@ -449,6 +449,15 @@ It may be argued that accuracy tests permits the separation between classes in h
 This is immaterial since group tests can also be performed in higher dimensions (see \cite{gretton_kernel_2012-1}).
 
 
+\subsection{Ease of implementation}
+A very important point is the ease of implementation. 
+The need for cross validation of the accuracy test greatly increases its computational complexity. 
+Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
+Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
+This is not the case for continuous test statistics. 
+
+
+
 \subsection{Reservations}
 \label{sec:reservations}
 
@@ -468,14 +477,6 @@ The reservation to the reservation is that the far greater power of the location
 
 
 
-\subsection{Ease of implementation}
-A very important point is the ease of implementation. 
-The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
-Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
-This is not the case for continuous test statistics. 
-
-
 
 \subsection{Epilogue}
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
@@ -488,6 +489,11 @@ The recent popularity of machine learning has resulted in the extensive teaching
 of prediction in theoretical and applied communities and the relative lack of awareness or
 popularity of the topic of Neyman-Pearson style hypothesis testing in the computer science
 and related ``data science'' communities.
+\end{quote}
+
+Or, as simply put by Frank Harrell in the \textsf{CrossValidated} Q\&A site\footnote{\url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}.}:
+\begin{quote}
+ ... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
 \end{quote}
 
 
