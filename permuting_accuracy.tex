@@ -449,12 +449,13 @@ We did not include this test in the battery we compared, but we note the followi
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
 \cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, a theoretical analysis of the concentration of the permutation p-value around.
-Their simualtion study shows that inbalance of the original data set may severely inflate the false alarm rates (Sec 3). 
 Their theoretical results formalize our intuition on the effect of the concentration of the permutatin p-value: 
 The finite Vapnik–Chervonenkis (VC) dimension requirement (Sec 4.3) prevents the permutation p-value from concentrating. 
+Their simualtion study shows that inbalance of the original data set may severely inflate the false alarm rates (Sec 3). 
+Like us, they find that if the original data set is balanced, then the resubstitution error (and also the leave-one-out), are very conservative. A fact we attribute to discretization and concentration. 
+\cite{golland_permutation_2005} also study the effect of the balance of the original data set, and find that if the original data set is highly unbalanced (governed by their $p$ parameter), then the permutation tests can severly inflate the false positive rates. 
 %TODO: how to permute?
-%TODO: what is the chance level?
-%TODO: why do they repornt anti-conservative findings. 
+%TODO: verify sensitivity to balance. 
 
 \subsection{Non-linear predictors}
 It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors.
