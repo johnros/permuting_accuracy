@@ -394,11 +394,6 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 %%%% Section %%%%
 \section{Discussion}
 \label{sec:discussion}
-% Not all problems are signal detection.
-% Implementation difficulty with discrete test statistics.
-% Signal not in location.
-% Heavy tails.
-
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
 Using simulations, we have concluded that the location tests are preferable. 
@@ -415,10 +410,6 @@ For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016
 The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivariate test (be it a location test or other), that is more powerful than an accuracy test. 
 There is also a good chance that it would be easier to implement, since no validation will be involved. 
 
-
-\subsection{Neyman-Pearson Classification}
-[TODO]
-%Neyman-Pearson classifier: \cite{scott_neyman-pearson_2005}
 
 
 
@@ -461,13 +452,10 @@ Since they permute features, and not labels, then all their permutation samples 
 %TODO: how to permute?
 %TODO: why number of folds matters?
 %TODO: verify sensitivity to balance. 
+%TODO: simulate using the mixture of Golland. 
 
 %TODO: discuss \cite{ojala_permutation_2010}
 
-
-\subsection{Non-linear predictors}
-It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors.
-This is an immaterial since group tests can also be performed in higher dimensions (e.g. \cite{gretton_kernel_2012-1}, or \cite{heller_consistent_2012}).
 
 
 \subsection{Ease of implementation}
@@ -487,10 +475,16 @@ Firstly, not all accuracy tests are concerned with signal detection.
 Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier. 
 Examples include brain decoding for machine interfaces, and clinical diagnosis, where the presence of a medical condition is ``predicted'' from imaging data. \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}
 
-Secondly, not all signals are manifested in a shift of the null distribution 
+Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+This is a false argument- accuracy test do not have any more flexibility that location tests. 
+Indeed, it is possible to test for location in the same dimesion the classifier is fitted. 
+\citet{gretton_kernel_2012-1} is an exaple where the test for location is performed in the RKHS of the data.
+It is also possible to test for the equality of two multivariate distributions without a-priori specifying any a-priori alternative \cite[e.g.][]{heller_consistent_2012}).
+
 Our focus on location tests is misleading. Perhaps \cite{simon_pitfalls_2003}'s \emph{class comparison} is a more appropriate name, in that it does not only imply a shift alternative. 
-Indeed, one may consider signal, i.e. effects, as a change in scale, such as the \emph{spiked covariance} model. In this case, other-than-Hotelling type tests are appropriate \citep[e.g.][]{nadler_finite_2008}.
-Tests have been proposed even when the nature of the difference between populations is left unspecified \citep[e.g.][]{gretton_kernel_2012-1}.
+Indeed, one may consider signal, i.e. effects, as a change in scale, such as the \emph{spiked covariance} model. 
+In this case, other-than-Hotelling type tests are appropriate.
+
 The fact that in our neuroimaging example (Section~\ref{sec:example}) some brain regions were detected with the accuracy test, and not the location test, is consistent with this observation. 
 
 The reservation to the reservation is that the far greater power of the location test, certainly in our example, does serve as en empirical evidence that changes in location are a prevalent phenomenon. 
