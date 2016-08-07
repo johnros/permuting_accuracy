@@ -434,7 +434,8 @@ For large sample sizes, discretization and concentration have weaker effects, an
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 \item There is no gain in z-scoring the accuracy scores. 
 \item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO:why balalance?
-\item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
+\item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. 
+On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
@@ -466,7 +467,7 @@ Since they permute features, and not labels, then all their permutation samples 
 
 \subsection{Non-linear predictors}
 It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors.
-This is immaterial since group tests can also be performed in higher dimensions (e.g. \cite{gretton_kernel_2012-1}, or \cite{heller_consistent_2012}).
+This is an immaterial since group tests can also be performed in higher dimensions (e.g. \cite{gretton_kernel_2012-1}, or \cite{heller_consistent_2012}).
 
 
 \subsection{Ease of implementation}
@@ -652,8 +653,7 @@ The reported power is the proportion of replication where the permutation p-valu
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	  \centering
-	  \missingfigure[figwidth=6cm]{TODO:figure}
-%	  \includegraphics[width=1\linewidth]{"art/2016-07-29 07:18:24"}
+	  \includegraphics[width=1\linewidth]{"art/2016-08-06 07:57:22"}
 	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
 	\label{fig:n_folds_unbalanced_2}
 	\end{subfigure}
