@@ -111,7 +111,6 @@ The former with a heritage dating back to \cite{hotelling_generalization_1931}, 
 
 The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
 By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
-Judging by convergence rates alone, not much is (asymptotically) lost by using an accuracy test. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
 The ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test in \cite{ramdas_classification_2016} is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
@@ -137,11 +136,11 @@ For an intuition consider the usage of a the \emph{resubstitution accuracy} as a
 This statistic simply means that the accuracy is not cross validated. 
 If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting \cite[Thorem 1]{mclachlan_bias_1976}. 
 In an extreme case, the resubstitution accuracy will be $1$ for the observed data, but also for any permutation.
-The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power of $0$. 
+The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power tending to $0$ as the dimension of the model grows. 
 
 
 To compare the power of accuracy tests and location tests in finite samples, we perform a simulation study of a battery of test statistics. 
-The main findings are reported in Section~\ref{sec:power}, and the intuition for our findings is provided in Section~\ref{sec:discussion}, but first, the problem's setup. 
+The main findings are reported in Sections~\ref{sec:power} and \ref{sec:example}, and the intuition for our findings is provided in Section~\ref{sec:discussion}, but first, the problem's setup. 
 
 
 
