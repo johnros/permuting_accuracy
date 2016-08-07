@@ -438,14 +438,23 @@ On the other hand, it increases the concentration of the accuracy statistic. Com
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
-It may be possible to recover some of the power lost due to discretization.
 There are many ways of cross-validating. 
 A full review can be found in \cite{arlot_survey_2010}.
-The level of discretiztion of the accuracy statisitc can be smoothed by cross validating with replacement. 
-One such method, is the \emph{bootstrap}. 
+Some may allow to recover some of the power lost due to discretization. 
+The discretness of the accuracy statisitc can be ``smoothed'' by cross validating with replacement. 
+Cross validation with replacement can be acheived, for instance, by the \emph{bootstrap}. 
 \cite{efron_improvements_1997} consider the bootstrap, and improvements, for unbiased risk estimation.
 For our purposes, since bias is not a concern, we can simply use the bootstrapped acucracy as our test statistic.
 %TODO: Bootstrap instead of V-fold. 
+
+\begin{figure}[ht]
+\centering
+	  \missingfigure[figwidth=0.8\linewidth]{TODO:figure}
+%	  \includegraphics[width=0.8\linewidth]{"art/2016-07-27 11:42:05"}
+	  \caption{\textbf{Bootstrap}}
+	\label{fig:bootstrap}
+\end{figure}
+
 
 
 \subsection{Related Literature}
