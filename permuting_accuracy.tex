@@ -412,6 +412,14 @@ There is also a good chance that it would be easier to implement, since no valid
 
 
 
+\subsection{Ease of implementation}
+A very important point is the ease of implementation. 
+The need for cross validation of the accuracy test greatly increases its computational complexity. 
+Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
+Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
+This is not the case for continuous test statistics. 
+
+
 
 \subsection{A good accuracy test}
 In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
@@ -430,7 +438,14 @@ On the other hand, it increases the concentration of the accuracy statistic. Com
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
-
+It may be possible to recover some of the power lost due to discretization.
+There are many ways of cross-validating. 
+A full review can be found in \cite{arlot_survey_2010}.
+The level of discretiztion of the accuracy statisitc can be smoothed by cross validating with replacement. 
+One such method, is the \emph{bootstrap}. 
+\cite{efron_improvements_1997} consider the bootstrap, and improvements, for unbiased risk estimation.
+For our purposes, since bias is not a concern, we can simply use the bootstrapped acucracy as our test statistic.
+%TODO: Bootstrap instead of V-fold. 
 
 
 \subsection{Related Literature}
@@ -456,14 +471,6 @@ Since they permute features, and not labels, then all their permutation samples 
 
 %TODO: discuss \cite{ojala_permutation_2010}
 
-
-
-\subsection{Ease of implementation}
-A very important point is the ease of implementation. 
-The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
-Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
-This is not the case for continuous test statistics. 
 
 
 
