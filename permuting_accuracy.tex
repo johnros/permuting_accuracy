@@ -474,14 +474,14 @@ svm.Boot.2 & SVM & Bootstrap & accuracy & cost=1e-1 \\
 
 
 \subsection{Related Literature}
-\cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} also looked into a similar problem as we do, namely, what is the preferred accuracy test?
+\cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} looked into the problem of choosing a good accuracy test. 
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
-\cite{golland_permutation_2005} study accuracy tests using simulation, real neuroimaging and genetic data, and analytically.
-Their anaytic results formalize our intuition from Section~\ref{sec:introduction} on the effect concentration of the permutatin p-value:
+\cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
+Their anaytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
 The finite Vapnik–Chervonenkis (VC) dimension requirement (Sec 4.3) prevents the permutation p-value from concentrating. 
 They also find that the power decresases with the level of discretization of the statistic. 
 This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
