@@ -477,6 +477,19 @@ Since they permute features, and not labels, then all their permutation samples 
 %TODO: verify sensitivity to balance. 
 %TODO: simulate using the mixture of Golland. 
 
+
+\begin{figure}[ht]
+\centering
+	  \includegraphics[width=0.8\linewidth]{"art/2016-08-08 07:33:05"}
+	  \caption{\textbf{Mixture:} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y^*_i}  (1/2+p)^{1-\y^*_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.}
+	\label{fig:golland}
+\end{figure}
+
+
+
+
+
+
 %TODO: discuss \cite{ojala_permutation_2010}
 
 
@@ -715,17 +728,16 @@ The reported power is the proportion of replication where the permutation p-valu
 \begin{figure}[h]
 \centering
 \caption{\mycaption}	
-	\begin{subfigure}{.5\textwidth}
+	\begin{subfigure}{.4\textwidth}
 	  \centering
 	  \missingfigure[figwidth=6cm]{TODO:figure}
 %	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
 	  \caption{\textbf{High-Dimension, local alternative:} $n=400$, $\mu \in \frac{\sqrt{40}}{\sqrt{400}} \times \set{0,1/4,1/2}.$} 
 	\label{fig:large_sample_3}
 	\end{subfigure}
-		\begin{subfigure}{.5\textwidth}
+		\begin{subfigure}{.4\textwidth}
 		  \centering
-		  \missingfigure[figwidth=6cm]{TODO:figure}
-	%	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
+		  \includegraphics[width=1\linewidth]{"art/2016-08-07 20:11:46"}
 		  \caption{\textbf{AR(1) dependence:} $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
 		\label{fig:ar_1}
 	\end{subfigure}
