@@ -113,8 +113,9 @@ The comparison between location and accuracy tests was precisely the goal of \ci
 By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between test statistics with similar rates \citep{vaart_asymptotic_1998}.
-The ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test in \cite{ramdas_classification_2016} is lower bounded by $\sqrt{2 \pi} \approx 2.5$. 
-This means that Fisher's LDA requires at least $2.5$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
+\cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allow to extract the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
+Using the Theorem~14.7 in \cite{vaart_asymptotic_1998}, we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
+This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $2.5$ is strong evidence in favor of the location test. 
 
