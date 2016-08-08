@@ -442,7 +442,26 @@ The discretness of the accuracy statisitc can be ``smoothed'' by allowing the te
 The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
 This is not the case, however, for the \emph{leave-one-out bootstrap estimator} \cite[Sec 7.11]{hastie_elements_2003}. 
 It is a simplified version of the \emph{0.632 bootstrap estimator} \citep{efron_improvements_1997}, and suffices for our purpose since we are not interested in unbiased risk estimation, but merely signal detection.
+The naming conventions of the bootstrapped estimates are detailed in Table~\ref{tab:collected_2}.
 As seen in Figure~\ref{fig:bootstrap}...  %TODO: bootstrap.
+
+\bigskip
+
+\begin{tcolorbox}
+\centering
+\begin{tabular}{l|c|c|c|c}
+Name & Basis & CV & Accuracy & Parameters\\ 
+\hline
+\hline
+lda.Boot.1 & LDA & Bootstrap & accuracy &  -- \\ 
+svm.Boot.1 & SVM & Bootstrap & accuracy & cost=1e1 \\ 
+svm.Boot.2 & SVM & Bootstrap & accuracy & cost=1e-1 \\ 
+\end{tabular} 
+\captionsetup{type=table}
+\caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. }
+\label{tab:collected_2}
+\end{tcolorbox}
+
 
 \begin{figure}[ht]
 \centering
