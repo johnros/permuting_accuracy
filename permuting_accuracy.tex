@@ -452,13 +452,16 @@ As seen in Figure~\ref{fig:bootstrap}...  %TODO: bootstrap.
 
 \begin{tcolorbox}
 \centering
-\begin{tabular}{l|c|c|c|c}
-Name & Basis & B & Accuracy & Parameters\\ 
+\begin{tabular}{l|c|c|c|c|c}
+Name & Basis & Boot Type & B & Accuracy & Parameters\\ 
 \hline
 \hline
-lda.Boot.1 & LDA & 50 & accuracy &  -- \\ 
-svm.Boot.1 & SVM & 50 & accuracy & cost=1e1 \\ 
-svm.Boot.2 & SVM & 50 & accuracy & cost=1e-1 \\ 
+lda.Boot.1 & LDA & $0.632$ & 10 & accuracy &  -- \\ 
+lda.Boot.2 & LDA & LOOB & 10 & accuracy &  -- \\ 
+svm.Boot.1 & SVM & $0.632$ & 10 & accuracy & cost=1e1 \\ 
+svm.Boot.2 & SVM & LOOB & 10 & accuracy & cost=1e-1 \\ 
+svm.Boot.3 & SVM & $0.632$ & 10 & accuracy & cost=1e1 \\ 
+svm.Boot.4 & SVM & LOOB & 10 & accuracy & cost=1e-1 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. }
