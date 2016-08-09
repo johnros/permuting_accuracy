@@ -451,14 +451,14 @@ The naming conventions of the bootstrapped estimates are detailed in Table~\ref{
 \begin{definition}[B-LOO]
 Denoting by $S^b$ the indexes of the test set of Bootstrap sample $b$, the \emph{leave-one-out} bootstrap estimate is defined as
 $$
-	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^b|} \sum_{i\in S^b} I(\hypEstim^b(x_i)=y_i)
+	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^b|} \sum_{i\in S^b} I(\hypEstim^b(x_i)=y_i).
 $$ %TODO: verify definition with Hastie and Arlot.
 \end{definition}
 
 \begin{definition}[B-$0.632$]
 Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, the B-$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
 $$
-	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{BLOO}
+	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{BLOO}.
 $$
 \end{definition}
 
@@ -479,9 +479,9 @@ Name & Basis & Boot Type & B & Accuracy & Parameters\\
 lda.Boot.1 & LDA & B-$0.632$ 	& 10 & accuracy &  -- \\ 
 lda.Boot.2 & LDA & B-LOO 	& 10 & accuracy &  -- \\ 
 svm.Boot.1 & SVM & B-$0.632$ 	& 10 & accuracy & cost=1e1 \\ 
-svm.Boot.2 & SVM & B-LOO 	& 10 & accuracy & cost=1e-1 \\ 
+svm.Boot.2 & SVM & B-LOO 	& 10 & accuracy & cost=1e1 \\ 
 svm.Boot.3 & SVM & B-$0.632$ 	& 50 & accuracy & cost=1e1 \\ 
-svm.Boot.4 & SVM & B-LOO 	& 50 & accuracy & cost=1e-1 \\ 
+svm.Boot.4 & SVM & B-LOO 	& 50 & accuracy & cost=1e1 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. } %TODO: caption. 
