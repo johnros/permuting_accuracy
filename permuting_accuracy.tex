@@ -446,9 +446,9 @@ This is not the case, however, for the \emph{leave-one-out bootstrap estimator} 
 %TODO: define the two bootstrap estimators. 
 %TODO: relate to terminology of Arlot and Celisse.
 By the same rational, the degree of conservativism should decrease with the number of bootstrap samples. 
-The naming conventions of the bootstrapped estimates are detailed in Table~\ref{tab:collected_2}.
 
 \begin{definition}[B-LOO]
+\label{def:bloo}
 Denoting by $S^b$ the indexes of the test set of Bootstrap sample $b$, the \emph{leave-one-out} bootstrap estimate is defined as
 $$
 	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^b|} \sum_{i\in S^b} I(\hypEstim^b(x_i)=y_i).
@@ -456,13 +456,14 @@ $$ %TODO: verify definition with Hastie and Arlot.
 \end{definition}
 
 \begin{definition}[B-$0.632$]
+\label{def:b0632}
 Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, the B-$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
 $$
 	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{BLOO}.
 $$
 \end{definition}
 
-The simlation results are reported in Figure~\ref{fig:bootstrap}.
+The naming conventions of the bootstrapped estimates are detailed in Table~\ref{tab:collected_2}, and the simlation results reported in Figure~\ref{fig:bootstrap}.
 It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of location tests. 
 It can also be seen that power increases with the number of Bootstrap replications, itself reducing the level of discretization. 
 The type of Bootstrap, B-LOO versus B-$0.632$, does not change the power. 
@@ -484,7 +485,9 @@ svm.Boot.3 & SVM & B-$0.632$ 	& 50 & accuracy & cost=1e1 \\
 svm.Boot.4 & SVM & B-LOO 	& 50 & accuracy & cost=1e1 \\ 
 \end{tabular} 
 \captionsetup{type=table}
-\caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. } %TODO: caption. 
+\caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
+B-LOO and B-$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
+$B$ denotes the number of Bootstrap samples. } %TODO: caption. 
 \label{tab:collected_2}
 \end{tcolorbox}
 
