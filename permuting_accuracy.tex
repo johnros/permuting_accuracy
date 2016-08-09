@@ -437,6 +437,7 @@ On the other hand, it increases the concentration of the accuracy statistic. Com
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
+\subsection{Smoothing accuracy estimates}
 It may be possible to alleviate the effect of discretizatin by appropriate cross-validation. 
 The discretness of the accuracy statisitc can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
@@ -471,6 +472,14 @@ svm.Boot.2 & SVM & 50 & accuracy & cost=1e-1 \\
 	\label{fig:bootstrap}
 \end{figure}
 
+
+\subsection{High dimensional classifiers}
+It is known that when $p>n$ Hotelling's $T^2$, and Fisher's LDA are not computable. 
+In our simlations, in which $p=23$ and $n=40$ is ``almost'' high dimensional, but still allows to compute both tests.
+We have simulated two high dimensional versions of Hotelling's $T^2$: \emph{sd} \citep{srivastava_testing_2013} and \emph{Hotelling.shrink} \citep{schafer_shrinkage_2005}. 
+The former solves the dimensionalty problem by assuming independence over coordinates, and the latter by Tikhonov regularization of the covariance, a-la ridge regression. 
+The corresponding high dimensional accuracy tests would be a \emph{naive Bayes} classfier, and $l_2$ regulirized SVM \citep{ramdas_classification_2016}.
+We conjecture that they would not alternour conclusions, since the main force driving the conservatrivism is discretization, which they do not solve. 
 
 
 \subsection{Related Literature}
