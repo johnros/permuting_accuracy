@@ -452,7 +452,7 @@ The naming conventions of the bootstrapped estimates are detailed in Table~\ref{
 Denoting by $S^b$ the indexes of the test set of Bootstrap sample $b$, the \emph{leave-one-out} bootstrap estimate is defined as
 $$
 	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^b|} \sum_{i\in S^b} I(\hypEstim^b(x_i)=y_i)
-$$
+$$ %TODO: verify definition with Hastie and Arlot.
 \end{definition}
 
 \begin{definition}[B-$0.632$]
