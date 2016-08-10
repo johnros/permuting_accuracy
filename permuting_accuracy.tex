@@ -443,7 +443,6 @@ It may be possible to alleviate the effect of discretization by appropriate cros
 The discreteness of the accuracy statistic can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
 This is not the case, however, for the \emph{leave-one-out bootstrap estimator} (B-LOO) and the \emph{0.632 bootstrap estimator} (B-$0.632$) \citep[Sec 7.11]{hastie_elements_2003}, which we define below for completeness.
-%TODO: relate to terminology of Arlot and Celisse.
 By the same rational, the degree of conservativism should decrease with the number of bootstrap samples. 
 
 \begin{definition}[B-LOO]
@@ -455,7 +454,7 @@ $$
 Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
 $$
 	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
-$$ %TODO: verify definition with Hastie and Arlot.
+$$
 \end{definition}
 
 \begin{definition}[B-$0.632$]
