@@ -44,7 +44,7 @@
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{\mathcal{E}} 
-\newcommand{\dominant}{\hat{p}_{max}}
+\newcommand{\majority}{\hat{p}_{max}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
 \newcommand{\rv}[1]{\mathbf{#1}} % A random variable
@@ -184,10 +184,10 @@ Given a predictor $\hypEstim$, a natural test statistic is some estimate of its 
 Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
 We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
 This, however, implies that if the classes are identical, random guessing has $0.5$ accuracy. This is not true if the classes are not balanced. 
-For unbalanced data the chance level is the probability of the minority class, we denote by $\minority$ \citep[ Sec 4.1]{golland_permutation_2005}.
-This suggests the following test statistic $|\acc_{\hypEstim}-\minority|$.
-Since we will be aggregating these statistics over random data sets where $\minority$ may vary, it seems appropriate to standardize the scale of this statistic. 
-We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\minority|/\sqrt{\minority(1-\minority)}$. 
+For unbalanced data the accuracy chance level is the probability of the majority class, we denote by $\majority$ \citep[ Sec 4.1]{golland_permutation_2005}.
+This suggests the following test statistic $|\acc_{\hypEstim}-\majority|$.
+Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
+We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}$. 
 
 
 
@@ -262,7 +262,7 @@ Three are location tests: Hotelling, Hotelling.shrink, and sd.
 \textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
 \textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
 The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
-For example, \textit{svm.CV.4} is a linear SVM, with \textit{libsvm}'s cost parameter set at $0.1$, using the cross validated z-scored accuracy ($|\acc_{\hypEstim}-\dominant|/\sqrt{\dominant(1-\dominant)}$, see Section~\ref{sec:considerations}).
+For example, \textit{svm.CV.4} is a linear SVM, with \textit{libsvm}'s cost parameter set at $0.1$, using the cross validated z-scored accuracy ($|\acc_{\hypEstim}-\majority/\sqrt{\majority(1-\majority)}$, see Section~\ref{sec:considerations}).
 Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy, without cross validation, and without z-scoring.}
 \label{tab:collected}
 \end{tcolorbox}
