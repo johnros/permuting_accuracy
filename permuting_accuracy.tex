@@ -43,7 +43,7 @@
 \newcommand{\hypEstim}{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
-\newcommand{\acc}{T^{acc}} 
+\newcommand{\acc}{\mathcal{E}} 
 \newcommand{\dominant}{\hat{p}_{max}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
@@ -119,7 +119,7 @@ This means that Fisher's LDA requires at least $6.3$ more samples to achieve the
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $2.5$ is strong evidence in favor of the location test. 
 
-Before discarding accuracy tests as innefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
+Before discarding accuracy tests as inefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
 The authors conjectured that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
 Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
 This eschews the discrete nature of the accuracy statistic, which will be shown to have  crucial impact. 
@@ -136,7 +136,7 @@ The discretization effect is aggravated if the test statistic is highly concentr
 For an intuition consider the usage of a the \emph{resubstitution accuracy} as a test statistic. 
 This statistic simply means that the accuracy is not cross validated. 
 If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
-In a very high dimensional model, the resubstitution accuracy will be $1$ for the observed data \cite[Thorem 1]{mclachlan_bias_1976}, but also for any permutation.
+In a very high dimensional model, the resubstitution accuracy will be $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power tending to $0$ as the dimension of the model grows. 
 
 
@@ -278,7 +278,7 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the res
 \label{sec:type_i}
 
 Figure~\ref{fig:simulation_1} demonstrates that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservativism.
-This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the abscense of any effect, encoded by a red circle. 
+This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the absence of any effect, encoded by a red circle. 
 This is true, in particular if:
 (a) the folds are balanced or not,
 (b) the tuning parameters of some test statistic are varied,
@@ -332,13 +332,13 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
 There is really no reason to use it. 
-\item Both accuracy and location tests are innapropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
-This was to be expeted and is reported mostly as a sanity check.
+\item Both accuracy and location tests are inappropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
+This was to be expected and is reported mostly as a sanity check.
 \item The presence of heavy tails (Figure~\ref{fig:t_null}) may reduce power, but does not quantitatively change results. 
 \item Balanced folding typically has no effect. 
 It increased power only for the z-scored statistics (Figure~\ref{fig:simulation_1}). This is surprising given they were precisely designed to deal with the presence of imbalance. 
 \item Varying the accuracy test's tunning parameter, such as the cost (i.e. margins) has no effect on the power of the test. 
-\item Correlation between coordinates, mimiquing temporal correlation in fMRI data, has no effect on conclusions, since all test statistics account for this corrlation (Figure~\ref{fig:ar_1}). %TODO: verify
+\item Correlation between coordinates, mimicking temporal correlation in fMRI data, has no effect on conclusions, since all test statistics account for this correlation (Figure~\ref{fig:ar_1}).
 \end{enumerate}
 
 
@@ -432,18 +432,17 @@ For large sample sizes, discretization and concentration have weaker effects, an
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 \item There is no gain in z-scoring the accuracy scores. 
-\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO:why balalance?
+\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO:why balance?
 \item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. 
 On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
 \subsection{Smoothing accuracy estimates}
-It may be possible to alleviate the effect of discretizatin by appropriate cross-validation. 
-The discretness of the accuracy statisitc can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
+It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
+The discreteness of the accuracy statistic can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
 This is not the case, however, for the \emph{leave-one-out bootstrap estimator} (B-LOO) and the \emph{0.632 bootstrap estimator} (B-$0.632$) \citep[Sec 7.11]{hastie_elements_2003}, which we define below for completeness.
-%TODO: define the two bootstrap estimators. 
 %TODO: relate to terminology of Arlot and Celisse.
 By the same rational, the degree of conservativism should decrease with the number of bootstrap samples. 
 
@@ -453,7 +452,7 @@ Denoting by $C^{(i)}$ the index set of bootstrap samples, $b$, where observation
 $$
 	\acc_{BLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} I(\hypEstim^b(x_i)=y_i).
 $$ 
-Equivaently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
+Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
 $$
 	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
 $$ %TODO: verify definition with Hastie and Arlot.
@@ -506,11 +505,11 @@ $B$ denotes the number of Bootstrap samples. } %TODO: caption.
 
 \subsection{High dimensional classifiers}
 It is known that when $p>n$ Hotelling's $T^2$, and Fisher's LDA are not computable. 
-In our simlations, in which $p=23$ and $n=40$ is ``almost'' high dimensional, but still allows to compute both tests.
+In our simulations, in which $p=23$ and $n=40$ is ``almost'' high dimensional, but still allows to compute both tests.
 We have simulated two high dimensional versions of Hotelling's $T^2$: \emph{sd} \citep{srivastava_testing_2013} and \emph{Hotelling.shrink} \citep{schafer_shrinkage_2005}. 
-The former solves the dimensionalty problem by assuming independence over coordinates, and the latter by Tikhonov regularization of the covariance, a-la ridge regression. 
-The corresponding high dimensional accuracy tests would be a \emph{naive Bayes} classfier, and $l_2$ regulirized SVM \citep{ramdas_classification_2016}.
-We conjecture that they would not alternour conclusions, since the main force driving the conservatrivism is discretization, which they do not solve. 
+The former solves the dimensionality problem by assuming independence over coordinates, and the latter by Tikhonov regularization of the covariance, a-la ridge regression. 
+The corresponding high dimensional accuracy tests would be a \emph{naive Bayes} classfier, and $l_2$ regularized SVM \citep{ramdas_classification_2016}.
+We conjecture that they would not alter our conclusions, since the main force driving the conservativism is discretization, which they do not solve. 
 
 
 \subsection{Related Literature}
@@ -521,9 +520,9 @@ We did not include this test in the battery we compared, but we note the followi
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
 \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
-Their anaytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
+Their analytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
 The finite Vapnik–Chervonenkis (VC) dimension requirement \citep[Sec 4.3]{golland_permutation_2003} prevents the permutation p-value from (asymptotically) concentrating. 
-They also find that the power decresases with the level of discretization of the statistic. 
+They also find that the power decreases with the level of discretization of the statistic. 
 This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
 Since they permute features, and not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
 
@@ -567,7 +566,7 @@ Examples of such problems include brain decoding for machine interfaces, and cli
 
 Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
 This is a false argument-- accuracy test do not have any more flexibility that location tests. 
-Indeed, it is possible to test for location in the same dimesion the classifier is learned. 
+Indeed, it is possible to test for location in the same dimension the classifier is learned. 
 \citet{gretton_kernel_2012-1} is an example where the test for location is performed in the RKHS of the data.
 It is also possible to test for the equality of two multivariate distributions without specifying any a-priori alternative \cite[e.g.][]{heller_consistent_2012}).
 On the other hand, based on our reported neuroimaging example, and others, we find that a location test in the original feature space is indeed a simple and powerful approach to signal detection.
@@ -599,17 +598,8 @@ And more simply by Frank Harrell in the \textsf{CrossValidated} Q\&A site\footno
 
 
 
-%\begin{acknowledgments}
-%TODO: acknowledgemens
-% isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, Jason Stein
-%\end{acknowledgments}
-
-
-
-
-
-
-
+\section{Acknowledgments}
+% isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, Jason 
 
 
 
