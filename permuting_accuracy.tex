@@ -545,8 +545,6 @@ We find that in this mixture class of models, like the location class of models,
 \end{figure}
 
 
-%TODO: discuss \cite{stelzer_statistical_2013}
-
 
 
 %TODO: discuss \cite{ojala_permutation_2010}
@@ -559,9 +557,16 @@ We find that in this mixture class of models, like the location class of models,
 
 Some reservations to the generality of our findings are in order. 
 Firstly, not all accuracy tests are concerned with signal detection.
-Indeed, it is possible that the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier. 
-Put differently- classification is harder than detection, so that we may be able to detect a difference between classes, but not be able to classify examples significantly better than chance. 
-Examples of such problems include brain decoding for machine interfaces, and clinical diagnosis, where the presence of a medical condition is predicted from imaging data. \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}
+Consider brain decoding for machine interfaces, and clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
+In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
+As put by \cite{ojala_permutation_2010}:
+\begin{quote}
+	\dots these tests study whether the classifier is using the described properties and not whether
+	the plain data contain such properties. For studying the characteristics of a population represented
+	by the data, standard statistical test could be used.
+\end{quote}
+This is because classification is harder than detection. 
+We may be able to detect a difference between classes, but not be able to classify examples significantly better than chance. 
 
 Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
 This is a false argument-- accuracy test do not have any more flexibility that location tests. 
