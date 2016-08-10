@@ -449,9 +449,13 @@ By the same rational, the degree of conservativism should decrease with the numb
 
 \begin{definition}[B-LOO]
 \label{def:bloo}
-Denoting by $S^b$ the indexes of the test set of Bootstrap sample $b$, the \emph{leave-one-out} bootstrap estimate is defined as
+Denoting by $C^{(i)}$ the index set of bootstrap samples, $b$, where observation $i$ is not in the train set, \emph{leave-one-out bootstrap} estimate is defined as:
 $$
-	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^b|} \sum_{i\in S^b} I(\hypEstim^b(x_i)=y_i).
+	\acc_{BLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} I(\hypEstim^b(x_i)=y_i).
+$$ 
+Equivaently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
+$$
+	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
 $$ %TODO: verify definition with Hastie and Arlot.
 \end{definition}
 
