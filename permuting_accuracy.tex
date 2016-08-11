@@ -57,7 +57,7 @@
 \newcommand{\mycaption}{Simulation details in Appendix~\ref{apx:simulation_details} except the changes in the sub-captions.}
 \newcommand{\argmin}[2]{\mathop{argmin} _{#1}\set{#2}} % The argmin operator
 \newcommand{\argmax}[2]{\mathop{argmax} _{#1}\set{#2}} % The argmin operator
-
+\newcommand{\R}{\textsf{R }}
 
 
 \title{Better-Than-Chance Classification for Signal Detection}
@@ -253,8 +253,9 @@ Three are population tests: Hotelling, Hotelling.shrink, and sd.
 \textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
 \textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
 The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
-For example, \textit{svm.CV.4} is a linear SVM, with \textit{libsvm}'s cost parameter set at $0.1$, using the cross validated z-scored accuracy ($|\acc_{\hypEstim}-\majority/\sqrt{\majority(1-\majority)}$, see Section~\ref{sec:considerations}).
-Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy, without cross validation, and without z-scoring.}
+For example, \textit{svm.CV.4} is a linear SVM implemented with the \emph{svm} \R function,
+the cost parameter set at $0.1$, and using the cross validated z-scored accuracy in Eq.~\ref{eq:z_scored_accuracy}.
+Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy.}
 \label{tab:collected}
 \end{tcolorbox}
 
@@ -679,7 +680,7 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \label{apx:simulation_details}
 
 The follwing details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
-The \textsf{R} code for the simulations can be found in [TODO].
+The \R code for the simulations can be found in [TODO].
 
 Each simulation is based on $4,000$ replications. 
 In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
