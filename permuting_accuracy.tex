@@ -401,7 +401,7 @@ Their high dimensional versions such as \cite{srivastava_testing_2013} and \cite
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
 (b) Inefficient use of the data for the validation holdout set. 
-In our high dimensional setup, we also confirmed that high-dimensional versions of the $T^2$ test, such as \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005} are preferable over the original $T^2$. 
+The presence of heavy tails shrinks the power advantage of the location tests over accuracy tests. 
 
 
 The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
@@ -428,10 +428,6 @@ For such cases we collect some conclusions from our simulations on the best prac
 \begin{enumerate}
 \item The conservativeness of accuracy tests decrease with sample size. 
 
-
-\item A major driver for the power loss is the discreteness of the test statistic. 
-This discretenes, thus conservativism, can be reuced by generating test samples \emph{with replacement} (Figure~\ref{fig:bootstrap}). 
-
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 
@@ -452,6 +448,7 @@ This also implies that there is a fundamental difference between V-folding and r
 
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
+
 
 \subsection{Smoothing accuracy estimates}
 It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
