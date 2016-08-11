@@ -428,22 +428,27 @@ For such cases we collect some conclusions from our simulations on the best prac
 \begin{enumerate}
 \item The conservativeness of accuracy tests decrease with sample size. 
 
-\item Cross validating has more power than resubstitution. 
-The power loss due to the smaller samples when cross validating, is smaller than the power loss due to the concentration of the resubstitition statistic (Figure~\ref{fig:large_sample}). 
 
-
-The power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the resubstitution accuracy. 
-For large sample sizes, discretization and concentration have weaker effects, and the cross validated accuracy may be replaced with the computationally more efficiency resubstitution accuracy.
+\item A major driver for the power loss is the discreteness of the test statistic. 
+This discretenes, thus conservativism, can be reuced by generating test samples \emph{with replacement} (Figure~\ref{fig:bootstrap}). 
 
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 
-\item There is no gain in z-scoring the accuracy scores. 
-
-\item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO:why balance?
-
-\item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. 
+\item For V-fold CV, it is unclear what is the effect of the number of folds. 
+More folds increase power by reducing the number of holdout samples. 
 On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
+This suggests that the optimal number of folds may be problem specific. 
+
+\item Cross validating has no less power than resubstitution. 
+The power loss due to the training sub-samples when cross validating, is smaller than the power loss due to the concentration of the resubstitition statistic (Figure~\ref{fig:large_sample}). 
+For large sample sizes, discretization and concentration have weaker effects, so that the cross validated accuracy may be replaced with the computationally more efficiency resubstitution accuracy (Figure~\ref{fig:large_sample_3}).
+This also implies that there is a fundamental difference between V-folding and resubstitution, so that latter should not be thought of as the limit of the former. 
+
+\item There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
+
+\item Cross validated accuracy with balanced folds has more power than unbalanced folds. 
+[TODO: Why?]. 
 
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
