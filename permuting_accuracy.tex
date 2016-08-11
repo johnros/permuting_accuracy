@@ -195,6 +195,7 @@ We will thus be considering both cross validated accuracies, and resubstitution 
 
 \paragraph{Balanced folding?}
 The standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified) \citep[e.g.][]{ojala_permutation_2010}.
+This means that each fold has the same number of examples from each class. 
 We will report results with both balanced and unbalanced data foldings, only to discover, it does not really matter. 
 
 
@@ -222,16 +223,14 @@ We thus propose the z-scored accuracy statistic:
 
 
 The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
-
-
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
 Name & Basis & CV & Accuracy & Parameters\\ 
 \hline
 \hline
-Hotelling & Hotelling & -- & -- & shrink=FALSE\\ 
-Hotelling.shrink & Hotelling & -- & -- & shrink=TRUE \\ 
+Hotelling & Hotelling & -- & -- & -- \\ 
+Hotelling.shrink & Hotelling & -- & -- & -- \\ 
 lda.CV.1 & LDA & TRUE & accuracy &  -- \\ 
 lda.CV.2 & LDA & TRUE & z-accuracy & -- \\ 
 lda.noCV.1 & LDA & FALSE & accuracy &  --\\ 
@@ -248,7 +247,7 @@ svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
-This table enumerates the various test statistics we will be studying. 
+This table collects the various test statistics we will be studying. 
 Three are population tests: Hotelling, Hotelling.shrink, and sd.
 \textit{Hotelling} is the classical two-group $T^2$ statistic. 
 \textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
