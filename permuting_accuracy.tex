@@ -19,7 +19,7 @@
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
 
 
-\captionsetup[figure]{labelfont=it,textfont={bf,it}}
+\captionsetup[figure]{labelfont=it,textfont={it}}
 \captionsetup[subfigure]{width=0.8\hsize,labelfont=bf,textfont=footnotesize,singlelinecheck=off,justification=raggedright,format=hang}
 
 \theoremstyle{definition}
@@ -101,31 +101,31 @@ As put in \cite{pereira_machine_2009}:
 \begin{quote}
 ... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
-A practitioner may then call upon a two-group location test such as Hotelling's $T^2$ \citep{anderson_introduction_2003}.
+A practitioner may then call upon a two-group population test such as Hotelling's $T^2$ \citep{anderson_introduction_2003}.
 Alternatively, if the size of a brain region is large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{schafer_shrinkage_2005} or \cite{srivastava_multivariate_2007}.
-For brevity, and in contrast to \emph{accuracy tests}, we will call any two-sample multivariate tests simply \emph{location tests}, also termed \emph{class comparisons}. [TODO: rename to parameter test?]
+For brevity, and in contrast to \emph{accuracy tests}, we will call any two-sample multivariate tests simply \emph{population tests}, also termed \emph{class comparisons}. [TODO: rename to parameter test?]
 
 
-At this point, it becomes unclear which is preferable: a location test or an accuracy test?
+At this point, it becomes unclear which is preferable: a population test or an accuracy test?
 The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $959$ citations\footnote{GoogleScholar. Accessed on Aug 4, 2016.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
-The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ location test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
-By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
+The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ population test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
+By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and population tests are rate equivalent. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
 \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
-In this light, the accuracy test is remarkably inefficient compared to the location test.  
-For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the location test. 
+In this light, the accuracy test is remarkably inefficient compared to the population test.  
+For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the population test. 
 
 Before discarding accuracy tests as inefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
 The authors conjectured that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
 Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
 This eschews the discrete nature of the accuracy statistic, which will be shown to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples? 
-Our conclusion will be quite simple: {\em location tests almost always have more power than accuracy tests}.
+Our conclusion will be quite simple: {\em population tests almost always have more power than accuracy tests}.
 
 Our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
@@ -141,7 +141,7 @@ In a very high dimensional model, the resubstitution accuracy will be $1$ for th
 The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 
 
-To compare the power of accuracy tests and location tests in finite samples, we perform a simulation study of a battery of test statistics. 
+To compare the power of accuracy tests and population tests in finite samples, we perform a simulation study of a battery of test statistics. 
 We start with fomalizing the problem in Section~\ref{sec:problem_setup}.
 The main findings are reported in Sections~\ref{sec:power} and \ref{sec:example}. 
 A discussion follows in Section~\ref{sec:discussion}. 
@@ -156,7 +156,7 @@ Let $\outcomes \in \outcomeS$ be a class encoding.
 Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
 In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the number of voxels in a brain region so that $\featureS=\reals^{27}$. 
 
-Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
+Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a population test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 
 An accuracy test amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
@@ -243,7 +243,7 @@ svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
 \captionsetup{type=table}
 \caption{\footnotesize
 This table enumerates the various test statistics we will be studying. 
-Three are location tests: Hotelling, Hotelling.shrink, and sd.
+Three are population tests: Hotelling, Hotelling.shrink, and sd.
 \textit{Hotelling} is the classical two-group $T^2$ statistic. 
 \textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
 \textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
@@ -309,16 +309,16 @@ Cross-validation was performed with balanced (stratified) and unbalanced data fo
 \label{sec:power}
 
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- 
-especially when comparing the power of location tests to accuracy tests. 
+especially when comparing the power of population tests to accuracy tests. 
 From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
 \begin{enumerate}
-\item Location tests have more power than accuracy tests in all our configurations.
+\item population tests have more power than accuracy tests in all our configurations.
 \item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3}), suggesting that concentration and\slash or discretization is responsible for power loss. 
 \item The power may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). %TODO: effect of n.folds.
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
 There is really no reason to use it. 
-\item Both accuracy and location tests are inappropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
+\item Both accuracy and population tests are inappropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
 This was to be expected and is reported mostly as a sanity check.
 \item The presence of heavy tails (Figure~\ref{fig:t_null}) may reduce power, but does not quantitatively change results. 
 \item Balanced folding typically has no effect. 
@@ -328,7 +328,7 @@ It increased power only for the z-scored statistics (Figure~\ref{fig:simulation_
 \end{enumerate}
 
 
-The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to location tests. 
+The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to population tests. 
 We now verify this finding on a neuroimaging dataset.
 
 
@@ -346,9 +346,9 @@ The data was kindly made available by the authors at the OpenfMRI website\footno
 
 We perform group inference using within-subject permutations using the pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
-To demonstrate our point, we compare the \emph{sd} location test with the \emph{svm.cv.1} accuracy test (see Table~\ref{tab:collected} for the definition of these statistics). 
+To demonstrate our point, we compare the \emph{sd} population test with the \emph{svm.cv.1} accuracy test (see Table~\ref{tab:collected} for the definition of these statistics). 
 
-In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
+In agreement with our simulation results, the population test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -360,11 +360,11 @@ Having established that accuracy tests are underpowered both in simulation and i
 \includegraphics[width=0.7\linewidth]{"art/svm_vs_SD"}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
-Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.cv.1}), and a location test (\emph{sd}). 
+Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.cv.1}), and a population test (\emph{sd}). 
 \emph{svm.cv.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
 Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 Number of permutations equals $400$.
-The location test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
+The population test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
 For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron_quantifying_2016}.  
   }
 \label{fig:read_data}
@@ -381,19 +381,19 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 \section{Discussion}
 \label{sec:discussion}
 
-We have set out to understand which of the tests is more powerful: the accuracy test or the location test. 
-Using simulations, we have concluded that the location tests are preferable. 
+We have set out to understand which of the tests is more powerful: the accuracy test or the population test. 
+Using simulations, we have concluded that the population tests are preferable. 
 Their high dimensional versions such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005} are preferable for typical neuroimaging problems such as MVPA.
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
 (b) Inefficient use of the data for the validation holdout set. 
-The presence of heavy tails shrinks the power advantage of the location tests over accuracy tests. 
+The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
 
 
 The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
-The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivariate test (be it a location test or other), that is more powerful than an accuracy test. 
+The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivariate test (be it a population test or other), that is more powerful than an accuracy test. 
 There is also a good chance that it would be easier to implement, since no cross validation will be involved. 
 
 
@@ -409,7 +409,7 @@ This is not the case for continuous test statistics.
 
 
 \subsection{A good accuracy test}
-In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
+In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a population test.
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
 \begin{enumerate}
 \item The conservativeness of accuracy tests decrease with sample size. 
@@ -464,7 +464,7 @@ $$
 \end{definition}
 
 The simlation results reported in Figure~\ref{fig:bootstrap}, with naming conventions in Table~\ref{tab:collected_2}.
-It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of location tests. 
+It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of population tests. 
 It can also be seen that power increases with the number of Bootstrap replications, itself reducing the level of discretization. 
 The type of Bootstrap, B-LOO versus B-$0.632$, does not change the power. 
 Again, consistent with the observation that it is discretization that drives the power loss. 
@@ -522,7 +522,7 @@ We conjecture that they would not alter our conclusions, since the main force dr
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} looked into the problem of choosing a good accuracy test. 
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
-(a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to location tests. 
+(a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. This means that in the cases that the accuracy test is called upon for discriminating populations, it will probably be underpowered compared to population tests. 
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds is crucial for an accuracy test. 
 
 \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
@@ -539,7 +539,7 @@ and
 $(x_i|y_i=-1) \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}$.
 Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
 We perform the same simulation as \cite{golland_permutation_2005}, after reparametrizing $p$ so that $p=0$ corresponds to the null model, and $p=23$ to be comparable to our other simulations.
-We find that in this mixture class of models, like the location class of models, a location test has more power than an accuracy test (Figure~\ref{fig:golland}).
+We find that in this mixture class of models, like the location class of models, a population test has more power than an accuracy test (Figure~\ref{fig:golland}).
 %TODO: why number of folds matters?
 
 
@@ -579,11 +579,11 @@ This is because classification is harder than detection.
 We may be able to detect a difference between classes, but not be able to classify examples significantly better than chance. 
 
 Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
-This is a false argument-- accuracy test do not have any more flexibility that location tests. 
+This is a false argument-- accuracy test do not have any more flexibility that population tests. 
 Indeed, it is possible to test for location in the same dimension the classifier is learned. 
 \citet{gretton_kernel_2012-1} is an example where the test for location is performed in the RKHS of the data.
 It is also possible to test for the equality of two multivariate distributions without specifying any a-priori alternative \cite[e.g.][]{heller_consistent_2012}).
-On the other hand, based on our reported neuroimaging example, and others, we find that a location test in the original feature space is indeed a simple and powerful approach to signal detection.
+On the other hand, based on our reported neuroimaging example, and others, we find that a population test in the original feature space is indeed a simple and powerful approach to signal detection.
 
 
 
@@ -594,7 +594,7 @@ On the other hand, based on our reported neuroimaging example, and others, we fi
 Given all the above, we find the popularity of accuracy tests quite puzzling. 
 We believe this is due to a reversal of the inference cascade. 
 Researchers first fit a classifier, and then ask if the classes are any different.
-Were they to start by asking if classes are any different, and only then try to classify, then location tests would naturally arise as the preferred method. 
+Were they to start by asking if classes are any different, and only then try to classify, then population tests would naturally arise as the preferred method. 
 As put by \cite{ramdas_classification_2016}:
 \begin{quote}
 The recent popularity of machine learning has resulted in the extensive teaching and use
