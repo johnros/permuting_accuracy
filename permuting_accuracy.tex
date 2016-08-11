@@ -178,7 +178,6 @@ The design of a permutation test using the prediction accuracy, requires the fol
 \item How many folds? 
 \end{enumerate}
 \item How to estimate accuracy?
-\item Permute labels of features?
 \end{enumerate}
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups. 
@@ -190,19 +189,14 @@ The underlying intuition is that if the exact same computation is performed over
 We will thus be considering both cross validated accuracies, and resubstitution accuracies as our test statistics. 
 
 
-\paragraph{Refolding?}
-The standard practice in neuroimaging is to refold the data after each permutation \citep{pereira_machine_2009}.
-This is imperative if permuting labels while aiming at balanced data folds. 
-This is not, however, imperative in general. 
-For simplicity, we will adhere to the standard practice of refolding the data within each permutation.
-
-
 \paragraph{Balanced folding?}
-As already implied, a standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified) \citep[e.g.][]{ojala_permutation_2010}.
-This is well justified when aiming at unbiased accuracy estimation. 
-This also simplifies matter when aiming at signal detection, as can be seen from the above discussion of the appropriate test statistic. 
-On the other hand, it may complicate matters, as can be seen from the above discussion on label versus feature permutation. 
+The standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified) \citep[e.g.][]{ojala_permutation_2010}.
 We will report results with both balanced and unbalanced data foldings, only to discover, it does not really matter. 
+
+
+\paragraph{Refolding?}
+The standard practice in neuroimaging is to refold the data after each permutation, so that data folds are balanced after each label permutation.
+We will adhere, even though it can be circumvented by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
@@ -222,19 +216,6 @@ For unbalanced data the accuracy chance level is the probability of the majority
 This suggests the following test statistic $|\acc_{\hypEstim}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
 We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}$. 
-
-
-
-\paragraph{Permute labels of features?}
-While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
-As an example, consider balanced (stratified) V-fold cross validation where the initial data folding is balanced. 
-After a label permutation, the original folds will probably not be balanced. 
-If the \emph{features} are permuted, then the labels conserve their original fold assignments, and the original folds are balanced after each permutation. 
-Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
-We thus adhere to the more common, albeit computationally less efficient practice of permuting labels. 
-
-
-
 
 
 The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
