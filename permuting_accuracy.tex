@@ -158,6 +158,7 @@ In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the numbe
 
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
+
 An accuracy test amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
 The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction.
 Denoting by $I(A)$ the indicator function of the event $A$, we have $\acc_{\hypEstim}:=\expect{I(\hypEstim(x)=y)}$ when given a randomly drawn data point, ($\features,\outcomes$). 
@@ -169,34 +170,24 @@ A statistically significant ``better than chance'' estimate of $\acc_{\hypEstim}
 
 The design of a permutation test using the prediction accuracy, requires the following design choices: 
 \begin{enumerate}
-\item How to estimate accuracy?
 \item Is the statistic cross validated or not?
-\item For a K-fold cross validated test statistic: should the data be refolded in each permutation? 
-\item Permute labels of features?
-\item For a K-fold cross validated test statistic: should the data folding balanced (a.k.a.\ stratified)?
+\item For a V-fold cross validated test statistic:
+\begin{enumerate}
+\item Should the data be refolded in each permutation? 
+\item Should the data folding be balanced (a.k.a.\ stratified)?
 \item How many folds? 
+\end{enumerate}
+\item How to estimate accuracy?
+\item Permute labels of features?
 \end{enumerate}
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups. 
 
-\paragraph{How to estimate accuracy?}
-\label{sec:estimate_accuracy}
-Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
-Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
-We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
-This, however, implies that if the classes are identical, random guessing has $0.5$ accuracy. This is not true if the classes are not balanced. 
-For unbalanced data the accuracy chance level is the probability of the majority class, we denote by $\majority$ \citep[ Sec 4.1]{golland_permutation_2005}.
-This suggests the following test statistic $|\acc_{\hypEstim}-\majority|$.
-Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
-We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}$. 
-
-
 
 \paragraph{Cross validate or not?}
-Were we interested in an unbiased estimator of the prediction error, there is no question that some independent validation is in order. 
 Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
-We will thus be considering both cross validated accuracies, and resubstitution accuracies as our test statistics, a.k.a.\ \emph{resubstitution classification}. 
+We will thus be considering both cross validated accuracies, and resubstitution accuracies as our test statistics. 
 
 
 \paragraph{Refolding?}
@@ -204,15 +195,6 @@ The standard practice in neuroimaging is to refold the data after each permutati
 This is imperative if permuting labels while aiming at balanced data folds. 
 This is not, however, imperative in general. 
 For simplicity, we will adhere to the standard practice of refolding the data within each permutation.
-
-
-\paragraph{Permute labels of features?}
-While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
-As an example, consider balanced (stratified) K-fold cross validation where the initial data folding is balanced. 
-After a label permutation, the original folds will probably not be balanced. 
-If the \emph{features} are permuted, then the labels conserve their original fold assignments, and the original folds are balanced after each permutation. 
-Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
-We thus adhere to the more common, albeit computationally less efficient practice of permuting labels. 
 
 
 \paragraph{Balanced folding?}
@@ -228,6 +210,31 @@ Different authors suggest different rules for the number of folds.
 We will be varying the number of folds.
 This will affect the concentration of permutation distribution of the estimated accuracy, which will have a crucial effect on the conservativeness of the accuracy test. 
 Our intuition suggests that since more folds imply a less concentrated estimate, then leave-one-out should be the less conservative, and 2-fold should be the most conservative. 
+
+
+\paragraph{How to estimate accuracy?}
+\label{sec:estimate_accuracy}
+Given a predictor $\hypEstim$, a natural test statistic is some estimate of its accuracy $\acc_{\hypEstim}$.
+Complicating matters: very low accuracies, even $0$, is evidence that the classes are separated, and we only need to invert the predictions. 
+We can thus consider $|\acc_{\hypEstim}-0.5|$ as the test statistic.
+This, however, implies that if the classes are identical, random guessing has $0.5$ accuracy. This is not true if the classes are not balanced. 
+For unbalanced data the accuracy chance level is the probability of the majority class, we denote by $\majority$ \citep[ Sec 4.1]{golland_permutation_2005}.
+This suggests the following test statistic $|\acc_{\hypEstim}-\majority|$.
+Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
+We thus also consider the z-scored accuracy: $|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}$. 
+
+
+
+\paragraph{Permute labels of features?}
+While seemingly identical, the compounding of permutations with data foldings renders these two approaches distinct. 
+As an example, consider balanced (stratified) V-fold cross validation where the initial data folding is balanced. 
+After a label permutation, the original folds will probably not be balanced. 
+If the \emph{features} are permuted, then the labels conserve their original fold assignments, and the original folds are balanced after each permutation. 
+Since we only report results while refolding the data in each permutation, then the only difference between permuting labels and permuting features seems to be a computational one. 
+We thus adhere to the more common, albeit computationally less efficient practice of permuting labels. 
+
+
+
 
 
 The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
