@@ -291,7 +291,7 @@ We return to this matter in the Discussion.
 
 \begin{figure}[h]
 \centering
-\caption{\footnotesize
+\caption{
 The power of a permutation test with various test statistics. 
 The power on the $x$ axis. 
 Effect are color and shape coded. 
@@ -304,13 +304,13 @@ Cross-validation was performed with balanced (stratified) and unbalanced data fo
 \begin{subfigure}{.5\textwidth}
 \centering
 \includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-\caption{\textbf{Unbalanced.}}  
+\caption{\textbf{Unbalanced.}} %TODO: caption  
 \label{fig:simulation_11}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
 \centering
 \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-\caption{\textbf{Balanced.}} 
+\caption{\textbf{Balanced.}} %TODO: caption 
 \label{fig:simulation_12}
 \end{subfigure}
 \end{figure}
@@ -497,7 +497,16 @@ $B$ denotes the number of Bootstrap samples. } %TODO: caption.
 \begin{figure}[ht]
 \centering
 	  \includegraphics[width=0.8\linewidth]{"art/2016-08-09 20:09:20"}
-	  \caption{\textbf{Bootstrap:} } %TODO:caption
+	  \caption{
+		  \textbf{Bootstrap:}
+		  The power of a permutation test with various test statistics. 
+		  The power on the $x$ axis. 
+		  Effect are color and shape coded. 
+		  The various statistics on the $y$ axis. 
+		  Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
+		  Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		  Simulation details in Appendix~\ref{apx:simulation_details}.
+		  } 
 	\label{fig:bootstrap}
 \end{figure}
 
@@ -548,9 +557,9 @@ We find that in this mixture class of models, like the location class of models,
 
 
 %TODO: discuss \cite{ojala_permutation_2010}
-% the problems they study
+% the problems they study: Test 1 versus Test 2
 % my simulated power to the analysis in Figure 6
-
+% the classifiers they compare
 
 
 
@@ -783,9 +792,8 @@ The reported power is the proportion of replication where the permutation p-valu
 \caption{\mycaption}	
 	\begin{subfigure}{.4\textwidth}
 	  \centering
-	  \missingfigure[figwidth=6cm]{TODO:figure}
-%	  \includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-	  \caption{\textbf{High-Dimension, local alternative:} $n=400$, $\mu \in \frac{\sqrt{40}}{\sqrt{400}} \times \set{0,1/4,1/2}.$} 
+	  \includegraphics[width=1\linewidth]{"art/2016-08-11 08:32:39"}
+	  \caption{\textbf{High-Dimension, local alternative:} $n=400$, $\mu \in \frac{1}{\sqrt{10}} \times \set{0,1/4,1/2}.$} 
 	\label{fig:large_sample_3}
 	\end{subfigure}
 		\begin{subfigure}{.4\textwidth}
