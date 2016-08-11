@@ -324,6 +324,10 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 
 \item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the location test vanishes. 
 
+\item The presence of correlations between coordiantes reduces the signal to noise ratio (SNR), thus reduces power. 
+More importantly, in the presence of correlations the effect of regularization is amplified, increasing the power difference between regulirized and non-regulirized test statistics.
+Put differently- in low SNR regimes, regularization proves crucial (Figure~\ref{fig:ar_1}).
+
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
 
@@ -334,9 +338,6 @@ This was to be expected and is reported mostly as a sanity check.
 
 \item Increasing the SVM's cost parameter, which reduces the number of support vectors entering the classifier, reduces power. 
 
-\item The presence of correlations between coordiantes reduces the signal to noise ratio (SNR), thus reduces power. 
-More importantly, in the presence of correlations the effect of regularization is amplified, increasing the power difference between regulirized and non-regulirized test statistics.
-Put differently- in low SNR regimes, regularization proves crucial (Figure~\ref{fig:ar_1}).
 \end{enumerate}
 
 
