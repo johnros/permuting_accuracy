@@ -327,7 +327,7 @@ especially when comparing the power of location tests to accuracy tests.
 From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
 \begin{enumerate}
 \item Location tests have more power than accuracy tests in all our configurations.
-\item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3}), suggesting that either concentration or discretization is responsible for power loss. 
+\item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3}), suggesting that concentration and\slash or discretization is responsible for power loss. 
 \item The power may increase or decrease with the number of folds (Figure~\ref{fig:n_folds}). %TODO: effect of n.folds.
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
@@ -404,18 +404,19 @@ We attribute this to several phenomena:
 In our high dimensional setup, we also confirmed that high-dimensional versions of the $T^2$ test, such as \cite{srivastava_testing_2013} or \cite{schafer_shrinkage_2005} are preferable over the original $T^2$. 
 
 
-The sensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdout. 
+The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
 The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivariate test (be it a location test or other), that is more powerful than an accuracy test. 
-There is also a good chance that it would be easier to implement, since no validation will be involved. 
+There is also a good chance that it would be easier to implement, since no cross validation will be involved. 
 
 
 
 \subsection{Ease of implementation}
-A very important point is the ease of implementation. 
+A very important consideration is the ease of implementation. 
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are considerably harder to implement. This is because their unforgiveness to the type of inequality. 
+Moreover, anyone who has actually implemented tests with discrete statistics, will attest they are more prone to programming errors. 
+This is because their unforgiveness to the type of inequalities used. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
 
@@ -425,16 +426,25 @@ This is not the case for continuous test statistics.
 In Section~\ref{sec:reservations} we discuss cases where an accuracy test cannot replace a location test.
 For such cases we collect some conclusions from our simulations on the best practices for accuracy tests.
 \begin{enumerate}
-\item The conservativeness due to discretization decreases with sample size. 
-\item Cross validating the accuracy statistic increases power in moderate sample sizes. 
+\item The conservativeness of accuracy tests decrease with sample size. 
+
+\item Cross validating has more power than resubstitution. 
+The power loss due to the smaller samples when cross validating, is smaller than the power loss due to the concentration of the resubstitition statistic (Figure~\ref{fig:large_sample}). 
+
+
 The power loss due to the holdout inefficiency is smaller than the power loss due to the concentration of the resubstitution accuracy. 
 For large sample sizes, discretization and concentration have weaker effects, and the cross validated accuracy may be replaced with the computationally more efficiency resubstitution accuracy.
+
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
+
 \item There is no gain in z-scoring the accuracy scores. 
+
 \item Cross validated accuracy with balanced folds has more power than unbalanced folds. We currently have no intuition to offer for this phenomenon. %TODO:why balance?
+
 \item It is unclear what is the effect of the number of folds. More folds increase power by reducing the number of holdout samples. 
 On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
+
 \item The value of the tunning parameters of a classifier have little to no effect. 
 \end{enumerate}
 
