@@ -359,13 +359,13 @@ The data was kindly made available by the authors at the OpenfMRI website\footno
 
 We perform group inference using within-subject permutations alng the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
-To demonstrate our point, we compare the \emph{sd} population test with the \emph{svm.cv.1} accuracy test (see Table~\ref{tab:collected} for the definition of these statistics). 
+To demonstrate our point, we compare the \emph{sd} population test with the \emph{svm.cv.1} accuracy test. 
 
 In agreement with our simulation results, the population test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
-Having established that accuracy tests are underpowered both in simulation and in application, we wish to identify the conditions under which this will occur, and discuss implications on the practice of accuracy tests. 
+Having established that accuracy tests are typically underpowered for signal detection compared to population tests, we wish to identify the conditions under which this will occur, and discuss implications on the practice of accuracy tests. 
 
 
 \begin{figure}[th]
