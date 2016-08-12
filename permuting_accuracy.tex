@@ -562,7 +562,9 @@ $B$ denotes the number of Bootstrap samples. } %TODO: caption.
 \subsection{High dimensional classifiers}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power to accuracy tests. 
 It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization (\emph{sd} and \emph{Hotelling.shrink}), and not only to discretization.
-
+To study this, we call upon several regulirized classifiers, desifned for high dimensional problems. 
+In the spirit of the regulirized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regulirized svm \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
+In the spirit of the diagonilized covariance of \emph{sd}, we try a diagonlized LDA \cite{dudoit_comparison_2002}, which can be thought of a method intersecting Fisher's LDA and Naive Bayes. 
 
 
 \bigskip
