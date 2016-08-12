@@ -492,19 +492,22 @@ It does so, however, for the train set, and not the test set.
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator} (bLOO) and its derivation-- the \emph{0.632 bootstrap estimator} (b$0.632$) \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 \label{def:bloo}
-Denoting by $C^{(i)}$ the index set of bootstrap samples, $b$, where observation $i$ is not in the train set, \emph{leave-one-out bootstrap} estimate is defined as:
+Denoting by $C^{(i)}$ the index set of bootstrap samples, $b$, where observation $i$ is not in the train set,
+and by $\hypEstim^b$ the classifier fitted to the $b$'th bootstrap training sample, 
+then the \emph{leave-one-out bootstrap} estimate is defined as:
 $$
 	\acc_{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} I(\hypEstim^b(x_i)=y_i).
 $$ 
 Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
 $$
-	\acc_{bLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
+	\acc_{bLOO}= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
 $$
 \end{definition}
 
 \begin{definition}[b$0.632$]
 \label{def:b0632}
-Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, the b$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
+Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, 
+the b$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
 $$
 	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{bLOO}.
 $$
