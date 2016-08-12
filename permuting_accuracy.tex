@@ -395,19 +395,22 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the population test. 
-Using simulations, we have concluded that the population tests are preferable. 
-Their high dimensional versions such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005} are preferable for typical neuroimaging problems such as MVPA.
+Using simulations, we have concluded that the population tests are typically preferable. 
+Their high dimensional versions, such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005},  are particularly well suited for neuroimaging problems such as MVPA.
 We attribute this to several phenomena: 
 (a) Discretization introduced in finite samples by the accuracy test statistic. 
 (b) Inefficient use of the data for the validation holdout set. 
+(c) Regularization crucial in high dimensional problems.
+
 The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
+Our empirical example suggests that even if the population test does not neccesarily domiate the accuracy test in power, empirically, it does have an advantage. 
 
 
-The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
-The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a multivariate test (be it a population test or other), that is more powerful than an accuracy test. 
-There is also a good chance that it would be easier to implement, since no cross validation will be involved. 
+
+The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a population test that is more powerful than an accuracy test. 
+There is also a good chance that it would be easier to implement, and faster to run, since no cross validation will be involved. 
 
 
 
@@ -418,6 +421,28 @@ Moreover, anyone who has actually implemented tests with discrete statistics, wi
 This is because their unforgiveness to the type of inequalities used. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
+
+
+
+
+\subsection{Reservations}
+\label{sec:reservations}
+
+Some reservations to the generality of our findings are in order. 
+Firstly, not all accuracy tests are concerned with signal detection.
+Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
+In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
+
+Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+This is a false argument-- accuracy test do not have any more flexibility that population tests. 
+Indeed, it is possible to test for location in the same dimension the classifier is learned. 
+\citet{gretton_kernel_2012-1} is an example where the test for location is performed in the RKHS of the data.
+It is also possible to test for the equality of two multivariate distributions [TODO: cite  vogelstein].
+On the other hand, based on our reported neuroimaging example, and others, we find that a population test in the original feature space is indeed a simple and powerful approach to signal detection.
+
+
+
+
 
 
 
@@ -446,6 +471,9 @@ This also implies that there is a fundamental difference between V-folding and r
 [TODO: Why?]. 
 
 \item The value of the tunning parameters of a classifier have little to no effect. 
+
+\item The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
+
 \end{enumerate}
 
 
@@ -498,7 +526,8 @@ svm.Boot.3 & SVM & B-$0.632$ 	& 50 & accuracy & cost=1e1 \\
 svm.Boot.4 & SVM & B-LOO 	& 50 & accuracy & cost=1e1 \\ 
 \end{tabular} 
 \captionsetup{type=table}
-\caption{The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
+\caption{
+The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
 B-LOO and B-$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
 $B$ denotes the number of Bootstrap samples. } %TODO: caption. 
 \label{tab:collected_2}
@@ -529,6 +558,30 @@ We have simulated two high dimensional versions of Hotelling's $T^2$: \emph{sd} 
 The former solves the dimensionality problem by assuming independence over coordinates, and the latter by Tikhonov regularization of the covariance, a-la ridge regression. 
 The corresponding high dimensional accuracy tests would be a \emph{naive Bayes} classfier, and $l_2$ regularized SVM \citep{ramdas_classification_2016}.
 We conjecture that they would not alter our conclusions, since the main force driving the conservativism is discretization, which they do not solve. 
+
+\bigskip
+
+\begin{tcolorbox}
+\centering
+\begin{tabular}{l|c|c|c|c}
+Name & Basis & CV & Accuracy & Parameters\\ 
+\hline
+\hline
+svm.highdim.1 & SVM & TRUE & accuracy & cost=1e-1 \\ 
+lda.highdim.1 & LDA & TRUE & accuracy & -- \\ 
+lda.highdim.2 & LDA & TRUE & accuracy & -- \\ 
+lda.highdim.3 & LDA & TRUE & accuracy & -- \\ 
+\end{tabular} 
+\captionsetup{type=table}
+\caption{
+The same as Table~\ref{tab:collected} for regulirized (high dimensional) predictors. 
+\emph{svm.highdim.1} is an $l2$ regulirized SVM \cite{friedman_regularization_2010}. 
+\emph{lda.highdim.1} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
+\emph{lda.highdim.2} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
+\emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
+} %TODO: caption
+\label{tab:collected_3}
+\end{tcolorbox}
 
 
 
@@ -585,31 +638,6 @@ We find that in this mixture class of models, like the location class of models,
 % my simulated power to the analysis in Figure 6
 % the classifiers they compare
 
-
-
-
-\subsection{Reservations}
-\label{sec:reservations}
-
-Some reservations to the generality of our findings are in order. 
-Firstly, not all accuracy tests are concerned with signal detection.
-Consider brain decoding for machine interfaces, and clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
-In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
-As put by \cite{ojala_permutation_2010}:
-\begin{quote}
-	\dots these tests study whether the classifier is using the described properties and not whether
-	the plain data contain such properties. For studying the characteristics of a population represented
-	by the data, standard statistical test could be used.
-\end{quote}
-This is because classification is harder than detection. 
-We may be able to detect a difference between classes, but not be able to classify examples significantly better than chance. 
-
-Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
-This is a false argument-- accuracy test do not have any more flexibility that population tests. 
-Indeed, it is possible to test for location in the same dimension the classifier is learned. 
-\citet{gretton_kernel_2012-1} is an example where the test for location is performed in the RKHS of the data.
-It is also possible to test for the equality of two multivariate distributions without specifying any a-priori alternative \cite[e.g.][]{heller_consistent_2012}).
-On the other hand, based on our reported neuroimaging example, and others, we find that a population test in the original feature space is indeed a simple and powerful approach to signal detection.
 
 
 
