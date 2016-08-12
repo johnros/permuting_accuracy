@@ -560,12 +560,9 @@ $B$ denotes the number of Bootstrap samples. } %TODO: caption.
 
 
 \subsection{High dimensional classifiers}
-It is known that when $p>n$ Hotelling's $T^2$, and Fisher's LDA are not computable. 
-In our simulations, in which $p=23$ and $n=40$ is ``almost'' high dimensional, but still allows to compute both tests.
-We have simulated two high dimensional versions of Hotelling's $T^2$: \emph{sd} \citep{srivastava_multivariate_2007} and \emph{Hotelling.shrink} \citep{schafer_shrinkage_2005}. 
-The former solves the dimensionality problem by assuming independence over coordinates, and the latter by Tikhonov regularization of the covariance, a-la ridge regression. 
-The corresponding high dimensional accuracy tests would be a \emph{naive Bayes} classfier, and $l_2$ regularized SVM \citep{ramdas_classification_2016}.
-We conjecture that they would not alter our conclusions, since the main force driving the conservativism is discretization, which they do not solve. 
+Inspecting Figure~\ref{fig:simulation_11}, or any other figure until now, it can be seen that Hotelling's $T^2$ test has similar power to the best performing accuracy tests. 
+It may thus be argued that the real advantage of the population tests is due to their adaptation to high dimension bu regulirizing (\emph{sd} and \emph{Hotelling.shrink}).
+
 
 \bigskip
 
@@ -587,7 +584,7 @@ The same as Table~\ref{tab:collected} for regulirized (high dimensional) predict
 \emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 \emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 \emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-} %TODO: caption
+} 
 \label{tab:collected_3}
 \end{tcolorbox}
 
