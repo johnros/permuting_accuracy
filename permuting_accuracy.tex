@@ -448,37 +448,38 @@ On the other hand, based on our reported neuroimaging example, and others, we fi
 
 \subsection{A good accuracy test}
 For the cases a population test cannot replace an accuracy test, we collect some conclusions and best practices from our simulations.
-\begin{enumerate}
-\item The conservativeness of accuracy tests decrease with sample size. 
+We give particuar emphasis in this section to V-fold cross validation due to it popularity, but note that sampling the test set with replacement is actually preferable, as we discuss in Section~\ref{sec:bootstrap}.
 
-\item Permuting features is easier than permuting labels. 
-It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
+\paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
 
-\item For V-fold CV, power decreases as the number of folds increases. 
+\paragraph{Permute features.} Permuting features is easier than permuting labels. 
+It allows to preserve balanced folds after a permutation without refolding.
+Altough we not we did not find a power difference between balanced and unbalanced foldings. 
+
+\paragraph{Use less folds.} For V-fold CV, power decreases as the number of folds increases. 
 This is quite interesting since two phenomena compete as the number of folds increase:
 (a) the train set is larger so that better accuracies are achieveable. 
 (b) The test set is smaller so that the accuracy estimate is more variable. 
 The decrease in power with increase fold number suggests that the latter dominates the former. 
 Put differently: it is easier to detect a small stable departure from chance level, than a large but unstable one.
 
-\item Cross validating has no less power than resubstitution. 
-The power loss due to the training sub-samples when cross validating, is smaller than the power loss due to the concentration of the resubstitition statistic (Figure~\ref{fig:large_sample}). 
-For large sample sizes, discretization and concentration have weaker effects, so that the cross validated accuracy may be replaced with the computationally more efficiency resubstitution accuracy (Figure~\ref{fig:large_sample_3}).
-This also implies that there is a fundamental difference between V-folding and resubstitution, so that latter should not be thought of as the limit of the former. 
 
-\item There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
+\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy useful in low dimension.
+In high dimension, the power loss is considerable compared to a cross validated approach. 
+We attribute this to the compouding of discretization and concentrarion effects: the difference between the sampling distribution of the resubstitutution accuracy is simply indinstinguishable under the null and under the alternative. 
+In low dimensional problems, the discretization is less impactful, and the computational burdon of cross validation can be avoided by using the resubstitution accuracy. 
+There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
 
-\item Cross validated accuracy with balanced folds has more power than unbalanced folds. 
-[TODO: Why?]. 
+\paragraph{Regulirize}
+Regulirizing the accuracy test proves very useful in high dimensional problems. 
+Put differently: reducing variance by adding some bias is very useful to detect better-than-chance classification. 
 
-\item The value of the tunning parameters of a classifier have little to no effect. 
+\paragraph{Don't z-score.} There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
 
-\item The insensitivity of the power to the number of folds suggests that most of the power is lost due to the discretization and not to the holdoutsize. 
-
-\end{enumerate}
 
 
 \subsection{Smoothing accuracy estimates}
+\label{sec:bootstrap}
 It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
 The discreteness of the accuracy statistic can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
