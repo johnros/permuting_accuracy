@@ -513,26 +513,25 @@ $$
 $$
 \end{definition}
 
-The simlation results reported in Figure~\ref{fig:bootstrap}, with naming conventions in Table~\ref{tab:collected_2}.
+Simulation results reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
 It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of population tests. 
-It can also be seen that power increases with the number of Bootstrap replications, itself reducing the level of discretization. 
-The type of Bootstrap, B-LOO versus B-$0.632$, does not change the power. 
-Again, consistent with the observation that it is discretization that drives the power loss. 
+It can also be seen that power increases with the number of bootstrap replications, itself reducing the level of discretization. 
+The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
 
 \bigskip
 
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c|c}
-Name & Basis & Boot Type & B & Accuracy & Parameters\\ 
+Name & Basis & Type & B & Accuracy & Parameters\\ 
 \hline
 \hline
-lda.Boot.1 & LDA & B-$0.632$ 	& 10 & accuracy &  -- \\ 
-lda.Boot.2 & LDA & B-LOO 	& 10 & accuracy &  -- \\ 
-svm.Boot.1 & SVM & B-$0.632$ 	& 10 & accuracy & cost=1e1 \\ 
-svm.Boot.2 & SVM & B-LOO 	& 10 & accuracy & cost=1e1 \\ 
-svm.Boot.3 & SVM & B-$0.632$ 	& 50 & accuracy & cost=1e1 \\ 
-svm.Boot.4 & SVM & B-LOO 	& 50 & accuracy & cost=1e1 \\ 
+lda.Boot.1 & LDA & b$0.632$ 	& 10 & accuracy &  -- \\ 
+lda.Boot.2 & LDA & bLOO 	& 10 & accuracy &  -- \\ 
+svm.Boot.1 & SVM & b$0.632$ 	& 10 & accuracy & cost=1e1 \\ 
+svm.Boot.2 & SVM & bLOO 	& 10 & accuracy & cost=1e1 \\ 
+svm.Boot.3 & SVM & b$0.632$ 	& 50 & accuracy & cost=1e1 \\ 
+svm.Boot.4 & SVM & bLOO 	& 50 & accuracy & cost=1e1 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
