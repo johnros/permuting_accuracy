@@ -454,10 +454,12 @@ For the cases a population test cannot replace an accuracy test, we collect some
 \item Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding, thus reducing computational complexity.
 
-\item For V-fold CV, it is unclear what is the effect of the number of folds. 
-More folds increase power by reducing the number of holdout samples. 
-On the other hand, it increases the concentration of the accuracy statistic. Compounded with the discreteness of the accuracy statistic, this decreases power. 
-This suggests that the optimal number of folds may be problem specific. 
+\item For V-fold CV, power decreases as the number of folds increases. 
+This is quite interesting since two phenomena compete as the number of folds increase:
+(a) the train set is larger so that better accuracies are achieveable. 
+(b) The test set is smaller so that the accuracy estimate is more variable. 
+The decrease in power with increase fold number suggests that the latter dominates the former. 
+Put differently: it is easier to detect a small stable departure from chance level, than a large but unstable one.
 
 \item Cross validating has no less power than resubstitution. 
 The power loss due to the training sub-samples when cross validating, is smaller than the power loss due to the concentration of the resubstitition statistic (Figure~\ref{fig:large_sample}). 
