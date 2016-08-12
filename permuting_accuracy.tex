@@ -478,31 +478,35 @@ Put differently: reducing variance by adding some bias is very useful to detect 
 
 
 
+
+
+
 \subsection{Smoothing accuracy estimates}
 \label{sec:bootstrap}
 It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
-The discreteness of the accuracy statistic can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
-The \emph{bootstrap} may seem like a candidate approach, but since the original data always serves as a test set, the accuracy can still only assume $1/n$ values. 
-This is not the case, however, for the \emph{leave-one-out bootstrap estimator} (B-LOO) and the \emph{0.632 bootstrap estimator} (B-$0.632$) \citep[Sec 7.11]{hastie_elements_2003}, which we define below for completeness.
-By the same rational, the degree of conservativism should decrease with the number of bootstrap samples. 
-
-\begin{definition}[B-LOO]
+The discreteness of the accuracy statistic is goverend by the number of examples in the union (over all validation iterations) of test sets.
+For V-fold CV, for instance, this number is simply the sample size. 
+This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
+The \emph{bootstrap} may seem like a good candidate approach since it samples examples with replacement. 
+It does so, however, for the train set, and not the test set. 
+An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator} (bLOO) and its derivation-- the \emph{0.632 bootstrap estimator} (b$0.632$) \citep[Sec 7.11]{hastie_elements_2003}.
+\begin{definition}[bLOO]
 \label{def:bloo}
 Denoting by $C^{(i)}$ the index set of bootstrap samples, $b$, where observation $i$ is not in the train set, \emph{leave-one-out bootstrap} estimate is defined as:
 $$
-	\acc_{BLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} I(\hypEstim^b(x_i)=y_i).
+	\acc_{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} I(\hypEstim^b(x_i)=y_i).
 $$ 
 Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
 $$
-	\acc_{BLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
+	\acc_{bLOO}:= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
 $$
 \end{definition}
 
-\begin{definition}[B-$0.632$]
+\begin{definition}[b$0.632$]
 \label{def:b0632}
-Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, the B-$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
+Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, the b$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
 $$
-	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{BLOO}.
+	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{bLOO}.
 $$
 \end{definition}
 
