@@ -52,8 +52,8 @@
 \newcommand{\y}{\rv y} % The random variable x 
 \newcommand{\X}{\rv X} % The random variable x 
 \newcommand{\Y}{\rv Y} % The random variable y
-\newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The gaussian distribution
-\newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The gaussian distribution
+\newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The Gaussian distribution
+\newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The Gaussian distribution
 \newcommand{\mycaption}{Simulation details in Appendix~\ref{apx:simulation_details} except the changes in the sub-captions.}
 \newcommand{\argmin}[2]{\mathop{argmin} _{#1}\set{#2}} % The argmin operator
 \newcommand{\argmax}[2]{\mathop{argmax} _{#1}\set{#2}} % The argmin operator
@@ -142,7 +142,7 @@ The concentration of resubstitution accuracy near $1$, and its discreteness, ren
 
 
 To compare the power of accuracy tests and population tests in finite samples, we perform a simulation study of a battery of test statistics. 
-We start with fomalizing the problem in Section~\ref{sec:problem_setup}.
+We start with formalizing the problem in Section~\ref{sec:problem_setup}.
 The main findings are reported in Sections~\ref{sec:power} and \ref{sec:example}. 
 A discussion follows in Section~\ref{sec:discussion}. 
 
@@ -269,7 +269,7 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the res
 \section{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-Figure~\ref{fig:simulation_1} demonstrates that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservativism.
+Figure~\ref{fig:simulation_1} demonstrates that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
 This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the absence of any effect, encoded by a red circle. 
 This is true, in particular if:
 (a) the folds are balanced or not,
@@ -324,8 +324,8 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 
 \item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the location test vanishes. 
 
-\item The presence of correlations between coordiantes reduces the signal to noise ratio (SNR), thus reduces power. 
-More importantly, in the presence of correlations the effect of regularization is amplified, increasing the power difference between regulirized and non-regulirized test statistics.
+\item The presence of correlations between coordinates reduces the signal to noise ratio (SNR), thus reduces power. 
+More importantly, in the presence of correlations the effect of regularization is amplified, increasing the power difference between regularized and non-regularized test statistics.
 Put differently- in low SNR regimes, regularization proves crucial (Figure~\ref{fig:ar_1}).
 
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
@@ -357,7 +357,7 @@ Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials 
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
-We perform group inference using within-subject permutations alng the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
+We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
 To demonstrate our point, we compare the \emph{sd} population test with the \emph{svm.cv.1} accuracy test. 
 
@@ -403,7 +403,7 @@ We attribute this to several phenomena:
 (c) Regularization crucial in high dimensional problems.
 
 The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
-Our empirical example suggests that even if the population test does not neccesarily domiate the accuracy test in power, empirically, it does have an advantage. 
+Our empirical example suggests that even if the population test does not necessarily dominate the accuracy test in power, empirically, it does have an advantage. 
 
 
 The degree of discretization is governed by the sample size. 
@@ -448,17 +448,17 @@ On the other hand, based on our reported neuroimaging example, and others, we fi
 
 \subsection{A good accuracy test}
 For the cases a population test cannot replace an accuracy test, we collect some conclusions and best practices from our simulations.
-We give particuar emphasis in this section to V-fold cross validation due to it popularity, but note that sampling the test set with replacement is actually preferable, as we discuss in Section~\ref{sec:bootstrap}.
+We give particular emphasis in this section to V-fold cross validation due to it popularity, but note that sampling the test set with replacement is actually preferable, as we discuss in Section~\ref{sec:bootstrap}.
 
 \paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
 
 \paragraph{Permute features.} Permuting features is easier than permuting labels. 
 It allows to preserve balanced folds after a permutation without refolding.
-Altough we not we did not find a power difference between balanced and unbalanced foldings. 
+Although we not we did not find a power difference between balanced and unbalanced foldings. 
 
 \paragraph{Use less folds.} For V-fold CV, power decreases as the number of folds increases. 
 This is quite interesting since two phenomena compete as the number of folds increase:
-(a) the train set is larger so that better accuracies are achieveable. 
+(a) the train set is larger so that better accuracies are achievable. 
 (b) The test set is smaller so that the accuracy estimate is more variable. 
 The decrease in power with increase fold number suggests that the latter dominates the former. 
 Put differently: it is easier to detect a small stable departure from chance level, than a large but unstable one.
@@ -466,12 +466,12 @@ Put differently: it is easier to detect a small stable departure from chance lev
 
 \paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy useful in low dimension.
 In high dimension, the power loss is considerable compared to a cross validated approach. 
-We attribute this to the compouding of discretization and concentrarion effects: the difference between the sampling distribution of the resubstitutution accuracy is simply indinstinguishable under the null and under the alternative. 
-In low dimensional problems, the discretization is less impactful, and the computational burdon of cross validation can be avoided by using the resubstitution accuracy. 
+We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
+In low dimensional problems, the discretization is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. 
 There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
 
-\paragraph{Regulirize}
-Regulirizing the accuracy test proves very useful in high dimensional problems. 
+\paragraph{Regularize}
+Regularizing the accuracy test proves very useful in high dimensional problems. 
 Put differently: reducing variance by adding some bias is very useful to detect better-than-chance classification. 
 
 \paragraph{Don't z-score.} There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
@@ -484,7 +484,7 @@ Put differently: reducing variance by adding some bias is very useful to detect 
 \subsection{Smoothing accuracy estimates}
 \label{sec:bootstrap}
 It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
-The discreteness of the accuracy statistic is goverend by the number of examples in the union (over all validation iterations) of test sets.
+The discreteness of the accuracy statistic is governed by the number of examples in the union (over all validation iterations) of test sets.
 For V-fold CV, for instance, this number is simply the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 The \emph{bootstrap} may seem like a good candidate approach since it samples examples with replacement. 
@@ -562,15 +562,17 @@ $B$ denotes the number of Bootstrap samples. } %TODO: caption.
 \subsection{High dimensional classifiers}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power to accuracy tests. 
 It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization (\emph{sd} and \emph{Hotelling.shrink}), and not only to discretization.
-To study this, we call upon several regulirized classifiers, desifned for high dimensional problems. 
-In the spirit of the regulirized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regulirized svm \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
-In the spirit of the diagonilized covariance of \emph{sd}, we try a diagonlized LDA \citep{dudoit_comparison_2002}, which can be thought of a method intersecting Fisher's LDA and Naive Bayes. 
+To study this, we call upon several regularized classifiers, designed for high dimensional problems. 
+In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized svm \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
+In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized LDA \citep{dudoit_comparison_2002}, which can be thought of a method intersecting Fisher's LDA and Naive Bayes. 
 
 
 Simulation results reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
-It can be seen that regulirizing a classifier in high dimension, just like a parameter test, improves power. 
-It can also be seen that (regulirized) parameter tests are still more powerful than (regulirized) accuracy tests. 
-This was to be expecetd, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregulirized parameter test, \emph{Hotelling}, is slightly more powerful than the unregulirized accuracy test, \emph{svm.CV.1} for instance.
+It can be seen that regularizing a classifier in high dimension, just like a parameter test, improves power. 
+It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
+This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than the regularized accuracy test, \emph{svm.CV.1} for instance.
+
+##
 
 \bigskip
 
@@ -587,8 +589,8 @@ lda.highdim.3 & LDA & TRUE & accuracy & -- \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
-The same as Table~\ref{tab:collected} for regulirized (high dimensional) predictors. 
-\emph{svm.highdim.1} is an $l2$ regulirized SVM \cite{friedman_regularization_2010}. 
+The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
+\emph{svm.highdim.1} is an $l2$ regularized SVM \cite{friedman_regularization_2010}. 
 \emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 \emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 \emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
@@ -639,7 +641,7 @@ We find that in this mixture class of models, like the location class of models,
 \centering
 	  \includegraphics[width=0.7\linewidth]{"art/2016-08-08 07:33:05"}
 	  \caption{\textbf{Mixture:} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y^*_i}  (1/2+p)^{1-\y^*_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
-	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green tringle) and $1/2$ (blue square). }
+	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:golland}
 \end{figure}
 
@@ -740,7 +742,7 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
 \section{Simulation Details}
 \label{apx:simulation_details}
 
-The follwing details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
+The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
 The \R code for the simulations can be found in [TODO].
 
 Each simulation is based on $4,000$ replications. 
