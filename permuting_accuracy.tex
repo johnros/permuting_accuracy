@@ -626,10 +626,10 @@ We did not include this test in the battery we compared, but we note the followi
 
 \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
 Their analytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
-The finite Vapnik–Chervonenkis (VC) dimension requirement \citep[Sec 4.3]{golland_permutation_2003} prevents the permutation p-value from (asymptotically) concentrating. 
-They also find that the power decreases with the level of discretization of the statistic. 
+The finite Vapnik–Chervonenkis (VC) dimension requirement \citep[Sec 4.3]{golland_permutation_2003} prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+Like ourselves, they also find that the power incrasses with the size of the test set (Figure~4, middle). 
 This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
-Since they permute features, and not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
+Since they permute features, not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
 
 \cite{golland_permutation_2005} simulate the power of an accuracy test using a multivariate Gaussian mixture, with a parameter $p$ governing the separation between classes. 
 Under their model 
