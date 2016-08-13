@@ -221,7 +221,6 @@ We thus propose the z-scored accuracy statistic:
 	|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}.
 \end{align} 
 
-
 The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
 \begin{tcolorbox}
 \centering
@@ -396,7 +395,7 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the population test. 
 No amount of simulations can replace the insight provided by a good closed-form analytic result. 
-The finite sample power of permutation tests is a formidable mathematical problem, so we currently content ourselves with simualtions. 
+The finite sample power of permutation tests is a formidable mathematical problem, so we currently content ourselves with simulations 
 We have concluded that the population tests are typically preferable. 
 Their high dimensional versions, such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005},  are particularly well suited for neuroimaging problems such as MVPA.
 We attribute this to several phenomena: 
@@ -574,8 +573,8 @@ It can be seen that regularizing a classifier in high dimension, just like a par
 It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
 This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than the regularized accuracy test, \emph{svm.CV.1} for instance.
 
-We can compound regularization in this section with the boottrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
-This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the location tests, but is a much more powerful accuracy test than the original non-regulirized, V-fold validated, version of \emph{svm.CV.1}.
+We can compound regularization in this section with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
+This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the location tests, but is a much more powerful accuracy test than the original non-regularized, V-fold validated, version of \emph{svm.CV.1}.
 
 \bigskip
 
@@ -603,10 +602,9 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 \end{tcolorbox}
 
 
-%TODO: update figure.
 \begin{figure}[ht]
 \centering
-	  \includegraphics[width=0.7\linewidth]{"art/2016-08-12 07:38:43"}
+	  \includegraphics[width=0.7\linewidth]{"art/2016-08-13 22:55:43"}
 	  \caption{
 \textbf{HighDim Classifier--} 
 		The power of a permutation test with various test statistics. 
@@ -630,7 +628,7 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 They perform an asymptotic analysis, and a simulation study. 
 They also apply various classifiers to various data sets. 
 Their emphasis is the effect of the underlying classifier on the power, and the potential of the ``independent features'' test for feature selection.
-This is a very different empasis from our own.
+This is a very different emphasis from our own.
 
 
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} looked into the problem of choosing a good accuracy test. 
@@ -643,7 +641,7 @@ We did not include this test in the battery we compared, but we note the followi
 \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
 Their analytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
 The finite Vapnik–Chervonenkis (VC) dimension requirement \citep[Sec 4.3]{golland_permutation_2003} prevents the permutation p-value from (asymptotically) concentrating near $1$. 
-Like ourselves, they also find that the power incrasses with the size of the test set (Figure~4, middle). 
+Like ourselves, they also find that the power increases with the size of the test set (Figure~4, middle). 
 This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
 Since they permute features, not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
 
@@ -653,7 +651,7 @@ $(x_i|y_i=1) \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}$
 and 
 $(x_i|y_i=-1) \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}$.
 Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, after reparametrizing $p$ so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simualtions.
+We now perform the same simulation as \cite{golland_permutation_2005}, after parameterizing $p$ so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simulations
 We find that also in this mixture class of models a population test has more power than an accuracy test (Figure~\ref{fig:golland}).
 
 
