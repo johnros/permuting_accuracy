@@ -231,19 +231,19 @@ Name & Basis & CV & Accuracy & Parameters\\
 \hline
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
-lda.CV.1 & LDA & TRUE & accuracy &  -- \\ 
-lda.CV.2 & LDA & TRUE & z-accuracy & -- \\ 
-lda.noCV.1 & LDA & FALSE & accuracy &  --\\ 
-lda.noCV.2 & LDA & FALSE & z-accuracy &  --\\ 
+lda.CV.1 & LDA & V-fold & accuracy &  -- \\ 
+lda.CV.2 & LDA & V-fold & z-accuracy & -- \\ 
+lda.noCV.1 & LDA & -- & accuracy &  --\\ 
+lda.noCV.2 & LDA & -- & z-accuracy &  --\\ 
 sd & SD & -- & -- & -- \\ 
-svm.CV.1 & SVM & TRUE & accuracy & cost=1e1 \\ 
-svm.CV.2 & SVM & TRUE & accuracy & cost=1e-1 \\ 
-svm.CV.3 & SVM & TRUE & z-accuracy & cost=1e1 \\ 
-svm.CV.4 & SVM & TRUE & z-accuracy & cost=1e-1 \\ 
-svm.noCV.1 & SVM & FALSE & accuracy & cost=1e1 \\ 
-svm.noCV.2 & SVM & FALSE & accuracy & cost=1e-1 \\ 
-svm.noCV.3 & SVM & FALSE & z-accuracy & cost=1e1 \\ 
-svm.noCV.4 & SVM & FALSE & z-accuracy & cost=1e-1 \\
+svm.CV.1 & SVM & V-fold & accuracy & cost=1e1 \\ 
+svm.CV.2 & SVM & V-fold & accuracy & cost=1e-1 \\ 
+svm.CV.3 & SVM & V-fold & z-accuracy & cost=1e1 \\ 
+svm.CV.4 & SVM & V-fold & z-accuracy & cost=1e-1 \\ 
+svm.noCV.1 & SVM & -- & accuracy & cost=1e1 \\ 
+svm.noCV.2 & SVM & -- & accuracy & cost=1e-1 \\ 
+svm.noCV.3 & SVM & -- & z-accuracy & cost=1e1 \\ 
+svm.noCV.4 & SVM & -- & z-accuracy & cost=1e-1 \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
