@@ -631,7 +631,8 @@ Like ourselves, they also find that the power incrasses with the size of the tes
 This is seen in their Figure~4, where the size of the test-set, $K$, governs the discretization. 
 Since they permute features, not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
 
-\cite{golland_permutation_2005} simulate the power of an accuracy test using a multivariate Gaussian mixture, with a parameter $p$ governing the separation between classes. 
+\cite{golland_permutation_2005} simulate the power of accuracy tests by sampling from a Gaussian mixture family of models, an not from a location family as our own simulations. 
+Their parameter $p$ governing the separation between classes. 
 Under their model 
 $(x_i|y_i=1) \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}$ 
 and 
