@@ -572,7 +572,8 @@ It can be seen that regularizing a classifier in high dimension, just like a par
 It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
 This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than the regularized accuracy test, \emph{svm.CV.1} for instance.
 
-##
+We can compound regularization in this section with the boottrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
+This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the location tests, but is a much more powerful accuracy test than the original non-regulirized, V-fold validated, version of \emph{svm.CV.1}.
 
 \bigskip
 
@@ -582,10 +583,11 @@ This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulatio
 Name & Basis & CV & Accuracy & Parameters\\ 
 \hline
 \hline
-svm.highdim.1 & SVM & TRUE & accuracy & cost=1e-1 \\ 
-lda.highdim.1 & LDA & TRUE & accuracy & -- \\ 
-lda.highdim.2 & LDA & TRUE & accuracy & -- \\ 
-lda.highdim.3 & LDA & TRUE & accuracy & -- \\ 
+svm.highdim.1 & SVM & V-fold & accuracy & cost=1e-1 \\ 
+svm.highdim.2 & SVM & B=50 & accuracy & cost=1e-1 \\ 
+lda.highdim.1 & LDA & V-fold & accuracy & -- \\ 
+lda.highdim.2 & LDA & V-fold & accuracy & -- \\ 
+lda.highdim.3 & LDA & V-fold & accuracy & -- \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
