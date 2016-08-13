@@ -538,8 +538,8 @@ svm.Boot.4 & SVM & bLOO 	& 50 & accuracy & cost=1e1 \\
 \captionsetup{type=table}
 \caption{
 The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
-B-LOO and B-$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
-$B$ denotes the number of Bootstrap samples. } %TODO: caption. 
+bLOO and b$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
+$B$ denotes the number of Bootstrap samples. } 
 \label{tab:collected_2}
 \end{tcolorbox}
 
@@ -607,7 +607,16 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 \begin{figure}[ht]
 \centering
 	  \includegraphics[width=0.7\linewidth]{"art/2016-08-12 07:38:43"}
-	  \caption{\textbf{HighDim Classifier-- TODO}. } %TODO: caption
+	  \caption{
+\textbf{HighDim Classifier--} 
+The power of a permutation test with various test statistics. 
+The power on the $x$ axis. 
+Effect are color and shape coded. 
+The various statistics on the $y$ axis. 
+Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
+Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+Simulation details in Appendix~\ref{apx:simulation_details}.
+} 
 	\label{fig:highdim}
 \end{figure}
 
