@@ -33,7 +33,7 @@
 %% OPTIONAL MACRO DEFINITIONS
 %\def\s{\sigma}
 \newcommand{\set}[1]{\{ #1 \}} % A set
-\newcommand{\indicator}[1]{I_{\set{#1}}} % The indicator function.
+\newcommand{\indicator}[1]{\mathcal{I}{\set{#1}}} % The indicator function.
 \newcommand{\reals}{\mathbb{R}} % the set of real numbers
 \newcommand{\features}{x} % The feature space
 \newcommand{\outcomes}{y} % The feature space
@@ -43,7 +43,8 @@
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
 \newcommand{\accZ}{\hat{\mathcal{Z}}} 
-\newcommand{\hyp}{\algo_\data(\features)} % A hypothesis
+\newcommand{\hyp}{\algo_{\data}(\features)} % A hypothesis
+\newcommand{\hypFun}[2]{\algo_{#1}(#2)} % A hypothesis
 \newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\majority}{\hat{\pi}}
@@ -180,6 +181,24 @@ Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ 
 a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
 In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\hyp}$, will be used for the testing. 
 
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}, and the V-fold cross validation (CV) estimate \citep{hastie_elements_2003}.
+\begin{definition}[Resubstitution accuracy]
+\label{def:resubstitution}
+The resubstitution accuracy estimator, $\accEstim_{\algo}^{resub}$,  is defined as
+\begin{align}
+	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features}=\outcomes_i}, 
+\end{align}
+where $\indicator{A}$ is the indicator function of event $A$. 
+\end{definition}
+
+
+\begin{definition}[V-fold CV]
+\label{def:v-fold}
+	
+\end{definition}
+
+
+
 
 \subsection{Candidate Tests}
 \label{sec:considerations}
@@ -199,8 +218,8 @@ The design of a permutation test using $\accEstim_{\algo}$, requires the followi
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in its mere departure from chance level. 
 
 \paragraph{Cross validate or not?}
-Given our goal, a biased error estimate is not a problem provided that bias is consistent over all permutations. 
-The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
+Given our goal, a biased estimate of $\accEstim_{\algo}$ is not a problem provided that bias is consistent over all permutations. 
+The underlying intuition is that a permutation test will be unbiased, provided that the exact same computation is performed over all permutations. 
 We will thus be considering both cross validated accuracies, and \emph{resubstitution accuracies}, where the accuracy is evaluated on the training set and not on a holdout.
 
 
