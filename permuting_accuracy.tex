@@ -356,7 +356,7 @@ Having established that all of the tests in our battery control the false positi
 especially when comparing population tests to accuracy tests. 
 From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
 \begin{enumerate}
-\item population tests have more power than accuracy tests in all our configurations.
+\item Population tests have more power than accuracy tests in all our configurations.
 
 \item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
 
@@ -437,10 +437,10 @@ No amount of simulations can replace the insight provided by a good closed-form 
 The finite sample power of permutation tests is a formidable mathematical problem, so we currently content ourselves with simulations 
 We have concluded that the population tests are typically preferable. 
 Their high dimensional versions, such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005},  are particularly well suited for neuroimaging problems such as MVPA.
-We attribute this to several phenomena: 
-(a) Discretization introduced in finite samples by the accuracy test statistic. 
-(b) Inefficient use of the data for the validation holdout set. 
-(c) Regularization crucial in high dimensional problems.
+We attribute this to several phenomena: \newline
+(a) Discretization introduced in finite samples by the accuracy test statistic. \newline
+(b) Inefficient use of the data for the validation holdout set. \newline
+(c) Regularization crucial in high dimensional problems. \newline
 
 The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
 Our empirical example suggests that even if the population test does not necessarily dominate the accuracy test in power, empirically, it does have an advantage. 
@@ -448,6 +448,7 @@ Our empirical example suggests that even if the population test does not necessa
 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
+An asymptotic analysis of a finite complexity model would also fail to reveal the effect of the concentration of the resubstitution accuracy near $1$. This effect would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
 
 The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a population test that is more powerful than an accuracy test. 
 There is also a good chance that it would be easier to implement, and faster to run, since no cross validation will be involved. 
