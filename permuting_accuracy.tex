@@ -190,18 +190,18 @@ We will now address these questions while bearing in mind that unlike the typica
 \paragraph{Cross validate or not?}
 Given our goal, a biased error estimate is not a problem provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
-We will thus be considering both cross validated accuracies, and \emph{resubstitution accuracies}, where the accuracy is evaluated on the training set. 
+We will thus be considering both cross validated accuracies, and \emph{resubstitution accuracies}, where the accuracy is evaluated on the training set and not on a holdout.
 
 
 \paragraph{Balanced folding?}
-The standard practice when cross validating is to constrain the data folds to be balanced (i.e. stratified) \citep[e.g.][]{ojala_permutation_2010}.
+The standard practice when cross validating is to constrain the data folds to be balanced, i.e. stratified \citep[e.g.][]{ojala_permutation_2010}.
 This means that each fold has the same number of examples from each class. 
 We will report results with both balanced and unbalanced data foldings, only to discover, it does not really matter. 
 
 
 \paragraph{Refolding?}
-The standard practice in neuroimaging is to refold the data after each permutation, so that data folds are balanced after each label permutation.
-We will adhere, even though it can be circumvented by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
+The standard practice in neuroimaging is to permute labels and refold the data after each permutation, so that the balance of the classes in each fold is preserved.
+We will adhere to this practice due to its popularity, even though it can be circumvented by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
