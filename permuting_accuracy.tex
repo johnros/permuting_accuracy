@@ -40,10 +40,11 @@
 \newcommand{\featureS}{\mathcal{X}} % The feature space
 \newcommand{\outcomeS}{\mathcal{Y}} % The feature space
 \newcommand{\hyp}{f} % A hypothesis
-\newcommand{\hypEstim}{\hat{\hyp}} % A hypothesis
+\newcommand{\hypEstim}{\hyp} %{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{\mathcal{E}} 
+\newcommand{\accEstim}{\hat{\mathcal{E}}} 
 \newcommand{\majority}{\hat{p}_{max}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
@@ -159,14 +160,14 @@ In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the numbe
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a population test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 
-An accuracy test amounts to learning a predictive model $\hypEstim(\features)$ from some assumed model class $\hypEstim \in \hypclass$. 
-The prediction accuracy, denoted $\acc_{\hypEstim}$, is defined as the probability of a given classifier $\hypEstim$ of making a correct prediction.
+An accuracy test amounts to learning a predictive model $\hyp(\features)$ from some assumed model class $\hyp \in \hypclass$. 
+The prediction accuracy, denoted $\acc_{\hyp}$, is defined as the probability of a given classifier $\hyp(x)$ of making a correct prediction.
 Denoting by $I(A)$ the indicator function of the event $A$, we get
 \begin{align}
-	\acc_{\hypEstim}:=\expect{I(\hypEstim(x)=y)}
+	\acc_{\hyp}:=\expect{I(\hyp(x)=y)}
 \end{align}
-when given a randomly drawn data point, ($\features,\outcomes$). 
-A statistically significant ``better than chance'' estimate of $\acc_{\hypEstim}$ is evidence that the classes are distinct. 
+where averaging is over all possible data points, ($\features,\outcomes$). 
+Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, a statistically significant ``better than chance'' estimate of $\accEstim_{\hyp}$ is evidence that the classes are distinct. 
 
 
 \subsection{Candidate Tests}
@@ -360,7 +361,7 @@ We perform group inference using within-subject permutations along the analysis 
 For completeness, the pipeline is described in Appendix~\ref{apx:analysis}. 
 To demonstrate our point, we compare the \emph{sd} population test with the \emph{svm.cv.1} accuracy test. 
 
-In agreement with our simulation results, the population test (\emph{sd}) discovers more brain regions when compared to an accuracy test (\emph{svm.cv.1}).
+In agreement with our simulation results, the population test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.cv.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -594,6 +595,7 @@ lda.highdim.3 & LDA & V-fold & accuracy & -- \\
 \caption{
 The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
 \emph{svm.highdim.1} is an $l2$ regularized SVM \cite{friedman_regularization_2010}. 
+\emph{svm.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
 \emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 \emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 \emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
