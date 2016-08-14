@@ -245,19 +245,14 @@ We will be varying the number of folds, and ultimately discover that the power \
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
-Given a predictor for the $i$'th data example\footnote{We add the unorthodox observation index $i$ to $\hyp$ to accommodate for cross validation methods, where each prediction is made with a different classifier, fit to a slightly different dataset.}, $\hyp$, a natural test statistic its empirical accuracy 
-\begin{align}
-\label{eq:accuracy_estim}
-	\accEstim_{\hyp}:= \sum_i I(\hyp(x_i)=y_i).
-\end{align}
-Since low accuracies, even $0$, are evidence that the classes are separated, we can consider the departure from chance level $|\accEstim_{\hyp}-0.5|$, as another candidate test statistic.
+Low accuracies, even $0$, are evidence that the classes are separated so that for our purposes, we should consider the departure from chance level $|\accEstim_{\algo}-0.5|$ as candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
-This suggests the following test statistic $|\accEstim_{\hyp}-\majority|$.
+This suggests the following test statistic $|\accEstim_{\algo}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
-We thus propose the z-scored accuracy statistic, $\accZ_{\hyp}$:
+We thus study, on top of the naive accuracy estimate, $\accEstim_{\algo}$ , also the \emph{z-scored accuracy} of algorithm $\algo$:
 \begin{align}
 \label{eq:z_scored_accuracy}
-	\accZ_{\hyp} := \frac{|\accEstim_{\hyp}-\majority|}{\sqrt{\majority(1-\majority)}}.
+	\accZ_{\algo} := \frac{|\accEstim_{\algo}-\majority|}{\sqrt{\majority(1-\majority)}}.
 \end{align} 
 
 Table~\ref{tab:collected} collects an initial battery of tests we will be comparing. 
@@ -554,7 +549,6 @@ the b$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as
 	\accEstim_{\algo}^{bLOO} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
 \end{align}
 \end{definition}
-
 Simulation results reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
 It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of population tests. 
 It can also be seen that power increases with the number of bootstrap replications, itself reducing the level of discretization. 
