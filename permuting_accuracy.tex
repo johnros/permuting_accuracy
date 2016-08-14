@@ -45,7 +45,7 @@
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
-\newcommand{\majority}{\hat{p}_{max}}
+\newcommand{\majority}{\hat{\pi}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
 \newcommand{\rv}[1]{\mathbf{#1}} % A random variable
@@ -201,7 +201,7 @@ We will report results with both balanced and unbalanced data foldings, only to 
 
 \paragraph{Refolding?}
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation, so that the balance of the classes in each fold is preserved.
-We will adhere to this practice due to its popularity, even though it can be circumvented by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it can be simplified by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
@@ -210,15 +210,18 @@ We will be varying the number of folds, and ultimately discover that the power \
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
-Given a predictor $\hypEstim$, a natural accuracy test statistic its accuracy $\acc_{\hypEstim}$.
-Since low accuracies, even $0$, are evidence that the classes are separated, can consider the departure from chance level, $|\acc_{\hypEstim}-0.5|$, as the test statistic.
+Given a predictor $\hypEstim$, a natural test statistic its empirical accuracy 
+\begin{align}
+	\accEstim_{\hyp}:= \sum_i I(f(x_i)=y_i).
+\end{align}
+Since low accuracies, even $0$, are evidence that the classes are separated, we can consider the departure from chance level $|\accEstim_{\hyp}-0.5|$, as another candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
-This suggests the following test statistic $|\acc_{\hypEstim}-\majority|$.
+This suggests the following test statistic $|\accEstim_{\hyp}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
 We thus propose the z-scored accuracy statistic: 
 \begin{align}
 \label{eq:z_scored_accuracy}
-	|\acc_{\hypEstim}-\majority|/\sqrt{\majority(1-\majority)}.
+	|\accEstim_{\hyp}-\majority|/\sqrt{\majority(1-\majority)}.
 \end{align} 
 
 The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
