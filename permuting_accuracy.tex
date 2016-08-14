@@ -532,15 +532,17 @@ It does so, however, for the train set, and not the test set.
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator} (bLOO) and its derivation-- the \emph{0.632 bootstrap estimator} (b$0.632$) \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 \label{def:bloo}
+The \emph{leave-one-out bootstrap} estimate is the average accuracy of the holdout observations, over all bootstrap samples. 
 Denoting by $\data^b$, a bootstrap sample $b$, sampled with replacement from $\data$. 
 Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
-The \emph{leave-one-out bootstrap} estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
+The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
 \begin{align}
 		\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
 \end{align}
-Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are not in the bootstrap train sample $b$,
+where $|A|$ is the cardinality of set $A$.
+Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
 \begin{align}
-	\acc_{bLOO}= \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} I(\hypEstim^b(x_i)=y_i).
+	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
 \end{align}
 \end{definition}
 
