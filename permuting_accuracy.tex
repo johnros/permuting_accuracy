@@ -173,23 +173,22 @@ Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, a statistically sig
 \subsection{Candidate Tests}
 \label{sec:considerations}
 
-The design of a permutation test using the prediction accuracy, requires the following design choices: 
+The design of a permutation test using $\accEstim_{\hyp}$, requires the following design choices: 
 \begin{enumerate}
-\item Is the statistic cross validated or not?
+\item Is $\accEstim_{\hyp}$ cross validated or not?
 \item For a V-fold cross validated test statistic:
 \begin{enumerate}
 \item Should the data be refolded in each permutation? 
 \item Should the data folding be balanced (a.k.a.\ stratified)?
 \item How many folds? 
 \end{enumerate}
-\item How to estimate accuracy?
+\item How to estimate $\accEstim_{\hyp}$?
 \end{enumerate}
 
-We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of the prediction error, but rather in the mere detection of a difference between two groups. 
-
+We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\accEstim_{\hyp}$, but rather in the mere detection of a difference between two classes. 
 
 \paragraph{Cross validate or not?}
-Since we are merely interested in detecting a difference between classes, a biased error estimate is not an issue provided that bias is consistent over all permutations. 
+Given our goal, a biased error estimate is not a problem provided that bias is consistent over all permutations. 
 The underlying intuition is that if the exact same computation is performed over all permutations, then a permutation test will be ``fair'', i.e., will not inflate the false positive rate. 
 We will thus be considering both cross validated accuracies, and resubstitution accuracies as our test statistics. 
 
