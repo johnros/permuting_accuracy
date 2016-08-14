@@ -39,13 +39,13 @@
 \newcommand{\outcomes}{y} % The feature space
 \newcommand{\featureS}{\mathcal{X}} % The feature space
 \newcommand{\outcomeS}{\mathcal{Y}} % The feature space
-\newcommand{\hyp}{f} % A hypothesis
-\newcommand{\hypEstim}{\hyp} %{\hat{\hyp}} % A hypothesis
-\newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
 \newcommand{\accZ}{\hat{\mathcal{Z}}} 
+\newcommand{\hyp}{f} % A hypothesis
+\newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
+\newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\majority}{\hat{\pi}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
@@ -60,6 +60,10 @@
 \newcommand{\argmin}[2]{\mathop{argmin} _{#1}\set{#2}} % The argmin operator
 \newcommand{\argmax}[2]{\mathop{argmax} _{#1}\set{#2}} % The argmin operator
 \newcommand{\R}{\textsf{R }}
+\newcommand{\algo}{\mathcal{A}}
+\newcommand{\data}{\mathcal{S}}
+\newcommand{\measure}{P}
+\newcommand{\measuren}{P^n}
 
 
 \title{Better-Than-Chance Classification for Signal Detection}
@@ -161,13 +165,21 @@ In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the numbe
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a population test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 
-An accuracy test amounts to learning a predictive model $\hyp(\features)$ from some assumed model class $\hyp \in \hypclass$. 
-The prediction accuracy, denoted $\acc_{\hyp}$, is defined as the probability of a given classifier $\hyp(x)$ of making a correct prediction.
-Denoting by $I(A)$ the indicator function of the event $A$, we get
+An accuracy test amounts to learning a predictive model and testing if its predictions are better than chance. 
+Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, and a predictor by $\hyp$, then a learning algorithm $\algo$ is a mapping $\algo:\data \to \hyp$. 
+The accuracy of predictor $\hyp=\algo_{\data}$ is defined as the probability of $\hyp$ making a correct prediction.
+Denoting by $\measure$ the probability measure of $(\x,\y)$, and by $\measuren$ the same for the i.i.d, sample $\data$
 \begin{align}
-	\acc_{\hyp}:=\expect{I(\hyp(x)=y)}
+	\acc_{\algo_\data}:=\measure(\algo_\data(x)=y).
 \end{align}
-where averaging is over all possible data points, ($\features,\outcomes$). 
+The accuracy of an algorithm $\algo$ is defined as the average accuracy, over all possible data sets
+\begin{align}
+	\acc_{\algo}:=\int_\data \acc_{\data} \; d\measuren(\data)
+\end{align}
+
+
+The accuracy of an algorithm, $\acc_\algo$ is defined as the a
+
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, a statistically significant ``better than chance'' estimate of $\accEstim_{\hyp}$ is evidence that the classes are distinct. 
 
 
@@ -235,8 +247,8 @@ Name & Basis & CV & Accuracy & Parameters\\
 \hline
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
-lda.CV.1 & LDA & V-fold & accuracy &  -- \\ 
-lda.CV.2 & LDA & V-fold & z-accuracy & -- \\ 
+lda.CV.1 & LDA & V-fold & $\accEstim$ &  -- \\ 
+lda.CV.2 & LDA & V-fold & $\accZ$ & -- \\ 
 lda.noCV.1 & LDA & -- & accuracy &  --\\ 
 lda.noCV.2 & LDA & -- & z-accuracy &  --\\ 
 sd & SD & -- & -- & -- \\ 
