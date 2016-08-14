@@ -550,9 +550,9 @@ Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are \
 \label{def:b0632}
 Denoting by $\acc_{resub}$ the resubstitution accuracy estimate, 
 the b$0.632$ accuracy estimator, $\acc_{0.632}$, is defined as 
-$$
-	\acc_{0.632} := 0.368 \; \acc_{resub}  + 0.632 \; \acc_{bLOO}.
-$$
+\begin{align}
+	\accEstim_{\algo}^{bLOO} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
+\end{align}
 \end{definition}
 
 Simulation results reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
