@@ -540,7 +540,7 @@ The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as
 		\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
 \end{align}
 where $|A|$ is the cardinality of set $A$.
-Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
+Equivalently [TODO: verify], denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
 \begin{align}
 	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
 \end{align}
