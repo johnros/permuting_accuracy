@@ -117,11 +117,11 @@ For brevity, and in contrast to \emph{accuracy tests}, we will call any two-samp
 At this point, it becomes unclear which is preferable: a population test or an accuracy test?
 The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $959$ citations\footnote{GoogleScholar. Accessed on Aug 4, 2016.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
-The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ population test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
+The comparison between population and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared the $T^2$ population test to the accuracy of \emph{Fisher's linear discriminant analysis} classifier (LDA). 
 By comparing the rates of convergence of the powers to $1$, \cite{ramdas_classification_2016} concluded that accuracy and population tests are rate equivalent. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
-\cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
+\cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (population) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power than the $T^2$ test. 
@@ -360,7 +360,7 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 
 \item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
 
-\item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the location test vanishes. 
+\item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the population test vanishes. 
 
 \item Regularization is most beneficial to power in low signal to noise (SNR) regimes. 
 Low SNR may be the result of a high-dimensional problem, or due to correlations.
@@ -390,7 +390,7 @@ We now verify our finding on a neuroimaging dataset.
 % Power of SVM versus SD.
 % Difficulties of implementation.
 
-Figure~\ref{fig:read_data} is an application of both a location and an accuracy test to the data of \cite{pernet_human_2015}. 
+Figure~\ref{fig:read_data} is an application of both a population and an accuracy test to the data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials in each scan.
 The study was rather large and consisted of about $200$ subjects.
@@ -616,7 +616,7 @@ It can also be seen that (regularized) parameter tests are still more powerful t
 This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than the regularized accuracy test, \emph{svm.CV.1} for instance.
 
 We can compound regularization in this section with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
-This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the location tests, but is a much more powerful accuracy test than the original non-regularized, V-fold validated, version of \emph{svm.CV.1}.
+This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the population tests, but is a much more powerful accuracy test than the original non-regularized, V-fold validated, version of \emph{svm.CV.1}.
 
 \bigskip
 
