@@ -620,11 +620,11 @@ This is done in the \emph{svm.highdim.2} test, which still falls short from the 
 Name & Algorithm & Accuracy & Z-scored & Parameters\\ 
 \hline
 \hline
-svm.highdim.1 & SVM & $\accEstim_{\algo}^{Vfold}$ & FALSE & cost=1e-1, V=4 \\ 
-svm.highdim.2 & SVM & $\accEstim_{\algo}^{0.632}$ & FALSE & cost=1e-1, B=50 \\ 
-lda.highdim.1 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
-lda.highdim.2 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
-lda.highdim.3 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
+svm.highdim.1 & SVM & V-fold & FALSE & cost=1e-1, V=4 \\ 
+svm.highdim.2 & SVM & b$0.632$ & FALSE & cost=1e-1, B=50 \\ 
+lda.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
+lda.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
+lda.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
