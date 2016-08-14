@@ -267,18 +267,18 @@ Name & Algorithm & Accuracy & Z-scored & Parameters\\
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
 sd & SD & -- & -- & -- \\ 
-lda.CV.1 	& LDA & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	&  -- \\ 
-lda.CV.2 	& LDA & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& -- \\ 
-lda.noCV.1 	& LDA & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	&  --\\ 
-lda.noCV.2 	& LDA & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	&  --\\ 
-svm.CV.1 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	& cost=1e1 \\ 
-svm.CV.2 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	& cost=1e-1 \\ 
-svm.CV.3 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& cost=1e1 \\ 
-svm.CV.4 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& cost=1e-1 \\ 
-svm.noCV.1 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	& cost=1e1 \\ 
-svm.noCV.2 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	& cost=1e-1 \\ 
-svm.noCV.3 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	& cost=1e1 \\ 
-svm.noCV.4 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	& cost=1e-1 \\
+lda.CV.1 	& LDA & V-fold 	& FALSE 	&  -- \\ 
+lda.CV.2 	& LDA & V-fold 	& TRUE 	& -- \\ 
+lda.noCV.1 	& LDA & Resubstitution 	& FALSE 	&  --\\ 
+lda.noCV.2 	& LDA & Resubstitution 	& TRUE 	&  --\\ 
+svm.CV.1 	& SVM & V-fold 	& FALSE 	& cost=1e1 \\ 
+svm.CV.2 	& SVM & V-fold 	& FALSE 	& cost=1e-1 \\ 
+svm.CV.3 	& SVM & V-fold 	& TRUE 	& cost=1e1 \\ 
+svm.CV.4 	& SVM & V-fold 	& TRUE 	& cost=1e-1 \\ 
+svm.noCV.1 	& SVM & Resubstitution 	& FALSE 	& cost=1e1 \\ 
+svm.noCV.2 	& SVM & Resubstitution 	& FALSE 	& cost=1e-1 \\ 
+svm.noCV.3 	& SVM & Resubstitution 	& TRUE 	& cost=1e1 \\ 
+svm.noCV.4 	& SVM & Resubstitution 	& TRUE 	& cost=1e-1 \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
