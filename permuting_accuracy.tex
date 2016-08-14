@@ -43,7 +43,7 @@
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
 \newcommand{\accZ}{\hat{\mathcal{Z}}} 
-\newcommand{\hyp}{\algo_\data} % A hypothesis
+\newcommand{\hyp}{\algo_\data(\features)} % A hypothesis
 \newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\majority}{\hat{\pi}}
@@ -62,8 +62,8 @@
 \newcommand{\R}{\textsf{R }}
 \newcommand{\algo}{\mathcal{A}}
 \newcommand{\data}{\mathcal{S}}
-\newcommand{\measure}{P}
-\newcommand{\measuren}{P^n}
+\newcommand{\measure}{\mathcal{P}}
+\newcommand{\measuren}{\measure^n}
 
 
 \title{Better-Than-Chance Classification for Signal Detection}
@@ -165,20 +165,20 @@ In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the numbe
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a population test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 
-An accuracy test amounts to learning a predictive model and testing if its predictions are better than chance. 
-Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, and a predictor by $\hyp$, then a learning algorithm $\algo$ is a mapping $\algo:\data \to \hyp$. 
+An accuracy test amounts to learning a predictive model and testing if its predictions $y|x$ are better than chance. 
+Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, the a predictor, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset, $\algo:\data \to \hyp$. 
 The accuracy of predictor $\hyp$ is defined as the probability of $\hyp$ making a correct prediction.
-Denoting by $\measure$ the probability measure of $(\x,\y)$, and by $\measuren$ the same for the i.i.d sample $\data$
+Denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample $\data$, then
 \begin{align}
-	\acc_{\hyp}:=\measure(\algo_\data(x)=y).
+	\acc_{\hyp}:=\measure(\hyp=\outcomes).
 \end{align}
 The accuracy of an algorithm $\algo$ is defined as the average accuracy, over all possible data sets
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren(\data).
 \end{align}
-Denoting an estimate of $\acc_{\algo_\data}$ by $\accEstim_{\algo_\data}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, 
+Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, 
 a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
-In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\algo_\data}$, will be used for the testing. 
+In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\hyp}$, will be used for the testing. 
 
 
 \subsection{Candidate Tests}
