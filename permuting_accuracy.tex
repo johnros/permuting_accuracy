@@ -211,9 +211,10 @@ We will be varying the number of folds, and ultimately discover that the power \
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
-Given a predictor $\hypEstim$, a natural test statistic its empirical accuracy 
+Given a predictor for the $i$'th data example\footnote{We add the unorthodox observation index $i$ to $\hyp_i$ to accommodate for cross validation methods, where each prediction is made with a different classifier, fit to a slightly different dataset.}, $\hyp_i$, a natural test statistic its empirical accuracy 
 \begin{align}
-	\accEstim_{\hyp}:= \sum_i I(f(x_i)=y_i).
+\label{eq:accuracy_estim}
+	\accEstim_{\hyp}:= \sum_i I(\hyp_i(x_i)=y_i).
 \end{align}
 Since low accuracies, even $0$, are evidence that the classes are separated, we can consider the departure from chance level $|\accEstim_{\hyp}-0.5|$, as another candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
@@ -225,7 +226,7 @@ We thus propose the z-scored accuracy statistic, $\accZ_\hyp$:
 	\accZ_{\hyp} := |\accEstim_{\hyp}-\majority|/\sqrt{\majority(1-\majority)}.
 \end{align} 
 
-The of tests we will be comparing is collected in Table~\ref{tab:collected}.
+Table~\ref{tab:collected} collects an initial battery of tests we will be comparing. 
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
