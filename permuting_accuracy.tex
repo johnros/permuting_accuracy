@@ -65,7 +65,8 @@
 \newcommand{\data}{\mathcal{S}}
 \newcommand{\measure}{\mathcal{P}}
 \newcommand{\measuren}{\measure^n}
-
+\newcommand{\union}{\cup}
+\newcommand{\intersect}{\cap}
 
 \title{Better-Than-Chance Classification for Signal Detection}
 
@@ -186,7 +187,7 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estima
 \label{def:resubstitution}
 The resubstitution accuracy estimator, $\accEstim_{\algo}^{resub}$,  is defined as
 \begin{align}
-	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features}=\outcomes_i}, 
+	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features_i}=\outcomes_i}, 
 \end{align}
 where $\indicator{A}$ is the indicator function of event $A$. 
 \end{definition}
@@ -194,7 +195,11 @@ where $\indicator{A}$ is the indicator function of event $A$.
 
 \begin{definition}[V-fold CV]
 \label{def:v-fold}
-	
+Denoting by $\data^{v}$ the $v$'th partition of the dataset, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
+\begin{align}
+	\accEstim_{\algo}^{Vfold} := 
+	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{(v)}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i}, 
+\end{align}
 \end{definition}
 
 
