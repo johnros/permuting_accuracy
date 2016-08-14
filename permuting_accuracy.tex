@@ -193,10 +193,10 @@ The design of a permutation test using $\accEstim_{\algo}$, requires the followi
 \item Should the data folding be balanced (a.k.a.\ stratified)?
 \item How many folds? 
 \end{enumerate}
-\item How to estimate $\accEstim_{\hyp}$?
+\item How to estimate $\accEstim_{\algo}$?
 \end{enumerate}
 
-We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\accEstim_{\hyp}$, but rather in the mere detection of a difference between two classes. 
+We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in its mere departure from chance level. 
 
 \paragraph{Cross validate or not?}
 Given our goal, a biased error estimate is not a problem provided that bias is consistent over all permutations. 
