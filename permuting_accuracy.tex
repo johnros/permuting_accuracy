@@ -392,7 +392,7 @@ We now verify our finding on a neuroimaging dataset.
 
 Figure~\ref{fig:read_data} is an application of both a population and an accuracy test to the data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
-Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials in each scan.
+Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
@@ -403,8 +403,6 @@ To demonstrate our point, we compare the \emph{sd} population test with the \emp
 In agreement with our simulation results, the population test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.cv.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
-
-Having established that accuracy tests are typically underpowered for signal detection compared to population tests, we wish to identify the conditions under which this will occur, and discuss practical implications. 
 
 
 \begin{figure}[th]
@@ -434,22 +432,23 @@ For the details of the analysis see Appendix~\ref{apx:analysis} and \cite{gilron
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: the accuracy test or the population test. 
-No amount of simulations can replace the insight provided by a good closed-form analytic result. 
+No amount of simulations can replace the insight provided by a closed-form analytic result. 
 The finite sample power of permutation tests is a formidable mathematical problem, so we currently content ourselves with simulations 
 We have concluded that the population tests are typically preferable. 
 Their high dimensional versions, such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005},  are particularly well suited for neuroimaging problems such as MVPA.
-We attribute this to several phenomena: \newline
-(a) Discretization introduced in finite samples by the accuracy test statistic. \newline
-(b) Inefficient use of the data for the validation holdout set. \newline
-(c) Regularization crucial in high dimensional problems. \newline
-
-The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
-Our empirical example suggests that even if the population test does not necessarily dominate the accuracy test in power, empirically, it does have an advantage. 
+We attribute this to several effects: \newline
+(a) The discrete nature of the accuracy test in finite samples. \newline
+(b) Inefficient use of the data when validating with a holdout set. \newline
+(c) The lack of regularization in high SNR regimes (high dimension or correlations). \newline
 
 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
 An asymptotic analysis of a finite complexity model would also fail to reveal the effect of the concentration of the resubstitution accuracy near $1$. This effect would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
+
+The presence of heavy tails shrinks the power advantage of the population tests over accuracy tests. 
+Our empirical example suggests that even if the population test does not necessarily dominate the accuracy test in power, empirically, it does have an advantage. 
+
 
 The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a population test that is more powerful than an accuracy test. 
 There is also a good chance that it would be easier to implement, and faster to run, since no cross validation will be involved. 
