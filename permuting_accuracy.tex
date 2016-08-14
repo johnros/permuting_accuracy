@@ -362,9 +362,9 @@ From the simulation results reported in Appendix~\ref{apx:simulations} we collec
 
 \item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the location test vanishes. 
 
-\item The presence of (positive) correlations is known to increase the data's variability, i.e., reduce the signal to noise ratio (SNR). This leads to a power reduction. 
-For this reason, in the presence of correlations the importance of regularization is amplified, increasing the power difference between regularized and non-regularized test statistics (Figure~\ref{fig:ar_1}).
-Put differently- in low SNR regimes, regularization is crucial.
+\item Regularization is most beneficial to power in low signal to noise (SNR) regimes. 
+Low SNR may be the result of a high-dimensional problem, or due to correlations.
+Indeed, the presence of positive correlations amplifies the contribution of regularization to power ((Figure~\ref{fig:ar_1})). 
 
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
