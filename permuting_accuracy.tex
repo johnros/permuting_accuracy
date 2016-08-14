@@ -195,10 +195,10 @@ where $\indicator{A}$ is the indicator function of event $A$.
 
 \begin{definition}[V-fold CV]
 \label{def:v-fold}
-Denoting by $\data^{v}$ the $v$'th partition of the dataset, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
+Denoting by $\data^{v}$ the $v$'th partition of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
 \begin{align}
 	\accEstim_{\algo}^{Vfold} := 
-	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{(v)}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i}, 
+	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i}, 
 \end{align}
 \end{definition}
 
@@ -249,34 +249,36 @@ Low accuracies, even $0$, are evidence that the classes are separated so that fo
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
 This suggests the following test statistic $|\accEstim_{\algo}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
-We thus study, on top of the naive accuracy estimate, $\accEstim_{\algo}$ , also the \emph{z-scored accuracy} of algorithm $\algo$:
+We thus study, along with the naive accuracy estimate, $\accEstim_{\algo}$ , also the \emph{z-scored accuracy} of algorithm $\algo$:
 \begin{align}
 \label{eq:z_scored_accuracy}
 	\accZ_{\algo} := \frac{|\accEstim_{\algo}-\majority|}{\sqrt{\majority(1-\majority)}}.
 \end{align} 
 
+\bigskip
+
 Table~\ref{tab:collected} collects an initial battery of tests we will be comparing. 
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
-Name & Basis & CV & Accuracy & Parameters\\ 
+Name & $\algo$ & CV & Accuracy & Parameters\\ 
 \hline
 \hline
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
-lda.CV.1 & LDA & V-fold & $\accEstim$ &  -- \\ 
-lda.CV.2 & LDA & V-fold & $\accZ$ & -- \\ 
-lda.noCV.1 & LDA & -- & accuracy &  --\\ 
-lda.noCV.2 & LDA & -- & z-accuracy &  --\\ 
 sd & SD & -- & -- & -- \\ 
-svm.CV.1 & SVM & V-fold & accuracy & cost=1e1 \\ 
-svm.CV.2 & SVM & V-fold & accuracy & cost=1e-1 \\ 
-svm.CV.3 & SVM & V-fold & z-accuracy & cost=1e1 \\ 
-svm.CV.4 & SVM & V-fold & z-accuracy & cost=1e-1 \\ 
-svm.noCV.1 & SVM & -- & accuracy & cost=1e1 \\ 
-svm.noCV.2 & SVM & -- & accuracy & cost=1e-1 \\ 
-svm.noCV.3 & SVM & -- & z-accuracy & cost=1e1 \\ 
-svm.noCV.4 & SVM & -- & z-accuracy & cost=1e-1 \\
+lda.CV.1 & LDA & V-fold & $\accEstim_{\algo}$ &  -- \\ 
+lda.CV.2 & LDA & V-fold & $\accZ_{\algo}$ & -- \\ 
+lda.noCV.1 & LDA & -- & $\accEstim_{\algo}$ &  --\\ 
+lda.noCV.2 & LDA & -- & $\accZ_{\algo}$ &  --\\ 
+svm.CV.1 & SVM & V-fold & $\accEstim_{\algo}$ & cost=1e1 \\ 
+svm.CV.2 & SVM & V-fold & $\accEstim_{\algo}$ & cost=1e-1 \\ 
+svm.CV.3 & SVM & V-fold & $\accZ_{\algo}$ & cost=1e1 \\ 
+svm.CV.4 & SVM & V-fold & $\accZ_{\algo}$ & cost=1e-1 \\ 
+svm.noCV.1 & SVM & -- & $\accEstim_{\algo}$ & cost=1e1 \\ 
+svm.noCV.2 & SVM & -- & $\accEstim_{\algo}$ & cost=1e-1 \\ 
+svm.noCV.3 & SVM & -- & $\accZ_{\algo}$ & cost=1e1 \\ 
+svm.noCV.4 & SVM & -- & $\accZ_{\algo}$ & cost=1e-1 \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
