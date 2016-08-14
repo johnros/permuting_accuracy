@@ -178,14 +178,15 @@ The accuracy of an algorithm $\algo$ is defined as the average accuracy, over al
 \end{align}
 Denoting an estimate of $\acc_{\algo_\data}$ by $\accEstim_{\algo_\data}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, 
 a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
+In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\algo_\data}$, will be used for the testing. 
 
 
 \subsection{Candidate Tests}
 \label{sec:considerations}
 
-The design of a permutation test using $\accEstim_{\hyp}$, requires the following design choices: 
+The design of a permutation test using $\accEstim_{\algo}$, requires the following design choices: 
 \begin{enumerate}
-\item Is $\accEstim_{\hyp}$ cross validated or not?
+\item Is $\accEstim_{\algo}$ cross validated or not?
 \item For a V-fold cross validated test statistic:
 \begin{enumerate}
 \item Should the data be refolded in each permutation? 
