@@ -43,7 +43,7 @@
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
 \newcommand{\accZ}{\hat{\mathcal{Z}}} 
-\newcommand{\hyp}{f} % A hypothesis
+\newcommand{\hyp}{\algo_\data} % A hypothesis
 \newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
 \newcommand{\majority}{\hat{\pi}}
@@ -167,16 +167,17 @@ I.e., we test if the multivariate voxel activation pattern has the same distribu
 
 An accuracy test amounts to learning a predictive model and testing if its predictions are better than chance. 
 Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, and a predictor by $\hyp$, then a learning algorithm $\algo$ is a mapping $\algo:\data \to \hyp$. 
-The accuracy of predictor $\hyp=\algo_{\data}$ is defined as the probability of $\hyp$ making a correct prediction.
+The accuracy of predictor $\hyp$ is defined as the probability of $\hyp$ making a correct prediction.
 Denoting by $\measure$ the probability measure of $(\x,\y)$, and by $\measuren$ the same for the i.i.d sample $\data$
 \begin{align}
-	\acc_{\algo_\data}:=\measure(\algo_\data(x)=y).
+	\acc_{\hyp}:=\measure(\algo_\data(x)=y).
 \end{align}
 The accuracy of an algorithm $\algo$ is defined as the average accuracy, over all possible data sets
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren(\data).
 \end{align}
-Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, a statistically significant ``better than chance'' estimate of $\accEstim_{\hyp}$ is evidence that the classes are distinct. 
+Denoting an estimate of $\acc_{\algo_\data}$ by $\accEstim_{\algo_\data}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, 
+a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
 
 
 \subsection{Candidate Tests}
@@ -219,16 +220,16 @@ We will be varying the number of folds, and ultimately discover that the power \
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
-Given a predictor for the $i$'th data example\footnote{We add the unorthodox observation index $i$ to $\hyp_i$ to accommodate for cross validation methods, where each prediction is made with a different classifier, fit to a slightly different dataset.}, $\hyp_i$, a natural test statistic its empirical accuracy 
+Given a predictor for the $i$'th data example\footnote{We add the unorthodox observation index $i$ to $\hyp$ to accommodate for cross validation methods, where each prediction is made with a different classifier, fit to a slightly different dataset.}, $\hyp$, a natural test statistic its empirical accuracy 
 \begin{align}
 \label{eq:accuracy_estim}
-	\accEstim_{\hyp}:= \sum_i I(\hyp_i(x_i)=y_i).
+	\accEstim_{\hyp}:= \sum_i I(\hyp(x_i)=y_i).
 \end{align}
 Since low accuracies, even $0$, are evidence that the classes are separated, we can consider the departure from chance level $|\accEstim_{\hyp}-0.5|$, as another candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
 This suggests the following test statistic $|\accEstim_{\hyp}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
-We thus propose the z-scored accuracy statistic, $\accZ_\hyp$:
+We thus propose the z-scored accuracy statistic, $\accZ_{\hyp}$:
 \begin{align}
 \label{eq:z_scored_accuracy}
 	\accZ_{\hyp} := |\accEstim_{\hyp}-\majority|/\sqrt{\majority(1-\majority)}.
