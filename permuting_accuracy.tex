@@ -261,24 +261,24 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
-Name & $\algo$ & CV & Accuracy & Parameters\\ 
+Name & $\algo$ & Accuracy & Z-scored & Parameters\\ 
 \hline
 \hline
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
 sd & SD & -- & -- & -- \\ 
-lda.CV.1 & LDA & V-fold & $\accEstim_{\algo}$ &  -- \\ 
-lda.CV.2 & LDA & V-fold & $\accZ_{\algo}$ & -- \\ 
-lda.noCV.1 & LDA & -- & $\accEstim_{\algo}$ &  --\\ 
-lda.noCV.2 & LDA & -- & $\accZ_{\algo}$ &  --\\ 
-svm.CV.1 & SVM & V-fold & $\accEstim_{\algo}$ & cost=1e1 \\ 
-svm.CV.2 & SVM & V-fold & $\accEstim_{\algo}$ & cost=1e-1 \\ 
-svm.CV.3 & SVM & V-fold & $\accZ_{\algo}$ & cost=1e1 \\ 
-svm.CV.4 & SVM & V-fold & $\accZ_{\algo}$ & cost=1e-1 \\ 
-svm.noCV.1 & SVM & -- & $\accEstim_{\algo}$ & cost=1e1 \\ 
-svm.noCV.2 & SVM & -- & $\accEstim_{\algo}$ & cost=1e-1 \\ 
-svm.noCV.3 & SVM & -- & $\accZ_{\algo}$ & cost=1e1 \\ 
-svm.noCV.4 & SVM & -- & $\accZ_{\algo}$ & cost=1e-1 \\
+lda.CV.1 	& LDA & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	&  -- \\ 
+lda.CV.2 	& LDA & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& -- \\ 
+lda.noCV.1 	& LDA & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	&  --\\ 
+lda.noCV.2 	& LDA & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	&  --\\ 
+svm.CV.1 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	& cost=1e1 \\ 
+svm.CV.2 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& FALSE 	& cost=1e-1 \\ 
+svm.CV.3 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& cost=1e1 \\ 
+svm.CV.4 	& SVM & $\accEstim_{\algo}^{Vfold}$ 	& TRUE 	& cost=1e-1 \\ 
+svm.noCV.1 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	& cost=1e1 \\ 
+svm.noCV.2 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& FALSE 	& cost=1e-1 \\ 
+svm.noCV.3 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	& cost=1e1 \\ 
+svm.noCV.4 	& SVM & $\accEstim_{\algo}^{Resub}$ 	& TRUE 	& cost=1e-1 \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
