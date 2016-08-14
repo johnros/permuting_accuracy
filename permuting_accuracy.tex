@@ -617,14 +617,14 @@ This is done in the \emph{svm.highdim.2} test, which still falls short from the 
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
-Name & Basis & CV & Accuracy & Parameters\\ 
+Name & Algorithm & Accuracy & Z-scored & Parameters\\ 
 \hline
 \hline
-svm.highdim.1 & SVM & V-fold & accuracy & cost=1e-1 \\ 
-svm.highdim.2 & SVM & B=50 & accuracy & cost=1e-1 \\ 
-lda.highdim.1 & LDA & V-fold & accuracy & -- \\ 
-lda.highdim.2 & LDA & V-fold & accuracy & -- \\ 
-lda.highdim.3 & LDA & V-fold & accuracy & -- \\ 
+svm.highdim.1 & SVM & $\accEstim_{\algo}^{Vfold}$ & FALSE & cost=1e-1, V=4 \\ 
+svm.highdim.2 & SVM & $\accEstim_{\algo}^{0.632}$ & FALSE & cost=1e-1, B=50 \\ 
+lda.highdim.1 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
+lda.highdim.2 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
+lda.highdim.3 & LDA & $\accEstim_{\algo}^{Vfold}$ & FALSE & -- \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
