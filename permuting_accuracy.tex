@@ -380,7 +380,8 @@ This was to be expected and is reported mostly as a sanity check.
 
 
 The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to population tests. 
-We now verify this finding on a neuroimaging dataset.
+We have not established, however, that the dominance of the population tests is not due to their regularization. Indeed, the unregularized \emph{Hotelling} test, is only slightly superior to the accuracy tests. We return to this matter in Section~\ref{sec:highdim}.
+We now verify our finding on a neuroimaging dataset.
 
 
 
@@ -601,6 +602,7 @@ $B$ denotes the number of Bootstrap samples. }
 
 
 \subsection{High dimensional classifiers}
+\label{sec:highdim}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power to accuracy tests. 
 It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization (\emph{sd} and \emph{Hotelling.shrink}), and not only to discretization.
 To study this, we call upon several regularized classifiers, designed for high dimensional problems. 
