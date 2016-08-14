@@ -45,6 +45,7 @@
 \newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
 \newcommand{\acc}{\mathcal{E}} 
 \newcommand{\accEstim}{\hat{\mathcal{E}}} 
+\newcommand{\accZ}{\hat{\mathcal{Z}}} 
 \newcommand{\majority}{\hat{\pi}}
 \newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
@@ -217,14 +218,14 @@ Given a predictor $\hypEstim$, a natural test statistic its empirical accuracy
 Since low accuracies, even $0$, are evidence that the classes are separated, we can consider the departure from chance level $|\accEstim_{\hyp}-0.5|$, as another candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
 This suggests the following test statistic $|\accEstim_{\hyp}-\majority|$.
-Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale of this statistic. 
-We thus propose the z-scored accuracy statistic: 
+Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
+We thus propose the z-scored accuracy statistic, $\accZ_\hyp$:
 \begin{align}
 \label{eq:z_scored_accuracy}
-	|\accEstim_{\hyp}-\majority|/\sqrt{\majority(1-\majority)}.
+	\accZ_{\hyp} := |\accEstim_{\hyp}-\majority|/\sqrt{\majority(1-\majority)}.
 \end{align} 
 
-The of tests we will be comparing is collected for convenience in Table~\ref{tab:collected}.
+The of tests we will be comparing is collected in Table~\ref{tab:collected}.
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
