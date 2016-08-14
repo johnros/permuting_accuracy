@@ -283,12 +283,12 @@ svm.noCV.4 	& SVM & Resubstitution 	& TRUE 	& cost=1e-1 \\
 \captionsetup{type=table}
 \caption{\footnotesize
 This table collects the various test statistics we will be studying. 
-Three are population tests: Hotelling, Hotelling.shrink, and sd.
+Three are population tests: \emph{Hotelling}, \emph{Hotelling.shrink}, and \emph{sd}.
 \textit{Hotelling} is the classical two-group $T^2$ statistic. 
-\textit{Hotelling.shrink} is a high dimensional version with the regularized covariance in \cite{schafer_shrinkage_2005}. 
-\textit{sd} is another high dimensional version of the $T^2$, from \cite{srivastava_two_2013}. 
+\textit{Hotelling.shrink} is a high dimensional version with the regularized covariance from \citet{schafer_shrinkage_2005}. 
+\textit{sd} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}. 
 The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
-For example, \textit{svm.CV.4} is a linear SVM implemented with the \emph{svm} \R function,
+For example, \textit{svm.CV.4} is a linear SVM implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015},
 the cost parameter set at $0.1$, and using the cross validated z-scored accuracy in Eq.~\ref{eq:z_scored_accuracy}.
 Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy.}
 \label{tab:collected}
