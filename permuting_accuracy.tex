@@ -267,18 +267,18 @@ Name & Algorithm & Accuracy & Z-scored & Parameters\\
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
 sd & SD & -- & -- & -- \\ 
-lda.CV.1 	& LDA & V-fold 	& FALSE 	&  -- \\ 
-lda.CV.2 	& LDA & V-fold 	& TRUE 	& -- \\ 
+lda.CV.1 	& LDA & V-fold 			& FALSE 	&  -- \\ 
+lda.CV.2 	& LDA & V-fold 			& TRUE 	& -- \\ 
 lda.noCV.1 	& LDA & Resubstitution 	& FALSE 	&  --\\ 
 lda.noCV.2 	& LDA & Resubstitution 	& TRUE 	&  --\\ 
-svm.CV.1 	& SVM & V-fold 	& FALSE 	& cost=1e1 \\ 
-svm.CV.2 	& SVM & V-fold 	& FALSE 	& cost=1e-1 \\ 
-svm.CV.3 	& SVM & V-fold 	& TRUE 	& cost=1e1 \\ 
-svm.CV.4 	& SVM & V-fold 	& TRUE 	& cost=1e-1 \\ 
-svm.noCV.1 	& SVM & Resubstitution 	& FALSE 	& cost=1e1 \\ 
-svm.noCV.2 	& SVM & Resubstitution 	& FALSE 	& cost=1e-1 \\ 
-svm.noCV.3 	& SVM & Resubstitution 	& TRUE 	& cost=1e1 \\ 
-svm.noCV.4 	& SVM & Resubstitution 	& TRUE 	& cost=1e-1 \\
+svm.CV.1 	& SVM & V-fold 			& FALSE & cost=$10$ \\ 
+svm.CV.2 	& SVM & V-fold 			& FALSE & cost=$0.1$ \\ 
+svm.CV.3 	& SVM & V-fold 			& TRUE 	& cost=$10$ \\ 
+svm.CV.4 	& SVM & V-fold 			& TRUE 	& cost=$0.1$ \\ 
+svm.noCV.1 	& SVM & Resubstitution 	& FALSE & cost=$10$ \\ 
+svm.noCV.2 	& SVM & Resubstitution 	& FALSE & cost=$0.1$ \\ 
+svm.noCV.3 	& SVM & Resubstitution 	& TRUE 	& cost=$10$ \\ 
+svm.noCV.4 	& SVM & Resubstitution 	& TRUE 	& cost=$0.1$ \\
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
@@ -304,12 +304,12 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the res
 \section{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-Figure~\ref{fig:simulation_1} demonstrates that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
+Our simulation show that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
 This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the absence of any effect, encoded by a red circle. 
-This is true, in particular if:
-(a) the folds are balanced or not,
-(b) the tuning parameters of some test statistic are varied,
-(d) the number of folds is varied.
+This is true, in particular if: \newline
+(a) The folds are balanced or not (figures~\ref{fig:simulation_11},\ref{fig:simulation_12}) \newline
+(b) The tuning parameters of some test statistic are varied (cost=). \newline
+(d) the number of folds is varied. \newline
 We also observe that the most conservative tests are the resubstitution accuracy statistics. 
 We return to this matter in the Discussion.
 
