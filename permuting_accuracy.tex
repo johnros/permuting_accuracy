@@ -241,7 +241,7 @@ We will adhere to this practice due to its popularity, even though it can be sim
 
 \paragraph{How many folds?}
 Different authors suggest different rules for the number of folds. 
-We will be varying the number of folds, and ultimately discover that the power \emph{decreases with the number of folds}. 
+We will look into the effect of the number of folds. 
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
@@ -466,7 +466,7 @@ This is not the case for continuous test statistics.
 
 
 
-##
+
 \subsection{Reservations}
 \label{sec:reservations}
 
@@ -475,12 +475,12 @@ Firstly, not all accuracy tests are concerned with signal detection.
 Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
 In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
 
-Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors while population tests do not. 
 This is a false argument-- accuracy test do not have any more flexibility that population tests. 
-Indeed, it is possible to test for location in the same dimension the classifier is learned. 
-\citet{gretton_kernel_2012-1} is an example where the test for location is performed in the RKHS of the data.
-It is also possible to test for the equality of two multivariate distributions [TODO: cite  vogelstein].
-On the other hand, based on our reported neuroimaging example, and others, we find that a population test in the original feature space is indeed a simple and powerful approach to signal detection.
+Indeed, it is possible to test for location in the same space the classifier is learned. 
+\citet{gretton_kernel_2012-1} is an example where the test for location is performed in RKHS.
+It is also possible to test for the equality of two multivariate distributions on an arbitrary, unspecified manifold \citep[e.g.][]{heller_consistent_2013}[TODO: verify].
+On the other hand, based on our experience, and the reported neuroimaging example, we find that a population test in the original feature space is a simple and powerful approach to signal detection.
 
 
 
@@ -494,17 +494,8 @@ We give particular emphasis in this section to V-fold cross validation due to it
 
 \paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
 
-\paragraph{Permute features.} Permuting features is easier than permuting labels. 
-It allows to preserve balanced folds after a permutation without refolding.
-Although we not we did not find a power difference between balanced and unbalanced foldings. 
-
-\paragraph{Use less folds.} For V-fold CV, power decreases as the number of folds increases. 
-This is quite interesting since two phenomena compete as the number of folds increase:
-(a) the train set is larger so that better accuracies are achievable. 
-(b) The test set is smaller so that the accuracy estimate is more variable. 
-The decrease in power with increase fold number suggests that the latter dominates the former. 
-Put differently: it is easier to detect a small stable departure from chance level, than a large but unstable one.
-
+\paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
+It allows to preserve the balance of folds after a permutation, without refolding.
 
 \paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy useful in low dimension.
 In high dimension, the power loss is considerable compared to a cross validated approach. 
