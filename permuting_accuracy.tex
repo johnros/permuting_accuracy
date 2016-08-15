@@ -497,7 +497,7 @@ We give particular emphasis in this section to V-fold cross validation due to it
 \paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
 It allows to preserve the balance of folds after a permutation, without refolding.
 
-\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy useful in low dimension.
+\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy is useful in low SNR regimes, such as low dimensional problems.
 In high dimension, the power loss is considerable compared to a cross validated approach. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In low dimensional problems, the discretization is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. 
