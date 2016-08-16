@@ -619,10 +619,17 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 
 
 \subsection{A good accuracy test}
-For the cases a population test cannot replace an accuracy test, we collect some conclusions and best practices from our simulations.
-We give particular emphasis in this section to V-fold cross validation due to it popularity, but note that sampling the test set with replacement is actually preferable, as we discuss in Section~\ref{sec:bootstrap}.
+For the cases a population test cannot replace an accuracy test, we collect some conclusions and best practices.
 
 \paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
+
+
+\paragraph{Regularize.}
+Regularizing a classifier proves crucial to detection power in low SNR regimes; in high dimension in particular. 
+We also conjecture that the power-maximizing regularization is larger than the error-minimizing regularization.
+
+\paragraph{Smooth accuracy.}
+Smooth accuracy estimate by cross validating with replacement. The bLOO estimator, in particular, is preferable over V-fold.
 
 \paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
 It allows to preserve the balance of folds after a permutation, without refolding.
@@ -632,10 +639,7 @@ In high dimension, the power loss is considerable compared to a cross validated 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In low dimensional problems, the discretization is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. 
 There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
-
-\paragraph{Regularize}
-Regularizing a classifier proves crucial to detection power in low SNR regimes; in high dimension in particular. 
-We also conjecture that the power-maximizing regularization is larger than the error-minimizing regularization. 
+ 
 
 \paragraph{Don't z-score.} There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
 
