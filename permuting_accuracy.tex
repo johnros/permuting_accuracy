@@ -482,7 +482,7 @@ An algorithm that samples test sets with replacement is the \emph{leave-one-out 
 \begin{definition}[bLOO]
 \label{def:bloo}
 The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy of the holdout observations, over all bootstrap samples. 
-Denoting by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
+Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
 Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
 The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
 \begin{align}
@@ -518,10 +518,10 @@ Name & Algorithm & Accuracy & B & Z-scored & Parameters\\
 \hline
 lda.Boot.1 & LDA & b$0.632$ & $10$ & FALSE &  -- \\ 
 lda.Boot.2 & LDA & bLOO 	& $10$ & FALSE &  -- \\ 
-svm.Boot.1 & SVM & b$0.632$ & $10$ & FALSE & cost=1e1 \\ 
-svm.Boot.2 & SVM & bLOO 	& $10$ & FALSE & cost=1e1 \\ 
-svm.Boot.3 & SVM & b$0.632$ & $50$ & FALSE & cost=1e1 \\ 
-svm.Boot.4 & SVM & bLOO 	& $50$ & FALSE & cost=1e1 \\ 
+svm.Boot.1 & SVM & b$0.632$ & $10$ & FALSE & cost=10 \\ 
+svm.Boot.2 & SVM & bLOO 	& $10$ & FALSE & cost=10 \\ 
+svm.Boot.3 & SVM & b$0.632$ & $50$ & FALSE & cost=10 \\ 
+svm.Boot.4 & SVM & bLOO 	& $50$ & FALSE & cost=10 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
@@ -551,17 +551,17 @@ $B$ denotes the number of Bootstrap samples. }
 
 \subsection{High dimensional classifiers}
 \label{sec:highdim}
-Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power as accuracy tests. 
+Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
 It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization, and not only to discretization.
 To study this, we call upon several \emph{regularized classifiers}, designed for high dimensional problems. 
-In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized SVM \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
+In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized SVM \citep{REF08a}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
 In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}. 
 
 
 Simulation results reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 It can be seen that regularizing a classifier in high dimension, just like a parameter test, improves power. 
 It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests-- \emph{svm.CV.1} for instance.
+This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{svm.CV.1}.
 
 We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
 This is done in the \emph{svm.highdim.2} and \emph{lda.highdim.4} tests. 
