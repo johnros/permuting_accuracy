@@ -253,7 +253,7 @@ We will look into the effect of the number of folds.
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
 Lower than $0.5$ accuracies, known as \emph{anti-learning}, are evidence that signal is present and classes are separated. Given out detection purposes, we should consider the departure from chance level $|\accEstim_{\algo}-0.5|$ as candidate test statistic.
-For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
+For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, which we denote by $\majority$.
 This suggests the following test statistic $|\accEstim_{\algo}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
 We thus study, along with the naive accuracy estimate, $\accEstim_{\algo}$ , also the \emph{z-scored accuracy} of algorithm $\algo$:
@@ -273,7 +273,7 @@ Name & Algorithm & Accuracy & Z-scored & Parameters\\
 \hline
 Hotelling & Hotelling & -- & -- & -- \\ 
 Hotelling.shrink & Hotelling & -- & -- & -- \\ 
-sd & SD & -- & -- & -- \\ 
+sd & Hotelling & -- & -- & -- \\ 
 lda.CV.1 	& LDA & V-fold 			& FALSE 	&  -- \\ 
 lda.CV.2 	& LDA & V-fold 			& TRUE 	& -- \\ 
 lda.noCV.1 	& LDA & Resubstitution 	& FALSE 	&  --\\ 
@@ -293,9 +293,9 @@ This table collects the various test statistics we will be studying.
 Three are population tests: \emph{Hotelling}, \emph{Hotelling.shrink}, and \emph{sd}.
 \textit{Hotelling} is the classical two-group $T^2$ statistic. 
 \textit{Hotelling.shrink} is a high dimensional version with the regularized covariance from \citet{schafer_shrinkage_2005}. 
-\textit{sd} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}. 
+\textit{sd} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
 The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
-For example, \textit{svm.CV.4} is a linear SVM implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015},
+For example, \textit{svm.CV.4} is a linear SVM (implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015}),
 the cost parameter set at $0.1$, and using the cross validated z-scored accuracy in Eq.~\ref{eq:z_scored_accuracy}.
 Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy.}
 \label{tab:collected}
