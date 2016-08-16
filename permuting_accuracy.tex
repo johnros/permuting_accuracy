@@ -605,7 +605,8 @@ It can also be seen that (regularized) parameter tests are still more powerful t
 This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests-- \emph{svm.CV.1} for instance.
 
 We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
-This is done in the \emph{svm.highdim.2} test, which is the first accuracy test that achieves the same power as the population tests. 
+This is done in the \emph{svm.highdim.2} and \emph{lda.highdim.4} tests. 
+The latter being the first accuracy test that achieves the same power as the best of population tests. 
 This is exciting news for the cases a population test cannot replace an accuracy test. 
 The implication for practitioners is that powerful accuracy tests can be constructed by sampling test sets with replacement, and regularizing the classier. 
 
