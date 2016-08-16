@@ -474,15 +474,15 @@ On the other hand, based on our experience, and the reported neuroimaging exampl
 
 \subsection{Smoothing accuracy estimates}
 \label{sec:bootstrap}
-It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
-The discreteness of the accuracy statistic is governed by the number of examples in the union of test sets, over all validation iterations.
+It may be possible to alleviate the effect of discretization by via the cross-validation scheme.
+The discreteness of the accuracy statistic is governed by the number of examples in the union of holdout test sets, over all retesting iterations.
 For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 \label{def:bloo}
-The \emph{leave-one-out bootstrap} estimate is the average accuracy of the holdout observations, over all bootstrap samples. 
-Denoting by $\data^b$, a bootstrap sample $b$, sampled with replacement from $\data$. 
+The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy of the holdout observations, over all bootstrap samples. 
+Denoting by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
 Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
 The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
 \begin{align}
@@ -497,7 +497,8 @@ Equivalently [TODO: verify], denoting by $S^{(b)}$ the indexes of observations, 
 
 \begin{definition}[b$0.632$]
 \label{def:b0632}
-The \emph{0.632 bootstrap} estimator, $\accEstim_{\algo}^{0.632}$, is defined as 
+The \emph{0.632 bootstrap} accuracy estimate, b$0.632$, is a wighted average of the resubstitution error and the bLOO.
+Formally:
 \begin{align}
 	\accEstim_{\algo}^{0.632} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
 \end{align}
