@@ -546,7 +546,7 @@ The \emph{0.632 bootstrap} estimator, $\accEstim_{\algo}^{0.632}$, is defined as
 \end{definition}
 Simulation results reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
 It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of population tests. 
-It can also be seen that power increases with the number of bootstrap replications, itself reducing the level of discretization. 
+It can also be seen that power increases with the number of bootstrap replications, as was to be expected, since more replications reduce the level of discretization.
 The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
 
 \bigskip
@@ -592,10 +592,10 @@ $B$ denotes the number of Bootstrap samples. }
 
 \subsection{High dimensional classifiers}
 \label{sec:highdim}
-Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power to accuracy tests. 
-It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization (\emph{sd} and \emph{Hotelling.shrink}), and not only to discretization.
-To study this, we call upon several regularized classifiers, designed for high dimensional problems. 
-In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized svm \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
+Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's $T^2$ test has similar power as accuracy tests. 
+It should thus be argued that the real advantage of the population tests is due to their adaptation to high dimension by regularization, and not only to discretization.
+To study this, we call upon several \emph{regularized classifiers}, designed for high dimensional problems. 
+In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized SVM \cite{friedman_regularization_2010}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
 In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized LDA \citep{dudoit_comparison_2002}, which can be thought of a method intersecting Fisher's LDA and Naive Bayes. 
 
 
