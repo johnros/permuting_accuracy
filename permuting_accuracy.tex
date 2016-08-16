@@ -602,10 +602,13 @@ In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized
 Simulation results reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 It can be seen that regularizing a classifier in high dimension, just like a parameter test, improves power. 
 It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than the regularized accuracy test, \emph{svm.CV.1} for instance.
+This was to be expected, since we already saw in (e.g. Figure~\ref{fig:simulation_11}) that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests-- \emph{svm.CV.1} for instance.
 
-We can compound regularization in this section with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
-This is done in the \emph{svm.highdim.2} test, which still falls short from the power of the population tests, but is a much more powerful accuracy test than the original non-regularized, V-fold validated, version of \emph{svm.CV.1}.
+We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
+This is done in the \emph{svm.highdim.2} test, which is the first accuracy test that achieves the same power as the population tests. 
+This is exciting news for the cases a population test cannot replace an accuracy test. 
+The implication for practitioners is that powerful accuracy tests can be constructed by sampling test sets with replacement, and regularizing the classier. 
+
 
 \bigskip
 
@@ -615,20 +618,22 @@ This is done in the \emph{svm.highdim.2} test, which still falls short from the 
 Name & Algorithm & Accuracy & Z-scored & Parameters\\ 
 \hline
 \hline
-svm.highdim.1 & SVM & V-fold & FALSE & cost=1e-1, V=4 \\ 
-svm.highdim.2 & SVM & b$0.632$ & FALSE & cost=1e-1, B=50 \\ 
+svm.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
+svm.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
 lda.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
 lda.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
 lda.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
+lda.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
 The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-\emph{svm.highdim.1} is an $l2$ regularized SVM \cite{friedman_regularization_2010}. 
+\emph{svm.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
 \emph{svm.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
 \emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 \emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 \emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
+\emph{lda.highdim.4} is the same with b$0.632$.
 } 
 \label{tab:collected_3}
 \end{tcolorbox}
