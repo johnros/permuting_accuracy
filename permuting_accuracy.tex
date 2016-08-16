@@ -174,7 +174,7 @@ Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a popu
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
 
 An accuracy test amounts to learning a predictive model and testing if its predictions $y|x$ are better than chance. 
-Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, the a predictor, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset, $\algo:\data \to \hyp$. 
+Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, the a predictor, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
 The accuracy of predictor $\hyp$ is defined as the probability of $\hyp$ making a correct prediction.
 Denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample $\data$, then
 \begin{align}
