@@ -175,12 +175,13 @@ I.e., we test if the multivariate voxel activation pattern has the same distribu
 
 An accuracy test amounts to learning a predictive model and testing if its predictions $y|x$ are better than chance. 
 Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, the a predictor, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
-The accuracy of predictor $\hyp$ is defined as the probability of $\hyp$ making a correct prediction.
-Denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample $\data$, then
+The accuracy of predictor, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction.
+The accuracy of an algorithm, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets. 
+Formally-- denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample $\data$, then
 \begin{align}
-	\acc_{\hyp}:=\measure(\hyp=\outcomes).
+	\acc_{\hyp}:=\int_{(\features,\outcomes)} \indicator{\hyp=\outcomes} \; d\measure(\features,\outcomes),
 \end{align}
-The accuracy of an algorithm $\algo$ is defined as the average accuracy, over all possible data sets
+and
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren(\data).
 \end{align}
