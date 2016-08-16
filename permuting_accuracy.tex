@@ -311,7 +311,7 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the res
 \section{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-Our simulation show that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
+Our simulations show that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
 This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the absence of any effect, encoded by a red circle. 
 This is true, in particular if: \newline
 (a) The folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}) \newline
@@ -325,32 +325,6 @@ We return to this matter in the Discussion.
 
 
 
-
-\begin{figure}[h]
-\centering
-\caption{
-The power of a permutation test with various test statistics. 
-The power on the $x$ axis. 
-Effect are color and shape coded. 
-The various statistics on the $y$ axis. 
-Their details are given in Table~\ref{tab:collected}. 
-Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-Simulation details in Appendix~\ref{apx:simulation_details}.
-Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
-\label{fig:simulation_1}
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-\caption{\textbf{Unbalanced.}} %TODO: caption  
-\label{fig:simulation_11}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-\caption{\textbf{Balanced.}} %TODO: caption 
-\label{fig:simulation_12}
-\end{subfigure}
-\end{figure}
 
 
 
@@ -751,8 +725,11 @@ and related ``data science'' communities.
 \appendix
 
 
-\newpage
 
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis pipeline}
 \label{apx:analysis}
 
@@ -793,9 +770,14 @@ Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is c
   	}
 \end{algorithm}
 
+
+
+
+
+
+
 \newpage
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 \section{Simulation Details}
 \label{apx:simulation_details}
 
@@ -823,9 +805,40 @@ The reported power is the proportion of replication where the permutation p-valu
 
 
 \newpage
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Results}
 \label{apx:simulations}
+
+
+
+
+\begin{figure}[h]
+	\centering
+	\caption{
+		The power of a permutation test with various test statistics. 
+		The power on the $x$ axis. 
+		Effect are color and shape coded. 
+		The various statistics on the $y$ axis. 
+		Their details are given in Table~\ref{tab:collected}. 
+		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Simulation details in Appendix~\ref{apx:simulation_details}.
+		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
+	\label{fig:simulation_1}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
+		\caption{\textbf{Unbalanced.}} %TODO: caption  
+		\label{fig:simulation_11}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
+		\caption{\textbf{Balanced.}} %TODO: caption 
+		\label{fig:simulation_12}
+	\end{subfigure}
+\end{figure}
+
+
 
 
 
