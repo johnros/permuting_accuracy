@@ -145,19 +145,19 @@ As simply put by Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website
 
 The degree of discretization is governed by the number of samples. 
 In our neuroscience example from \citet{gilron_quantifying_2016}, the classification is performed based on $40$ trials, so that the test statistic may assume only $40$ possible values. 
-This number of examples is not unusual if considering this is the number of trial-repeats, or the number of subjects in an neuroimaging study. 
+This number of examples is not unusual if considering this is the number of trial-repeats, or the number of subjects, in an neuroimaging study. 
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
 For an intuition consider the usage of a the \emph{resubstitution accuracy} as a test statistic. 
-This statistic simply means that the accuracy is not cross validated. 
+This statistic simply means that the accuracy is not cross validated, but rather evaluated on the training data.
 If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
-In a very high dimensional model, the resubstitution accuracy will be $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
-The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with a power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
+In a very high dimensional regime, the resubstitution accuracy will be $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
+The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 
 
-To compare the power of accuracy tests and population tests in finite samples, we perform a simulation study of a battery of test statistics. 
+To compare the power of accuracy tests and population tests in finite samples, we study a battery of test statistics by means of simulation. 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:power} and \ref{sec:example}. 
+The main findings are reported in Sections~\ref{sec:power}, \ref{sec:example} and Appendix~\ref{apx:simulations}.
 A discussion follows in Section~\ref{sec:discussion}. 
 
 
