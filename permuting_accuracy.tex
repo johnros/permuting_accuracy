@@ -497,15 +497,15 @@ We give particular emphasis in this section to V-fold cross validation due to it
 \paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
 It allows to preserve the balance of folds after a permutation, without refolding.
 
-\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy is useful in low SNR regimes, such as low dimensional problems.
+\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy is useful in low SNR regimes, such as low dimensional problems, because it avoids cross validation without compromising power. 
 In high dimension, the power loss is considerable compared to a cross validated approach. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In low dimensional problems, the discretization is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. 
 There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
 
 \paragraph{Regularize}
-Regularizing the accuracy test proves very useful in high dimensional problems. 
-Put differently: reducing variance by adding some bias is very useful to detect better-than-chance classification. 
+Regularizing a classifier proves crucial to detection power in low SNR regimes; in high dimension in particular. 
+We also conjecture that the power-maximizing regularization is larger than the error-minimizing regularization. 
 
 \paragraph{Don't z-score.} There is no gain in z-scoring the accuracy scores. Our motivating rational was clearly flawed. [TODO: why?]
 
@@ -517,12 +517,10 @@ Put differently: reducing variance by adding some bias is very useful to detect 
 \subsection{Smoothing accuracy estimates}
 \label{sec:bootstrap}
 It may be possible to alleviate the effect of discretization by appropriate cross-validation. 
-The discreteness of the accuracy statistic is governed by the number of examples in the union (over all validation iterations) of test sets.
-For V-fold CV, for instance, this number is simply the sample size. 
+The discreteness of the accuracy statistic is governed by the number of examples in the union of test sets, over all validation iterations.
+For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
-The \emph{bootstrap} may seem like a good candidate approach since it samples examples with replacement. 
-It does so, however, for the train set, and not the test set. 
-An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator} (bLOO) and its derivation-- the \emph{0.632 bootstrap estimator} (b$0.632$) \citep[Sec 7.11]{hastie_elements_2003}.
+An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 \label{def:bloo}
 The \emph{leave-one-out bootstrap} estimate is the average accuracy of the holdout observations, over all bootstrap samples. 
@@ -541,7 +539,7 @@ Equivalently [TODO: verify], denoting by $S^{(b)}$ the indexes of observations, 
 
 \begin{definition}[b$0.632$]
 \label{def:b0632}
-The b$0.632$ accuracy estimator, $\accEstim_{\algo}^{0.632}$, is defined as 
+The \emph{0.632 bootstrap} estimator, $\accEstim_{\algo}^{0.632}$, is defined as 
 \begin{align}
 	\accEstim_{\algo}^{0.632} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
 \end{align}
