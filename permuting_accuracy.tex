@@ -47,8 +47,6 @@
 \newcommand{\hypFun}[2]{\algo_{#1}(#2)} % A hypothesis
 \newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
 \newcommand{\hypclass}{\mathcal{F}}
-\newcommand{\majority}{\hat{\pi}}
-\newcommand{\minority}{\hat{p}_{min}}
 \newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
 \newcommand{\rv}[1]{\mathbf{#1}} % A random variable
 \newcommand{\x}{\rv x} % The random variable x 
@@ -67,6 +65,8 @@
 \newcommand{\measuren}{\measure^n}
 \newcommand{\union}{\cup}
 \newcommand{\intersect}{\cap}
+\newcommand{\majority}{\accEstim_{Maj}}
+
 
 \title{Better-Than-Chance Classification for Signal Detection}
 
@@ -189,10 +189,10 @@ Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ 
 a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
 In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\hyp}$, will be used for the testing. 
 
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}, and the V-fold cross validation (CV) estimate \citep{hastie_elements_2003}.
-\begin{definition}[Resubstitution accuracy]
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}, and the V-fold cross validation (CV) estimate.
+\begin{definition}[Resubstitution estimate]
 \label{def:resubstitution}
-The resubstitution accuracy estimator, $\accEstim_{\algo}^{resub}$,  is defined as
+The resubstitution accuracy estimator, $\accEstim_{\algo}^{Resub}$,  is defined as
 \begin{align}
 	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features_i}=\outcomes_i}, 
 \end{align}
@@ -200,9 +200,9 @@ where $\indicator{A}$ is the indicator function of event $A$.
 \end{definition}
 
 
-\begin{definition}[V-fold CV]
+\begin{definition}[V-fold CV estimate]
 \label{def:v-fold}
-Denoting by $\data^{v}$ the $v$'th partition of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
+Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
 \begin{align}
 	\accEstim_{\algo}^{Vfold} := 
 	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i}, 
@@ -215,7 +215,7 @@ Denoting by $\data^{v}$ the $v$'th partition of the dataset, and by $\data^{(v)}
 \subsection{Candidate Tests}
 \label{sec:considerations}
 
-The design of a permutation test using $\accEstim_{\algo}$, requires the following design choices: 
+The design of a permutation test using $\accEstim_{\algo}$ requires the following design choices: 
 \begin{enumerate}
 \item Is $\accEstim_{\algo}$ cross validated or not?
 \item For a V-fold cross validated test statistic:
@@ -227,23 +227,23 @@ The design of a permutation test using $\accEstim_{\algo}$, requires the followi
 \item How to estimate $\accEstim_{\algo}$?
 \end{enumerate}
 
-We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in its mere departure from chance level. 
+We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross validate or not?}
 Given our goal, a biased estimate of $\accEstim_{\algo}$ is not a problem provided that bias is consistent over all permutations. 
 The underlying intuition is that a permutation test will be unbiased, provided that the exact same computation is performed over all permutations. 
-We will thus be considering both cross validated accuracies, and \emph{resubstitution accuracies}, where the accuracy is evaluated on the training set and not on a holdout.
+We will thus be considering both cross validated accuracies, and resubstitution accuracies.
 
 
 \paragraph{Balanced folding?}
 The standard practice when cross validating is to constrain the data folds to be balanced, i.e. stratified \citep[e.g.][]{ojala_permutation_2010}.
 This means that each fold has the same number of examples from each class. 
-We will report results with both balanced and unbalanced data foldings, only to discover, it does not really matter. 
+We will report results with both balanced and unbalanced data foldings, only to discover, it does not seem to matter. 
 
 
 \paragraph{Refolding?}
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation, so that the balance of the classes in each fold is preserved.
-We will adhere to this practice due to its popularity, even though it can be simplified by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it can be avoided by permuting features instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
@@ -252,7 +252,7 @@ We will look into the effect of the number of folds.
 
 \paragraph{How to estimate accuracy?}
 \label{sec:estimate_accuracy}
-Low accuracies, even $0$, are evidence that the classes are separated so that for our purposes, we should consider the departure from chance level $|\accEstim_{\algo}-0.5|$ as candidate test statistic.
+Lower than $0.5$ accuracies, known as \emph{anti-learning}, are evidence that signal is present and classes are separated. Given out detection purposes, we should consider the departure from chance level $|\accEstim_{\algo}-0.5|$ as candidate test statistic.
 For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, we denote by $\majority$.
 This suggests the following test statistic $|\accEstim_{\algo}-\majority|$.
 Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
