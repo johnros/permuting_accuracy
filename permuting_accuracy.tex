@@ -314,7 +314,7 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the res
 Our simulations show that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
 This can be seen from the fact that the probability of rejection is no larger than $0.05$ in the absence of any effect, encoded by a red circle. 
 This is true, in particular if: \newline
-(a) The folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}) \newline
+(a) The folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
 (b) The tuning parameters are varied (cost=$10$ versus cost=$0.1$). \newline
 (c) The number of folds is varied (Figures \ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
 (d) The noise is heavytailed (Figure~\ref{fig:t_null}). \newline
@@ -337,21 +337,20 @@ Having established that all of the tests in our battery control the false positi
 especially when comparing population tests to accuracy tests. 
 From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
 \begin{enumerate}
-\item Population tests have more power than accuracy tests in all our configurations.
+\item Population tests have no less-- and typically more-- power than accuracy tests in our simulations.
 
-\item The conservativeness decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
+\item The conservativeness of accuracy tests decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
 
-\item For heavy tailed distributions (Figure~\ref{fig:t_null}), the extra power of the population test vanishes. 
+\item For heavy tailed distributions (Figure~\ref{fig:t_null}), the difference in power between population tests and accuracy tests vanishes. 
 
-\item Regularization is most beneficial to power in low signal to noise (SNR) regimes. 
-Low SNR may be the result of a high-dimensional problem, or due to correlations.
-Indeed, the presence of positive correlations amplifies the contribution of regularization to power ((Figure~\ref{fig:ar_1})). 
+\item Regularization is critical to power as can be seen by comparing \emph{Hotelling} to \emph{Hotelling.shrink} and \emph{sd}.
 
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely kills power.
+The non-z-scored accuracy tests are unaffected by the balance of the folding.
 
 \item Both accuracy and population tests are inappropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
-This was to be expected and is reported mostly as a sanity check.
+This was to be expected and is reported mostly as a sanity check (cost=10 vs. cost=0.1 statistics).
 
 \item Balanced folding only affects the z-scored accuracy, in the opposite direction than we anticipated. 
 
@@ -361,7 +360,8 @@ This was to be expected and is reported mostly as a sanity check.
 
 
 The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to population tests. 
-We have not established, however, that the dominance of the population tests is not due to their regularization. Indeed, the unregularized \emph{Hotelling} test, is only slightly superior to the accuracy tests. We return to this matter in Section~\ref{sec:highdim}.
+We have not established, however, that the dominance of the population tests is not due to their regularization. Indeed, the unregularized \emph{Hotelling} test, is only slightly superior to the accuracy tests. 
+We return to this matter in Section~\ref{sec:highdim}, by adding some regularized accuracy tests to our battery. 
 We now verify our finding on a neuroimaging dataset.
 
 
