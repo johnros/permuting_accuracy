@@ -510,6 +510,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 \bigskip
 
+%TODO: change cost in simulation to 0.1
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c|c}
@@ -566,12 +567,12 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
 This is done in the \emph{svm.highdim.2} and \emph{lda.highdim.4} tests. 
 The latter being one of the very few accuracy tests that achieve the same power as population tests. 
-This is exciting news for the cases a population test cannot replace an accuracy test. 
-The implication for practitioners is that powerful accuracy tests can be constructed by sampling test sets with replacement, and regularizing the classier. 
+This is exciting news since it shows how to design powerful new high-powered accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
 
 
 \bigskip
 
+%TODO: change cost in simulation to 0.1
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
@@ -601,7 +602,7 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 
 \begin{figure}[ht]
 \centering
-	  \includegraphics[width=0.7\linewidth]{"art/2016-08-15 20:07:55"}
+	  \includegraphics[width=0.7\linewidth]{"art/2016-08-17 08:48:18"}
 	  \caption{
 \textbf{HighDim Classifier--} 
 		The power of a permutation test with various test statistics. 
