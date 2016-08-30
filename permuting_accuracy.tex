@@ -459,8 +459,7 @@ In those examples, the purpose of the test is not to detect a difference between
 Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors while population tests do not. 
 This is a false argument-- accuracy test do not have any more flexibility that population tests. 
 Indeed, it is possible to test for location in the same space the classifier is learned. 
-\citet{gretton_kernel_2012-1} is an example where the test for location is performed in RKHS.
-It is also possible to test for the equality of two multivariate distributions on an arbitrary \citep[e.g.][]{szekely_brownian_2009}.
+For independence tests in high dimensional spaces see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
 On the other hand, based on our experience, and the reported neuroimaging example, we find that a population test in the original feature space is a simple and powerful approach to signal detection.
 
 
@@ -535,7 +534,7 @@ $B$ denotes the number of Bootstrap samples. }
 
 \begin{figure}[ht]
 \centering
-	  \includegraphics[width=0.7\linewidth]{"art/2016-08-09 20:09:20"}
+	  \includegraphics[width=0.7\linewidth]{"art/2016-08-30 18:08:08"}
 	  \caption{
 		  \textbf{Bootstrap--}
 		  The power of a permutation test with various test statistics. 
