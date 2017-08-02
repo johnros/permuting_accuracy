@@ -1,3 +1,4 @@
+\pdfoutput=1
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -27,7 +28,9 @@
 
 
 
-\author{Jonathan Rosenblatt \and Roee Gilron \and Roy Mukamel}
+\author{Jonathan Rosenblatt \\ Ben Gurion University, 
+	\and Roee Gilron \\ Tel Aviv University,
+	\and Roy Mukamel \\ Tel Aviv University.}
 
 
 %% OPTIONAL MACRO DEFINITIONS
@@ -80,12 +83,12 @@
 
 
 \maketitle
-\linenumbers
+%\linenumbers
 
 \begin{abstract}
-We show that using a classifier's accuracy as a test statistic, is underpowered for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
-It is also more complicated to implement, so that a statistical test should be preferred. 
-For the cases that the goal of the test is not the existence of a difference between populations, but the actual classification ability, we suggest several improvements to the classification accuracy, to increase its power against a ``pure chance'' null. 
+We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
+It is also more complicated to implement. 
+For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power against a ``pure chance'' null. 
 \end{abstract}
 
 
@@ -733,7 +736,8 @@ and related ``data science'' communities.
 
 
 
-\section{Acknowledgments}
+%\section{Acknowledgments}
+%TODO
 % isf 900/60, Jelle, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, Jason 
 
 
