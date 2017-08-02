@@ -1,0 +1,108 @@
+---
+title: "crossvalidated permutation"
+author: "Jonathan Rosenblatt"
+date: "4/25/2016"
+output: html_document
+---
+
+---
+title: "recover exchangeability"
+author: "Jonathan Rosenblatt"
+date: "April 25, 2016"
+output: html_document
+---
+The idea: check if a hold-out test statistic can recover exchangeability so that it can be safely permuted?
+
+Sketch:
+
+- Generate null data with arbitrary covariance. 
+- Check bias in label-switching test. 
+- Cehck bias in label-switching with holdout. 
+
+```{r preliminaries}
+library(magrittr)
+library(mvtnorm)
+library(foreach)
+library(doMC)
+
+t_stat <- function(x,y){
+  mean.x <- mean(x)
+  mean.y <- mean(y)
+  var.x <- var(x)
+  var.y <- var(y)
+  n.x <- length(x)
+  n.x.1 <- n.x-1
+  n.y <- length(y)
+  n.y.1 <- n.y-1
+  var.pooled <- (n.x.1 * var.x + n.y.1 * var.y)/(n.x.1+n.y.1)
+  nom <- (mean.y-mean.x)^2
+  denom <- var.pooled * (1/n.x + 1/n.y)
+  t.stat <- nom / denom
+  return(t.stat)
+}
+## Testing:
+# t_stat(rnorm(10), rnorm(20,2))
+
+ar1_cov <- function(n, rho){
+  result <- matrix(NA, n, n)
+  for(i in 1:n){
+    for(j in 1:n){
+      result[i,j] <- rho^(abs(i-j))
+    }
+  }
+  return(result)
+}
+## Testing
+# ar1_cov(3,0.8)
+```
+
+
+```{r }
+n <- 1e2
+labels <- c(rep(TRUE, n/2), rep(FALSE,n/2))
+shift <- 0
+Sigma <- diag(n)
+
+replicate(1e1,{
+  noise <- rmvnorm(1, sigma = Sigma)
+  x <- noise[labels]
+  y <- shift + noise[!labels]
+  t.stat <- t_stat(x,y)
+  
+  n.permutations <- 1e2
+  t.stat.permuted <- rep(NA, n.permutations)
+  for(i in 1:n.permutations){
+    .labels <- sample(labels)
+    .x <- noise[.labels]
+    .y <- shift + noise[!.labels]
+    t.stat.permuted[i] <- t_stat(.x,.y)
+  }
+  
+  t.pval <- 1-ecdf(t.stat.permuted)(t.stat)
+  t.pval
+})
+```
+
+```{r naive permutation under dependence}
+Sigma <- ar1_cov(n, rho=0.5)
+
+replicate(1e1,{
+  noise <- rmvnorm(1, Sigma)
+  x <- noise[labels]
+  y <- shift + noise[!labels]
+  t.stat <- t_stat(x,y)
+  
+  n.permutations <- 1e2
+  t.stat.permuted <- rep(NA, n.permutations)
+  for(i in 1:n.permutations){
+    .labels <- sample(labels)
+    .x <- noise[.labels]
+    .y <- shift + noise[!.labels]
+    t.stat.permuted[i] <- t_stat(.x,.y)
+  }
+  
+  t.pval <- 1-ecdf(t.stat.permuted)(t.stat)
+  t.pval
+})
+```
+

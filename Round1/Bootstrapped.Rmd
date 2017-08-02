@@ -1,0 +1,223 @@
+---
+title: "Bootstrapped effect"
+author: "Jonathan Rosenblatt"
+date: "Aug 8, 2016"
+output: html_document
+---
+
+
+```{r preliminaries}
+the.message <- "Bootstrap"
+
+setwd('~/workspace/Gilron/')
+source('Gilron Effect of Cross Validatino.R')
+
+balance <- TRUE   # set for TRUE for balanced folding ana refolding.
+balanc.log <- 'balance_log.txt'
+file.remove(balanc.log)
+file.create(balanc.log)
+
+n.replications <- 4e3 #4e3
+err.bar <- round(3*sqrt(.05*.95/(n.replications)),3)
+p <- 23
+n <- 40
+n.permutations <- 300
+n.folds <- 8
+cost.1 <- 1e1
+cost.2 <- 1e-1
+effects <- seq(0, 0.5, length=3) # change in locatino
+# effects <- seq(1, 1.2, length=3) # change in scale
+# RNGkind("Wich") # Set random number generator. 
+RNGkind("default")
+
+Sigma <- diag(p)
+# Sigma <- ar1_cov(p, rho=0.8)
+# Sigma <- comSym_cov(p, rho=0.7) 
+# Sigma <- diag((1:p)*p/sum(1:p))
+```
+
+
+## Fixed folds. Cross-Validated. All in one.
+```{r independent noise variable folds}
+registerDoMC(cores=50)
+
+# Many statistics are not compute for efficiency. 
+# To compute them, just uncomment them.
+
+pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=effects, .combine=rbind)  %dopar% {
+  # effect <- effects[2]
+  
+  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
+  
+  # Gaussian noise
+  .noise <- rmvnorm(n=n, sigma = Sigma)
+  # t noise
+  # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
+  # levelplot(t(.noise))
+  
+  # Shift alternative:
+  noise <- .noise + effect * labels
+  # Scale alternative:
+  # noise <- .noise * effect ^ labels 
+  # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+  
+  # Golland's mixture null:
+  # .noise <- rmvnorm(n=n, sigma = Sigma) # Gaussian noise
+  # shift <- rep(sqrt(9/p), p)
+  # shift.group <- 2*rbinom(n, 1, (0.5-effect)^labels*(0.5+effect)^(1-labels))-1
+  # noise <- .noise + t(outer(shift, shift.group))
+  # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+
+  # Asign observations to folds. Use the simple label structure to balance folds.
+  fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+  # capture.output(table(fold.ids, labels), file=balanc.log, append = TRUE)
+  
+  # Compute observed statistic
+  x1 <- noise[labels,]
+  x2 <- noise[!labels,]
+  
+ts <- list(
+  Hotelling=t_Hotelling(x1, x2, FALSE),
+  Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+  lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+  lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+  lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+  lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+  sd=t_SD(x1, x2),
+  svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+  svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+  svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=1, cost=cost.2, type=1),
+  svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
+  svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=1, cost=cost.2, type=1),
+  svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+  lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=1, type=1),
+  lda.Boot.2=t_lda_boot(noise, labels, B=10, type2=2, type=1)
+)
+
+  # Initialize result containers
+  
+  permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+  
+  old.labels <- labels
+  old.folds.ids <- fold.ids
+  statistics.names <- names(ts)
+  save(statistics.names, file='names.RData')
+  
+  for(i in 1:n.permutations){
+    # i <- 1
+    
+    labels <- sample(labels) 
+    fold.ids <- balanced_folding(labels, n.folds, balance) # refolding.
+    x1 <- noise[labels,]
+    x2 <- noise[!labels,]
+    
+    # Checking balance:
+    # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
+    
+    # for permuting Xs:
+    # .indexes <- sample(seq(n))
+    #  .noise <- noise[.indexes,] 
+    
+    
+    permuted[i,] <- c(
+  Hotelling=t_Hotelling(x1, x2, FALSE),
+  Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+  lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+  lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+  lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+  lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+  sd=t_SD(x1, x2),
+  svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+  svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+  svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=1, cost=cost.1, type=1),
+  svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.1, type=1),
+  svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=1, cost=cost.1, type=1),
+  svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1,  type=1),
+  lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=1, type=1),
+  lda.Boot.2=t_lda_boot(noise, labels, B=10, type2=2, type=1)
+    )
+  } # End permutation
+
+  pvals <- mapply(my.ecdf, matrix2list(permuted), ts)
+
+  c(effect=effect, pvals) 
+}
+pbPost("note", "Done", the.message)
+# file.name <- as.character(Sys.time())
+# save.image(file=file.name)
+```
+
+
+```{r analyze multiple effects}
+# load(file='2016-08-08 07:33:05') # Bootstrapping
+
+.limits <- 0.05 + c(-err.bar,0,err.bar)
+
+pvals.1.9 %<>%  tbl_df
+load(file = 'names.RData')
+names(pvals.1.9)[-1] <-  statistics.names
+
+pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') %>% tbl_df
+
+pvals.melt %<>% mutate(
+  reject= as.numeric(value <= 0.05),
+  effect.factor=as.factor(effect)) 
+
+
+plot.2 <- pvals.melt %>% 
+  # ggplot(aes(y=reject, x=effect, group=statistic, color=statistic, shape=statistic)) +
+  ggplot(aes(y=reject, x=effect, group=statistic, color=statistic)) +
+  theme_bw(base_size = 20)+
+  # ggtitle("Fixed signal, Gaussian Noise")+
+  xlab('Effect')+
+  ylab('Power')+
+  stat_summary(fun.y='mean', geom="line") +
+  # stat_summary(fun.data = mean_cl_normal, geom = "errorbar")
+  stat_summary(fun.y='mean', geom="point") +
+  geom_hline(yintercept=.limits, lty=c(3,2,3))
+
+plot.2
+```
+
+
+```{r}
+plot.3 <- pvals.melt %>% 
+  ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
+  theme_bw(base_size = 20)+
+  theme(legend.position="none")+
+  # ggtitle("Fixed signal, Gaussian Noise")+
+  ylab('Power')+
+  xlab('')+
+  stat_summary(fun.y='mean', geom="point", cex=4) +
+  geom_hline(yintercept=0.05, lty=2)+
+  geom_vline(xintercept=.limits, lty=c(3,2,3))+
+  coord_flip()
+
+plot.3
+
+# pdf(file = paste('Output/',file.name,'.pdf', sep=''))
+# plot.3
+# dev.off()
+
+# ggplotly(plot.2)
+```
+
+
+
+```{r analyze single effect}
+the.title <- sprintf('permutations=%d, replications=%d, n=%d, p=%d, n.folds=%d, errror bar=%s, balance=%s', n.permutations, n.replications, n, p, n.folds, err.bar, balance)
+
+pvals.1.9.1 <- filter(pvals.1.9, effect==0) %>% select(-effect)
+powers <- cbind(round(apply(pvals.1.9.1, 2, function(x) mean(x<=0.05, na.rm=TRUE)),3))
+powers
+
+
+.limits <- 0.05 + c(-err.bar,0,err.bar)
+# dotchart(powers[,1]); abline(v=.limits, lty=c(3,2,3))
+dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3));title(the.title)
+# dotchart(powers[,1], xlim=c(0.04,0.1)); abline(v=.limits, lty=c(3,2,3)) #;title(the.title)
+
+# pdf(file = paste('Output/',file.name,'zoom.pdf', sep=''))
+# dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3))
+# dev.off()
+```

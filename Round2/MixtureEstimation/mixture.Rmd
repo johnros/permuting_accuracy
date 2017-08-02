@@ -1,0 +1,81 @@
+---
+title: "Mixture"
+author: "Jonathan Rosenblatt"
+date: "9/25/2016"
+output: html_document
+---
+
+# Make likelihood:
+```{r}
+setwd(dir = '~/workspace/Gilron/MixtureEstimation/')
+files <- list.files(pattern = '*.csv')
+
+sigma2star <- function(sigma) log(sigma)
+star2sigma <- function(sigma.star) exp(sigma.star)
+
+p2star <- function(p) log(p/(1-p))
+star2p <- function(p.star) 1/(1+exp(-p.star))
+
+```
+
+```{r}
+for( file.name in files){
+  csv <- read.csv(file=file.name, header = FALSE)
+  n <- table(csv$V2)[1]
+  ts <- length(unique(csv$V2))
+  csv$subject <- rep(1:n, ts)
+  
+  L <- function(p, sigma1, sigma2, mu){
+    n <- nrow(csv)
+    results <-rep(NA, n) 
+    
+    for(i in 1:n){
+      t <- csv$V2[i]
+      x <- csv$V1[i]
+      A <- sigma2/sqrt(t)
+      B <- sqrt(sigma1^2 + sigma2^2/t)
+      results[i] <- (1-p) * dnorm(x, 0, A) + p * dnorm(x, mu, B)
+    }
+    sum(log(results))
+  }
+  ## Testing:
+  # L(0.5, 1, 1, 1)
+  
+  
+  L2 <- function(p.star, sigma1.star, sigma2.star, mu){
+    p <- star2p(p.star)
+    sigma1 <- star2sigma(sigma1.star)
+    sigma2 <- star2sigma(sigma2.star)
+    -L(p, sigma1, sigma2, mu)
+  }
+  ## Testing:
+  # L2(p2star(0.5), sigma2star(1), sigma2star(1), 1)
+  
+  .init <- c(p2star(0.5), sigma2star(1), sigma2star(1), 1)
+  
+  L3 <- function(x){
+    x <- as.list(x)
+    do.call(L2,x)
+  }
+  ## Testing:
+  # L3(.init)
+  
+  # Solve:
+  ml <- optim(par = .init, fn = L3)
+  
+  cat('ROI=', file.name, 'prevalence=', star2p(ml$par[1]), '\n')
+  
+}
+
+
+```
+
+
+
+# Optimize Likelihood
+```{r}
+
+optim()
+```
+
+
