@@ -16,6 +16,7 @@ library(plotly)
 # library(sparsediscrim)
 library(glmnet)
 library(LiblineaR)
+library(data.table)
 
 
 tr <- function(A) sum(diag(A))
@@ -134,26 +135,17 @@ t_cv <- function(FUN, noise, new.labels, old.labels, fold.ids, ...){
 
 
 
-
-
-t_Hotelling <- function(x,y, shrinkage){
-  
-  T2 <- hotelling.stat(x,y, shrinkage=shrinkage)$statistic
-  return(T2)
-  
+t_Oracle <- function(x,y, Sx, Sy){
   x.bar <- colMeans(x)
   y.bar <- colMeans(y)
   delta <- x.bar - y.bar
   
-  Sx <- cov(x)
-  Sy <- cov(y)
-  
   nx <- nrow(x)
   ny <- nrow(y)
   n <- nx + ny
-  nx1 <- nx-1
-  ny1 <- ny-1
-  n1 <- n-2
+  nx1 <- nx
+  ny1 <- ny
+  n1 <- n
   
   S <- (nx1*Sx + ny1*Sy)/n1
   S.inv <- solve(S)
@@ -161,13 +153,22 @@ t_Hotelling <- function(x,y, shrinkage){
   T2 <- delta %*% S.inv %*% delta
   return(T2)
 }
+### Testing:
+# t_Oracle(x = rmvnorm(1e2, rep(0,1e1)),
+#          y = rmvnorm(1e2, rep(0,1e1)),
+#          Sx=diag(1e1), Sy=diag(1e1))
+
+
+
+
+t_Hotelling <- function(x,y, shrinkage){
+  T2 <- hotelling.stat(x,y, shrinkage=shrinkage)$statistic
+  return(T2)
+}
 ## Testing:
-# .p <- 1e0
-# .nx <- 1e1
-# .ny <- 1e1
-# .x <- rmvnorm(.nx, rep(0,.p))
-# .y <- rmvnorm(.ny, rep(0,.p))
-# t2013(.x,.y)
+# t_Hotelling(x = rmvnorm(1e2, rep(0,1e1)), 
+#             y = rmvnorm(1e2, rep(0,1e1)), 
+#             shrinkage = TRUE)
 
 
 

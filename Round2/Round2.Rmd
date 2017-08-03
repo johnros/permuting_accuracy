@@ -5,9 +5,9 @@ date: "8/2/2017"
 output: html_document
 ---
 
-```{r preliminaries}
-the.message <- "n=400"
 
+
+```{r preliminaries}
 source('Gilron Effect of Cross Validatino.R')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
@@ -16,9 +16,8 @@ file.remove(balance.log)
 file.create(balance.log)
 
 n.replications <- 2e2 # 4e3
-err.bar <- round(3*sqrt(.05*.95/(n.replications)),3)
-p <- 23
-n <- 4e1 # 4e2
+p <- 5 #23
+n <- 4e2 # total sample size-> n/2 in each group.
 n.permutations <- 3e1 # 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -32,12 +31,16 @@ Sigma <- diag(p)
 # Sigma <- ar1_cov(p, rho=0.8)
 # Sigma <- comSym_cov(p, rho=0.7) 
 # Sigma <- diag((1:p)*p/sum(1:p))
+
+the.message <- paste("n=",n, sep='')
+
+file.name <- "1"
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r independent noise variable folds}
-registerDoMC(cores=detectCores()-20)
+registerDoMC(cores=80)
 
 # Many statistics are not compute for efficiency. 
 # To compute them, just uncomment them.
@@ -46,17 +49,16 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:%
   foreach(effect=effects, .combine=rbind)  %dopar% {
   # effect <- effects[2]
   
-  # Sample group labels
-  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) 
+  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
   
-  # Sample noise
+  # Gaussian noise
   .noise <- rmvnorm(n=n, sigma = Sigma)
   # t noise
   # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
-  # levelplot(t(.noise))
   
   # Shift alternative:
   noise <- .noise + effect * labels
+  
   # Scale alternative:
   # noise <- .noise * effect ^ labels 
   # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
@@ -68,45 +70,48 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:%
   # noise <- .noise + t(outer(shift, shift.group))
   # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
 
-  # Asign observations to folds. Use the simple label structure to balance folds.
-  fold.ids <- balanced_folding(labels, n.folds, balance = balance)
-  # capture.output(table(fold.ids, labels), file=balanc.log, append = TRUE)
-  
   # Compute observed statistic
   x1 <- noise[labels,]
   x2 <- noise[!labels,]
   
-ts <- list(
-  Hotelling=t_Hotelling(x1, x2, FALSE),
-  Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-  lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-  lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-  lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-  lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-  sd=t_SD(x1, x2),
-  svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-  svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-  svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-  svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-  svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-  svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
-  svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-  svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-)
-
-  # Initialize result containers
+  # Asign observations to folds. Use the simple label structure to balance folds.
+  fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+  # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
+ 
+  # Observables 
+  ts <- list(
+    Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+    Hotelling=t_Hotelling(x1, x2, FALSE),
+    Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+    lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+    lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+    lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+    lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+    sd=t_SD(x1, x2),
+    svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+    svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+    svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+    svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+    svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+    svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+    svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+    svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+  )
   
-  permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
   
+  # Prepare to permute
   old.labels <- labels
   old.folds.ids <- fold.ids
   statistics.names <- names(ts)
   
+  # Initialize permuted statistics
+  permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+  
   for(i in 1:n.permutations){
     # i <- 1
     
-    labels <- sample(labels) 
-    fold.ids <- balanced_folding(labels, n.folds, balance) # refolding.
+    labels <- sample(labels) # make permutation
+    fold.ids <- balanced_folding(labels, n.folds, balance) # refold
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
     
@@ -117,8 +122,8 @@ ts <- list(
     # .indexes <- sample(seq(n))
     #  .noise <- noise[.indexes,] 
     
-    
     permuted[i,] <- c(
+      Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
@@ -137,56 +142,31 @@ ts <- list(
     )
   } # End permutation
   
+  # Compute p-vals for each statistic
+  pvals <- rep(NA, length(ts))
+  for(i in seq_along(ts)){
+    pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+  }
   
-  pvals <- mapply(my.ecdf, matrix2list(permuted), ts)
-
   c(effect=effect, pvals) 
 }
 pbPost("note", "Done", the.message)
-
-# file.name <- as.character(Sys.time())
 # save.image(file=file.name)
 ```
 
 
+
 ```{r analyze multiple effects}
-# load(file='2016-07-27 11:42:05') # balanced
-# load(file='2016-07-26 20:55:48') # unbalanced
-# load(file='2016-07-27 21:21:12') # 2 folds. balanced.
-# load(file='2016-08-04 13:59:33') # n=400
-# load(file='2016-07-30 10:33:05') # scale change
-# load(file='2016-08-05 09:37:35') # 2 folds. unbalanced.
-# load(file='2016-08-06 07:57:22') # 20 folds. unbalanced.
-# load(file='2016-08-07 20:11:46') # AR(1)
-# load(file='2016-08-08 07:33:05') # Golland alternative
-# load(file='2016-08-11 08:32:39') # n=400, small effects
-
-
+err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
-pvals.1.9 %<>%  tbl_df
-names(pvals.1.9)[-1] <- c('Hotelling','Hotelling.shrink', 'lda.CV.1', 'lda.CV.2', 'lda.noCV.1', 'lda.noCV.2',  'sd','svm.CV.1', 'svm.CV.2', 'svm.CV.3',  'svm.CV.4','svm.noCV.1', 'svm.noCV.2', 'svm.noCV.3','svm.noCV.4')
+pvals.1.9 %<>%  as.data.table()
+
+names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
   
-pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') %>% tbl_df
+pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 
-pvals.melt %<>% mutate(
-  reject= as.numeric(value <= 0.05),
-  effect.factor=as.factor(effect)) 
-
-
-plot.2 <- pvals.melt %>% 
-  # ggplot(aes(y=reject, x=effect, group=statistic, color=statistic, shape=statistic)) +
-  ggplot(aes(y=reject, x=effect, group=statistic, color=statistic)) +
-  theme_bw(base_size = 20)+
-  # ggtitle("Fixed signal, Gaussian Noise")+
-  xlab('Effect')+
-  ylab('Power')+
-  stat_summary(fun.y='mean', geom="line") +
-  # stat_summary(fun.data = mean_cl_normal, geom = "errorbar")
-  stat_summary(fun.y='mean', geom="point") +
-  geom_hline(yintercept=.limits, lty=c(3,2,3))
-
-plot.2
+pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
 
 
@@ -202,14 +182,11 @@ plot.3 <- pvals.melt %>%
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+
   coord_flip()
-
 plot.3
 
 # pdf(file = paste('Output/',file.name,'.pdf', sep=''))
 # plot.3
 # dev.off()
-
-# ggplotly(plot.2)
 ```
 
 
@@ -231,958 +208,3 @@ dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3));title(the.t
 # dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3))
 # dev.off()
 ```
-
-
-```{r}
-for(i in 2:ncol(pvals.1.9.1)){
-  plot(table(pvals.1.9.1[,i]))
-  title(paste(names(pvals.1.9.1[i])))
-}
-```
-
-
-
-```{r na counts}
-for(i in 2:ncol(pvals.1.9.1)){
-  plot(table(is.na(pvals.1.9.1[,i])))
-  title(paste(names(pvals.1.9.1[i])))
-}
-```
-
-
-
-Some more analysis:
-```{r}
-image(pvals.1.9)
-colnames(pvals.1.9)
-rownames(pvals.1.9) <- NULL
-apply(pvals.1.9, 2, function(x) length(unique(x)))
-
-image(pvals.1.9, col= terrain.colors(500))
-dotplot(t(pvals.1.9))
-pvals.1.9.melt <- reshape2::melt((pvals.1.9), id.vars = NULL)
-ggplot(pvals.1.9.melt[1:1.2e4,], aes(x = value, y = Var2)) + geom_point(alpha=0.1) #+ scale_x_continuous(trans='log')
-
-ggplot(pvals.1.9.melt, aes(x = Var2, y = value)) + geom_violin()
-
-```
-
-```{r}
-unif.sample <- runif(n.permutations)
-for(j in 1:ncol(pvals.1.9)){
-  # j <- 1
-  qqplot(pvals.1.9[,j], unif.sample, main=paste(colnames(pvals.1.9)[j]))
-  qqline(pvals.1.9[,j], distribution = qunif)
-  invisible(readline(prompt = 'Press [Return]'))
-}
-```
-
-
-
-
-
-#################################################################
-Deprecated code
-#################################################################
-
-# Deprecated
-
-## Fixed folds. Cross-Validated. Test __is__ permuted.
-
-```{r independent noise variable folds}
-train.prop <- NA
-(labels <- c(rep(TRUE, n/2), rep(FALSE,n/2))) # group asignemtn labels
-n.folds <- 5
-cost <- 1e0
-effect <- 1e-1
-
-registerDoMC(cores=50)
-
-pvals.1.3 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  .noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  noise <- .noise + effect * labels
-  # plot(noise, col=labels+1, cex=1)
-  
-  fold.ids <- sample(rep(1:n.folds, length=n))
-  
-  x1 <- noise[labels,]
-  x2 <- noise[!labels,]
-  
-  t.Hotelling <- t_Hotelling(x1, x2) # compute observes Hotelling
-  t.SD <- t_SD(x1, x2)
-  t.SVM.CV <- t_svm_cv(noise, labels, fold.ids, cost=cost)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)  
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .x1 <- noise[.labels,]
-    .x2 <- noise[!.labels,]
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x1, .x2) 
-    permuted.SD[i] <-  t_SD(.x1, .x2)
-    permuted.svm[i] <-  t_svm_cv(noise, .labels, fold.ids, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pvals.sd)
-}
-```
-
-
-```{r }
-my.summary(pvals.1.3)
-```
-
-
-
-## Fixed folds. CV instead of Holdoutout (test __not__ permuted)
-
-```{r independent noise variable folds}
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-n.folds <- 2
-cost <- 1e-1
-effect <- 2e-1
-
-registerDoMC(cores=50)
-
-pvals.1.3.1 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  .noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  noise <- .noise + effect * labels
-  
-  fold.ids <- sample(rep(1:n.folds, length=n))
-  
-  x.train <- noise[labels,]
-  y.train <- noise[!labels,]
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SD <- t_SD(x.train, y.train)
-  t.SVM.CV <- t_svm_cv(noise, labels, fold.ids, cost=cost)
-  
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)  
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .x.train <- noise[.labels,]
-    .y.train <- noise[!.labels,]
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-    permuted.svm[i] <-  t_svm_cv_2(noise, .labels, labels, fold.ids, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r }
-my.summary(pvals.1.3.1)
-```
-
-
-
-
-
-## Fixed holdout 
-
-### Shuffle train only
-
-```{r independent noise fixed folds}
-train.prop <- 5/10
-train.count <- n * train.prop
-train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-cost <- 1e-1
-effect <- 0
-
-registerDoMC(cores=50)
-
-pvals.1 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  .noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  noise <- .noise + effect* labels
-  
-  train.noise <- noise[train.ind, ]
-  train.labels <- labels[train.ind]
-  test.noise <- noise[!train.ind, ]
-  test.labels <- labels[!train.ind]
-  
-  x.train <- noise[labels,] 
-  y.train <- effect + noise[!labels,]  
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SD <- t_SD(x.train, y.train)
-  t.SVM.CV <- t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels)
-    .train.labels <- .labels[train.ind]
-    
-    .x.train <- noise[.labels,]
-    .y.train <- noise[!.labels,]
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-    permuted.svm[i] <-  t_svm(train.noise, .train.labels, test.noise, test.labels, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r}
-my.summary(pvals.1)
-```
-
-
-
-### Shuffle train and test
-
-```{r independent noise fixed folds}
-train.prop <- 5/10
-train.count <- n * train.prop
-train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-cost <- 1e0
-effect <- 1e-1
-
-registerDoMC(cores=50)
-
-pvals.1.4 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  .noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  noise <- .noise + effect * labels
-  
-  train.noise <- noise[train.ind, ]
-  train.labels <- labels[train.ind]
-  test.noise <- noise[!train.ind, ]
-  test.labels <- labels[!train.ind]
-  
-  x.train <- noise[train.labels,] 
-  y.train <- noise[!train.labels,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SD <- t_SD(x.train, y.train)
-  t.SVM.CV <- t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-  .labels <- sample(labels)
-  .train.labels <- .labels[train.ind]
-  .test.labels <- .labels[!train.ind]
-  
-  .x.train <- noise[.train.labels,] 
-  .y.train <- noise[!.train.labels,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-    permuted.svm[i] <-  t_svm(train.noise, .train.labels, test.noise, .test.labels, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r}
-# boxplot(pvals.1, main='White noise, Random Holdout')
-my.summary(pvals.1.4)
-```
-
-
-### No holdout, shuffle train only
-
-```{r independent noise fixed folds no cross validation}
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-
-train.prop <- 8/10
-train.count <- n*train.prop
-cost <- 1e0
-
-
-registerDoMC(cores=50)
-
-pvals.1.2 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-  
-  train.noise <- noise[train.ind, ]
-  train.labels <- labels[train.ind]
-  test.noise <- noise[!train.ind, ]
-  test.labels <- labels[!train.ind]
-  
-  x.train <- noise[train.labels,] 
-  y.train <- noise[!train.labels,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .train.labels <- sample(train.labels)
-    .x.train <- train.noise[.train.labels,]
-    .y.train <- train.noise[!.train.labels,]
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-    permuted.svm[i] <-  t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r }
-# boxplot(pvals.1.2, main='White noise, Random Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d, train.prop=%s', cost, n.permutations, n.replications, n, p, train.prop)
-apply(pvals.1.2, 2, function(x) mean(x<0.05))
-```
-
-
-### No holdout, shuffle train and test
-
-```{r independent noise fixed folds no cross validation}
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-
-train.prop <- 5/10
-train.count <- n*train.prop
-cost <- 1e0
-
-registerDoMC(cores=50)
-
-pvals.1.5 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-  
-  train.noise <- noise[train.ind, ]
-  train.labels <- labels[train.ind]
-  test.noise <- noise[!train.ind, ]
-  test.labels <- labels[!train.ind]
-  
-  x.train <- noise[train.labels,] 
-  y.train <- noise[!train.labels,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SD <- t_SD(x.train, y.train)
-  t.SVM.CV <- t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .train.labels <- sample(train.labels)
-    .x.train <- train.noise[.train.labels,]
-    .y.train <- train.noise[!.train.labels,]
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-    permuted.svm[i] <-  t_svm(train.noise, train.labels, test.noise, test.labels, cost=cost)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r }
-# boxplot(pvals.1.2, main='White noise, Random Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d, train.prop=%s', cost, n.permutations, n.replications, n, p, train.prop)
-apply(pvals.1.5, 2, function(x) mean(x<0.05))
-```
-
-
-
-## Refolding in each permutation
-
-```{r independent noise variable folds}
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-train.prop <- 8/10
-train.count <- n*train.prop
-cost <- 1e1
-
-registerDoMC(cores=50)
-
-pvals.1.1 <- foreach(j=1:n.replications, .combine=rbind) %dopar% {
-  noise <- rmvnorm(n, sigma = Sigma) # generate noise
-  
-  data <- data.frame(label=labels, noise)
-  train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    .train.ind <- sample(train.ind)
-    .train <- .data[.train.ind,]
-    .test <- .data[!.train.ind,]
-    
-    .x.train <- noise[.labels&.train.ind,] 
-    .x.test <- noise[.labels&!.train.ind,] 
-    .y.train <- noise[!.labels&.train.ind,] 
-    .y.test <- noise[!.labels&!.train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1-ecdf(permuted.svm)(t.SVM.CV)
-  pvals.sd <- 1-ecdf(permuted.SD)(t.SD)
-  
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD= pvals.sd)
-}
-```
-
-
-```{r }
-# boxplot(pvals.1.1, main='White noise, Random Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d, train.prop=%s', cost, n.permutations, n.replications, n, p, train.prop)
-apply(pvals.1.1, 2, function(x) mean(x<0.05))
-```
-
-
-
-
-
-
-
-# AR dependence
-AR1 will cause strong dependence **within** groups.
-
-
-```{r make AR correlation}
-image(Sigma.ar1 <- ar1_cov(p, rho=0.7) )
-```
-
-
-
-## No holdout
-```{r AR noise no holdout}
-train.count <- n*6/10
-
-registerDoMC(cores=50)
-
-pvals.2.0 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.ar1) # generate noise
-  
-  data <- data.frame(label=labels, noise)
-  train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, train, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .train, cost=cost)
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.2.0, main='AR1 noise, No Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.2.0, 2, function(x) mean(x<0.05))
-```
-
-
-## Random holdout
-
-```{r AR noise random holdout}
-train.count <- n*6/10
-
-registerDoMC(cores=50)
-
-pvals.2 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.ar1) # generate noise
-  
-  data <- data.frame(label=labels, noise)
-  train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train, y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD <- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <-  t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.2, main='AR1 noise, Random Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.2, 2, function(x) mean(x<0.05))
-```
-
-
-
-
-
-
-
-
-## Spread holdout
-```{r }
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-train.prop <- 6
-test.prop <- 4
-train.count <- n*train.prop/(train.prop+test.prop)
-n.blocks <- n %/% (train.prop+test.prop)
-
-registerDoMC(cores=50)
-pvals.3 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.ar1) # generate noise
-  
-  train.ind <- rep(c(rep(TRUE, train.prop),rep(FALSE, test.prop)), n.blocks)
-    
-  data <- data.frame(label=labels, noise)
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train,y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD<- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <- t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.3, main='AR1 noise, Spread Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.3, 2, function(x) mean(x<0.05))
-```
-
-
-
-## Groupped holdout
-```{r }
-train.prop <- 6
-test.prop <- 4
-train.count <- n*train.prop/(train.prop+test.prop)
-test.count <- n-train.count
-n.blocks <- n %/% (train.prop+test.prop)
-
-registerDoMC(cores=50)
-pvals.4 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.ar1) # generate noise
-  
-  train.ind <- c(rep(TRUE, train.count), rep(FALSE, test.count))
-    
-  data <- data.frame(label=labels, noise)
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train,y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD<- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <- t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.4, main='AR noise, Close Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.4, 2, function(x) mean(x<0.05))
-```
-
-
-
-
-# Compound Symmetry dependence
-CS will cause dependence **between** groups.
-
-
-```{r}
-image(Sigma.CS1 <- comSym_cov(p, rho=0.7) )
-```
-
-
-## Random holdout
-```{r }
-train.count <- n*6/10
-
-registerDoMC(cores=50)
-pvals.5 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.CS1) # generate noise
-  
-  data <- data.frame(label=labels, noise)
-  train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train,y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD<- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <- t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.5, main='CS noise, Random Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.5, 2, function(x) mean(x<0.05))
-```
-
-
-## Spread holdout
-```{r }
-train.prop <- 6
-test.prop <- 4
-train.count <- n*train.prop/(train.prop+test.prop)
-n.blocks <- n %/% (train.prop+test.prop)
-
-registerDoMC(cores=50)
-pvals.6 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.CS1) # generate noise
-  
-  train.ind <- rep(c(rep(TRUE, train.prop),rep(FALSE, test.prop)), n.blocks)
-    
-  data <- data.frame(label=labels, noise)
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train,y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD<- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <- t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.6, main='CS noise, Far Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.6, 2, function(x) mean(x<0.05))
-```
-
-
-
-## Groupped holdout
-```{r }
-labels <- c(rep(TRUE, n/2), rep(FALSE,n/2)) # group asignemtn labels
-train.prop <- 6
-test.prop <- 4
-train.count <- n*train.prop/(train.prop+test.prop)
-n.blocks <- n %/% (train.prop+test.prop)
-
-registerDoMC(cores=50)
-pvals.7 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  noise <- rmvnorm(n, sigma = Sigma.CS1) # generate noise
-  
-  train.ind <- c(rep(TRUE, train.count), rep(FALSE, test.count))
-    
-  data <- data.frame(label=labels, noise)
-  train <- data[train.ind,]
-  test <- data[!train.ind,]
-  
-  x.train <- noise[labels&train.ind,] 
-  x.test <- noise[labels&!train.ind,] 
-  y.train <- noise[!labels&train.ind,] 
-  y.test <- noise[!labels&!train.ind,] 
-  
-  t.Hotelling <- t_Hotelling(x.train,y.train) # compute observes Hotelling
-  t.SVM.CV <- t_svm(train, test, cost=cost)
-  t.SD <- t_SD(x.train, y.train)
-  
-  permuted.Hotelling <- rep(NA, n.permutations)
-  permuted.svm <- rep(NA, n.permutations)
-  permuted.SD<- rep(NA, n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
-    .labels <- sample(labels) # freely shuffle labels
-    .data <- data.frame(label=.labels, noise)
-    # Is the fold recomputed in every permutation?
-    # train.ind <- sample(c(rep(TRUE,train.count), rep(FALSE, n-train.count)))
-    .train <- .data[train.ind,]
-    .test <- .data[!train.ind,]
-    
-    .x.train <- noise[.labels&train.ind,] 
-    .x.test <- noise[.labels&!train.ind,] 
-    .y.train <- noise[!.labels&train.ind,] 
-    .y.test <- noise[!.labels&!train.ind,] 
-    
-    permuted.Hotelling[i] <- t_Hotelling(.x.train, .y.train) # compute observes Hotelling
-    permuted.svm[i] <-  t_svm(.train, .test, cost=cost)
-    permuted.SD[i] <- t_SD(.x.train, .y.train)
-  }
-  
-  pval.Hotelling <- 1-ecdf(permuted.Hotelling)(t.Hotelling) # permutation pvalue
-  pval.svm <- 1 - ecdf(permuted.svm)(t.SVM.CV)
-  pval.SD <- 1 - ecdf(permuted.SD)(t.SD)
-  c(Hotelling= pval.Hotelling, SVM=pval.svm, SD=pval.SD)
-}
-```
-
-
-```{r }
-# boxplot(pvals.7, main='CS noise, Close Holdout')
-sprintf('cost=%s, permutations=%d, replications=%d, n=%d, p=%d', cost, n.permutations, n.replications, n, p)
-apply(pvals.7, 2, function(x) mean(x<0.05))
-```
-
-
-```{r save image}
-save.image(file = '~/workspace/Gilron_cross_validation_effect.RData')
-```
-
