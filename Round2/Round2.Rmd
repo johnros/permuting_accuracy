@@ -1,27 +1,25 @@
 ---
-title: "Cross validation effect"
+title: "Round2"
 author: "Jonathan Rosenblatt"
-date: "June 8, 2016"
+date: "8/2/2017"
 output: html_document
 ---
-
 
 ```{r preliminaries}
 the.message <- "n=400"
 
-setwd('~/workspace/Gilron/')
 source('Gilron Effect of Cross Validatino.R')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-balanc.log <- 'balance_log.txt'
-file.remove(balanc.log)
-file.create(balanc.log)
+balance.log <- 'balance_log.txt'
+file.remove(balance.log)
+file.create(balance.log)
 
-n.replications <- 2e3 # 4e3
+n.replications <- 2e2 # 4e3
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3)
 p <- 23
-n <- 4e2
-n.permutations <- 3e2
+n <- 4e1 # 4e2
+n.permutations <- 3e1 # 3e2
 n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
@@ -39,17 +37,19 @@ Sigma <- diag(p)
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r independent noise variable folds}
-registerDoMC(cores=50)
+registerDoMC(cores=detectCores()-20)
 
 # Many statistics are not compute for efficiency. 
 # To compute them, just uncomment them.
 
-pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=effects, .combine=rbind)  %dopar% {
+pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% 
+  foreach(effect=effects, .combine=rbind)  %dopar% {
   # effect <- effects[2]
   
-  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
+  # Sample group labels
+  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) 
   
-  # Gaussian noise
+  # Sample noise
   .noise <- rmvnorm(n=n, sigma = Sigma)
   # t noise
   # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
@@ -143,6 +143,7 @@ ts <- list(
   c(effect=effect, pvals) 
 }
 pbPost("note", "Done", the.message)
+
 # file.name <- as.character(Sys.time())
 # save.image(file=file.name)
 ```
