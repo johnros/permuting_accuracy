@@ -157,19 +157,18 @@ where $|A|$ denotes the cardinality of a set $A$.
 
 
 
-\subsection{Candidate Tests}
+\subsection{A Battery of Candidate Tests}
 \label{sec:considerations}
 
 The design of a permutation test using $\accEstim_{\algo}$ requires the following design choices: 
 \begin{enumerate}
-\item Is $\accEstim_{\algo}$ cross validated or not?
+\item How to estimate $\accEstim_{\algo}$? In particular, is it resampled?
 \item For a V-fold cross validated test statistic:
 \begin{enumerate}
 \item Should the data be refolded in each permutation? 
 \item Should the data folding be balanced (a.k.a.\ stratified)?
 \item How many folds? 
 \end{enumerate}
-\item How to estimate $\accEstim_{\algo}$?
 \end{enumerate}
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
@@ -183,7 +182,7 @@ We will thus be considering both cross validated accuracies, and resubstitution 
 \paragraph{Balanced folding?}
 The standard practice when cross validating is to constrain the data folds to be balanced, i.e. stratified \citep[e.g.][]{ojala_permutation_2010}.
 This means that each fold has the same number of examples from each class. 
-We will report results with both balanced and unbalanced data foldings, only to discover, it does not seem to matter. 
+We will report results with both balanced and unbalanced data foldings. 
 
 
 \paragraph{Refolding?}
@@ -195,61 +194,49 @@ We will adhere to this practice due to its popularity, even though it can be avo
 Different authors suggest different rules for the number of folds. 
 We will look into the effect of the number of folds. 
 
-\paragraph{How to estimate accuracy?}
-\label{sec:estimate_accuracy}
-Lower than $0.5$ accuracies, known as \emph{anti-learning}, are evidence that signal is present and classes are separated. Given out detection purposes, we should consider the departure from chance level $|\accEstim_{\algo}-0.5|$ as candidate test statistic.
-For unbalanced classes, chance level is not $0.5$, but rather the the probability of the majority class, which we denote by $\majority$.
-This suggests the following test statistic $|\accEstim_{\algo}-\majority|$.
-Since we will be aggregating these statistics over random data sets where $\majority$ may vary, it seems appropriate to standardize the scale. 
-We thus study, along with the naive accuracy estimate, $\accEstim_{\algo}$ , also the \emph{z-scored accuracy} of algorithm $\algo$:
-\begin{align}
-\label{eq:z_scored_accuracy}
-	\accZ_{\algo} := \frac{|\accEstim_{\algo}-\majority|}{\sqrt{\majority(1-\majority)}}.
-\end{align} 
-
-\bigskip
-
 Table~\ref{tab:collected} collects an initial battery of tests we will be comparing. 
 \begin{tcolorbox}
 \centering
-\begin{tabular}{l|c|c|c|c}
-Name & Algorithm & Accuracy & Z-scored & Parameters\\ 
+\begin{tabular}{l|c|c|c}
+Name & Algorithm & Accuracy & Parameters\\ 
 \hline
 \hline
-Hotelling & Hotelling & -- & -- & -- \\ 
-Hotelling.shrink & Hotelling & -- & -- & -- \\ 
-sd & Hotelling & -- & -- & -- \\ 
-lda.CV.1 	& LDA & V-fold 			& FALSE 	&  -- \\ 
-lda.CV.2 	& LDA & V-fold 			& TRUE 	& -- \\ 
-lda.noCV.1 	& LDA & Resubstitution 	& FALSE 	&  --\\ 
-lda.noCV.2 	& LDA & Resubstitution 	& TRUE 	&  --\\ 
-svm.CV.1 	& SVM & V-fold 			& FALSE & cost=$10$ \\ 
-svm.CV.2 	& SVM & V-fold 			& FALSE & cost=$0.1$ \\ 
-svm.CV.3 	& SVM & V-fold 			& TRUE 	& cost=$10$ \\ 
-svm.CV.4 	& SVM & V-fold 			& TRUE 	& cost=$0.1$ \\ 
-svm.noCV.1 	& SVM & Resubstitution 	& FALSE & cost=$10$ \\ 
-svm.noCV.2 	& SVM & Resubstitution 	& FALSE & cost=$0.1$ \\ 
-svm.noCV.3 	& SVM & Resubstitution 	& TRUE 	& cost=$10$ \\ 
-svm.noCV.4 	& SVM & Resubstitution 	& TRUE 	& cost=$0.1$ \\
+Hotelling & Hotelling & -- & -- \\ 
+Hotelling.shrink & Hotelling & -- & -- \\ 
+sd & Hotelling & -- & -- \\ 
+lda.CV.1 	& LDA & V-fold 			&  -- \\ 
+lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
+svm.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
+svm.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
+svm.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
+svm.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
 This table collects the various test statistics we will be studying. 
-Three are location tests: \emph{Hotelling}, \emph{Hotelling.shrink}, and \emph{sd}.
+Location tests include: Oracle, Hotelling, Hotelling.shrink, and SD.
 \textit{Hotelling} is the classical two-group $T^2$ statistic. 
-\textit{Hotelling.shrink} is a high dimensional version with the regularized covariance from \citet{schafer_shrinkage_2005}. 
-\textit{sd} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
-The rest of the tests are variations of the linear SVM, and Fisher's LDA, with varying accuracy measures, cross validated or not, and varying tuning parameters. 
-For example, \textit{svm.CV.4} is a linear SVM (implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015}),
-the cost parameter set at $0.1$, and using the cross validated z-scored accuracy in Eq.~\ref{eq:z_scored_accuracy}.
-Another example is \textit{lda.noCV.1}, which is Fisher's LDA, returning the resubstitution accuracy.}
+\textit{Oracle} is the same as Hotelling, only using the generative covariance, and not an estimated one.
+\textit{Hotelling.shrink} is a high dimensional version of $T^2$, with the regularized covariance from \citet{schafer_shrinkage_2005}. 
+\textit{SD} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
+The rest of the tests are accuracy tests, with details given in the table. 
+For example, \textit{svm.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$.
+Another example is \textit{lda.noCV.1}, which is Fisher's LDA, with a substituted accuracy estimate.}
 \label{tab:collected}
 \end{tcolorbox}
 
 
+\subsection{Collecting the Pieces Into a Permutation Test}
+The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
+Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not kick in and we recur to permutation tests.
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is exact. 
 
-
-
+The sketch of our test is the following:
+\begin{enumerate}\itemsep0em 
+	\item Set $\statistic$ to be any of the statistics in Table~\ref{tab:collected}.
+	\item Permute labels to recover the null distribution of $\statistic$. 
+	\item Declare classes differ if the observed $\statistic$ is beyond its $95\%$'th permutation percentile.  
+\end{enumerate}
 
 
 %%%% Section %%%%
@@ -746,6 +733,8 @@ and related ``data science'' communities.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 \section{Simulation Details}
 \label{apx:simulation_details}
+
+[TODO: Add (Implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015})]
 
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
 The \R code for the simulations can be found in [TODO].
