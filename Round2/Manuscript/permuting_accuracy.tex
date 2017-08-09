@@ -110,41 +110,48 @@ In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the numbe
 
 Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
+The comparison metric between test statistics, $\statistic$, will thus be their power, i.e., the probability that $\statistic$ infers that $\features|\outcomes=1$ is not distributed like $\features|\outcomes=-1$.
 
-An accuracy test amounts to learning a predictive model and testing if its predictions of $y|x$ are better than chance. 
-Denoting a dataset by $\data:=(\features_i,\outcomes_i)_{i=1}^n$, the a predictor, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
-The accuracy of predictor\footnote{Known as the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
-The accuracy of an algorithm\footnote{Known as the \emph{expected test error} in \cite{hastie_elements_2003}}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+
+
+
+\subsection{Accuracy Measures as Test Statistics}
+We now define the predictive accuracy measure, and consider it as a test statistic.
+An accuracy test amounts to learning a predictive model and setting $\statistic$ to be some measure of the departure of the accuracy from its chance level.  
+
+Denoting a dataset by $\data:=\{\features_i,\outcomes_i\}_{i=1}^n$, a predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
+The accuracy of predictor\footnote{Known as the complement of the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
+The accuracy of an algorithm\footnote{Known as the complement of the \emph{expected test error} in \cite{hastie_elements_2003}}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formally-- denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample in $\data$, then
 \begin{align}
 	\acc_{\hyp}:=\int_{(\features,\outcomes)} \indicator{\hyp(\features)=\outcomes} \; d\measure(\features,\outcomes),
 \end{align}
 and
 \begin{align}
-	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren(\data).
-\end{align}
-Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, 
-a statistically significant ``better than chance'' estimate of either,  is evidence that the classes are distinct. 
-In a typical application, the predictor is not fixed, so that $\accEstim_{\algo}$, and not $\accEstim_{\hyp}$, will be used for the testing. 
-
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}, and the V-fold cross validation (CV) estimate.
-\begin{definition}[Resubstitution estimate]
-\label{def:resubstitution}
-The resubstitution accuracy estimator, $\accEstim_{\algo}^{Resub}$,  is defined as
-\begin{align}
-	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features_i}=\outcomes_i}, 
+	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,
 \end{align}
 where $\indicator{A}$ is the indicator function of event $A$. 
+
+Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
+
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}\footnote{Known as the \emph{train error} in \cite{hastie_elements_2003}.}, and the V-fold Cross Validation (CV) estimate.
+\begin{definition}[Resubstitution estimate]
+\label{def:resubstitution}
+The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
+\begin{align}
+	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features_i}=\outcomes_i}.
+\end{align}
 \end{definition}
 
 
 \begin{definition}[V-fold CV estimate]
 \label{def:v-fold}
-Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, $\accEstim_{\algo}^{Vfold}$, is defined as 	
+Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, denoted $\accEstim_{\algo}^{Vfold}$, is defined as 	
 \begin{align}
 	\accEstim_{\algo}^{Vfold} := 
-	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i}, 
+	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i},
 \end{align}
+where $|A|$ denotes the cardinality of a set $A$.
 \end{definition}
 
 
