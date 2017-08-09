@@ -1,6 +1,6 @@
 #### Now with the cleaned up code ####
 
-File name: 2016-07-26 20:55:48
+File name: "file1"
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -9,11 +9,11 @@ File name: 2016-07-26 20:55:48
   Replications: 4e3
   n=40
   p=23
-  Folds: 8
+  Folds: 8   # takes a very long time!
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-07-27 11:42:05
+File name: "file2"
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
