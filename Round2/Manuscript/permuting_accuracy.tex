@@ -104,13 +104,13 @@ A discussion follows in Section~\ref{sec:discussion}.
 \section{Problem setup}
 \label{sec:problem_setup}
 
-Let $\outcomes \in \outcomeS$ be a class encoding. 
-Let $\features \in \featureS$ be a $p$ dimensional feature vector. 
-In our vocal/non-vocal example we have $\outcomeS=\set{-1,1}$ and $p$, the number of voxels in a brain region so that $\featureS=\reals^{27}$. 
+Let $y \in y$ be a class encoding. 
+Let $x \in x$ be a $p$ dimensional feature vector. 
+In our vocal/non-vocal example we have $y=\set{-1,1}$ and $p$, the number of voxels in a brain region so that $x=\reals^{27}$. 
 
-Given $n$ pairs of $(\features_i,\outcomes_i)$, typically assumed i.i.d., a location test amounts to testing whether $\features|\outcomes=1$ has the the same distribution as $\features|\outcomes=-1$. 
+Given $n$ pairs of $(x_i,y_i)$, typically assumed i.i.d., a location test amounts to testing whether $x|y=1$ has the the same distribution as $x|y=-1$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
-The comparison metric between test statistics, $\statistic$, will thus be their power, i.e., the probability that $\statistic$ infers that $\features|\outcomes=1$ is not distributed like $\features|\outcomes=-1$.
+The comparison metric between test statistics, $\statistic$, will thus be their power, i.e., the probability that $\statistic$ infers that $x|y=1$ is not distributed like $x|y=-1$.
 
 
 
@@ -119,12 +119,12 @@ The comparison metric between test statistics, $\statistic$, will thus be their 
 We now define the predictive accuracy measure, and consider it as a test statistic.
 An accuracy test amounts to learning a predictive model and setting $\statistic$ to be some measure of the departure of the accuracy from its chance level.  
 
-Denoting a dataset by $\data:=\{\features_i,\outcomes_i\}_{i=1}^n$, a predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\featureS \to \outcomeS$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
+Denoting a dataset by $\data:=\{x_i,y_i\}_{i=1}^n$, a predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:x \to y$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
 The accuracy of predictor\footnote{Known as the complement of the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
 The accuracy of an algorithm\footnote{Known as the complement of the \emph{expected test error} in \cite{hastie_elements_2003}}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
-Formally-- denoting by $\measure$ the probability measure of $(\features, \outcomes)$, and by $\measuren$ the same for the i.i.d sample in $\data$, then
+Formally-- denoting by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the same for the i.i.d sample in $\data$, then
 \begin{align}
-	\acc_{\hyp}:=\int_{(\features,\outcomes)} \indicator{\hyp(\features)=\outcomes} \; d\measure(\features,\outcomes),
+	\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure(x,y),
 \end{align}
 and
 \begin{align}
@@ -139,7 +139,7 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estima
 \label{def:resubstitution}
 The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
 \begin{align}
-	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{\features_i}=\outcomes_i}.
+	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{x_i}=y_i}.
 \end{align}
 \end{definition}
 
@@ -149,7 +149,7 @@ The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $
 Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, denoted $\accEstim_{\algo}^{Vfold}$, is defined as 	
 \begin{align}
 	\accEstim_{\algo}^{Vfold} := 
-	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{\features_i}=\outcomes_i},
+	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{x_i}=y_i},
 \end{align}
 where $|A|$ denotes the cardinality of a set $A$.
 \end{definition}
@@ -229,7 +229,7 @@ Another example is \textit{lda.noCV.1}, which is Fisher's LDA, with a substitute
 \subsection{Collecting the Pieces Into a Permutation Test}
 The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
 Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not kick in and we recur to permutation tests.
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is exact. 
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is either exact or conservative, but never anti-conservative. 
 
 The sketch of our test is the following:
 \begin{enumerate}\itemsep0em 
@@ -239,13 +239,17 @@ The sketch of our test is the following:
 \end{enumerate}
 
 
+
+
+
 %%%% Section %%%%
-\section{Controlling the False Positive Rate}
+\section{Results}
+\subsection{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-Our simulations show that all of the tests considered conserve the desired $0.05$ false positive rate, up to varying levels of conservatism.
-This can be seen from the fact that the probability of rejection is no higher than $0.05$ in the absence of any effect, encoded by a red circle. 
-This is true, in particular if: \newline
+Theory suggests that all permutation tests should be exact, i.e., exactly control the false positive rate. 
+Our simulations confirm this: in Figure~\ref{fig:simulation_1}, and all the following, a red circle encodes the null case,  where no signal is present and $x|y=1$ has the same distribution as $x|y=-1$.
+We see that the permutation test is exact for all candidate test statistics. In particular if: \newline
 (a) The folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
 (b) The tuning parameters are varied (cost=$10$ versus cost=$0.1$). \newline
 (c) The number of folds is varied (Figures \ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
@@ -416,12 +420,12 @@ Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacemen
 Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
 The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
 \begin{align}
-		\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
+		\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
 \end{align}
 where $|A|$ is the cardinality of set $A$.
 Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
 \begin{align}
-	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{\features_i}=\outcomes_i}.
+	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
 \end{align}
 \end{definition}
 
