@@ -198,18 +198,19 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c}
-Name & Algorithm & Accuracy & Parameters\\ 
+Name & Algorithm & Resampling & Parameters\\ 
 \hline
 \hline
-Hotelling & Hotelling & -- & -- \\ 
-Hotelling.shrink & Hotelling & -- & -- \\ 
-sd & Hotelling & -- & -- \\ 
-lda.CV.1 	& LDA & V-fold 			&  -- \\ 
-lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
-svm.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
-svm.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
-svm.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
-svm.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
+Hotelling & Hotelling & Resubstitution & -- \\ 
+Oracle & Hotelling & Resubstitution & -- \\ 
+Hotelling.shrink & Hotelling & Resubstitution & -- \\ 
+SD & Hotelling & Resubstitution & -- \\ 
+LDA.CV.1 	& LDA & V-fold 			&  -- \\ 
+LDA.noCV.1 	& LDA & Resubstitution 	&  --\\ 
+LDA.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
+SVM.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
+SVM.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
+SVM.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
@@ -220,8 +221,8 @@ Location tests include: Oracle, Hotelling, Hotelling.shrink, and SD.
 \textit{Hotelling.shrink} is a high dimensional version of $T^2$, with the regularized covariance from \citet{schafer_shrinkage_2005}. 
 \textit{SD} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
 The rest of the tests are accuracy tests, with details given in the table. 
-For example, \textit{svm.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$.
-Another example is \textit{lda.noCV.1}, which is Fisher's LDA, with a substituted accuracy estimate.}
+For example, \textit{SVM.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$.
+Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstituted accuracy estimate.}
 \label{tab:collected}
 \end{tcolorbox}
 
@@ -247,10 +248,11 @@ The sketch of our test is the following:
 \subsection{Controlling the False Positive Rate}
 \label{sec:type_i}
 
-Theory suggests that all permutation tests should be exact, i.e., exactly control the false positive rate. 
-Our simulations confirm this: in Figure~\ref{fig:simulation_1}, and all the following, a red circle encodes the null case,  where no signal is present and $x|y=1$ has the same distribution as $x|y=-1$.
-We see that the permutation test is exact for all candidate test statistics. In particular if: \newline
-(a) The folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
+Theory suggests that all permutation tests should be exact, i.e., provide non-asymptotic, possibly conservative, control of the false positive rate. 
+Our simulations confirm this.
+In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=-1$, by a red circle. 
+Since the red circles are always below the desired $0.05$ error rate, theory agrees with simulation, and in particular if: \newline
+(a) The resampling folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
 (b) The tuning parameters are varied (cost=$10$ versus cost=$0.1$). \newline
 (c) The number of folds is varied (Figures \ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
 (d) The noise is heavytailed (Figure~\ref{fig:t_null}). \newline
@@ -261,6 +263,33 @@ We return to this matter in the Discussion.
 
 
 
+\begin{figure}[h]
+	\centering
+	\caption{
+		The power of a permutation test with various test statistics. 
+		The power on the $x$ axis. 
+		Effects are color and shape coded. 
+		The various statistics on the $y$ axis. 
+		Their details are given in Table~\ref{tab:collected}. 
+		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Simulation details in Appendix~\ref{apx:simulation_details}.
+		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
+	\label{fig:simulation_1}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
+		\caption{\textbf{Unbalanced.}} %TODO: caption  
+		\label{fig:simulation_11}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
+		\caption{\textbf{Balanced.}} %TODO: caption 
+		\label{fig:simulation_12}
+	\end{subfigure}
+\end{figure}
+
+
 
 
 
@@ -269,17 +298,16 @@ We return to this matter in the Discussion.
 \section{Power}
 \label{sec:power}
 
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- 
-especially when comparing location tests to accuracy tests. 
-From the simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
+From the various simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:[TODO]
 \begin{enumerate}
-\item location tests have no less-- and typically more-- power than accuracy tests in our simulations.
+\item location tests have no less-- and typically more-- power than accuracy tests in our simulations. [TODO: add scale alternatives]
 
 \item The conservativeness of accuracy tests decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
 
 \item For heavy tailed distributions (Figure~\ref{fig:t_null}), the difference in power between location tests and accuracy tests vanishes. 
 
-\item Regularization is critical to power as can be seen by comparing \emph{Hotelling} to \emph{Hotelling.shrink} and \emph{sd}.
+\item Regularization is critical to power as can be seen by comparing \emph{Hotelling} to \emph{Hotelling.shrink} and \emph{SD}.
 
 \item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
 If the z-scoring has any effect at all, it merely diminishes power.
@@ -295,17 +323,17 @@ This was to be expected and is reported mostly as a sanity check (cost=10 vs. co
 \end{enumerate}
 
 
-The major insight from simulations is that the use of accuracy tests for signal detection is underpowered compared to location tests. 
-We have not established, however, that the dominance of the location tests is not due to their regularization. Indeed, the unregularized \emph{Hotelling} test, is only slightly superior to the accuracy tests. 
-We return to this matter in Section~\ref{sec:highdim}, by adding some regularized accuracy tests to our battery. 
-We now verify our finding on a neuroimaging dataset.
-
+The major insight from simulations, is that the use of accuracy tests for signal detection is typically underpowered compared to location tests. 
+One candidate explanation is simply Neyman-Pearson's Lemma: the signal in most of our simulations is a shift of the distribution. 
+Location tests, such as \emph{Hotelling's}, and it's variants, may be thought of as maximal-power tests by the Neyma-Peasron Lemma. 
+This intuition is not completely accurate, in particular because the covariance is unknown, and the alternative is composite. 
+There is thus no uniformly most powerful test for these problems. 
+Some candidate explanations for the success, and failure, of these tests are discussed in Section~\ref{sec:discussion}. 
+We now verify the dominance of the high-dimensional location test in an empirical setup. 
 
 
 \section{Neuroimaging Example}
 \label{sec:example}
-% Power of SVM versus SD.
-% Difficulties of implementation.
 
 Figure~\ref{fig:read_data} is an application of both a location and an accuracy test to the data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
@@ -314,7 +342,7 @@ The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-To demonstrate our point, we compare the \emph{sd} location test with the \emph{svm.cv.1} accuracy test. 
+To demonstrate our point, we compare the \emph{SD} location test with the \emph{SVM.cv.1} accuracy test. 
 
 In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.cv.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
@@ -349,24 +377,26 @@ For the details of the analysis see \cite{gilron_quantifying_2016}.
 
 We have set out to understand which of the tests is more powerful: accuracy tests or location tests. 
 No amount of simulations can replace the insight provided by a closed-form analytic result. 
-The finite sample power of permutation tests is a formidable mathematical problem, so we currently content ourselves with simulations.
+The finite sample power of permutation tests is, however, a formidable mathematical problem. We thus currently content ourselves with simulations.
 We have concluded that the location tests are typically preferable. 
-Their high dimensional versions, such as \cite{srivastava_multivariate_2007} and \cite{schafer_shrinkage_2005},  are particularly well suited for neuroimaging problems such as MVPA.
+Their high dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007},  are particularly well suited for neuroimaging problems such as MVPA.
 We attribute this to several effects: \newline
-(a) The discrete nature of the accuracy test in finite samples. \newline
+(a) The discrete nature of the accuracy tests. \newline
 (b) Inefficient use of the data when validating with a holdout set. \newline
-(c) The lack of regularization in high SNR regimes (high dimension and\slash or strong correlations). \newline
+(c) Inappropriate regularization in high SNR regimes, which may be due to strong correlations, or to $p/n=\mathcal{O}(1)$. \newline
 
 
 The degree of discretization is governed by the sample size. 
-For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016} may uncover the holdout inefficiency, but will not uncover the discretization effect. 
-An asymptotic analysis of a finite complexity model, such as \cite[Sec~4.3]{golland_permutation_2005}, would also fail to reveal the effect of the concentration of the resubstitution accuracy near $1$. This effect would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, may be inaccurate.
+The analysis in \cite{ramdas_classification_2016} also deals with a split-sample, which's effect may be considerable in finite samples. 
+The analysis in \cite{golland_permutation_2005} does not reveal the strong concentration of resubstitution accuracy statistics. This analysis would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
 
 Simulations do show cases where location tests have no advantage over accuracy tests. 
 One such scenario is when the noise is heavytailed, as seen in Figure~\ref{fig:t_null}.
 The second scenario will be discussed in Section~\ref{sec:highdim}.
 
-The practical advice for the practitioner, is that for the purpose of signal detection, there is typically a location test that is more powerful than an accuracy test. 
+The practical advice for the practitioner, is accuracy tests are never optimal. 
+There is always a multivariate test, possibly a location test, that dominates in power. 
 The class of location tests we examined, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
 They are also typically easier to implement, and faster to run, since no cross validation will be involved. 
 
@@ -375,7 +405,7 @@ They are also typically easier to implement, and faster to run, since no cross v
 \subsection{Ease of implementation}
 A very important consideration is the ease of implementation. 
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, programming with discrete statistics is more prone to errors. 
+Moreover, programming with discrete statistics is more prone to programming errors. 
 This is because their unforgiveness to the type of inequalities used. 
 Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
@@ -383,7 +413,7 @@ This is not the case for continuous test statistics.
 
 
 
-\subsection{Reservations}
+\subsection{Brain Machine Interfaces}
 \label{sec:reservations}
 
 Some reservations to the generality of our findings are in order. 
@@ -391,11 +421,13 @@ Firstly, not all accuracy tests are concerned with signal detection.
 Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
 In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
 
-Secondly, it may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors while location tests do not. 
+
+\subsection{Testing in Augmented Spaces}
+It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors while location tests do not. 
 This is a false argument-- accuracy tests do not have any more flexibility than location tests. 
 Indeed, it is possible to test for location in the same space the classifier is learned. 
 For independence tests in high dimensional spaces see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
-On the other hand, based on our experience, and the reported neuroimaging example, we find that a location test in the original feature space is a simple and powerful approach to signal detection.
+On the other hand, based on our experience, and the reported neuroimaging example, we find that a location test in the original feature space is a simple and powerful enough.
 
 
 
@@ -406,88 +438,10 @@ On the other hand, based on our experience, and the reported neuroimaging exampl
 
 
 
-\subsection{Smoothing accuracy estimates}
-\label{sec:bootstrap}
-It may be possible to alleviate the effect of discretization via the cross-validation scheme.
-The discreteness of the accuracy statistic is governed by the number of examples in the union of holdout test sets, over all retesting iterations.
-For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
-This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
-An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
-\begin{definition}[bLOO]
-\label{def:bloo}
-The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy of the holdout observations, over all bootstrap samples. 
-Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
-Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
-The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
-\begin{align}
-		\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
-\end{align}
-where $|A|$ is the cardinality of set $A$.
-Equivalently, denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
-\begin{align}
-	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
-\end{align}
-\end{definition}
-
-\begin{definition}[b$0.632$]
-\label{def:b0632}
-The \emph{0.632 bootstrap} accuracy estimate, b$0.632$, is a weighted average of the resubstitution error and the bLOO.
-Formally:
-\begin{align}
-	\accEstim_{\algo}^{0.632} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
-\end{align}
-\end{definition}
-Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
-It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of location tests. 
-It can also be seen that power increases with the number of bootstrap replications, as was to be expected, since more replications reduce the level of discretization.
-The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
-
-\bigskip
-
-%TODO: change cost in simulation to 0.1
-\begin{tcolorbox}
-\centering
-\begin{tabular}{l|c|c|c|c|c}
-Name & Algorithm & Accuracy & B & Z-scored & Parameters\\ 
-\hline
-\hline
-lda.Boot.1 & LDA & b$0.632$ & $10$ & FALSE &  -- \\ 
-lda.Boot.2 & LDA & bLOO 	& $10$ & FALSE &  -- \\ 
-svm.Boot.1 & SVM & b$0.632$ & $10$ & FALSE & cost=10 \\ 
-svm.Boot.2 & SVM & bLOO 	& $10$ & FALSE & cost=10 \\ 
-svm.Boot.3 & SVM & b$0.632$ & $50$ & FALSE & cost=10 \\ 
-svm.Boot.4 & SVM & bLOO 	& $50$ & FALSE & cost=10 \\ 
-\end{tabular} 
-\captionsetup{type=table}
-\caption{
-The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
-bLOO and b$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
-$B$ denotes the number of Bootstrap samples. } 
-\label{tab:collected_2}
-\end{tcolorbox}
-
-
-\begin{figure}[ht]
-\centering
-	  \includegraphics[width=0.7\linewidth]{"art/2016-08-30 18:08:08"}
-	  \caption{
-		  \textbf{Bootstrap--}
-		  The power of a permutation test with various test statistics. 
-		  The power on the $x$ axis. 
-		  Effects are color and shape coded. 
-		  The various statistics on the $y$ axis. 
-		  Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
-		  Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		  Simulation details in Appendix~\ref{apx:simulation_details}.
-		  } 
-	\label{fig:bootstrap}
-\end{figure}
-
-
-\subsection{High dimensional classifiers}
+\subsection{The Effect of High Dimension}
 \label{sec:highdim}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It should thus be argued that the real advantage of the location tests is due to their adaptation to high dimension by regularization, and not only to discretization.
+It should thus be argued that the real advantage of the location tests is due to their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization, and not only to discretization.
 To study this, we call upon several \emph{regularized classifiers}, designed for high dimensional problems. 
 In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized SVM \citep{REF08a}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
 In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}. 
@@ -510,7 +464,7 @@ This is exciting news since it shows how to design powerful new high-powered acc
 \begin{tcolorbox}
 \centering
 \begin{tabular}{l|c|c|c|c}
-Name & Algorithm & Accuracy & Z-scored & Parameters\\ 
+Name & Algorithm & Resampling & Z-scored & Parameters\\ 
 \hline
 \hline
 svm.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
@@ -552,8 +506,93 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 
 
 
-\subsection{Beyond location tests}
 
+
+
+\subsection{Smoothing accuracy estimates}
+\label{sec:bootstrap}
+It may be possible to alleviate the effect of discretization via the cross-validation scheme.
+The discreteness of the accuracy statistic is governed by the number of examples in the union of holdout test sets.
+For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
+This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
+An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
+\begin{definition}[bLOO]
+	\label{def:bloo}
+	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy of the holdout observations, over all bootstrap samples. 
+	Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
+	Also denote by $C^{(i)}$ the index set of bootstrap samples, $b$, not containing observation $i$.
+	The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
+	\begin{align}
+	\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
+	\end{align}
+	where $|A|$ is the cardinality of set $A$.
+	An equivalent formulation, which stresses the Bootstrap nature of the algorithm is the following. 
+	Denoting by $S^{(b)}$ the indexes of observations, $i$, that are \emph{not} in the bootstrap sample $b$ and are not empty, 
+	\begin{align}
+	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
+	\end{align}
+\end{definition}
+
+\begin{definition}[b$0.632$]
+	\label{def:b0632}
+	The \emph{0.632 bootstrap} accuracy estimate, b$0.632$, is a weighted average of the resubstitution error and the bLOO.
+	Formally:
+	\begin{align}
+	\accEstim_{\algo}^{0.632} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
+	\end{align}
+\end{definition}
+Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
+It can be seen that selecting test sets with replacement does increase the power, when compared to V-fold cross validation, but still falls short from the power of location tests. 
+It can also be seen that power increases with the number of bootstrap replications, as was to be expected, since more replications reduce the level of discretization.
+The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
+
+\bigskip
+
+%TODO: change cost in simulation to 0.1
+\begin{tcolorbox}
+	\centering
+	\begin{tabular}{l|c|c|c|c|c}
+		Name & Algorithm & Resampling & B & Z-scored & Parameters\\ 
+		\hline
+		\hline
+		LDA.Boot.1 & LDA & b$0.632$ & $10$ & FALSE &  -- \\ 
+		LDA.Boot.2 & LDA & bLOO 	& $10$ & FALSE &  -- \\ 
+		SVM.Boot.1 & SVM & b$0.632$ & $10$ & FALSE & cost=10 \\ 
+		SVM.Boot.2 & SVM & bLOO 	& $10$ & FALSE & cost=10 \\ 
+		SVM.Boot.3 & SVM & b$0.632$ & $50$ & FALSE & cost=10 \\ 
+		SVM.Boot.4 & SVM & bLOO 	& $50$ & FALSE & cost=10 \\ 
+	\end{tabular} 
+	\captionsetup{type=table}
+	\caption{
+		The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
+		bLOO and b$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
+		$B$ denotes the number of Bootstrap samples. } 
+	\label{tab:collected_2}
+\end{tcolorbox}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{"art/2016-08-30 18:08:08"}
+	\caption{
+		\textbf{Bootstrap--}
+		The power of a permutation test with various test statistics. 
+		The power on the $x$ axis. 
+		Effects are color and shape coded. 
+		The various statistics on the $y$ axis. 
+		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
+		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Simulation details in Appendix~\ref{apx:simulation_details}.
+	} 
+	\label{fig:bootstrap}
+\end{figure}
+
+
+
+
+
+\subsection{Beyond location tests}
+TODO
 
 
 \subsection{A good accuracy test}
@@ -769,33 +808,6 @@ The reported power is the proportion of replication where the permutation p-valu
 \label{apx:simulations}
 
 
-
-
-\begin{figure}[h]
-	\centering
-	\caption{
-		The power of a permutation test with various test statistics. 
-		The power on the $x$ axis. 
-		Effects are color and shape coded. 
-		The various statistics on the $y$ axis. 
-		Their details are given in Table~\ref{tab:collected}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		Simulation details in Appendix~\ref{apx:simulation_details}.
-		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
-	\label{fig:simulation_1}
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/2016-07-26 20:55:48"}
-		\caption{\textbf{Unbalanced.}} %TODO: caption  
-		\label{fig:simulation_11}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/2016-07-27 11:42:05"}
-		\caption{\textbf{Balanced.}} %TODO: caption 
-		\label{fig:simulation_12}
-	\end{subfigure}
-\end{figure}
 
 
 
