@@ -6,7 +6,7 @@ File name: "file1"
   Original: unbalanced
   Permuted: unbalanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8   # takes a very long time!
@@ -18,11 +18,11 @@ File name: "file2"
   Effects: [0,0.5]
   Original: balanced
   Permuted: balanced
-  Permutations: 3e3
-  Replications: 4e3
+  Permutations: 3e2
+  Replications: 1e3
   n=40
   p=23
-  Folds: 8
+  Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
   

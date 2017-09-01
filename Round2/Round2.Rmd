@@ -15,114 +15,86 @@ balance.log <- 'balance_log.txt'
 file.remove(balance.log)
 file.create(balance.log)
 
-n.replications <- 2e2 # 4e3
-p <- 5 #23
-n <- 4e2 # total sample size-> n/2 in each group.
-n.permutations <- 3e1 # 3e2
+n.replications <-  1e3
+p <- 23
+n <- 4e1 # total sample size-> n/2 in each group.
+n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
-effects <- sqrt(40/400) * seq(0, 0.5, length=3) # change in locatinon
+effects <- seq(0, 0.5, length=3) # change in location
+# effects <- sqrt(40/400) * seq(0, 0.5, length=3) # change in location
 # effects <- seq(1, 1.2, length=3) # change in scale
-# RNGkind("Wich") # Set random number generator. 
-RNGkind("default")
 
 Sigma <- diag(p)
 # Sigma <- ar1_cov(p, rho=0.8)
 # Sigma <- comSym_cov(p, rho=0.7) 
 # Sigma <- diag((1:p)*p/sum(1:p))
 
-the.message <- paste("n=",n, sep='')
-
-file.name <- "1"
+file.name <- "file1"
+the.message <- paste(file.name)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
-```{r independent noise variable folds}
-registerDoMC(cores=80)
+```{r}
+# Sys.getpid()
 
+library(RhpcBLASctl)
+blas_set_num_threads(1)
+# get_num_cores()
+# get_num_procs()
+# blas_get_num_procs()
+
+registerDoMC(cores=120)
+
+# Testing parallelization:
+# foreach(i=1:60) %dopar% {
+#   eigen(matrix(rnorm(1e6), ncol = 1e3, nrow = 1e3))$values[[1]][[1]]
+# }
+# foreach(i=1:20) %:% foreach(j=1:3) %dopar% mean(rnorm(1e7))
+```
+
+
+```{r independent noise variable folds}
 # Many statistics are not compute for efficiency. 
 # To compute them, just uncomment them.
 
-pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% 
-  foreach(effect=effects, .combine=rbind)  %dopar% {
-  # effect <- effects[2]
-  
-  labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
-  
-  # Gaussian noise
-  .noise <- rmvnorm(n=n, sigma = Sigma)
-  # t noise
-  # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
-  
-  # Shift alternative:
-  noise <- .noise + effect * labels
-  
-  # Scale alternative:
-  # noise <- .noise * effect ^ labels 
-  # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
-  
-  # Golland's mixture null:
-  # .noise <- rmvnorm(n=n, sigma = Sigma) # Gaussian noise
-  # shift <- rep(sqrt(9/p), p)
-  # shift.group <- 2*rbinom(n, 1, (0.5-effect)^labels*(0.5+effect)^(1-labels))-1
-  # noise <- .noise + t(outer(shift, shift.group))
-  # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
-
-  # Compute observed statistic
-  x1 <- noise[labels,]
-  x2 <- noise[!labels,]
-  
-  # Asign observations to folds. Use the simple label structure to balance folds.
-  fold.ids <- balanced_folding(labels, n.folds, balance = balance)
-  # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
- 
-  # Observables 
-  ts <- list(
-    Oracle=t_Oracle(x1, x2, Sigma, Sigma),
-    Hotelling=t_Hotelling(x1, x2, FALSE),
-    Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-    lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-    lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-    lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-    sd=t_SD(x1, x2),
-    svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-    svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-    svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-    svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-    svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-    svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
-    svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-    svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-  )
-  
-  
-  # Prepare to permute
-  old.labels <- labels
-  old.folds.ids <- fold.ids
-  statistics.names <- names(ts)
-  
-  # Initialize permuted statistics
-  permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
-  
-  for(i in 1:n.permutations){
-    # i <- 1
+pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
+  foreach(effect=effects, .combine=rbind)  %do% {
+    # effect <- effects[2]
     
-    labels <- sample(labels) # make permutation
-    fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+    labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
+    
+    # Gaussian noise
+    .noise <- rmvnorm(n=n, sigma = Sigma)
+    # t noise
+    # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
+    
+    # Shift alternative:
+    noise <- .noise + effect * labels
+    
+    # Scale alternative:
+    # noise <- .noise * effect ^ labels 
+    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+    
+    # Golland's mixture null:
+    # .noise <- rmvnorm(n=n, sigma = Sigma) # Gaussian noise
+    # shift <- rep(sqrt(9/p), p)
+    # shift.group <- 2*rbinom(n, 1, (0.5-effect)^labels*(0.5+effect)^(1-labels))-1
+    # noise <- .noise + t(outer(shift, shift.group))
+    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+    
+    # Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
     
-    # Checking balance:
-    # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
+    # Asign observations to folds. Use the simple label structure to balance folds.
+    fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+    # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
-    # for permuting Xs:
-    # .indexes <- sample(seq(n))
-    #  .noise <- noise[.indexes,] 
-    
-    permuted[i,] <- c(
+    # Observables 
+    ts <- list(
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
@@ -140,23 +112,69 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:%
       svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
       svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
-  } # End permutation
-  
-  # Compute p-vals for each statistic
-  pvals <- rep(NA, length(ts))
-  for(i in seq_along(ts)){
-    pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+    
+    
+    # Prepare to permute
+    old.labels <- labels
+    old.folds.ids <- fold.ids
+    statistics.names <- names(ts)
+    
+    # Initialize permuted statistics
+    permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+    
+    for(i in 1:n.permutations){
+      # i <- 1
+      
+      labels <- sample(labels) # make permutation
+      fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+      x1 <- noise[labels,]
+      x2 <- noise[!labels,]
+      
+      # Checking balance:
+      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
+      
+      # for permuting Xs:
+      # .indexes <- sample(seq(n))
+      #  .noise <- noise[.indexes,] 
+      
+      permuted[i,] <- c(
+        Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+        Hotelling=t_Hotelling(x1, x2, FALSE),
+        Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+        lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+        sd=t_SD(x1, x2),
+        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+        svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+        svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+        svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+      )
+    } # End permutation
+    
+    # Compute p-vals for each statistic
+    pvals <- rep(NA, length(ts))
+    for(i in seq_along(ts)){
+      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+    }
+    
+    c(effect=effect, pvals) 
   }
+} 
   
-  c(effect=effect, pvals) 
-}
-pbPost("note", "Done", the.message)
-# save.image(file=file.name)
+pbPost(type = "note", body = "Done", the.message)
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 
 ```{r analyze multiple effects}
+# load("file2.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
@@ -184,27 +202,9 @@ plot.3 <- pvals.melt %>%
   coord_flip()
 plot.3
 
-# pdf(file = paste('Output/',file.name,'.pdf', sep=''))
-# plot.3
-# dev.off()
+pdf(file = paste('Output/',file.name,'.pdf', sep=''))
+plot.3
+dev.off()
 ```
 
 
-
-```{r analyze single effect}
-the.title <- sprintf('permutations=%d, replications=%d, n=%d, p=%d, n.folds=%d, errror bar=%s, balance=%s', n.permutations, n.replications, n, p, n.folds, err.bar, balance)
-
-pvals.1.9.1 <- filter(pvals.1.9, effect==0) %>% select(-effect)
-powers <- cbind(round(apply(pvals.1.9.1, 2, function(x) mean(x<=0.05, na.rm=TRUE)),3))
-powers
-
-
-.limits <- 0.05 + c(-err.bar,0,err.bar)
-# dotchart(powers[,1]); abline(v=.limits, lty=c(3,2,3))
-dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3));title(the.title)
-# dotchart(powers[,1], xlim=c(0.04,0.1)); abline(v=.limits, lty=c(3,2,3)) #;title(the.title)
-
-# pdf(file = paste('Output/',file.name,'zoom.pdf', sep=''))
-# dotchart(powers[,1], xlim=c(0,0.1)); abline(v=.limits, lty=c(3,2,3))
-# dev.off()
-```
