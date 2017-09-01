@@ -1,6 +1,19 @@
 #### Now with the cleaned up code ####
 
-File name: "file1"
+File name: file1
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 4e3
+  n(*)=400
+  p=23
+  Folds: 8
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: "file2"
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -9,11 +22,12 @@ File name: "file1"
   Replications: 1e3
   n=40
   p=23
-  Folds: 8   # takes a very long time!
+  Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
-  
-File name: "file2"
+
+
+File name: "file3"
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -25,8 +39,10 @@ File name: "file2"
   Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
+
   
-File name: 2016-07-27 21:21:12
+  
+File name: file4
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -39,7 +55,7 @@ File name: 2016-07-27 21:21:12
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-08-05 09:37:35
+File name: file5
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -54,7 +70,7 @@ File name: 2016-08-05 09:37:35
   
   
   
-File name: 2016-07-29 07:18:24
+File name: file6
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -67,7 +83,7 @@ File name: 2016-07-29 07:18:24
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-08-06 07:57:22
+File name: file7
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -81,7 +97,7 @@ File name: 2016-08-06 07:57:22
   Trial dependence (n): none
   
   
-File name: 2016-07-30 10:33:05
+File name: file8
   Null: Gaussian
   Effects(*): scale change
   Original: balanced
@@ -94,7 +110,7 @@ File name: 2016-07-30 10:33:05
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name:2016-08-04 19:32:17 
+File name: file9 
   Null(*): t
   Effects: [0,0.5]
   Original: balanced
@@ -107,21 +123,9 @@ File name:2016-08-04 19:32:17
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-08-04 13:59:33
-  Null: Gaussian
-  Effects: [0,0.5]
-  Original: balanced
-  Permuted: balanced
-  Permutations: 3e2
-  Replications: 4e3
-  n(*)=400
-  p=23
-  Folds: 8
-  Voxel dependence (p): none
-  Trial dependence (n): none
   
   
-File name: TODO
+File name: file10
   Null: Gaussian
   Effects: 1/sqrt(10) * [0,0.5]
   Original: balanced
@@ -135,7 +139,7 @@ File name: TODO
   Trial dependence (n): none
   
   
-File name: 2016-08-07 20:11:46
+File name: file11
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -148,7 +152,7 @@ File name: 2016-08-07 20:11:46
   Voxel dependence(*) (p): AR(1)
   Trial dependence (n): none
   
-File name: 2016-08-08 07:33:05
+File name: file12
   Null(*): Golland Mixture
   Effects: [0,0.5]
   Original: balanced
@@ -161,7 +165,7 @@ File name: 2016-08-08 07:33:05
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-08-30 18:08:08
+File name: file13
   Statistic (*): Bootstrapped 
   Null: Gaussian
   Effects: [0,0.5]
@@ -175,10 +179,24 @@ File name: 2016-08-30 18:08:08
   Voxel dependence (p): none
   Trial dependence (n): none
   
-File name: 2016-08-15 20:07:55
+File name: file14
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 2e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file15
+  Statistic (*): Scale alternative 
+  Null: Gaussian
+  Effects: ?
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
