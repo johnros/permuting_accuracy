@@ -1,33 +1,21 @@
 #### Now with the cleaned up code ####
 
 File name: file1
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n(*)=400
   p=23
-  Folds: 8
-  Voxel dependence (p): none
-  Trial dependence (n): none
-
-File name: "file2"
-  Null: Gaussian
-  Effects: [0,0.5]
-  Original: unbalanced
-  Permuted: unbalanced
-  Permutations: 3e2
-  Replications: 1e3
-  n=40
-  p=23
   Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
 
-
-File name: "file3"
+File name: file2
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -40,15 +28,28 @@ File name: "file3"
   Voxel dependence (p): none
   Trial dependence (n): none
 
-  
-  
+File name: file3
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original(*): unbalanced
+  Permuted(*): unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
 File name: file4
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds(*): 2
@@ -56,12 +57,13 @@ File name: file4
   Trial dependence (n): none
   
 File name: file5
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
   Permuted: unbalanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds(*): 2
@@ -76,7 +78,7 @@ File name: file6
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds(*): 20
@@ -89,7 +91,7 @@ File name: file7
   Original: unbalanced
   Permuted: unbalanced
   Permutations: 3e3
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds(*): 20
@@ -103,7 +105,7 @@ File name: file8
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8
@@ -116,7 +118,7 @@ File name: file9
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8
@@ -145,7 +147,7 @@ File name: file11
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8
@@ -158,7 +160,7 @@ File name: file12
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8
@@ -172,7 +174,7 @@ File name: file13
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 4e3
+  Replications: 1e3
   n=40
   p=23
   Folds: 8

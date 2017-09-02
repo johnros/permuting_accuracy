@@ -1,3 +1,6 @@
+## R
+*.RData
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -143,3 +146,4 @@ TSWLatexianTemp*
 *~[0-9]*
 .Rproj.user
 packrat/lib*/
+packrat/src/

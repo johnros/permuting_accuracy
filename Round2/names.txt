@@ -1,4 +1,0 @@
- [1] "Hotelling"        "Hotelling.shrink" "lda.CV.1"         "lda.CV.2"        
- [5] "lda.noCV.1"       "lda.noCV.2"       "sd"               "svm.CV.1"        
- [9] "svm.CV.2"         "svm.Boot.1"       "svm.Boot.3"       "svm.Boot.4"      
-[13] "svm.Boot.5"       "lda.Boot.1"       "lda.Boot.2"      
