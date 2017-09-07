@@ -43,7 +43,7 @@ File name: file3
   Trial dependence (n): none
 
 File name: file4
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -87,7 +87,7 @@ File name: file6
   Trial dependence (n): none
   
 File name: file7
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
