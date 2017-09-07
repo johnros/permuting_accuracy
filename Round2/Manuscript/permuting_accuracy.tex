@@ -441,21 +441,18 @@ On the other hand, based on our experience, and the reported neuroimaging exampl
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It should thus be argued that the real advantage of the location tests is due to their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization, and not only to discretization.
+It should thus be argued that the real advantage of the location tests is due to their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
 To study this, we call upon several \emph{regularized classifiers}, designed for high dimensional problems. 
-In the spirit of the regularized covariance of \emph{Hotelling.shrink}, we try an $l_2$ regularized SVM \citep{REF08a}, and shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}. %TODO: verify references
-In the spirit of the diagonalized covariance of \emph{sd}, we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}. 
+The high-dimension is typically dealt with by regularizing the covariance estimation. 
+The statistics we try include an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
+We also try we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}, which is similar in spirit to the \emph{SD} test. 
 
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
-It can be seen that regularizing a classifier in high dimension, just like a parameter test, improves power. 
-It can also be seen that (regularized) parameter tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized parameter test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{svm.CV.1}.
+It can be seen that regularizing a classifier in high dimension, just like a location test, improves power. 
+It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
+This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}.
 
-We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
-This is done in the \emph{svm.highdim.2} and \emph{lda.highdim.4} tests. 
-The latter being one of the very few accuracy tests that achieve the same power as location tests. 
-This is exciting news since it shows how to design powerful new high-powered accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
 
 
 \bigskip
@@ -467,22 +464,22 @@ This is exciting news since it shows how to design powerful new high-powered acc
 Name & Algorithm & Resampling & Z-scored & Parameters\\ 
 \hline
 \hline
-svm.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
-svm.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
-lda.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
-lda.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
-lda.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
-lda.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
+SVM.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
+SVM.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
+LDA.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
+LDA.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
+LDA.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
+LDA.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{
 The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-\emph{svm.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
-\emph{svm.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
-\emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
-\emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
-\emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-\emph{lda.highdim.4} is the same with b$0.632$.
+\emph{SVM.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
+\emph{SVM.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
+\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
+\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
+\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
+\emph{LDA.highdim.4} is the same with b$0.632$.
 } 
 \label{tab:collected_3}
 \end{tcolorbox}
@@ -504,6 +501,18 @@ The same as Table~\ref{tab:collected} for regularized (high dimensional) predict
 	\label{fig:highdim}
 \end{figure}
 
+
+
+
+\subsection{Scale Alternatives}
+Is it possible that an accuracy test may have more power than a location test?
+Yes. 
+If, for instance, the signal is not carried in the means of the data, but rater, in its scatter. 
+In the testing literature, this is known as \emph{scale alternatives} \cite[e.g.][and references therein]{ley2015high}.
+
+In Figure TODO we designed a simulation where the accuracy test has more power than a location test. 
+This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
+Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
 
 
 
@@ -590,13 +599,11 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 
 
-
-\subsection{Beyond location tests}
-TODO
-
-
 \subsection{A good accuracy test}
-For the cases a location test cannot replace an accuracy test, we collect some conclusions and best practices.
+There are cases where an accuracy test cannot be replaced by some location, or other, statistical test. 
+Brain-computer interfaces are one such example, where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
+For these cases, we collect some conclusions and best practices. 
+
 
 \paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
 
@@ -608,6 +615,12 @@ We also conjecture that the power-maximizing regularization is larger than the e
 
 \paragraph{Smooth accuracy.}
 Smooth accuracy estimate by cross validating with replacement. The bLOO estimator, in particular, is preferable over V-fold.
+
+We can compound the regularization with the bootstrapping from Section~\ref{sec:bootstrap}, to improve finite sample power of the accuracy tests. 
+This is done in the \emph{SVM.highdim.2} and \emph{LDA.highdim.4} tests. 
+The latter being one of the very few accuracy tests that achieve the same power as location tests. 
+This is exciting news since it shows how to design powerful new high-powered accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
+
 
 \paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
 It allows to preserve the balance of folds after a permutation, without refolding.
@@ -650,7 +663,7 @@ This is a very different emphasis from our own.
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note the following: 
 (a) The independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. 
-It may probably be improved with the methods discussed in this section, before the application of \cite{olivetti_induction_2012}'s independence test. 
+It may probably be improved by regulirizing and resampling with replacement, before the application of \cite{olivetti_induction_2012}'s independence test. 
 (b) In contrast with the underlying motivation of \cite{olivetti_induction_2012}'s independence test, we did not find that balancing the data folds affects the power of the test. 
 
 
@@ -667,7 +680,7 @@ $$(x_i|y_i=1) \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}$$
 and 
 $$(x_i|y_i=-1) \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}.$$
 Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, after parameterizing $p$ so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simulations
+We now perform the same simulation as \cite{golland_permutation_2005}, after parameterizing $p$ so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simulations.
 We find that also in this mixture class of models a location test has more power than an accuracy test (Figure~\ref{fig:golland}).
 
 
