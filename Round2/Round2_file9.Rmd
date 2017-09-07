@@ -8,10 +8,10 @@ output: html_document
 
 
 ```{r preliminaries}
-file.name <- "file8"
+file.name <- "file9"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  4e2# 1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -60,27 +60,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
-    ## Gaussian noise
-    .noise <- rmvnorm(n=n, sigma = Sigma)
-    
     ## t noise
-    # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
+    .noise <- rmvt(n=n, sigma = Sigma, df=3)
     
     ## Shift alternative:
-    # noise <- .noise + effect * labels
-    
-    ## Scale alternative:
-    A <- diag(n) 
-    A[labels,labels] <- A[labels,labels]*(1:n)^(-effect)
-    noise <- A %*% .noise 
-    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
-    
-    # Golland's mixture null:
-    # .noise <- rmvnorm(n=n, sigma = Sigma) # Gaussian noise
-    # shift <- rep(sqrt(9/p), p)
-    # shift.group <- 2*rbinom(n, 1, (0.5-effect)^labels*(0.5+effect)^(1-labels))-1
-    # noise <- .noise + t(outer(shift, shift.group))
-    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+    noise <- .noise + effect * labels
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -154,7 +138,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       )
     } # End permutation
     
-    # Compute p-vals for each statistic
+    ## Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
@@ -165,13 +149,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-# save.image(file=paste(file.name,".RData", sep=''))
+save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 
 ```{r analyze multiple effects}
-# load("file2.RData")
+# load("file9.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
