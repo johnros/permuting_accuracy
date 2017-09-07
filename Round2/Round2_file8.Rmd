@@ -11,7 +11,7 @@ output: html_document
 file.name <- "file8"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  4e2# 1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -23,14 +23,9 @@ source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
-# effects <- sqrt(40/400) * seq(0, 0.5, length=3) # change in location
-
 
 ## Signal in scale
 Sigma <- diag(p)
-# Sigma <- ar1_cov(p, rho=0.8)
-# Sigma <- comSym_cov(p, rho=0.7) 
-# Sigma <- diag((1:p)*p/sum(1:p))
 ```
 
 
@@ -63,23 +58,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
-    ## t noise
-    # .noise <- rmvt(n=n, sigma = Sigma, df=3) 
-    
-    ## Shift alternative:
-    # noise <- .noise + effect * labels
-    
     ## Scale alternative:
     A <- diag(n) 
     A[labels,labels] <- A[labels,labels]*(1:n)^(-effect)
     noise <- A %*% .noise 
-    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
-    
-    # Golland's mixture null:
-    # .noise <- rmvnorm(n=n, sigma = Sigma) # Gaussian noise
-    # shift <- rep(sqrt(9/p), p)
-    # shift.group <- 2*rbinom(n, 1, (0.5-effect)^labels*(0.5+effect)^(1-labels))-1
-    # noise <- .noise + t(outer(shift, shift.group))
     # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
     
     ## Compute observed statistic
@@ -165,7 +147,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-# save.image(file=paste(file.name,".RData", sep=''))
+save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 

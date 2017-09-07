@@ -7,9 +7,8 @@ output: html_document
 
 
 ```{r preliminaries}
-the.message <- "Bootstrap"
+the.message <- "file13"
 
-setwd('~/workspace/Gilron/')
 source('Gilron Effect of Cross Validatino.R')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
@@ -17,7 +16,7 @@ balanc.log <- 'balance_log.txt'
 file.remove(balanc.log)
 file.create(balanc.log)
 
-n.replications <- 4e3 #4e3
+n.replications <- 1e3 
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3)
 p <- 23
 n <- 40

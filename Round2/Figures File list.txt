@@ -73,6 +73,7 @@ File name: file5
   
   
 File name: file6
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -86,11 +87,12 @@ File name: file6
   Trial dependence (n): none
   
 File name: file7
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
   Permuted: unbalanced
-  Permutations: 3e3
+  Permutations: 3e2
   Replications: 1e3
   n=40
   p=23
@@ -100,19 +102,22 @@ File name: file7
   
   
 File name: file8
+  Status: OK
   Null: Gaussian
-  Effects(*): scale change
+  Effects(*): scale change 
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
   Replications: 1e3
   n=40
   p=23
-  Folds: 8
+  Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
+  Note: Oracle uses null covariance. 
   
 File name: file9 
+  Status: OK
   Null(*): t
   Effects: [0,0.5]
   Original: balanced
@@ -128,6 +133,7 @@ File name: file9
   
   
 File name: file10
+  Status: 
   Null: Gaussian
   Effects: 1/sqrt(10) * [0,0.5]
   Original: balanced
@@ -142,6 +148,7 @@ File name: file10
   
   
 File name: file11
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -150,11 +157,12 @@ File name: file11
   Replications: 1e3
   n=40
   p=23
-  Folds: 8
+  Folds: 4
   Voxel dependence(*) (p): AR(1)
   Trial dependence (n): none
   
 File name: file12
+  Status: OK
   Null(*): Golland Mixture
   Effects: [0,0.5]
   Original: balanced
@@ -168,6 +176,7 @@ File name: file12
   Trial dependence (n): none
   
 File name: file13
+  Status: OK
   Statistic (*): Bootstrapped 
   Null: Gaussian
   Effects: [0,0.5]
@@ -182,6 +191,7 @@ File name: file13
   Trial dependence (n): none
   
 File name: file14
+  Status: Done. Why is Oracle so under powered?
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]

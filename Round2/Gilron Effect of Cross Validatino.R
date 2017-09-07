@@ -13,7 +13,7 @@ suppressPackageStartupMessages(library(RPushbullet))
 suppressPackageStartupMessages(library(reshape2))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(plotly))
-# library(sparsediscrim)
+suppressPackageStartupMessages(library(sparsediscrim))
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(LiblineaR))
 suppressPackageStartupMessages(library(data.table))
@@ -21,6 +21,14 @@ suppressPackageStartupMessages(library('globaltest'))
 
 # source("https://bioconductor.org/biocLite.R")
 # biocLite("globaltest")
+
+
+
+balance.log <- 'balance_log.txt'
+file.remove(balance.log)
+file.create(balance.log)
+the.message <- paste(file.name)
+
 
 
 
