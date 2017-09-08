@@ -8,12 +8,12 @@ output: html_document
 
 
 ```{r preliminaries}
-file.name <- "file14"
+file.name <- "file2"
 
-balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
+balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
 p <- 23
-n <- 4e2 # total sample size-> n/2 in each group.
+n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -34,21 +34,20 @@ Sigma <- diag(p)
 library(RhpcBLASctl)
 blas_set_num_threads(1)
 
-registerDoMC(cores=110)
+registerDoMC(cores=40)
 ```
 
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
-    # effect <- effects[[2]]
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
-    # Shift alternative:
+    ## Shift alternative:
     noise <- .noise + effect * labels
     
     ## Compute observed statistic
@@ -64,18 +63,20 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-      sd=t_SD(x1, x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-      svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
-      svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-      lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
-      lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
-      lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-      lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
-      svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-      svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+      lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+      lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+      lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+      sd=t_SD(x1, x2),
+      svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+      svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+      svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+      svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+      svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+      svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+      svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+      svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
-    
     
     
     # Prepare to permute
@@ -105,16 +106,19 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-        sd=t_SD(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
-        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-        lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
-        svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-        svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+        lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+        sd=t_SD(x1, x2),
+        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+        svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+        svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+        svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
       )
     } # End permutation
     
@@ -135,7 +139,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file1.RData")
+# load("file2.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
@@ -144,6 +148,9 @@ pvals.1.9 %<>%  as.data.table()
 names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+
+statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
