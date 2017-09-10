@@ -259,42 +259,29 @@ We do so via simulation, which details are now described.
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
 The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
 
-Each simulation is based on $4,000$ replications. 
-In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
-Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
-Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i=2 y^*_i-1$.
-The noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$. 
-The sample size $n=40$. 
-The dimension of the data is $p=23$. 
-The covariance $\Sigma=I$. 
-Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$.
+Each simulation is based on $1,000$ replications. 
+In each replication, we generate $n$ i.i.d. samples from a shift class $\x_i = \mu \y^*_i + \eta_i$, w=here $y^*_i=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+The covariance $\Sigma=I$ unless stated otherwise. 
+Effects, i.e. shifts $\mu$, are equal equal in all $p$ coordinates, and vary over $\mu \in \set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
-For test statistics that require data folding, we used $8$ folds. 
+For test statistics that require data folding, we used $4$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
-We perform $400$ such permutations. 
+We perform $300$ such permutations. 
 We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
-The reported power is the proportion of replication where the permutation p-value falls below $0.05$.
+The reported power is thus the proportion of replication where the permutation p-value falls below $0.05$.
 
 
 
-
-
-\subsection{Controlling the False Positive Rate}
+\subsection{False Positive Rate}
 \label{sec:type_i}
 
+We start with a sanity check of the simulation. 
 Theory suggests that all permutation tests should be exact, i.e., provide non-asymptotic, possibly conservative, control of the false positive rate. 
 Our simulations confirm this.
-In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=-1$, by a red circle. 
-Since the red circles are always below the desired $0.05$ error rate, theory agrees with simulation, and in particular if: \newline
-(a) The resampling folds are balanced or not (Figures~\ref{fig:simulation_1},\ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
-(b) The tuning parameters are varied (cost=$10$ versus cost=$0.1$). \newline
-(c) The number of folds is varied (Figures \ref{fig:n_folds} and \ref{fig:n_folds_unbalanced}). \newline
-(d) The noise is heavytailed (Figure~\ref{fig:t_null}). \newline
-(e) The problem is high or low dimensional (Figure~\ref{fig:large_sample}.) \newline
-(f) The noise is correlated (Figure~\ref{fig:ar_1}). \newline
-We also observe that the most conservative tests are the resubstitution accuracy statistics. 
-We return to this matter in the Discussion.
+In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
+Since the red circles are always below the desired $0.05$ error rate, then the false positive rate of all test statistics, in all simulations is controlled. 
+We may thus proceed and compare the power of each test statistic. 
 
 
 
@@ -307,7 +294,7 @@ We return to this matter in the Discussion.
 		The various statistics on the $y$ axis. 
 		Their details are given in Table~\ref{tab:collected}. 
 		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		Simulation details in Appendix~\ref{apx:simulation_details}.
+		Simulation details in Section~\ref{apx:simulation_details}.
 		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
 	\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
