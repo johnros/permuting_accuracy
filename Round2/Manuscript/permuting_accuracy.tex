@@ -245,6 +245,41 @@ The sketch of our test is the following:
 
 %%%% Section %%%%
 \section{Results}
+
+Now that we can construct various accuracy tests, we can compare them to location tests. 
+We do so via simulation, which details are now described.
+
+
+
+\subsection{Simulation Details}
+\label{apx:simulation_details}
+
+[TODO: Add (Implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015})]
+
+The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
+The \R code for the simulations can be found in [TODO].
+
+Each simulation is based on $4,000$ replications. 
+In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
+Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
+Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i=2 y^*_i-1$.
+The noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$. 
+The sample size $n=40$. 
+The dimension of the data is $p=23$. 
+The covariance $\Sigma=I$. 
+Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$.
+
+Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
+For test statistics that require data folding, we used $8$ folds. 
+We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
+We perform $400$ such permutations. 
+We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
+The reported power is the proportion of replication where the permutation p-value falls below $0.05$.
+
+
+
+
+
 \subsection{Controlling the False Positive Rate}
 \label{sec:type_i}
 
@@ -295,7 +330,7 @@ We return to this matter in the Discussion.
 
 
 %%%% Section %%%%
-\section{Power}
+\subsection{Power}
 \label{sec:power}
 
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
@@ -787,35 +822,6 @@ and related ``data science'' communities.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-\section{Simulation Details}
-\label{apx:simulation_details}
-
-[TODO: Add (Implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015})]
-
-The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
-The \R code for the simulations can be found in [TODO].
-
-Each simulation is based on $4,000$ replications. 
-In each replication, we generate $n$ i.i.d. samples from a shift model $\x_i = \mu \y^*_i + \eta_i$.
-Where $y^*_i=\set{0,1}$ is the class of subject $i$ in dummy coding. 
-Recalling that $y_i=\set{-1,1}$ is the class in effect coding, then clearly $y_i=2 y^*_i-1$.
-The noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$. 
-The sample size $n=40$. 
-The dimension of the data is $p=23$. 
-The covariance $\Sigma=I$. 
-Effects, i.e. shifts $\mu$, are equal coordinate $p$-vectors with coordinates that vary over $\mu \in \set{0,1/4,1/2}$.
-
-Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
-For test statistics that require data folding, we used $8$ folds. 
-We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
-We perform $400$ such permutations. 
-We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
-The reported power is the proportion of replication where the permutation p-value falls below $0.05$.
-
-
-
-
-\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Results}
 \label{apx:simulations}
