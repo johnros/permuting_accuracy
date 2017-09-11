@@ -95,7 +95,7 @@ The concentration of resubstitution accuracy near $1$, and its discreteness, ren
 
 To compare the power of accuracy tests and location tests in finite samples, we study a battery of test statistics by means of simulation. 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:power}, \ref{sec:example} and Appendix~\ref{apx:simulations}.
+The main findings are reported in Sections~\ref{sec:power}, \ref{sec:example}.
 A discussion follows in Section~\ref{sec:discussion}. 
 
 
@@ -285,6 +285,20 @@ We may thus proceed and compare the power of each test statistic.
 
 
 
+
+
+
+%%%% Section %%%%
+\subsection{Power}
+\label{sec:power}
+
+Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
+
+From Figure~\ref{fig:simulation_1} we learn that location tests are more powerful than accuracy tests.
+This is particularly visible for intermediate signal strength (green triangle), and the high-dimensional location tests: \emph{SD} and \emph{Hotelling.shrink} (see Table~\ref{tab:collected}).
+
+
+
 \begin{figure}[h]
 	\centering
 	\caption{
@@ -312,48 +326,42 @@ We may thus proceed and compare the power of each test statistic.
 \end{figure}
 
 
+Clearly, the statement that location tests have more power than accuracy tests is currently limited to the simulation setup of Figure~\ref{fig:simulation_1}.
+Are location tests always preferable to accuracy tests?
+No. 
+There exist scenarios where accuracy tests have no less, or even more power, than location tests.
+These are discussed in Section~\ref{sec:discussion}.
 
 
 
-
-%%%% Section %%%%
-\subsection{Power}
-\label{sec:power}
-
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
-From the various simulation results reported in Appendix~\ref{apx:simulations} we collect the following insights:[TODO]
 \begin{enumerate}
-\item location tests have no less-- and typically more-- power than accuracy tests in our simulations. [TODO: add scale alternatives]
+\item Heavy tailed noise reduces the power advantage of our location tests (Figure~\ref{fig:t_null}).
 
-\item The conservativeness of accuracy tests decays as the sample grows (Figures~\ref{fig:large_sample_1}, \ref{fig:large_sample_2} and \ref{fig:large_sample_3})
+\item The conservativeness of accuracy tests decays as the sample grows (Figure~\ref{fig:large_sample_3}).
 
-\item For heavy tailed distributions (Figure~\ref{fig:t_null}), the difference in power between location tests and accuracy tests vanishes. 
+\item It may be possible to find an alternative distribution (i.e., a signal), for which an accuracy test has more power. 
+Figure~\ref{fig:scale_change} is such an example where signal is in the covariance and not the means.
 
 \item Regularization is critical to power as can be seen by comparing \emph{Hotelling} to \emph{Hotelling.shrink} and \emph{SD}.
 
-\item The z-scoring of the accuracies was introduced to deal with unbalanced foldings. 
-If the z-scoring has any effect at all, it merely diminishes power.
-The non-z-scored accuracy tests are unaffected by the balance of the folding.
-
-\item Both accuracy and location tests are inappropriate for scale alternatives (Figure~\ref{fig:scale_change}). 
-This was to be expected and is reported mostly as a sanity check (cost=10 vs. cost=0.1 statistics).
-
-\item Balanced folding only affects the z-scored accuracy, in the opposite direction than we anticipated. 
-
 \item Increasing the SVM's cost parameter, which reduces the number of support vectors entering the classifier, reduces power. 
+
+\item Balanced (i.e. stratified) data folding is more powerful.
 
 \end{enumerate}
 
 
-The major insight from simulations, is that the use of accuracy tests for signal detection is typically underpowered compared to location tests. 
-One candidate explanation is simply Neyman-Pearson's Lemma: the signal in most of our simulations is a shift of the distribution. 
-Location tests, such as \emph{Hotelling's}, and it's variants, may be thought of as maximal-power tests by the Neyma-Peasron Lemma. 
-This intuition is not completely accurate, in particular because the covariance is unknown, and the alternative is composite. 
-There is thus no uniformly most powerful test for these problems. 
-Some candidate explanations for the success, and failure, of these tests are discussed in Section~\ref{sec:discussion}. 
+One candidate explanation for the power of location tests is uses Neyman-Pearson's Lemma: the signal in most of our simulations is a shift of the distribution. 
+Location tests, such as \emph{Hotelling's}, and it's variants, may be thought of as maximal-power tests by the Neyman-Pearson's Lemma. 
+There is thus no uniformly most powerful test for these problems, but the Neyman-Pearson intuition is a good starting point. 
+Some other explanations for the success, or failure, of these tests are discussed in Section~\ref{sec:discussion}. 
 We now verify the dominance of the high-dimensional location test in an empirical setup. 
 
 
+
+
+
+%%%%%%%   Neuroimaging
 \section{Neuroimaging Example}
 \label{sec:example}
 
@@ -398,29 +406,41 @@ For the details of the analysis see \cite{gilron_quantifying_2016}.
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: accuracy tests or location tests. 
-No amount of simulations can replace the insight provided by a closed-form analytic result. 
-The finite sample power of permutation tests is, however, a formidable mathematical problem. We thus currently content ourselves with simulations.
-We have concluded that the location tests are typically preferable. 
-Their high dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007},  are particularly well suited for neuroimaging problems such as MVPA.
-We attribute this to several effects: \newline
-(a) The discrete nature of the accuracy tests. \newline
-(b) Inefficient use of the data when validating with a holdout set. \newline
-(c) Inappropriate regularization in high SNR regimes, which may be due to strong correlations, or to $p/n=\mathcal{O}(1)$. \newline
-
-
-The degree of discretization is governed by the sample size. 
-For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, may be inaccurate.
-The analysis in \cite{ramdas_classification_2016} also deals with a split-sample, which's effect may be considerable in finite samples. 
-The analysis in \cite{golland_permutation_2005} does not reveal the strong concentration of resubstitution accuracy statistics. This analysis would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
-
-Simulations do show cases where location tests have no advantage over accuracy tests. 
-One such scenario is when the noise is heavytailed, as seen in Figure~\ref{fig:t_null}.
-The second scenario will be discussed in Section~\ref{sec:highdim}.
-
-The practical advice for the practitioner, is accuracy tests are never optimal. 
+Our practical advice for the practitioner, is that accuracy tests are never optimal. 
 There is always a multivariate test, possibly a location test, that dominates in power. 
 The class of location tests we examined, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
 They are also typically easier to implement, and faster to run, since no cross validation will be involved. 
+Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007}, are particularly well suited for empirical problems such as neuroimaging and genetics.
+
+
+
+
+\subsection{Where is power lost?}
+The low power of the accuracy tests compared to location tests can be attributed to the following causes:\newline
+(a) A Neyman-Pearson type argument, favoring location tests for the shift alternatives we simulated. \newline
+(b) The discrete nature of the accuracy tests. \newline
+(c) Inefficient use of the data when validating with a holdout set. \newline
+(d) Inappropriate regularization in high SNR regimes. \newline
+
+
+
+\paragraph{Shift Alternatives}
+We focused on shift alternatives. 
+One may argue that empirical alternatives are rarely of shift type, thus limiting our conclusions. 
+We reply that our empirical evidence in Section~\ref{sec:example}, also favors location tests. 
+More generally: discretization alone suffice to state that there will always be a test statistic with more power than an accuracy test. 
+When looking for a ``one-size fits all'' strategy, it is our experience that location tests are a better candidate than accuracy tests. 
+
+
+
+\paragraph{Discreteness}
+The degree of discretization is governed by the sample size. 
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all relative power analysis that rely on a Contiguity argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
+These studies have other limitations as well.
+\citet{ramdas_classification_2016} assume a split-sample, which increases the power advantage of location tests.
+The asymptotic analysis of the resubstitution accuracy statistics in \citep{golland_permutation_2005} not only conceals the discreteness of the test statistic, but also the effects of its concentration. 
+This analysis would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
+
 
 
 
@@ -429,19 +449,25 @@ A very important consideration is the ease of implementation.
 The need for cross validation of the accuracy test greatly increases its computational complexity. 
 Moreover, programming with discrete statistics is more prone to programming errors. 
 This is because their unforgiveness to the type of inequalities used. 
-Indeed, mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
+Mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
 This is not the case for continuous test statistics. 
 
 
 
+\subsection{Interpretation}
+Multivariate tests, and location tests in particular, are easier to interpret. 
+To do so we typically use a Neyman-Pearson type argument, to think of the type of signal a test is sensitive to. 
+Accuracy tests can be analyzed in the same way, but they are thought of as ``black boxes''. 
+For instance, \citet{gilron2017s} demonstrate that the type of signal they capture is less obvious to practitioners.  
 
-\subsection{Brain Machine Interfaces}
-\label{sec:reservations}
 
-Some reservations to the generality of our findings are in order. 
-Firstly, not all accuracy tests are concerned with signal detection.
-Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
-In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
+
+\subsection{Balanced folds}
+Balancing the V-fold cross validation folds, known as \emph{stratified cross validation}, improved the detection power in all simulation setups. 
+
+
+\subsection{Number of folds}
+The number of folds in the V-fold cross validation had no effect on conclusions (Figure~\ref{fig:n_folds}).
 
 
 \subsection{Testing in Augmented Spaces}
@@ -456,24 +482,19 @@ On the other hand, based on our experience, and the reported neuroimaging exampl
 
 
 
-
-
-
-
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It should thus be argued that the real advantage of the location tests is due to their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
-To study this, we call upon several \emph{regularized classifiers}, designed for high dimensional problems. 
-The high-dimension is typically dealt with by regularizing the covariance estimation. 
-The statistics we try include an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
-We also try we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}, which is similar in spirit to the \emph{SD} test. 
+It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
+To study this, we call upon several \emph{covariance regularized classifiers}, designed for high dimensional problems. 
+We try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
+We also try we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}, which is similar in spirit to the \emph{SD} location test. 
 
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 It can be seen that regularizing a classifier in high dimension, just like a location test, improves power. 
 It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}.
+This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}; a phenomenon we attribute to the discretization effect.
 
 
 
@@ -532,10 +553,71 @@ Yes.
 If, for instance, the signal is not carried in the means of the data, but rater, in its scatter. 
 In the testing literature, this is known as \emph{scale alternatives} \cite[e.g.][and references therein]{ley2015high}.
 
-In Figure TODO we designed a simulation where the accuracy test has more power than a location test. 
+In Figure~\ref{fig:scale_change} we designed a simulation where the accuracy test has more power than a location test. 
 This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
 Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
 
+
+\subsection{Departure From Gaussianity}
+Does a departure from the Gaussianity assumption invalidate our preference for location tests over accuracy tests? 
+Hotelling's $T^2$ test is known to be a Generalize-Likelihood-Ratio test in the multivariate Gaussian shift class so it may be possible that outside of the Gaussian class, it no longer enjoys its desirable statistical properties. 
+
+Replacing the Gaussian distribution with a heavy-tailed multivariate-$t$ distribution does not invalidate our the dominance of location tests over accuracy tests but it did reduce the advantage of the location tests (Figure~\ref{fig:t_null}).
+
+
+
+
+\begin{figure}[h]
+	\centering
+	\caption{\mycaption}	
+	%\label{fig:simulation_1}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file8"}
+		\caption{\textbf{Scale Change--} $\x_i =  \eta_i * \mu^ {\y^*_i}$ so that the effects are a scale change.}  
+		\label{fig:scale_change}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file9"}
+		\caption{\textbf{Heavytailed--} $\eta_i$ is not $p$-variate Gaussian, but rather $p$-variate t, with $df=3$ .  } 
+		\label{fig:t_null}
+	\end{subfigure}
+\end{figure}
+
+
+
+
+
+\subsection{Dependence}
+
+\begin{figure}[h]
+	\centering
+	\caption{\mycaption}	
+	\begin{subfigure}{.4\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{"art/file11"}
+	\caption{Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
+	\label{fig:ar_1}
+	\end{subfigure}
+	\begin{subfigure}{.4\textwidth}
+	\centering
+	%	  \includegraphics[width=1\linewidth]{"art/file10"}
+	\caption{Long-memory Brownian motion dependence: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.8$. .} 
+	\label{fig:pink_noise}
+	\end{subfigure}
+\end{figure}
+
+
+
+
+\subsection{Brain Machine Interfaces}
+\label{sec:reservations}
+
+Some reservations to the generality of our findings are in order. 
+Firstly, not all accuracy tests are concerned with signal detection.
+Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
+In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
 
 
 
@@ -807,98 +889,55 @@ and related ``data science'' communities.
 
 
 
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Results}
-\label{apx:simulations}
 
 
 
 
 
-
-
-\begin{figure}[h]
-\centering
-\caption{\mycaption}	
-\label{fig:n_folds}
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file4"}
-	  \caption{\textbf{2-fold} cross validation. Balanced folding.}  
-	\label{fig:n_folds_1}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file6"}
-	  \caption{\textbf{20-fold} cross validation. Balanced folding} 
-	\label{fig:n_folds_2}
-	\end{subfigure}
-\end{figure}
-
-
-
-\begin{figure}[h]
-\centering
-\caption{\mycaption}	
-\label{fig:n_folds_unbalanced}
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file5"}
-	  \caption{\textbf{2-fold} cross validation. Unbalanced folding.} 
-	\label{fig:n_folds_unbalanced_1}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file7"}
-	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
-	\label{fig:n_folds_unbalanced_2}
-	\end{subfigure}
-\end{figure}
+%\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Simulation Results}
+%\label{apx:simulations}
+%
+%
+%\begin{figure}[h]
+%\centering
+%\caption{\mycaption}	
+%\label{fig:n_folds}
+%	\begin{subfigure}{.5\textwidth}
+%	  \centering
+%	  \includegraphics[width=1\linewidth]{"art/file4"}
+%	  \caption{\textbf{2-fold} cross validation. Balanced folding.}  
+%	\label{fig:n_folds_1}
+%	\end{subfigure}%
+%	\begin{subfigure}{.5\textwidth}
+%	  \centering
+%	  \includegraphics[width=1\linewidth]{"art/file6"}
+%	  \caption{\textbf{20-fold} cross validation. Balanced folding} 
+%	\label{fig:n_folds_2}
+%	\end{subfigure}
+%\end{figure}
 
 
 
-\begin{figure}[h]
-\centering
-\caption{\mycaption}	
-%\label{fig:simulation_1}
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file8"}
-	  \caption{\textbf{Scale Change--} $\x_i =  \eta_i * \mu^ {\y^*_i}$ so that the effects are a scale change.}  
-	\label{fig:scale_change}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-	  \centering
-	  \includegraphics[width=1\linewidth]{"art/file9"}
-	  \caption{\textbf{Heavytailed--} $\eta_i$ is not $p$-variate Gaussian, but rather $p$-variate t, with $df=3$ .  } 
-	\label{fig:t_null}
-	\end{subfigure}
-\end{figure}
-
-
-
-
-
-
-
-\begin{figure}[h]
-\centering
-\caption{\mycaption}	
-	\begin{subfigure}{.4\textwidth}
-	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file10"}
-	  \caption{\textbf{High-Dimension, local alternative--} $n=400$, $\mu \in \frac{1}{\sqrt{10}} \times \set{0,1/4,1/2}.$} 
-	\label{fig:large_sample_3}
-	\end{subfigure}
-		\begin{subfigure}{.4\textwidth}
-		  \centering
-		  \includegraphics[width=1\linewidth]{"art/file11"}
-		  \caption{\textbf{AR(1) dependence--} $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
-		\label{fig:ar_1}
-	\end{subfigure}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%\caption{\mycaption}	
+%\label{fig:n_folds_unbalanced}
+%	\begin{subfigure}{.5\textwidth}
+%	  \centering
+%	  \includegraphics[width=1\linewidth]{"art/file5"}
+%	  \caption{\textbf{2-fold} cross validation. Unbalanced folding.} 
+%	\label{fig:n_folds_unbalanced_1}
+%	\end{subfigure}%
+%	\begin{subfigure}{.5\textwidth}
+%	  \centering
+%	  \includegraphics[width=1\linewidth]{"art/file7"}
+%	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
+%	\label{fig:n_folds_unbalanced_2}
+%	\end{subfigure}
+%\end{figure}
 
 
 
