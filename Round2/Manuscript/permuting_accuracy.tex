@@ -19,7 +19,7 @@
 \begin{abstract}
 We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
 It is also more complicated to implement. 
-For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power against a ``pure chance'' null. 
+For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power. 
 \end{abstract}
 
 
@@ -37,7 +37,7 @@ This practice is also observed in some high profile publications in the genetics
 To fix ideas, we will adhere to a concrete example.
 In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions which encode differences between vocal and non-vocal stimuli. 
 Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the spatial activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
-We call this an \emph{accuracy test}, because it uses the prediction accuracy as a test statistic \footnote{a.k.a.\ \emph{class prediction}, or \emph{pattern discrimination}.}. 
+We call this an \emph{accuracy test}, because it uses the prediction accuracy as a test statistic \footnote{Known as \emph{class prediction}, or \emph{pattern discrimination}.}. 
 
 This same signal detection task can be also approached as a two-group multivariate test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
@@ -47,18 +47,18 @@ As put in \cite{pereira_machine_2009}:
 \end{quote}
 A practitioner may thus approach the signal detection problem with a two-group location test such as Hotelling's $T^2$ \citep{anderson_introduction_2003}.
 Alternatively, if the size of brain region of interest is large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon, such as in \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, or \cite{srivastava_multivariate_2007} .
-For brevity, and in contrast to \emph{accuracy tests}, we will call these \emph{location tests}, \footnote{a.k.a.\ \emph{class comparisons}.}, because they test for the equality of location of a multivariate distribution. 
+For brevity, and in contrast to \emph{accuracy tests}, we will call these \emph{location tests\footnote{Known as \emph{class comparisons}.}}, because they test for the equality of location of a multivariate distribution. 
 
 
 At this point, it becomes unclear which is preferable: a location test or an accuracy test?
 The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $1,170$ citations\footnote{GoogleScholar. Accessed Aug 2017.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
-The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared Hotelling's $T^2$ location test to an accuracy using \emph{Fisher's linear discriminant analysis} classifier (LDA). 
+The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared Hotelling's $T^2$ location test to accuracy tests using \emph{Fisher's linear discriminant analysis} classifier (LDA). 
 By comparing the rates of convergence of the power of each statistic to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 Rates, however, are only a first stage when comparing test statistics. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
-They are the limiting ratios of the samples sizes required to achieve similar performance. 
+ARE is the limiting ratio of the samples sizes required by two statistics to achieve similar power. 
 \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
@@ -69,20 +69,20 @@ For comparison, the t-test is only $1.04$ more (asymptotically) efficient than W
 Before discarding accuracy tests as inefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
 The authors conjectured that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
 Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
-This eschews the discrete nature of the accuracy statistic, which will be shown to have  crucial impact. 
+This eschews the discrete nature of the accuracy statistic, which we will show to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
 Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, and are easier to implement.}
 
 Our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
-As simply put by Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}}} post back in $2011$:
+As put by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}}} post back in $2011$:
 \begin{quote}
 	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
 \end{quote}
 
 
 The degree of discretization is governed by the number of samples. 
-In our example from \citet{gilron_quantifying_2016}, the classification is computed using $40$ examples, so that the test statistic may assume only $40$ possible values. 
+In our example from \citet{gilron_quantifying_2016}, the classification accuracy is computed using $40$ examples, so that the test statistic may assume only $40$ possible values. 
 This number of examples is not unusual if considering this is the number of trial-repeats, or the number of subjects, in an neuroimaging study. 
 
 The discretization effect is aggravated if the test statistic is highly concentrated. 
@@ -95,8 +95,8 @@ The concentration of resubstitution accuracy near $1$, and its discreteness, ren
 
 To compare the power of accuracy tests and location tests in finite samples, we study a battery of test statistics by means of simulation. 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:power}, \ref{sec:example}.
-A discussion follows in Section~\ref{sec:discussion}. 
+The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}.
+A discussion follows. 
 
 
 
@@ -104,25 +104,28 @@ A discussion follows in Section~\ref{sec:discussion}.
 \section{Problem setup}
 \label{sec:problem_setup}
 
+
+\subsection{Multivariate Testing}
+
 Let $y \in y$ be a class encoding. 
 Let $x \in x$ be a $p$ dimensional feature vector. 
-In our vocal/non-vocal example we have $y=\set{-1,1}$ and $p$, the number of voxels in a brain region so that $x=\reals^{27}$. 
+In our vocal/non-vocal example we have $y=\set{0,1}$ and $p$, the number of voxels in a brain region so that $x=\reals^{27}$. 
 
-Given $n$ pairs of $(x_i,y_i)$, typically assumed i.i.d., a location test amounts to testing whether $x|y=1$ has the the same distribution as $x|y=-1$. 
+Given $n$ pairs of $(x_i,y_i)$, typically assumed i.i.d., a multivariate test amounts to testing whether $x|y=1$ has the the same distribution as $x|y=0$. 
 I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
-The comparison metric between test statistics, $\statistic$, will thus be their power, i.e., the probability that $\statistic$ infers that $x|y=1$ is not distributed like $x|y=-1$.
+The comparison metric between statistics is their power, i.e., the probability to infer that $x|y=1$ is not distributed like $x|y=0$.
 
 
 
 
-\subsection{Accuracy Measures as Test Statistics}
-We now define the predictive accuracy measure, and consider it as a test statistic.
-An accuracy test amounts to learning a predictive model and setting $\statistic$ to be some measure of the departure of the accuracy from its chance level.  
+\subsection{Prediction Accuracy as a Test Statistic}
+An accuracy test amounts to setting a test statistic $\statistic$, to be some measure prediction accuracy.  
 
-Denoting a dataset by $\data:=\{x_i,y_i\}_{i=1}^n$, a predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:x \to y$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$, so that $\algo:\data \to \hyp$. 
+Denoting a dataset by $\data:=\{x_i,y_i\}_{i=1}^n$, a predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:x \to y$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
 The accuracy of predictor\footnote{Known as the complement of the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
 The accuracy of an algorithm\footnote{Known as the complement of the \emph{expected test error} in \cite{hastie_elements_2003}}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
-Formally-- denoting by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the same for the i.i.d sample in $\data$, then
+Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
+We can then write 
 \begin{align}
 	\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure(x,y),
 \end{align}
@@ -162,13 +165,11 @@ where $|A|$ denotes the cardinality of a set $A$.
 
 The design of a permutation test using $\accEstim_{\algo}$ requires the following design choices: 
 \begin{enumerate}
-\item How to estimate $\accEstim_{\algo}$? In particular, is it resampled?
-\item For a V-fold cross validated test statistic:
-\begin{enumerate}
-\item Should the data be refolded in each permutation? 
-\item Should the data folding be balanced (a.k.a.\ stratified)?
-\item How many folds? 
-\end{enumerate}
+\item How to estimate $\accEstim_{\algo}$? In particular, should it be resampled and how? 
+\item If resampling using V-fold cross validation: 
+How many folds? 
+Should the data be refolded after each permutation? 
+Should the folding be balanced? 
 \end{enumerate}
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
@@ -180,7 +181,7 @@ We will thus be considering both cross validated accuracies, and resubstitution 
 
 
 \paragraph{Balanced folding?}
-The standard practice when cross validating is to constrain the data folds to be balanced, i.e. stratified \citep[e.g.][]{ojala_permutation_2010}.
+The standard practice when V-fold cross validating is to constrain the data folds to be balanced, i.e. stratified \citep[e.g.][]{ojala_permutation_2010}.
 This means that each fold has the same number of examples from each class. 
 We will report results with both balanced and unbalanced data foldings. 
 
@@ -215,13 +216,13 @@ SVM.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\
 \captionsetup{type=table}
 \caption{\footnotesize
 This table collects the various test statistics we will be studying. 
-Location tests include: Oracle, Hotelling, Hotelling.shrink, and SD.
-\textit{Hotelling} is the classical two-group $T^2$ statistic. 
-\textit{Oracle} is the same as Hotelling, only using the generative covariance, and not an estimated one.
+Location tests include: \textit{Oracle}, \textit{Hotelling}, \textit{Hotelling.shrink}, and \textit{SD}.
+\textit{Hotelling} is the classical two-group $T^2$ statistic \citep{anderson_introduction_2003}. 
+\textit{Oracle} is the same as Hotelling's $T^2$, only using the generative covariance, and not an estimated one.
 \textit{Hotelling.shrink} is a high dimensional version of $T^2$, with the regularized covariance from \citet{schafer_shrinkage_2005}. 
 \textit{SD} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
 The rest of the tests are accuracy tests, with details given in the table. 
-For example, \textit{SVM.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$.
+For example, \textit{SVM.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$ \citep{meyer_e1071:_2015}.
 Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstituted accuracy estimate.}
 \label{tab:collected}
 \end{tcolorbox}
@@ -229,7 +230,7 @@ Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstitu
 
 \subsection{Collecting the Pieces Into a Permutation Test}
 The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
-Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not kick in and we recur to permutation tests.
+Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is either exact or conservative, but never anti-conservative. 
 
 The sketch of our test is the following:
@@ -245,6 +246,7 @@ The sketch of our test is the following:
 
 %%%% Section %%%%
 \section{Results}
+\label{sec:results}
 
 Now that we can construct various accuracy tests, we can compare them to location tests. 
 We do so via simulation, which details are now described.
@@ -253,8 +255,6 @@ We do so via simulation, which details are now described.
 
 \subsection{Simulation Details}
 \label{apx:simulation_details}
-
-[TODO: Add (Implemented with the \emph{svm} \R function \citep{meyer_e1071:_2015})]
 
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
 The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
