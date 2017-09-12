@@ -222,7 +222,7 @@ Location tests include: \textit{Oracle}, \textit{Hotelling}, \textit{Hotelling.s
 \textit{Hotelling.shrink} is a high dimensional version of $T^2$, with the regularized covariance from \citet{schafer_shrinkage_2005}. 
 \textit{SD} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
 The rest of the tests are accuracy tests, with details given in the table. 
-For example, \textit{SVM.CV.2} is a linear SVM, with cross validated accuracy, and cost parameter set at $0.1$ \citep{meyer_e1071:_2015}.
+For example, \textit{SVM.CV.2} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $0.1$ \citep{meyer_e1071:_2015}.
 Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstituted accuracy estimate.}
 \label{tab:collected}
 \end{tcolorbox}
@@ -231,14 +231,13 @@ Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstitu
 \subsection{Collecting the Pieces Into a Permutation Test}
 The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
 Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is either exact or conservative, but never anti-conservative. 
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid in that it has a false positive rate no larger than the desired level. 
 
-The sketch of our test is the following:
-\begin{enumerate}\itemsep0em 
-	\item Set $\statistic$ to be any of the statistics in Table~\ref{tab:collected}.
-	\item Permute labels to recover the null distribution of $\statistic$. 
-	\item Declare classes differ if the observed $\statistic$ is beyond its $95\%$'th permutation percentile.  
-\end{enumerate}
+\noindent
+The sketch of our test is the following:\newline
+(a) Fix a test statistic $\statistic$.\newline
+(b) Permute labels and recompute $\statistic$ to recover its null. \newline
+(c) Declare classes differ if the observed $\statistic$ is beyond its $95\%$'th permutation percentile.  \newline
 
 
 
@@ -247,7 +246,6 @@ The sketch of our test is the following:
 %%%% Section %%%%
 \section{Results}
 \label{sec:results}
-
 Now that we can construct various accuracy tests, we can compare them to location tests. 
 We do so via simulation, which details are now described.
 
@@ -260,15 +258,15 @@ The following details are common to all the reported simulations, unless stated 
 The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
 
 Each simulation is based on $1,000$ replications. 
-In each replication, we generate $n$ i.i.d. samples from a shift class $\x_i = \mu \y^*_i + \eta_i$, w=here $y^*_i=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
-The covariance $\Sigma=I$ unless stated otherwise. 
+In each replication, we generate $n$ i.i.d. samples from a shift class $\x_i = \mu \y^*_i + \eta_i$, where $y^*_i=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+The covariance $\Sigma=I$. 
 Effects, i.e. shifts $\mu$, are equal equal in all $p$ coordinates, and vary over $\mu \in \set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
-We then reject the $\mu_i=0$ null hypothesis if the permutation p-value is smaller than $0.05$.
+We then reject the $\mu_i=0$ null hypothesis against a two sided alternative if the permutation p-value is smaller than $0.05$.
 The reported power is thus the proportion of replication where the permutation p-value falls below $0.05$.
 
 
@@ -277,7 +275,7 @@ The reported power is thus the proportion of replication where the permutation p
 \label{sec:type_i}
 
 We start with a sanity check of the simulation. 
-Theory suggests that all permutation tests should be exact, i.e., provide non-asymptotic, possibly conservative, control of the false positive rate. 
+Theory suggests that all permutation tests should control the false positive rates. 
 Our simulations confirm this.
 In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
 Since the red circles are always below the desired $0.05$ error rate, then the false positive rate of all test statistics, in all simulations is controlled. 
@@ -302,7 +300,7 @@ This is particularly visible for intermediate signal strength (green triangle), 
 \begin{figure}[h]
 	\centering
 	\caption{
-		The power of a permutation test with various test statistics. 
+		The power of the permutation test with various test statistics. 
 		The power on the $x$ axis. 
 		Effects are color and shape coded. 
 		The various statistics on the $y$ axis. 
@@ -333,29 +331,6 @@ There exist scenarios where accuracy tests have no less, or even more power, tha
 These are discussed in Section~\ref{sec:discussion}.
 
 
-
-\begin{enumerate}
-\item Heavy tailed noise reduces the power advantage of our location tests (Figure~\ref{fig:t_null}).
-
-\item The conservativeness of accuracy tests decays as the sample grows (Figure~\ref{fig:large_sample_3}).
-
-\item It may be possible to find an alternative distribution (i.e., a signal), for which an accuracy test has more power. 
-Figure~\ref{fig:scale_change} is such an example where signal is in the covariance and not the means.
-
-\item Regularization is critical to power as can be seen by comparing \emph{Hotelling} to \emph{Hotelling.shrink} and \emph{SD}.
-
-\item Increasing the SVM's cost parameter, which reduces the number of support vectors entering the classifier, reduces power. 
-
-\item Balanced (i.e. stratified) data folding is more powerful.
-
-\end{enumerate}
-
-
-One candidate explanation for the power of location tests is uses Neyman-Pearson's Lemma: the signal in most of our simulations is a shift of the distribution. 
-Location tests, such as \emph{Hotelling's}, and it's variants, may be thought of as maximal-power tests by the Neyman-Pearson's Lemma. 
-There is thus no uniformly most powerful test for these problems, but the Neyman-Pearson intuition is a good starting point. 
-Some other explanations for the success, or failure, of these tests are discussed in Section~\ref{sec:discussion}. 
-We now verify the dominance of the high-dimensional location test in an empirical setup. 
 
 
 
@@ -415,12 +390,12 @@ Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{go
 
 
 
-\subsection{Where is power lost?}
+\subsection{Where do Accuracy Tests Lose Power?}
 The low power of the accuracy tests compared to location tests can be attributed to the following causes:\newline
-(a) A Neyman-Pearson type argument, favoring location tests for the shift alternatives we simulated. \newline
-(b) The discrete nature of the accuracy tests. \newline
+(a) A Neyman-Pearson type argument, favoring location tests for the shift alternatives we simulated (even if not maximal power). \newline
+(b) The discrete nature of accuracy tests. \newline
 (c) Inefficient use of the data when validating with a holdout set. \newline
-(d) Inappropriate regularization in high SNR regimes. \newline
+(d) Inappropriate regularization in high SNR regimes: testing requires less regularization than predicting. \newline
 
 
 
@@ -435,22 +410,13 @@ When looking for a ``one-size fits all'' strategy, it is our experience that loc
 
 \paragraph{Discreteness}
 The degree of discretization is governed by the sample size. 
-For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all relative power analysis that rely on a Contiguity argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
 These studies have other limitations as well.
-\citet{ramdas_classification_2016} assume a split-sample, which increases the power advantage of location tests.
-The asymptotic analysis of the resubstitution accuracy statistics in \citep{golland_permutation_2005} not only conceals the discreteness of the test statistic, but also the effects of its concentration. 
-This analysis would render the resubstitution estimates a legitimate asymptotic test, and a terrible finite sample test. 
+\citet{ramdas_classification_2016} assume a split-sample holdout, without cross-validation.
+This hurts the power of accuracy tests. 
+The asymptotic analysis of the resubstitution accuracy statistics in \citet{golland_permutation_2005} not only conceals the discreteness of the test statistic, but also the effects of its concentration. 
+This analysis renders resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. 
 
-
-
-
-\subsection{Ease of implementation}
-A very important consideration is the ease of implementation. 
-The need for cross validation of the accuracy test greatly increases its computational complexity. 
-Moreover, programming with discrete statistics is more prone to programming errors. 
-This is because their unforgiveness to the type of inequalities used. 
-Mistakenly replacing a weak inequality with a strong inequality in one's program may considerably change the results. 
-This is not the case for continuous test statistics. 
 
 
 
@@ -462,11 +428,11 @@ For instance, \citet{gilron2017s} demonstrate that the type of signal they captu
 
 
 
-\subsection{Balanced folds}
+\subsection{Balanced Folds}
 Balancing the V-fold cross validation folds, known as \emph{stratified cross validation}, improved the detection power in all simulation setups. 
 
 
-\subsection{Number of folds}
+\subsection{Number of Folds}
 The number of folds in the V-fold cross validation had no effect on conclusions (Figure~\ref{fig:n_folds}).
 
 
@@ -622,7 +588,7 @@ In those examples, the purpose of the test is not to detect a difference between
 
 
 
-\subsection{Smoothing accuracy estimates}
+\subsection{Smoothing Accuracy Estimates}
 \label{sec:bootstrap}
 It may be possible to alleviate the effect of discretization via the cross-validation scheme.
 The discreteness of the accuracy statistic is governed by the number of examples in the union of holdout test sets.
@@ -703,7 +669,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 
 
-\subsection{A good accuracy test}
+\subsection{A Good Accuracy Test}
 There are cases where an accuracy test cannot be replaced by some location, or other, statistical test. 
 Brain-computer interfaces are one such example, where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
 For these cases, we collect some conclusions and best practices. 
