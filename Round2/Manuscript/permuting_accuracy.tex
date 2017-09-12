@@ -333,6 +333,139 @@ These are discussed in Section~\ref{sec:discussion}.
 
 
 
+\subsection{Scale Alternatives}
+Is it possible for an accuracy test to have more power than a location test?
+Yes. 
+\emph{Scale alternatives}, where signal is carried in the covariance and not in means, provide one such example. 
+
+In Figure~\ref{fig:scale_change} we report a simulation designed to show the possibility of an accuracy test being more powerful then a location test. 
+This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
+If the practitioner were expecting a change in scatter, then a Neyman-Pearson type reasoning would lead them to abandon both location and accuracy tests, and adopt a bona-fide covariance test \citep[e.g.][]{ley2015high}.
+Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
+
+
+\subsection{Departure From Gaussianity}
+The Neyman-Pearson type reasoning that favors the location test over accuracy tests may fail when the data is not multivariate Guassian, thus Hotelling's $T^2$ statistic no longer a generalized-likelihood-ratio test. 
+
+To check this, we replaced the multivariate Gaussian distribution with a heavy-tailed multivariate-$t$ distribution. 
+The dominance of the location tests was preserved even under a multivariate heavy-tailed distribution, but this does reduce the advantage of the location tests  over accuracy tests (Figure~\ref{fig:t_null}).
+
+
+
+
+\begin{figure}[h]
+	\centering
+	\caption{\mycaption}	
+	%\label{fig:simulation_1}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file8"}
+		\caption{\textbf{Scale Change--} $\x_i =  \eta_i * \mu^ {\y^*_i}$ so that the effects are a scale change.}  
+		\label{fig:scale_change}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file9"}
+		\caption{\textbf{Heavytailed--} $\eta_i$ is not $p$-variate Gaussian, but rather $p$-variate t, with $df=3$ .  } 
+		\label{fig:t_null}
+	\end{subfigure}
+\end{figure}
+
+
+
+
+
+\subsection{Dependence}
+
+\begin{figure}[h]
+	\centering
+	\caption{\mycaption}	
+	\begin{subfigure}{.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file11"}
+		\caption{Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
+		\label{fig:ar_1}
+	\end{subfigure}
+	\begin{subfigure}{.4\textwidth}
+		\centering
+		%	  \includegraphics[width=1\linewidth]{"art/file10"}
+		\caption{Long-memory Brownian motion dependence: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.8$. .} 
+		\label{fig:pink_noise}
+	\end{subfigure}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{The Effect of High Dimension}
+\label{sec:highdim}
+Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
+It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
+To study this, we call upon several \emph{covariance regularized classifiers}, designed for high dimensional problems. 
+We try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
+We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which is similar in spirit to the \emph{SD} location test. 
+
+
+Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
+It can be seen that regularizing a classifier in high dimension, just like a location test, improves power. 
+It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
+This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}; a phenomenon we attribute to the discretization effect.
+
+
+
+\bigskip
+
+%TODO: change cost in simulation to 0.1
+\begin{tcolorbox}
+	\centering
+	\begin{tabular}{l|c|c|c|c}
+		Name & Algorithm & Resampling & Z-scored & Parameters\\ 
+		\hline
+		\hline
+		SVM.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
+		SVM.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
+		LDA.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
+		LDA.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
+		LDA.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
+		LDA.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
+	\end{tabular} 
+	\captionsetup{type=table}
+	\caption{
+		The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
+		\emph{SVM.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
+		\emph{SVM.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
+		\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
+		\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
+		\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
+		\emph{LDA.highdim.4} is the same with b$0.632$.
+	} 
+	\label{tab:collected_3}
+\end{tcolorbox}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{"art/file14"}
+	\caption{
+		\textbf{HighDim Classifier--} 
+		The power of a permutation test with various test statistics. 
+		The power on the $x$ axis. 
+		Effects are color and shape coded. 
+		The various statistics on the $y$ axis. 
+		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
+		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Simulation details in Appendix~\ref{apx:simulation_details}.
+	} 
+	\label{fig:highdim}
+\end{figure}
+
+
+
+
+
 
 
 
@@ -422,18 +555,10 @@ This analysis renders resubstitution accuracy estimates a legitimate asymptotic 
 
 \subsection{Interpretation}
 Multivariate tests, and location tests in particular, are easier to interpret. 
-To do so we typically use a Neyman-Pearson type argument, to think of the type of signal a test is sensitive to. 
-Accuracy tests can be analyzed in the same way, but they are thought of as ``black boxes''. 
-For instance, \citet{gilron2017s} demonstrate that the type of signal they capture is less obvious to practitioners.  
+To do so we typically use a Neyman-Pearson type argument, and think of the type of signal a test is sensitive to. 
+Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
+\citet{gilron2017s} for instance, demonstrate that the type of signal captured by accuracy tests is less obvious to neuroimaging practitioners than location tests. 
 
-
-
-\subsection{Balanced Folds}
-Balancing the V-fold cross validation folds, known as \emph{stratified cross validation}, improved the detection power in all simulation setups. 
-
-
-\subsection{Number of Folds}
-The number of folds in the V-fold cross validation had no effect on conclusions (Figure~\ref{fig:n_folds}).
 
 
 \subsection{Testing in Augmented Spaces}
@@ -441,149 +566,12 @@ It may be argued that accuracy tests permits the separation between classes in h
 This is a false argument-- accuracy tests do not have any more flexibility than location tests. 
 Indeed, it is possible to test for location in the same space the classifier is learned. 
 For independence tests in high dimensional spaces see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
-On the other hand, based on our experience, and the reported neuroimaging example, we find that a location test in the original feature space is a simple and powerful enough.
 
 
 
 
 
 
-\subsection{The Effect of High Dimension}
-\label{sec:highdim}
-Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
-To study this, we call upon several \emph{covariance regularized classifiers}, designed for high dimensional problems. 
-We try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
-We also try we try a diagonalized LDA \citep{dudoit_comparison_2002}, a.k.a.\ \emph{Gaussian naive Bayes}, which is similar in spirit to the \emph{SD} location test. 
-
-
-Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
-It can be seen that regularizing a classifier in high dimension, just like a location test, improves power. 
-It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}; a phenomenon we attribute to the discretization effect.
-
-
-
-\bigskip
-
-%TODO: change cost in simulation to 0.1
-\begin{tcolorbox}
-\centering
-\begin{tabular}{l|c|c|c|c}
-Name & Algorithm & Resampling & Z-scored & Parameters\\ 
-\hline
-\hline
-SVM.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
-SVM.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
-LDA.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
-LDA.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
-LDA.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
-LDA.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
-\end{tabular} 
-\captionsetup{type=table}
-\caption{
-The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-\emph{SVM.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
-\emph{SVM.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
-\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
-\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
-\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-\emph{LDA.highdim.4} is the same with b$0.632$.
-} 
-\label{tab:collected_3}
-\end{tcolorbox}
-
-
-\begin{figure}[ht]
-\centering
-	  \includegraphics[width=0.7\linewidth]{"art/file14"}
-	  \caption{
-\textbf{HighDim Classifier--} 
-		The power of a permutation test with various test statistics. 
-		The power on the $x$ axis. 
-		Effects are color and shape coded. 
-		The various statistics on the $y$ axis. 
-		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		Simulation details in Appendix~\ref{apx:simulation_details}.
-} 
-	\label{fig:highdim}
-\end{figure}
-
-
-
-
-\subsection{Scale Alternatives}
-Is it possible that an accuracy test may have more power than a location test?
-Yes. 
-If, for instance, the signal is not carried in the means of the data, but rater, in its scatter. 
-In the testing literature, this is known as \emph{scale alternatives} \cite[e.g.][and references therein]{ley2015high}.
-
-In Figure~\ref{fig:scale_change} we designed a simulation where the accuracy test has more power than a location test. 
-This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
-Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
-
-
-\subsection{Departure From Gaussianity}
-Does a departure from the Gaussianity assumption invalidate our preference for location tests over accuracy tests? 
-Hotelling's $T^2$ test is known to be a Generalize-Likelihood-Ratio test in the multivariate Gaussian shift class so it may be possible that outside of the Gaussian class, it no longer enjoys its desirable statistical properties. 
-
-Replacing the Gaussian distribution with a heavy-tailed multivariate-$t$ distribution does not invalidate our the dominance of location tests over accuracy tests but it did reduce the advantage of the location tests (Figure~\ref{fig:t_null}).
-
-
-
-
-\begin{figure}[h]
-	\centering
-	\caption{\mycaption}	
-	%\label{fig:simulation_1}
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file8"}
-		\caption{\textbf{Scale Change--} $\x_i =  \eta_i * \mu^ {\y^*_i}$ so that the effects are a scale change.}  
-		\label{fig:scale_change}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file9"}
-		\caption{\textbf{Heavytailed--} $\eta_i$ is not $p$-variate Gaussian, but rather $p$-variate t, with $df=3$ .  } 
-		\label{fig:t_null}
-	\end{subfigure}
-\end{figure}
-
-
-
-
-
-\subsection{Dependence}
-
-\begin{figure}[h]
-	\centering
-	\caption{\mycaption}	
-	\begin{subfigure}{.4\textwidth}
-	\centering
-	\includegraphics[width=1\linewidth]{"art/file11"}
-	\caption{Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
-	\label{fig:ar_1}
-	\end{subfigure}
-	\begin{subfigure}{.4\textwidth}
-	\centering
-	%	  \includegraphics[width=1\linewidth]{"art/file10"}
-	\caption{Long-memory Brownian motion dependence: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.8$. .} 
-	\label{fig:pink_noise}
-	\end{subfigure}
-\end{figure}
-
-
-
-
-\subsection{Brain Machine Interfaces}
-\label{sec:reservations}
-
-Some reservations to the generality of our findings are in order. 
-Firstly, not all accuracy tests are concerned with signal detection.
-Consider brain decoding for machine interfaces, or clinical diagnosis, where the presence of a medical condition is predicted from imaging data \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013}. 
-In those examples, the purpose of the test is not to detect a difference between classes, but to actually test the performance of a particular classifier.  
 
 
 
@@ -671,7 +659,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 \subsection{A Good Accuracy Test}
 There are cases where an accuracy test cannot be replaced by some location, or other, statistical test. 
-Brain-computer interfaces are one such example, where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
+Brain-computer interfaces and clinical diagnostics \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
 For these cases, we collect some conclusions and best practices. 
 
 
