@@ -8,7 +8,7 @@ output: html_document
 
 
 ```{r preliminaries}
-file.name <- "file10"
+file.name <- "file16"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -24,8 +24,9 @@ source('Gilron Effect of Cross Validatino.R')
 ## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
 
-## Signal in scale
-Sigma <- diag(p)
+## Covariance
+Sigma <- browninan_cov(p,0.2)
+# lattice::levelplot(Sigma)
 ```
 
 
@@ -44,8 +45,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
-    ## t noise
-    .noise <- rmvt(n=n, sigma = Sigma, df=3)
+    ## Gaussian noise
+    .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
     noise <- .noise + effect * labels
@@ -139,7 +140,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file10.RData")
+# load("file16.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
@@ -148,13 +149,15 @@ pvals.1.9 %<>%  as.data.table()
 names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
 
 
-plot.3 <- pvals.melt %>% 
 ```{r}
+plot.3 <- pvals.melt %>% 
   ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
   theme_bw(base_size = 20)+
   theme(legend.position="none")+
