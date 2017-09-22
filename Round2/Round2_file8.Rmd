@@ -61,6 +61,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Scale alternative:
     A <- diag(n) 
     A[labels,labels] <- A[labels,labels]*(1:n)^(-effect)
+    # lattice::levelplot(A)
+    # image(A)
     noise <- A %*% .noise 
     # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
     

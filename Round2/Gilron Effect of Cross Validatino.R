@@ -18,6 +18,7 @@ suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(LiblineaR))
 suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library('globaltest'))
+suppressPackageStartupMessages(library(RobPer))
 
 # source("https://bioconductor.org/biocLite.R")
 # biocLite("globaltest")
@@ -86,6 +87,24 @@ comSym_cov <- function(n, rho){
 }
 ## Testing:
 # image(comSym_cov(1e1,0.9))
+
+
+
+browninan_cov <- function(n, rho){
+  result <- matrix(NA, n, n)
+  for(i in 1:n){
+    for(j in 1:n){
+      result[i,j] <- rho*min(i,j)
+    }
+  }
+  return(result)
+}
+## Testing
+# lattice::levelplot(browninan_cov(10,0.8))
+
+
+
+
 
 
 balanced_folding <- function(labels, n.folds, balance){
