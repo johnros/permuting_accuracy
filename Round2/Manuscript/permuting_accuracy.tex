@@ -221,7 +221,7 @@ Hotelling.shrink & Hotelling & Resubstitution & -- \\
 SD & Hotelling & Resubstitution & -- \\ 
 LDA.CV.1 	& LDA & V-fold 			&  -- \\ 
 LDA.noCV.1 	& LDA & Resubstitution 	&  --\\ 
-LDA.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
+SVM.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
 SVM.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
 SVM.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
 SVM.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
@@ -241,15 +241,16 @@ Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstitu
 \end{tcolorbox}
 
 
-\subsection{Collecting the Pieces Into a Permutation Test}
+\subsection{From a Test Statistic to a Permutation Test}
+
 The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
 Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid in that it has a false positive rate no larger than the desired level. 
 
 \noindent
-The sketch of our test is the following:\newline
-(a) Fix a test statistic $\statistic$.\newline
-(b) Permute labels and recompute $\statistic$ to recover its null. \newline
+The sketch of our permutation test is the following:\newline
+(a) Fix a test statistic.\newline
+(b) Permute labels and recompute the statistic to recover its permutation distribution. \newline
 (c) Declare classes differ if the observed $\statistic$ is beyond its $95\%$'th permutation percentile.  \newline
 
 
@@ -259,12 +260,12 @@ The sketch of our test is the following:\newline
 %%%% Section %%%%
 \section{Results}
 \label{sec:results}
-Now that we can construct various accuracy tests, we can compare them to location tests. 
+We now compare the power of our various statistics in various configurations. 
 We do so via simulation, which details are now described.
+We start by presenting the most basic simulation setup, and then its modifications. 
 
 
-
-\subsection{Simulation Details}
+\subsection{Basic Simulation Setup}
 \label{sec:simulation_details}
 
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
@@ -274,26 +275,27 @@ Each simulation is based on $1,000$ replications.
 In each replication, we generate $n$ i.i.d. samples from a shift class 
 \begin{align}
 \label{eq:distribution}
-	\x_i = \mu \y^*_i + \eta_i,
+	\x_i = \mu \y_i + \eta_i,
 \end{align}
-where $\y^*_i=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
-Effects, i.e. shifts $\mu$, are equal equal in all $p$ coordinates, and vary over $\mu \in \set{0,1/4,1/2}$.
+In this basic setup, effects are of shift type and captured by $\mu$. 
+Shifts are equal in all $p$ coordinates of $\mu$, with magnitude varying over $\set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
 We then reject the $\mu_i=0$ null hypothesis against a two sided alternative if the permutation p-value is smaller than $0.05$.
-The reported power is thus the proportion of replication where the permutation p-value falls below $0.05$.
+The reported power is the proportion of replication where the permutation p-value fell below $0.05$.
 
 
 
 \subsection{False Positive Rate}
 \label{sec:type_i}
 
-We start with a sanity check of the simulation. 
-Theory suggests that all permutation tests should control the false positive rates. 
+We start with a sanity check. 
+Theory suggests that all test statistics should control their false positive rate. 
 Our simulations confirm this.
 In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
 Since the red circles are always below the desired $0.05$ error rate, then the false positive rate of all test statistics, in all simulations is controlled. 
@@ -311,7 +313,7 @@ We may thus proceed and compare the power of each test statistic.
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
 
 From Figure~\ref{fig:simulation_1} we learn that location tests are more powerful than accuracy tests.
-This is particularly visible for intermediate signal strength (green triangle), and the high-dimensional location tests: \emph{SD} and \emph{Hotelling.shrink} (see Table~\ref{tab:collected}).
+This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
 
 
 
@@ -323,49 +325,33 @@ This is particularly visible for intermediate signal strength (green triangle), 
 		Effects are color and shape coded. 
 		The various statistics on the $y$ axis. 
 		Their details are given in Table~\ref{tab:collected}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Effects vary over $\mu=(0,\dots,0)$ (red circle), $\mu=(0.25,\dots,0.25)$ (green triangle), and $\mu=(0.5,\dots,0.5)$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
 		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
 	\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file3"}
-		\caption{\textbf{Unbalanced.}} %TODO: caption  
+		\caption{\textbf{Unbalanced.}} 
 		\label{fig:simulation_11}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file2"}
-		\caption{\textbf{Balanced.}} %TODO: caption 
+		\caption{\textbf{Balanced.}} 
 		\label{fig:simulation_12}
 	\end{subfigure}
 \end{figure}
 
 
-Clearly, the statement that location tests have more power than accuracy tests is currently limited to the simulation setup of Figure~\ref{fig:simulation_1}.
-Are location tests always preferable to accuracy tests?
-No. 
-There exist scenarios where accuracy tests have no less, or even more power, than location tests.
-These are discussed in Section~\ref{sec:discussion}.
 
 
-
-
-\subsection{Scale Alternatives}
-Is it possible for an accuracy test to have more power than a location test?
-Yes. 
-\emph{Scale alternatives}, where signal is carried in the covariance and not in means, provide one such example. 
-
-In Figure~\ref{fig:scale_change} we report a simulation designed to show the possibility of an accuracy test being more powerful then a location test. 
-This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
-If the practitioner were expecting a change in scatter, then a Neyman-Pearson type reasoning would lead them to abandon both location and accuracy tests, and adopt a bona-fide covariance test \citep[e.g.][]{ley2015high}.
-Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
 
 
 \subsection{Departure From Gaussianity}
-The Neyman-Pearson type reasoning that favors the location test over accuracy tests may fail when the data is not multivariate Guassian, thus Hotelling's $T^2$ statistic no longer a generalized-likelihood-ratio test. 
+The Neyman-Pearson Lemma (NPL) type reasoning that favors the location test over accuracy tests may fail when the data is not multivariate Gaussian, and Hotelling's $T^2$ statistic no longer a generalized-likelihood-ratio test. 
 
-To check this, we replaced the multivariate Gaussian distribution with a heavy-tailed multivariate-$t$ distribution. 
+To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution. 
 The dominance of the location tests was preserved even under a multivariate heavy-tailed distribution, but this does reduce the advantage of the location tests  over accuracy tests (Figure~\ref{fig:t_null}).
 
 
@@ -385,7 +371,7 @@ The dominance of the location tests was preserved even under a multivariate heav
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file9"}
-		\caption{\textbf{Heavytailed--} $\eta_i$ is not $p$-variate Gaussian, but rather $p$-variate t, with $df=3$ .  } 
+		\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t, with $df=3$ .  } 
 		\label{fig:t_null}
 	\end{subfigure}
 \end{figure}
@@ -394,13 +380,23 @@ The dominance of the location tests was preserved even under a multivariate heav
 
 
 
-\subsection{Dependence}
-We now test the robustness of our results to the correlation within sample. 
-in terms of Eq.(\ref{eq:distribution}) it means we change $\Sigma$. 
-Intuitively- both location tests and accuracy tests require some estimation of $\Sigma$, so that correlations are accounted for. 
-The question remains- which test does it better. 
+\subsection{Departure from Independence}
+\label{sec:dependence}
+
+We now test the robustness of our results to the correlations in $x$. 
+In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
+Intuitively- both location tests and accuracy tests include the estimation of $\Sigma$, so that correlations should be accounted for. 
+The question remains- which test has more power?
 We address this matter in two setups. 
-A ``short range'' dependence, for which we use an $AR(1)$ covariance, and a ``long range'' dependence, for which we use the Brownian motion covariance. 
+The first is a ``short memory'' dependence, for which we use an $AR(1)$ covariance.
+The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
+
+We would expect \emph{Oracle} to be the best performer within the location tests. 
+We would also expect \emph{SD} to be the worst performer, particularly in the long memory setup, since its assumed diagonal covariance is far from the true covariance. 
+From the long memory setup in Figure~\ref{fig:pink_noise} we see that the Oracle is indeed the best performed, but we are surprised that:
+(a) An SVM with small regularization (\emph{SVM.CV.2}) is the best test statistic.
+(b) \emph{SD} outperforms \emph{Hotelling.shrink} even though is assumes a diagonal covariance, which is far from the true Brownian motion covariance. 
+[TODO: why??]
 
 
 \begin{figure}[h]
@@ -409,7 +405,8 @@ A ``short range'' dependence, for which we use an $AR(1)$ covariance, and a ``lo
 	\begin{subfigure}{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file11"}
-		\caption{Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
+		\caption{TODO: Oracle looks bad. 
+			Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.8$. } 
 		\label{fig:ar_1}
 	\end{subfigure}
 	\begin{subfigure}{.4\textwidth}
@@ -424,7 +421,23 @@ A ``short range'' dependence, for which we use an $AR(1)$ covariance, and a ``lo
 
 
 
-\subsection{Resampling with Replacement}
+\subsection{Departure from Shift Alternatives}
+Is it possible for an accuracy test to have more power than a location test?
+Yes. 
+We already saw one example in the long memory setup in Section~\ref{sec:dependence}.
+\emph{Scale alternatives}, where signal is carried in the covariance and not in means, provide one such example. 
+Formally, $\mathbb{E}[x|y=1]=\mathbb{E}[x|y=0]$, but $Var[x|y=1]\neq Var[x|y=0]$.
+
+In Figure~\ref{fig:scale_change} we report a simulation designed to show the possibility of an accuracy test being more powerful then a location test. 
+This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
+If the practitioner were expecting a change in scatter, then a Neyman-Pearson type reasoning would lead them to abandon both location and accuracy tests, and adopt a bona-fide covariance test \citep[e.g.][]{ley2015high}.
+Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
+
+
+
+
+
+\subsection{Departure from V-fold CV}
 \label{sec:bootstrap}
 
 Intuition suggests we may alleviate the discretization by cross-validating with replacement, instead of the V-fold CV.
@@ -770,7 +783,7 @@ We find that also in this mixture class of models a location test has more power
 \centering
 	  \includegraphics[width=0.7\linewidth]{"art/file12"}
 	  \caption{TODO: verify!
-	  	\textbf{Mixture--} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y^*_i}  (1/2+p)^{1-\y^*_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
+	  	\textbf{Mixture--} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y_i}  (1/2+p)^{1-\y_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:golland}
 \end{figure}
