@@ -20,6 +20,7 @@
 We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
 It is also more complicated to implement. 
 For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power. 
+TODO: replace matrix(-1,...) with matrix(NA,...) in ALL files!
 \end{abstract}
 
 
@@ -91,7 +92,7 @@ For an intuition consider the usage of the \emph{resubstitution accuracy} as a t
 This statistic simply means that the accuracy is not cross validated, but rather evaluated on the training data.
 If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
 In a very high dimensional regime, the resubstitution accuracy will be $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
-The concentration of resubstitution accuracy near $1$, and its discreteness, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
+The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 
 
 To compare the power of accuracy tests and location tests in finite samples, we study a battery of test statistics by means of simulation. 
@@ -379,7 +380,7 @@ The dominance of the location tests was preserved even under a multivariate heav
 
 
 
-
+% Dependence
 \subsection{Departure from Independence}
 \label{sec:dependence}
 
@@ -420,7 +421,7 @@ From the long memory setup in Figure~\ref{fig:pink_noise} we see that the Oracle
 
 
 
-
+% Scale alternatives
 \subsection{Departure from Shift Alternatives}
 Is it possible for an accuracy test to have more power than a location test?
 Yes. 
@@ -436,12 +437,12 @@ Our empirical example in Section~\ref{sec:example}, and experience, actually sup
 
 
 
-
+% Resampling with replacement
 \subsection{Departure from V-fold CV}
 \label{sec:bootstrap}
 
-Intuition suggests we may alleviate the discretization by cross-validating with replacement, instead of the V-fold CV.
-The discreteness of the accuracy statistic is governed by the number of examples in the union of holdout test sets.
+Intuition suggests we may alleviate the discretization of the accuracy test statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
+The discretization of the accuracy statistic is governed by the number of examples in the union of holdout test sets.
 For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
@@ -470,8 +471,8 @@ An algorithm that samples test sets with replacement is the \emph{leave-one-out 
 	\end{align}
 \end{definition}
 Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
-It can be seen that selecting test sets with replacement does increase the power of accuracy tests, when compared to V-fold cross validation, but still falls short from the power of location tests. 
-It can also be seen that power increases with the number of bootstrap replications, as was to be expected, since more replications reduce the level of discretization.
+As expected, selecting test sets with replacement does increase the power of accuracy tests, when compared to V-fold cross validation, but still falls short from the power of location tests. 
+It can also be seen that power increases with the number of bootstrap replications, since more replications reduce the level of discretization.
 The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
 
 \bigskip
@@ -503,7 +504,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 	\centering
 	\includegraphics[width=0.7\linewidth]{"art/file13"}
 	\caption{
-		\textbf{Bootstrap--}
+		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
 		Effects are color and shape coded. 
@@ -519,11 +520,16 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
+
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves. } by regularization.
-To study this, we call upon several \emph{covariance regularized classifiers}, designed for high dimensional problems. 
-We try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, which are similar in spirit to the \emph{Hotelling.shrink} test. 
-We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which is similar in spirit to the \emph{SD} location test. 
+It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves.}.
+By this we mean that both \emph{SD} and \emph{Hotelling.shrink} alleviate the variance in the estimation of $\Sigma$ by introducing some bias. 
+
+At first, this may seem as a false claim, since the $l_2$ penalty in the SVM servers as regularization. 
+On the other hand, the literature does offer classifier where regularization operates directly on the covariance. 
+[TODO: how does l2 SVM differs from SVM.CV?]
+We thus try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
+We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{SD}.
 
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
@@ -531,11 +537,10 @@ It can be seen that regularizing a classifier in high dimension, just like a loc
 It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
 This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}; a phenomenon we attribute to the discretization effect.
 
-
+[TODO: change cost in simulation to 0.1, or add it.]
 
 \bigskip
 
-%TODO: change cost in simulation to 0.1
 \begin{tcolorbox}
 	\centering
 	\begin{tabular}{l|c|c|c|c}
@@ -567,14 +572,14 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 	\centering
 	\includegraphics[width=0.7\linewidth]{"art/file14"}
 	\caption{
-		\textbf{HighDim Classifier--} 
+		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
 		Effects are color and shape coded. 
 		The various statistics on the $y$ axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
 		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		Simulation details in Appendix~\ref{sec:simulation_details}.
+		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:highdim}
 \end{figure}
@@ -590,16 +595,16 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 \section{Neuroimaging Example}
 \label{sec:example}
 
-Figure~\ref{fig:read_data} is an application of both a location and an accuracy test to the data of \cite{pernet_human_2015}. 
+Figure~\ref{fig:read_data} is an application of both a location and an accuracy test to the neuroimaging data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-To demonstrate our point, we compare the \emph{SD} location test with the \emph{SVM.cv.1} accuracy test. 
+To demonstrate our point, we compare the \emph{SD} location test with the \emph{SVM.CV.1} accuracy test. 
 
-In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.cv.1}).
+In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{SVM.CV.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -609,8 +614,8 @@ We emphasize that both test statistics were compared with the same permutation s
 \includegraphics[width=0.7\linewidth]{"art/svm_vs_SD"}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
-Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.cv.1}), and a location test (\emph{sd}). 
-\emph{svm.cv.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
+Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{SVM.CV.1}), and a location test (\emph{SD}). 
+\emph{SVM.CV.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
 Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 Number of permutations equals $400$.
 The location test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
@@ -642,45 +647,47 @@ Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{go
 
 \subsection{Where do Accuracy Tests Lose Power?}
 The low power of the accuracy tests compared to location tests can be attributed to the following causes:\newline
-(a) A Neyman-Pearson type argument, favoring location tests for the shift alternatives we simulated (even if not maximal power). \newline
-(b) The discrete nature of accuracy tests. \newline
+(a) \textbf{Discretization}: The discrete nature of accuracy test statistics. \newline
+(b) \textbf{Shift Alternatives}: A NPL type argument, favoring location tests to detect the shift alternatives we simulated (even if not maximal power). \newline
 (c) Inefficient use of the data when validating with a holdout set. \newline
 (d) Inappropriate regularization in high SNR regimes: testing requires less regularization than predicting. \newline
 
 
 
+
+\paragraph{Discretization}
+The degree of discretization is governed by the sample size. 
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
+These studies have other limitations as well.
+\citet{ramdas_classification_2016} assume a split-sample holdout, without cross-validation.
+A split sample holdout hurts the power of the accuracy test. It either trains a sub-optimal classifier, if the test sample is large. Or is inflates the variance of the accuracy statistic, if the test sample is small. 
+The resubstitution accuracy does not suffer from this inefficiency. 
+Its asymptotic analysis in \citet{golland_permutation_2005}, however, conceals both the discretization of the test statistic, and the effects of its concentration. 
+This analysis renders resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. 
+
+
 \paragraph{Shift Alternatives}
 We focused on shift alternatives. 
 One may argue that empirical alternatives are rarely of shift type, thus limiting our conclusions. 
-We reply that our empirical evidence in Section~\ref{sec:example}, also favors location tests. 
+We reply that: 
+(a) Shift alternatives are by far the most studied signal type in the statistical literature.
+(b) Our empirical results in Section~\ref{sec:example} favor location tests. 
 More generally: discretization alone suffice to state that there will always be a test statistic with more power than an accuracy test. 
 When looking for a ``one-size fits all'' strategy, it is our experience that location tests are a better candidate than accuracy tests. 
 
 
 
-\paragraph{Discreteness}
-The degree of discretization is governed by the sample size. 
-For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
-These studies have other limitations as well.
-\citet{ramdas_classification_2016} assume a split-sample holdout, without cross-validation.
-This hurts the power of accuracy tests. 
-The asymptotic analysis of the resubstitution accuracy statistics in \citet{golland_permutation_2005} not only conceals the discreteness of the test statistic, but also the effects of its concentration. 
-This analysis renders resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. 
-
-
-
-
 \subsection{Interpretation}
 Multivariate tests, and location tests in particular, are easier to interpret. 
-To do so we typically use a Neyman-Pearson type argument, and think of the type of signal a test is sensitive to. 
+To do so we typically use a NPL type argument, and think of the type of signal a test is sensitive to. 
 Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
-\citet{gilron2017s} for instance, demonstrate that the type of signal captured by accuracy tests is less obvious to neuroimaging practitioners than location tests. 
+\citet{gilron2017s} for instance, demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
 
 
 \subsection{Testing in Augmented Spaces}
-It may be argued that accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors while location tests do not. 
-This is a false argument-- accuracy tests do not have any more flexibility than location tests. 
+It may be argued that only accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+This is a false argument--- accuracy tests do not have any more flexibility than location tests. 
 Indeed, it is possible to test for location in the same space the classifier is learned. 
 For independence tests in high dimensional spaces see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
 
@@ -697,35 +704,36 @@ For independence tests in high dimensional spaces see for example \cite{szekely_
 
 
 \subsection{A Good Accuracy Test}
-There are cases where an accuracy test cannot be replaced by some location, or other, statistical test. 
 Brain-computer interfaces and clinical diagnostics \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
+In these cases an accuracy test cannot be replaced by a location, or other, statistical test. 
 For these cases, we collect some conclusions and best practices. 
-
 
 \paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
 
-
 \paragraph{Regularize.}
-Regularization proves crucial to detection power in low SNR regimes, which may be does to strong correlations or high-dimension.
+Regularization proves crucial to detection power in low SNR regimes, which may be due to strong correlations or high-dimension.
 We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on this matter. 
 
-
 \paragraph{Smooth accuracy.}
-Smooth accuracy estimate by cross validating with replacement. The bLOO estimator, in particular, is preferable over V-fold.
+[TODO: verify after updating plot]
+Smooth accuracy estimate by cross validating with replacement. 
+The bLOO estimator, in particular, is preferable over V-fold.
 
 We can compound regularization with bootstrapping to improve the power of the accuracy tests. 
 This is done in the \emph{SVM.highdim.2} and \emph{LDA.highdim.4} tests. 
 The latter being one of the very few accuracy tests that achieve the same power as location tests. 
-This is exciting since it shows how to design powerful new high-powered accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
+This is exciting since it shows how to design powerful accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
 
 
-\paragraph{Permute features.} Permuting features, such as in \cite{golland_permutation_2005}, is easier than permuting labels. 
+\paragraph{Permute features.} 
+Permuting features, such as in \cite{golland_permutation_2005}, is computationally more efficient than permuting labels, because refolding can be done once, for all permutations.
 It allows to preserve the balance of folds after a permutation, without refolding.
 
-\paragraph{Resubstitution accuracy in low dimension.} Resubstitution accuracy is useful in low SNR regimes, such as low dimensional problems, because it avoids cross validation without compromising power. 
-In high dimension, the power loss is considerable compared to a cross validated approach. 
+\paragraph{Resubstitution accuracy in high SNR.} 
+Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, because it avoids cross validation without compromising power. 
+In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
-In low dimensional problems, the discretization is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. 
+In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
 There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
  
 
@@ -747,7 +755,7 @@ There is a fundamental difference between V-folding and resubstitution. The latt
 
 
 \subsection{Related Literature}
-\cite{ojala_permutation_2010} study the power of two accuracy tests differing in the permutation scheme:
+\cite{ojala_permutation_2010} study the power of two accuracy tests differing in their permutation scheme:
 One testing the ``no signal'' null hypothesis, and the other testing the ``independent features'' null hypothesis. 
 They perform an asymptotic analysis, and a simulation study. 
 They also apply various classifiers to various data sets. 
@@ -769,13 +777,14 @@ This is seen in Fig.4 of \citet{golland_permutation_2005}, where the size of the
 Since they permute features, not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
 
 \cite{golland_permutation_2005} simulate the power of accuracy tests by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+[TODO: this does not make sense. Verify!]
 Under their model (with some abuse of notation)
 $$(x_i|y_i=1) \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}$$ 
 and 
 $$(x_i|y_i=0) \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}.$$
-Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
+Varying $p$ interpolates between the null distribution $(p=0.5)$ [TODO: verify] and a location shift model $(p=0)$. 
 We now perform the same simulation as \cite{golland_permutation_2005}, after re-parameterizing so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simulations.
-We find that also in this mixture class of models a location test has more power than an accuracy test (Figure~\ref{fig:golland}).
+Even there are cases where location tests are suboptimal for mixture alternatives, \cite[e.g.]{rosenblatt2017mixture}, we find that when compared to accuracy tests, location tests have more power (Figure~\ref{fig:golland}).
 
 
 
@@ -783,7 +792,7 @@ We find that also in this mixture class of models a location test has more power
 \centering
 	  \includegraphics[width=0.7\linewidth]{"art/file12"}
 	  \caption{TODO: verify!
-	  	\textbf{Mixture--} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y_i}  (1/2+p)^{1-\y_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
+	  	\textbf{Mixture Alternatives.} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y_i}  (1/2+p)^{1-\y_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:golland}
 \end{figure}
