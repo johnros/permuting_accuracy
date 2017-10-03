@@ -480,16 +480,16 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 %TODO: change cost in simulation to 0.1
 \begin{tcolorbox}
 	\centering
-	\begin{tabular}{l|c|c|c|c|c}
-		Name & Algorithm & Resampling & B & Z-scored & Parameters\\ 
+	\begin{tabular}{l|c|c|c|c}
+		Name & Algorithm & Resampling & B  & Parameters\\ 
 		\hline
 		\hline
-		LDA.Boot.1 & LDA & b$0.632$ & $10$ & FALSE &  -- \\ 
-		LDA.Boot.2 & LDA & bLOO 	& $10$ & FALSE &  -- \\ 
-		SVM.Boot.1 & SVM & b$0.632$ & $10$ & FALSE & cost=10 \\ 
-		SVM.Boot.2 & SVM & bLOO 	& $10$ & FALSE & cost=10 \\ 
-		SVM.Boot.3 & SVM & b$0.632$ & $50$ & FALSE & cost=10 \\ 
-		SVM.Boot.4 & SVM & bLOO 	& $50$ & FALSE & cost=10 \\ 
+		LDA.Boot.1 & LDA & b$0.632$ & $10$ &  -- \\ 
+		LDA.Boot.2 & LDA & bLOO 	& $10$ &  -- \\ 
+		SVM.Boot.1 & SVM & b$0.632$ & $10$ & cost=10 \\ 
+		SVM.Boot.2 & SVM & bLOO 	& $10$ & cost=10 \\ 
+		SVM.Boot.3 & SVM & b$0.632$ & $50$ & cost=10 \\ 
+		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=10 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -543,16 +543,16 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 
 \begin{tcolorbox}
 	\centering
-	\begin{tabular}{l|c|c|c|c}
-		Name & Algorithm & Resampling & Z-scored & Parameters\\ 
+	\begin{tabular}{l|c|c|c}
+		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		SVM.highdim.1 & SVM & V-fold & FALSE & cost=10, V=4 \\ 
-		SVM.highdim.2 & SVM & b$0.632$ & FALSE & cost=10, B=50 \\ 
-		LDA.highdim.1 & LDA & V-fold & FALSE & V=4 \\ 
-		LDA.highdim.2 & LDA & V-fold & FALSE & V=4 \\ 
-		LDA.highdim.3 & LDA & V-fold & FALSE & V=4 \\ 
-		LDA.highdim.4 & LDA & b$0.632$ & FALSE & B=50 \\ 
+		SVM.highdim.1 & SVM & V-fold & cost=10, V=4 \\ 
+		SVM.highdim.2 & SVM & b$0.632$ & cost=10, B=50 \\ 
+		LDA.highdim.1 & LDA & V-fold & V=4 \\ 
+		LDA.highdim.2 & LDA & V-fold & V=4 \\ 
+		LDA.highdim.3 & LDA & V-fold & V=4 \\ 
+		LDA.highdim.4 & LDA & b$0.632$ & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -779,12 +779,23 @@ Since they permute features, not labels, then all their permutation samples are 
 \cite{golland_permutation_2005} simulate the power of accuracy tests by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
 [TODO: this does not make sense. Verify!]
 Under their model (with some abuse of notation)
-$$(x_i|y_i=1) \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}$$ 
-and 
-$$(x_i|y_i=0) \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}.$$
-Varying $p$ interpolates between the null distribution $(p=0.5)$ [TODO: verify] and a location shift model $(p=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, after re-parameterizing so that $p=0$ corresponds to the null model, and in the same dimensionality as our previous simulations.
-Even there are cases where location tests are suboptimal for mixture alternatives, \cite[e.g.]{rosenblatt2017mixture}, we find that when compared to accuracy tests, location tests have more power (Figure~\ref{fig:golland}).
+\begin{align*}
+\begin{split}
+	(x_i|y_i=1) & \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}, \\
+	(x_i|y_i=0) & \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}.
+\end{split}
+\end{align*}
+Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
+We now perform the same simulation as \cite{golland_permutation_2005}, and in the same dimensionality as our previous simulations.
+We re-parameterize so that $p=0$ corresponds to the null model:
+\begin{align}
+\begin{split}
+\label{eq:mixture_alternative}
+	(x_i|y_i=1) & \sim (1/2-p) \gauss{\mu_1,I}+ (1/2+p) \gauss{\mu_2,I}, \\
+	(x_i|y_i=0) & \sim (1/2+p) \gauss{\mu_1,I}+ (1/2-p) \gauss{\mu_2,I}.	
+\end{split}
+\end{align}
+Even there are cases where location tests are suboptimal for mixture alternatives, \cite[e.g.][]{rosenblatt2017mixture}, we find that when compared to accuracy tests, location tests have more power (Figure~\ref{fig:golland}).
 
 
 
@@ -792,7 +803,8 @@ Even there are cases where location tests are suboptimal for mixture alternative
 \centering
 	  \includegraphics[width=0.7\linewidth]{"art/file12"}
 	  \caption{TODO: verify!
-	  	\textbf{Mixture Alternatives.} $\x_i = \chi_i \mu + \eta_i; \chi_i = \set{-1,1}$ and $\prob{\chi_i=1}=(1/2-p)^{\y_i}  (1/2+p)^{1-\y_i}$. $\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
+	  	\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
+	  	$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:golland}
 \end{figure}
