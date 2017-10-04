@@ -1,5 +1,5 @@
 ---
-title: "Round2"
+title: "Browninan covariance. Identity signal"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -27,6 +27,7 @@ effects <- seq(0, 0.5, length=3) # change in location
 ## Covariance
 Sigma <- browninan_cov(p,0.2)
 lattice::levelplot(Sigma)
+direction <- rep(1,p)
 ```
 
 
@@ -49,7 +50,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
-    noise <- .noise + effect * labels
+    noise <- .noise
+    noise[labels,] <- noise[labels,] + effect * direction
     
     ## Compute observed statistic
     x1 <- noise[labels,]

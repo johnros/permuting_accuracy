@@ -230,7 +230,7 @@ File name: file16
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Long memory browninan motion dependence
+  Voxel dependence(*) (p): browninan motion covariance. Identity signal
   Trial dependence (n): none
 
 
@@ -274,4 +274,61 @@ File name: file19
   p=23
   Folds: 4
   Voxel dependence(*) (p): Arbitrary. Signal in identity. 
+  Trial dependence (n): none
+
+
+File name: file20
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in high PCs. 
+  Trial dependence (n): none
+  
+File name: file21
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in low PCs. 
+  Trial dependence (n): none
+
+File name: file22
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): browninan motion covariance. signal in high PCs
+  Trial dependence (n): none
+  
+File name: file23
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): browninan motion covariance. signal in low PCs
   Trial dependence (n): none

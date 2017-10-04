@@ -1,5 +1,5 @@
 ---
-title: "Signal in identity line"
+title: "Arbitrary Covariance. Signal in identity line"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -26,11 +26,10 @@ effects <- seq(0, 0.5, length=3)
 
 
 ## Covariance between features
-A <- matrix(rnorm(p^2), ncol = p, nrow = p)
-Sigma <- crossprod(A,A)
-lattice::levelplot(Sigma)
+load(file='Sigma.RData')
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
 plot(Sigma.eigen$values, type='h')
+direction <- rep(1,p)
 ```
 
 
@@ -55,7 +54,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect 
+    noise[labels,] <- noise[labels,] + effect * direction
     
     ## Compute observed statistic
     x1 <- noise[labels,]
