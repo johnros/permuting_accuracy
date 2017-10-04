@@ -1,5 +1,5 @@
 ---
-title: "Round2"
+title: "Short term memory (AR(1)) with signal in HIGH PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -8,10 +8,10 @@ output: html_document
 
 
 ```{r preliminaries}
-file.name <- "file16"
+file.name <- "file20"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2# 1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -22,11 +22,13 @@ cost.2 <- 1e-1
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) # change in location
+effects <- seq(0, 0.5, length=3) 
 
-## Covariance
-Sigma <- browninan_cov(p,0.2)
+## Dependence
+Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
+Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
+direction <- sqrt(p) * Sigma.eigen$vectors[,which.max(abs(Sigma.eigen$values))]
 ```
 
 
@@ -35,7 +37,7 @@ lattice::levelplot(Sigma)
 library(RhpcBLASctl)
 blas_set_num_threads(1)
 
-registerDoMC(cores=50)
+registerDoMC(cores=110)
 ```
 
 
@@ -47,10 +49,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
-    
+
     ## Shift alternative:
-    noise <- .noise + effect * labels
-    
+    # noise <- .noise + effect * labels
+    noise <- .noise
+    noise[labels,] <- noise[labels,] + effect * direction 
+
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
@@ -86,7 +90,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     statistics.names <- names(ts)
     
     # Initialize permuted statistics
-    permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+    permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
     for(i in 1:n.permutations){
       # i <- 1
@@ -140,7 +144,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file16.RData")
+# load("file20.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 

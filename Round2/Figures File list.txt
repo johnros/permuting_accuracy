@@ -158,7 +158,7 @@ File name: file11
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): AR(1)
+  Voxel dependence(*) (p): AR(1) rho=0.6
   Trial dependence (n): none
   
 File name: file12
@@ -230,5 +230,48 @@ File name: file16
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): 
+  Voxel dependence(*) (p): Long memory browninan motion dependence
+  Trial dependence (n): none
+
+
+File name: file17
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in low PCs. 
+  Trial dependence (n): none
+
+File name: file18
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in high PCs. 
+  Trial dependence (n): none
+
+File name: file19
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in identity. 
   Trial dependence (n): none

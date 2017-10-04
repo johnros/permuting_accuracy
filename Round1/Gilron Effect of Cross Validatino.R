@@ -62,6 +62,22 @@ ar1_cov <- function(n, rho){
 ## Testing
 # ar1_cov(10,0.8)
 
+
+antiAr1_cov <- function(n, rho){
+  result <- matrix(NA, n, n)
+  for(i in 1:n){
+    for(j in 1:n){
+      result[i,j] <- round(rho^(n-abs(i-j)) ,2)
+    }
+  }
+  return(result)
+}
+## Testing
+# lattice::levelplot(antiAr1_cov(10,0.8))
+
+
+
+
 comSym_cov <- function(n, rho){
   result <- diag(n)
   del <- n/2

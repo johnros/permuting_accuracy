@@ -6,6 +6,10 @@ output: html_document
 ---
 
 
+```{r}
+source('Gilron Effect of Cross Validatino.R')
+```
+
 
 ```{r preliminaries}
 file.name <- "file14"
@@ -18,8 +22,6 @@ n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
-
-source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
@@ -41,7 +43,7 @@ registerDoMC(cores=110)
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
-    # effect <- effects[[2]]
+    # effect <- effects[[3]]
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
@@ -76,15 +78,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
     )
     
-    
-    
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
     statistics.names <- names(ts)
     
     # Initialize permuted statistics
-    permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+    permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
     for(i in 1:n.permutations){
       # i <- 1

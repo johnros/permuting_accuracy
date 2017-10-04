@@ -11,7 +11,7 @@ output: html_document
 file.name <- "file8"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  4e1 #1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -35,36 +35,23 @@ Sigma <- diag(p)
 
 library(RhpcBLASctl)
 blas_set_num_threads(1)
-# get_num_cores()
-# get_num_procs()
-# blas_get_num_procs()
-
 registerDoMC(cores=110)
-
-# Testing parallelization:
-# foreach(i=1:60) %dopar% {
-#   eigen(matrix(rnorm(1e6), ncol = 1e3, nrow = 1e3))$values[[1]][[1]]
-# }
-# foreach(i=1:20) %:% foreach(j=1:3) %dopar% mean(rnorm(1e7))
 ```
 
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
+    # effect <- effects[3]
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
-    ## Gaussian noise
-    .noise <- rmvnorm(n=n, sigma = Sigma)
-    
-    ## Scale alternative:
-    A <- diag(n) 
-    A[labels,labels] <- A[labels,labels]*(1:n)^(-effect)
-    # lattice::levelplot(A)
-    # image(A)
-    noise <- A %*% .noise 
-    # plot(noise, col=labels+1, cex=1); abline(h=0,v=0, lty=2)
+    ## Gaussian noise with Scale alternative:
+    noise <- matrix(NA, ncol=p, nrow=n)
+    noise[!labels] <- rmvnorm(n=n/2, sigma = Sigma)
+    Sigma.effect <- diag( exp(effect/4 * ((1:p)-p/2)) )
+    noise[labels] <- rmvnorm(n=n/2, sigma = Sigma.effect)
+    # matplot(t(noise), type='l', col=labels+1)
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -76,7 +63,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     # Observables 
     ts <- list(
-      Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+      Oracle=t_Oracle(x1, x2, Sigma.effect, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
@@ -93,7 +80,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
       svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
-    
     
     # Prepare to permute
     old.labels <- labels
@@ -155,7 +141,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file2.RData")
+# load("file8.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
@@ -164,6 +150,8 @@ pvals.1.9 %<>%  as.data.table()
 names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
