@@ -70,11 +70,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
       svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+      svm.CV.5=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
+      svm.CV.6=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
       lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
-      svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+      # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
       svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
     )
     
@@ -109,12 +111,14 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
         svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+        svm.CV.5=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
+        svm.CV.6=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
         lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
         lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
         lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
         lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
-        svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-        svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+        # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+        svm.boot.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
       )
     } # End permutation
     
@@ -141,10 +145,9 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
+names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.5',  'SVM.CV.6','LDA.highdim.1','LDA.highdim.2','LDA.highdim.3','LDA.highdim.4','SVM.Boot.5')
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
 pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 

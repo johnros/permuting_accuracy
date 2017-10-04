@@ -190,7 +190,7 @@ t_Hotelling <- function(x,y, shrinkage){
 
 
 
-# Linear SVM. Arguments self explanatory.
+# Linear SVM. 
 t_svm <- function(train.noise, train.labels, test.noise, test.labels, cost, type){
   svm.1 <- svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear', cost=cost)
   accuracy <- mean(predict(svm.1, newdata=test.noise)==test.labels)
@@ -206,11 +206,7 @@ t_svm <- function(train.noise, train.labels, test.noise, test.labels, cost, type
   return(statistic)
 }
 
-# Compute cross validated test statistics
-# noise: the predictors 
-# labels: 
-# fold.ids: the asignemt of observations to folds
-# cost: the svm cost parameter. 
+# Compute cross validated accuracy with l2 regulirized SVM.
 t_svm_cv <- function(noise, new.labels, old.labels, fold.ids, cost, type){
   t_cv(FUN = t_svm, noise, new.labels, old.labels, fold.ids, cost, type)
 }
@@ -220,7 +216,6 @@ t_svm_cv <- function(noise, new.labels, old.labels, fold.ids, cost, type){
 
 # Linear SVM. Arguments self explanatory.
 t_svml2 <- function(train.noise, train.labels, test.noise, test.labels, cost, type){
-  # svm.1 <- glmnet(x=train.noise, y=train.labels, family = 'binomial', alpha = 0)
   svm.1 <- LiblineaR(data=train.noise, target =train.labels, type=1, cost=cost)
   predict.labels <- predict(svm.1, newx=test.noise, type='class')$predictions
   accuracy <- mean(predict.labels==test.labels)
@@ -236,11 +231,7 @@ t_svml2 <- function(train.noise, train.labels, test.noise, test.labels, cost, ty
   return(statistic)
 }
 
-# Compute cross validated test statistics
-# noise: the predictors 
-# labels: 
-# fold.ids: the asignemt of observations to folds
-# cost: the svm cost parameter. 
+# l2 regulirized svm using Liblinear, and K-fold accuracy estimate
 t_svml2_cv <- function(noise, new.labels, old.labels, fold.ids, cost, type){
   t_cv(FUN = t_svml2, noise, new.labels, old.labels, fold.ids, cost, type)
 }
@@ -450,7 +441,7 @@ t_sdlda_boot <- function(noise, labels, B, type2, type){
 
 
 
-
+# Bootstrapped accuracy estimate with l2 regulirized SVM
 t_svm_highdim_boot <- function(noise, labels, B, cost, type2, type){
   t_boot(FUN = t_svml2, noise = noise, labels = labels, B=B, type2 = type2, cost=cost, type=type)
 }

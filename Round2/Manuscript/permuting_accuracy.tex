@@ -518,6 +518,9 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 
 
+
+
+
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 
@@ -527,7 +530,7 @@ By this we mean that both \emph{SD} and \emph{Hotelling.shrink} alleviate the va
 
 At first, this may seem as a false claim, since the $l_2$ penalty in the SVM servers as regularization. 
 On the other hand, the literature does offer classifier where regularization operates directly on the covariance. 
-[TODO: how does l2 SVM differs from SVM.CV?]
+[TODO: how does l2 SVM differs from SVM.CV? Probably does not. Try various cost functions instead of different implementations. ]
 We thus try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
 We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{SD}.
 
