@@ -11,7 +11,7 @@ output: html_document
 file.name <- "file23"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2 #1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -36,7 +36,7 @@ direction <- sqrt(p) * Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))]
 library(RhpcBLASctl)
 blas_set_num_threads(1)
 
-registerDoMC(cores=50)
+registerDoMC(cores=100)
 ```
 
 
@@ -142,7 +142,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file16.RData")
+# load("file23.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 

@@ -1,7 +1,7 @@
 #### Now with the cleaned up code ####
 
 File name: file1
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -15,7 +15,7 @@ File name: file1
   Trial dependence (n): none
 
 File name: file2
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -29,7 +29,7 @@ File name: file2
   Trial dependence (n): none
 
 File name: file3
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original(*): unbalanced
@@ -57,7 +57,7 @@ File name: file4
   Trial dependence (n): none
   
 File name: file5
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -73,7 +73,7 @@ File name: file5
   
   
 File name: file6
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -102,7 +102,7 @@ File name: file7
   
   
 File name: file8
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects(*): scale change 
   Original: balanced
@@ -117,7 +117,7 @@ File name: file8
   Note: Oracle uses null covariance. 
   
 File name: file9 
-  Status: OK
+  Status: 
   Null(*): t
   Effects: [0,0.5]
   Original: balanced
@@ -148,7 +148,7 @@ File name: file10
   
   
 File name: file11
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -162,7 +162,7 @@ File name: file11
   Trial dependence (n): none
   
 File name: file12
-  Status: OK
+  Status: 
   Null(*): Golland Mixture
   Effects: [0,0.5]
   Original: balanced
@@ -176,7 +176,7 @@ File name: file12
   Trial dependence (n): none
   
 File name: file13
-  Status: OK
+  Status: 
   Statistic (*): Bootstrapped 
   Null: Gaussian
   Effects: [0,0.5]
@@ -235,7 +235,7 @@ File name: file16
 
 
 File name: file17
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -249,7 +249,7 @@ File name: file17
   Trial dependence (n): none
 
 File name: file18
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -263,7 +263,7 @@ File name: file18
   Trial dependence (n): none
 
 File name: file19
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -278,7 +278,7 @@ File name: file19
 
 
 File name: file20
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -292,7 +292,7 @@ File name: file20
   Trial dependence (n): none
   
 File name: file21
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
