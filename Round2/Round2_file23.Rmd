@@ -120,7 +120,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
         svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
         svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
-        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
         svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
       )
     } # End permutation

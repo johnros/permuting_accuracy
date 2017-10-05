@@ -1,7 +1,7 @@
 #### Now with the cleaned up code ####
 
 File name: file1
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
