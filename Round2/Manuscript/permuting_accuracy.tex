@@ -526,21 +526,20 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
 It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves.}.
-By this we mean that both \emph{SD} and \emph{Hotelling.shrink} alleviate the variance in the estimation of $\Sigma$ by introducing some bias. 
+By this we mean that both \emph{SD} and \emph{Hotelling.shrink} alleviate the dimensionality of the problem, manifested in the variability in the estimation of $\Sigma$, by introducing some bias. 
 
-At first, this may seem as a false claim, since the $l_2$ penalty in the SVM servers as regularization. 
-On the other hand, the literature does offer classifier where regularization operates directly on the covariance. 
-[TODO: how does l2 SVM differs from SVM.CV? Probably does not. Try various cost functions instead of different implementations. ]
-We thus try an $l_2$ regularized SVM \citep{friedman_regularization_2010}, and a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
+At first, this may seem as a false intuition, because we know from ridge regression that $l_2$ regularization, such as in our SVM, already introduces a Tikhonov regularization to the covariance estimation.  
+This, however, is not the only way to regularize the covariance estimator. 
+We thus try a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
 We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{SD}.
 
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
-It can be seen that regularizing a classifier in high dimension, just like a location test, improves power. 
-It can also be seen that (regularized) location tests are still more powerful than (regularized) accuracy tests. 
-This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulation_11} that the unregularized location test, \emph{Hotelling}, is slightly more powerful than unregularized accuracy tests such as (e.g.) \emph{SVM.CV.1}; a phenomenon we attribute to the discretization effect.
+The proper regularization of the covariance of a classifier, just like a location test, can improve power. 
+See, for instance, \emph{SVM.CV.6} is clearly better regularized than other the V-fold cross-validated accuracy tests. 
+Compounding with a bootstrap instead of V-fold further increases the power of the test (\emph{LDA.highdim.4}).
+But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have similar, if not better, performance. 
 
-[TODO: change cost in simulation to 0.1, or add it.]
 
 \bigskip
 
@@ -560,8 +559,7 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 	\captionsetup{type=table}
 	\caption{
 		The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-		\emph{SVM.highdim.1} is an $l_2$ regularized SVM \citep{friedman_regularization_2010}. 
-		\emph{SVM.highdim.2} is the same with b$0.632$ instead of V-fold cross validation. 
+		\emph{SVM.CV.5} and \emph{SVM.CV.6} are $l_2$ regularized SVM, with varying regularization penalty.
 		\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 		\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 		\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
@@ -575,6 +573,7 @@ This was to be expected, since we already saw in (e.g.) Figure~\ref{fig:simulati
 	\centering
 	\includegraphics[width=0.7\linewidth]{"art/file14"}
 	\caption{
+		TODO: update labels
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
