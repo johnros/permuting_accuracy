@@ -1,23 +1,19 @@
 ---
-title: "Round2"
+title: "HighDim Classifiers"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
 ---
 
 
-```{r}
-source('Gilron Effect of Cross Validatino.R')
-```
-
 
 ```{r preliminaries}
 file.name <- "file14"
 
 balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  5e2# 1e3
 p <- 23
-n <- 4e2 # total sample size-> n/2 in each group.
+n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -26,6 +22,8 @@ cost.2 <- 1e-1
 ## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
 
+source('Gilron Effect of Cross Validatino.R')
+
 ## Signal in scale
 Sigma <- diag(p)
 ```
@@ -33,17 +31,14 @@ Sigma <- diag(p)
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
-registerDoMC(cores=110)
+RhpcBLASctl::blas_set_num_threads(1)
+registerDoMC(cores=100)
 ```
 
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
-    # effect <- effects[[3]]
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
@@ -51,6 +46,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     # Shift alternative:
+    # effect <- effects[[2]]
     noise <- .noise + effect * labels
     
     ## Compute observed statistic
@@ -59,7 +55,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = balance)
-    # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
     ts <- list(
@@ -77,13 +72,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
       # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-      svm.highdim.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+      svm.boot.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
     )
     
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <- names(ts)
+    statistics.names <<- names(ts)
     
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -145,10 +140,10 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.5',  'SVM.CV.6','LDA.highdim.1','LDA.highdim.2','LDA.highdim.3','LDA.highdim.4','SVM.Boot.5')
+names(pvals.1.9)[-1] <- statistics.names
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+# pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

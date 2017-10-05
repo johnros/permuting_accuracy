@@ -17,11 +17,11 @@ suppressPackageStartupMessages(library(sparsediscrim))
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(LiblineaR))
 suppressPackageStartupMessages(library(data.table))
+# source("https://bioconductor.org/biocLite.R")
+# biocLite("globaltest")
 suppressPackageStartupMessages(library('globaltest'))
 suppressPackageStartupMessages(library(RobPer))
 
-# source("https://bioconductor.org/biocLite.R")
-# biocLite("globaltest")
 
 
 

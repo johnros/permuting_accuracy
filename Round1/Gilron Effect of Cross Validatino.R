@@ -8,7 +8,7 @@ library(e1071)
 library(Hotelling)
 library(MASS)
 library(ggplot2)
-library(caret)
+# library(caret)
 library(RPushbullet)
 # library(doRNG)
 library(reshape2)
@@ -316,7 +316,7 @@ t_hdrda_cv <- function(noise, new.labels, old.labels, fold.ids, type){
 
 
 t_sdlda <- function(train.noise, train.labels, test.noise, test.labels, type){
-  lda.1 <- sdlda(x=train.noise, y =train.labels)
+  lda.1 <- sdlda(x=train.noise, y=train.labels)
   predictions <- predict(lda.1, newdata=test.noise)$class
   accuracy <- mean(predictions==test.labels)
   
@@ -391,11 +391,7 @@ t_SD <- function(x,y){
 
 
 
-# A Bootstrapping wrapper.
-# Sketch:
-## For B bootstrap samples:
-## Compute statistic
-## Average over samples
+# A Bootstrapped accuracy estimator.
 t_boot <- function(FUN, noise, labels, B, type2, ...){
   
   t.boot <- rep(NA, B) # initialize output container
@@ -423,6 +419,7 @@ t_boot <- function(FUN, noise, labels, B, type2, ...){
   
   return(result) 
 }
+## Testing:
 
 
 
@@ -438,6 +435,8 @@ t_lda_boot <- function(noise, labels, B, type2, type){
 t_sdlda_boot <- function(noise, labels, B, type2, type){
   t_boot(FUN = t_sdlda, noise = noise, labels = labels, B = B, type2=type2, type=type)
 }
+## Testing:
+# t_sdlda_boot(noise, labels, B=50, type2=1, type=1)
 
 
 
