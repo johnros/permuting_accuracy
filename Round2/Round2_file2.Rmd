@@ -21,20 +21,16 @@ cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
 
-## Signal in scale
 Sigma <- diag(p)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
-registerDoMC(cores=40)
+RhpcBLASctl::blas_set_num_threads(1)
+registerDoMC(cores=110)
 ```
 
 
@@ -82,10 +78,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <- names(ts)
+    statistics.names <<- names(ts)
     
     # Initialize permuted statistics
-    permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+    permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
     for(i in 1:n.permutations){
       # i <- 1
@@ -94,13 +90,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
-      
-      # Checking balance:
-      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
-      
-      # for permuting Xs:
-      # .indexes <- sample(seq(n))
-      #  .noise <- noise[.indexes,] 
       
       permuted[i,] <- c(
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
@@ -145,10 +134,10 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
+# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
+names(pvals.1.9)[-1] <- statistics.names
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-
 statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
 pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 

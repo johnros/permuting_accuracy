@@ -191,14 +191,14 @@ File name: file13
   Trial dependence (n): none
   
 File name: file14
-  Status: Done. Why is Oracle so under powered?
+  Status: OK
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
-  Replications: 2e3
+  Replications: 5e2
   n=40
   p=23
   Folds: 4
