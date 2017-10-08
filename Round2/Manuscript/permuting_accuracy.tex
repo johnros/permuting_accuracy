@@ -504,6 +504,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 	\centering
 	\includegraphics[width=0.7\linewidth]{"art/file13"}
 	\caption{
+		TODO: redo whole Bootstrap analysis.
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -539,7 +540,6 @@ The proper regularization of the covariance of a classifier, just like a locatio
 See, for instance, \emph{SVM.CV.6} is clearly better regularized than other the V-fold cross-validated accuracy tests. 
 Compounding with a bootstrap instead of V-fold further increases the power of the test (\emph{LDA.highdim.4}).
 But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have similar, if not better, performance. 
-
 
 \bigskip
 
@@ -716,13 +716,14 @@ For these cases, we collect some conclusions and best practices.
 Regularization proves crucial to detection power in low SNR regimes, which may be due to strong correlations or high-dimension.
 We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on this matter. 
 
+
 \paragraph{Smooth accuracy.}
 [TODO: verify after updating plot]
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 
 We can compound regularization with bootstrapping to improve the power of the accuracy tests. 
-This is done in the \emph{SVM.highdim.2} and \emph{LDA.highdim.4} tests. 
+This is done in the \emph{SVM.boot.1} and \emph{LDA.highdim.4} tests. 
 The latter being one of the very few accuracy tests that achieve the same power as location tests. 
 This is exciting since it shows how to design powerful accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
 
