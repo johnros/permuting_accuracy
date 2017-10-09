@@ -20,7 +20,6 @@
 We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
 It is also more complicated to implement. 
 For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power. 
-TODO: replace matrix(-1,...) with matrix(NA,...) in ALL files!
 \end{abstract}
 
 
@@ -298,7 +297,7 @@ We start with a sanity check.
 Theory suggests that all test statistics should control their false positive rate. 
 Our simulations confirm this.
 In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
-Since the red circles are always below the desired $0.05$ error rate, then the false positive rate of all test statistics, in all simulations is controlled. 
+Since the red circles are always below the desired $0.05$ error rate (up to simulation accuracy) then the false positive rate of all test statistics, in all simulations is controlled. 
 We may thus proceed and compare the power of each test statistic. 
 
 
@@ -382,6 +381,24 @@ The first is a ``short memory'' dependence, for which we use an $AR(1)$ covarian
 The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
 The third is an arbitrary random covariance.
 
+The simulation results reveal some non trivial phenomena.
+First, the power of some tests may be smaller than then false positive rate. 
+Particularly when the signal is in the direction of the lower principal components (PCs) of $\Sigma$. 
+This is particularly counter intuitive since lower PCs are thought of as ``less noisy directions'', so that signal in those directions should be easier to detect. 
+Our results show that this is a false intuition.
+A test with less power than the false positive rate is known as a \emph{biased test} in the statistical literature. 
+The bias in high-dimensional tests has already been observed by \citet{goeman2006testing}, albeit not in the context of permutation tests.
+
+Second, the \emph{Oracle} is not the best performer: the location tests with estimated covariance have more power than a location test with the generative covariance. 
+This may be due to the fact that the permutation covariance differ from the sampling covariance. 
+A difference than grows larger as the dimension of the problem increases. 
+
+Third, It may be possible that even for shift alternatives, an accuracy test has more power than a location test. 
+An example is provided by the long-range dependence setup with signal in the lower PCs of $\Sigma$ (Figure~\ref{fig:dependence_32} [TODO:verify]).
+
+
+
+
 Phenomenon:
 Oracle worse than other locations tests.
 Location tests biased when noise in low PCs.
@@ -393,19 +410,19 @@ Low PCs seems harder than high PCs.
 \begin{figure}[h]
 	\centering
 	\caption{Short memory, AR(1) covariance. $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 	\centering
 	\includegraphics[width=1\linewidth]{"art/file20"}
 	\caption{Signal in direction of highest principal components of $\Sigma$.} 
 	\label{fig:dependence_11}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file21"}
 		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
 		\label{fig:dependence_12}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		  \includegraphics[width=1\linewidth]{"art/file11"}
 		\caption{Signal in direction of identity vector.} 
@@ -417,19 +434,19 @@ Low PCs seems harder than high PCs.
 \begin{figure}[h]
 	\centering
 	\caption{Long-memory Brownian motion covariance: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file22"}
 		\caption{Signal in direction of highest principal components of $\Sigma$.} 
 		\label{fig:dependence_21}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file23"}
 		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
 		\label{fig:dependence_22}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file16"}
 		\caption{Signal in direction of identity vector.} 
@@ -442,19 +459,19 @@ Low PCs seems harder than high PCs.
 \begin{figure}[h]
 	\centering
 	\caption{Arbitrary Covariance. $\Sigma:=A'A,$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.}	
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file18"}
 		\caption{Signal in direction of highest principal components of $\Sigma$.} 
 		\label{fig:dependence_31}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file17"}
 		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
 		\label{fig:dependence_32}
 	\end{subfigure}
-	\begin{subfigure}[t]{.32\textwidth}
+	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file19"}
 		\caption{Signal in direction of identity vector.} 
