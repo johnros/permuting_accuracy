@@ -381,16 +381,19 @@ The first is a ``short memory'' dependence, for which we use an $AR(1)$ covarian
 The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
 The third is an arbitrary random covariance.
 
-The simulations results reveal some counter intuitive phenomena. 
-First, the \emph{Oracle} is not the best performer: the location tests with estimated covariance have more power than a location test with the generative covariance. 
+The simulation results reveal some non trivial phenomena.
+First, the power of some tests may be smaller than then false positive rate. 
+Particularly when the signal is in the direction of the lower principal components (PCs) of $\Sigma$. 
+This is particularly counter intuitive since lower PCs are thought of as ``less noisy directions'', so that signal in those directions should be easier to detect. 
+Our results show that this is a false intuition.
+A test with less power than the false positive rate is known as a \emph{biased test} in the statistical literature. 
+The bias in high-dimensional tests has already been observed by \citet{goeman2006testing}, albeit not in the context of permutation tests.
+
+Second, the \emph{Oracle} is not the best performer: the location tests with estimated covariance have more power than a location test with the generative covariance. 
 This may be due to the fact that the permutation covariance differ from the sampling covariance. 
 A difference than grows larger as the dimension of the problem increases. 
 
-Second, the power of some tests may be smaller than then false positive rate. 
-Particularly when the signal is in the direction of the lower principal components (PCs) of $\Sigma$. 
-This is known as a \emph{biased test} in the statistical literature, and has already been observed in the context of high-dimensional testing by \citet{goeman2006testing}, albeit not in the context of permutation tests.
-
-It may be possible that even for shift alternatives, an accuracy test has more power than a location test. 
+Third, It may be possible that even for shift alternatives, an accuracy test has more power than a location test. 
 An example is provided by the long-range dependence setup with signal in the lower PCs of $\Sigma$ (Figure~\ref{fig:dependence_32} [TODO:verify]).
 
 
