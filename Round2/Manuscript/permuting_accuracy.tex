@@ -712,7 +712,7 @@ The discretization argument alone suffice to state that there will always be a t
 Multivariate tests, and location tests in particular, are easier to interpret. 
 To do so we typically use a NPL type argument, and think of the type of signal a test is sensitive to. 
 Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
-\citet{gilron2017s} for instance, demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
+\citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
 
 
@@ -735,7 +735,7 @@ For independence tests in high dimensional spaces see for example \cite{szekely_
 
 
 \subsection{A Good Accuracy Test}
-Brain-computer interfaces and clinical diagnostics \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular decoder can extract it. 
+Brain-computer interfaces and clinical diagnostics \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract it. 
 In these cases an accuracy test cannot be replaced by a location, or other, statistical test. 
 For these cases, we collect some conclusions and best practices. 
 
@@ -751,14 +751,8 @@ We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 
-We can compound regularization with bootstrapping to improve the power of the accuracy tests. 
-This is done in the \emph{SVM.boot.1} and \emph{LDA.highdim.4} tests. 
-The latter being one of the very few accuracy tests that achieve the same power as location tests. 
-This is exciting since it shows how to design powerful accuracy tests: by sampling test sets with replacement, and by regularizing the classifiers. 
-
-
 \paragraph{Permute features.} 
-Permuting features, such as in \cite{golland_permutation_2005}, is computationally more efficient than permuting labels, because refolding can be done once, for all permutations.
+Permuting features, instead of labels, is computationally more efficient than permuting labels, because refolding can be done once, for all permutations.
 It allows to preserve the balance of folds after a permutation, without refolding.
 
 \paragraph{Resubstitution accuracy in high SNR.} 
@@ -766,22 +760,7 @@ Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, becaus
 In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
-There is a fundamental difference between V-folding and resubstitution. The latter should not be thought of as the limit of the former. 
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -812,21 +791,23 @@ Since they permute features, not labels, then all their permutation samples are 
 Under their model (with some abuse of notation)
 \begin{align*}
 \begin{split}
-	(x_i|y_i=1) & \sim p \gauss{\mu_1,I}+ (1-p) \gauss{\mu_2,I}, \\
-	(x_i|y_i=0) & \sim (1-p) \gauss{\mu_1,I}+ p \gauss{\mu_2,I}.
+	(x_i|y_i=1) & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
+	(x_i|y_i=0) & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
 \end{split}
 \end{align*}
-Varying $p$ interpolates between the null distribution $(p=0.5)$ and a location shift model $(p=0)$. 
+Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
 We now perform the same simulation as \cite{golland_permutation_2005}, and in the same dimensionality as our previous simulations.
-We re-parameterize so that $p=0$ corresponds to the null model:
+We re-parameterize so that $\pi=0$ corresponds to the null model:
 \begin{align}
 \begin{split}
 \label{eq:mixture_alternative}
-	(x_i|y_i=1) & \sim (1/2-p) \gauss{\mu_1,I}+ (1/2+p) \gauss{\mu_2,I}, \\
-	(x_i|y_i=0) & \sim (1/2+p) \gauss{\mu_1,I}+ (1/2-p) \gauss{\mu_2,I}.	
+	(x_i|y_i=1) & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
+	(x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
 \end{split}
 \end{align}
-Even there are cases where location tests are suboptimal for mixture alternatives, \cite[e.g.][]{rosenblatt2017mixture}, we find that when compared to accuracy tests, location tests have more power (Figure~\ref{fig:golland}).
+\citet{rosenblatt2017mixture} show that a location test may be suboptimal for mixture alternatives, but when compared to Wilcoxon's signed rank test, and not to an accuracy tests.
+From our results, reported in Figure~\ref{fig:golland}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred.
+
 
 
 
@@ -835,15 +816,9 @@ Even there are cases where location tests are suboptimal for mixture alternative
 	  \includegraphics[width=0.5\linewidth]{"art/file12"}
 	  \caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 	  	$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
-	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
+	  The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:golland}
 \end{figure}
-
-
-
-
-
-
 
 
 
