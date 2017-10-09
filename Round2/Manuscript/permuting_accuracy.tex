@@ -356,15 +356,6 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 
 
-\begin{figure}[ht]
-		\centering
-	\includegraphics[width=0.5\linewidth]{"art/file8"}
-	\caption{TODO: what is wrong here?!?
-		\textbf{Scale Change.} 
-		$Var[\x_i|y_i=0] = I; Var[\x_i|y_i=1] = \Sigma$ where $\Sigma$ is diagonal with $\Sigma_{jj}=exp((j-p/2)/4*effect)$.}  
-\label{fig:scale_change}
-\end{figure}
-
 
 \begin{figure}[th]
 	\centering
@@ -391,8 +382,12 @@ The first is a ``short memory'' dependence, for which we use an $AR(1)$ covarian
 The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
 The third is an arbitrary random covariance.
 
+Phenomenon:
+Oracle worse than other locations tests.
+Location tests biased when noise in low PCs.
+Low PCs seems harder than high PCs.
 
-TODO: figures and discussion.
+[TODO: performs more replications and update discussion.]
 
 
 \begin{figure}[h]
@@ -474,17 +469,26 @@ TODO: figures and discussion.
 
 % Scale alternatives
 \subsection{Departure from Shift Alternatives}
-Is it possible for an accuracy test to have more power than a location test?
-Yes. 
-We already saw one example in the long memory setup in Section~\ref{sec:dependence}.
-\emph{Scale alternatives}, where signal is carried in the covariance and not in means, provide one such example. 
-Formally, $\mathbb{E}[x|y=1]=\mathbb{E}[x|y=0]$, but $Var[x|y=1]\neq Var[x|y=0]$.
+\label{sec:scale_alternative}
+Locations tests, as their name suggests, are designed to detect changes in multivariate location.
+Are they also preferable to detect changes in scale, where $\mathbb{E}[x|y=1]=\mathbb{E}[x|y=0]$, but $Var[x|y=1]\neq Var[x|y=0]$?
+There is no universal answer to this question: the preferred test depends on the alternative/signal at hand. 
 
-In Figure~\ref{fig:scale_change} we report a simulation designed to show the possibility of an accuracy test being more powerful then a location test. 
-This result is merely a proof of existence, and is not to be interpreted as ``accuracy tests have more power than location tests against scale alternatives''.
+In Figure~\ref{fig:scale_change} we report a simulation designed to demonstrate a preference for accuracy tests. 
+We could have just as easily designed a simulation to demonstrate a preference for location tests. 
+
 If the practitioner were expecting a change in scatter, then a Neyman-Pearson type reasoning would lead them to abandon both location and accuracy tests, and adopt a bona-fide covariance test \citep[e.g.][]{ley2015high}.
-Our empirical example in Section~\ref{sec:example}, and experience, actually support the opposite conclusion: that location tests have more power than accuracy tests. 
 
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{"art/file8"}
+	\caption{TODO: what is wrong here?!?
+		\textbf{Scale Change.} 
+		$Var[\x_i|y_i=0] = I; Var[\x_i|y_i=1] = \Sigma$ where $\Sigma$ is diagonal with $\Sigma_{jj}=exp((j-p/2)/4*effect)$.}  
+	\label{fig:scale_change}
+\end{figure}
 
 
 
@@ -493,7 +497,7 @@ Our empirical example in Section~\ref{sec:example}, and experience, actually sup
 \label{sec:bootstrap}
 
 Intuition suggests we may alleviate the discretization of the accuracy test statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
-The discretization of the accuracy statistic is governed by the number of examples in the union of holdout test sets.
+The discretization of the accuracy statistic is governed by the number of examples in the union of test sets.
 For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
@@ -513,39 +517,28 @@ An algorithm that samples test sets with replacement is the \emph{leave-one-out 
 	\end{align}
 \end{definition}
 
-\begin{definition}[b$0.632$]
-	\label{def:b0632}
-	The \emph{0.632 bootstrap} accuracy estimate, b$0.632$, is a weighted average of the resubstitution error and the bLOO.
-	Formally:
-	\begin{align}
-	\accEstim_{\algo}^{0.632} := 0.368 \; \accEstim_{\algo}^{Resub}  + 0.632 \; \accEstim_{\algo}^{bLOO}.
-	\end{align}
-\end{definition}
+
 Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
 As expected, selecting test sets with replacement does increase the power of accuracy tests, when compared to V-fold cross validation, but still falls short from the power of location tests. 
 It can also be seen that power increases with the number of bootstrap replications, since more replications reduce the level of discretization.
-The type of bootstrap, bLOO versus b$0.632$, does not change the power. 
 
 \bigskip
 
-%TODO: change cost in simulation to 0.1
 \begin{tcolorbox}
 	\centering
 	\begin{tabular}{l|c|c|c|c}
 		Name & Algorithm & Resampling & B  & Parameters\\ 
 		\hline
 		\hline
-		LDA.Boot.1 & LDA & b$0.632$ & $10$ &  -- \\ 
-		LDA.Boot.2 & LDA & bLOO 	& $10$ &  -- \\ 
-		SVM.Boot.1 & SVM & b$0.632$ & $10$ & cost=10 \\ 
-		SVM.Boot.2 & SVM & bLOO 	& $10$ & cost=10 \\ 
-		SVM.Boot.3 & SVM & b$0.632$ & $50$ & cost=10 \\ 
-		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=10 \\ 
+		LDA.Boot.1 & LDA & bLOO 	& $10$ &  -- \\ 
+		SVM.Boot.1 & SVM & bLOO 	& $10$ & cost=10 \\ 
+		SVM.Boot.2 & SVM & bLOO 	& $50$ & cost=10 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
+		TODO: remove 0632 from results and update names.
 		The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
-		bLOO and b$0.632$ are defined in definitions~\ref{def:bloo} and \ref{def:b0632} respectively.
+		bLOO is defined in~\ref{def:bloo}.
 		$B$ denotes the number of Bootstrap samples. } 
 	\label{tab:collected_2}
 \end{tcolorbox}
@@ -576,20 +569,18 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 
-Inspecting Figure~\ref{fig:simulation_11} (for instance), it can be seen that Hotelling's unregularized  $T^2$ test has similar power as accuracy tests. 
-It could thus be argued that the real advantage of \emph{SD} or \emph{Hotelling.shrink} is not in their sensitivity to location, but rather, in their adaptation to high dimension\footnote{By \emph{high-dimension} it is typically meant that $p/n$ is not too small, regardless of $p$ and $n$ themselves.}.
-By this we mean that both \emph{SD} and \emph{Hotelling.shrink} alleviate the dimensionality of the problem, manifested in the variability in the estimation of $\Sigma$, by introducing some bias. 
-
-At first, this may seem as a false intuition, because we know from ridge regression that $l_2$ regularization, such as in our SVM, already introduces a Tikhonov regularization to the covariance estimation.  
-This, however, is not the only way to regularize the covariance estimator. 
+Our setup of $n=40$ and $p=23$ is high dimensional in that $p/n$ is not too small. 
+This surfaces finite samples effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
+Our best performing tests, \emph{SD}, \emph{Goeman}, and \emph{Hotelling.shrink}, alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$, thus reducing variance at the cost of some bias. 
+It may thus be argued that the results are driven by the regularization of the covariance, and not the test itself.
+The $l_2$ regularization in our SVM predictors, also regularize the covariance estimation, but it is certainly not the only way to regularize the covariance estimator. 
 We thus try a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
 We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{SD}.
 
-
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a location test, can improve power. 
-See, for instance, \emph{SVM.CV.6} is clearly better regularized than other the V-fold cross-validated accuracy tests. 
-Compounding with a bootstrap instead of V-fold further increases the power of the test (\emph{LDA.highdim.4}).
+See, for instance, \emph{SVM.CV.6} which is clearly better regularized than other the V-fold cross-validated accuracy tests. 
+Compounding with a bootstrap instead of V-fold further increases the power of the test (e.g. \emph{LDA.highdim.4}).
 But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have similar, if not better, performance. 
 
 \bigskip
@@ -605,7 +596,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		LDA.highdim.1 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.2 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.3 & LDA & V-fold & V=4 \\ 
-		LDA.highdim.4 & LDA & b$0.632$ & B=50 \\ 
+		LDA.highdim.4 & LDA & b$0.632$ [TODO: replace with LOO] & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -614,7 +605,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 		\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 		\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-		\emph{LDA.highdim.4} is the same with b$0.632$.
+		\emph{LDA.highdim.4} is the same with b$0.632$ [TODO: replace with LOO].
 	} 
 	\label{tab:collected_3}
 \end{tcolorbox}
@@ -699,34 +690,21 @@ Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{go
 
 
 \subsection{Where do Accuracy Tests Lose Power?}
-The low power of the accuracy tests compared to location tests can be attributed to the following causes:\newline
-(a) \textbf{Discretization}: The discrete nature of accuracy test statistics. \newline
-(b) \textbf{Shift Alternatives}: A NPL type argument, favoring location tests to detect the shift alternatives we simulated (even if not maximal power). \newline
-(c) Inefficient use of the data when validating with a holdout set. \newline
-(d) Inappropriate regularization in high SNR regimes: testing requires less regularization than predicting. \newline
-
-
-
-
-\paragraph{Discretization}
+The low power of the accuracy tests compared to location tests can be attributed to the following causes: \newline
+(a) \textbf{Discretization}: 
+The discrete nature of accuracy test statistics. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
-These studies have other limitations as well.
-\citet{ramdas_classification_2016} assume a split-sample holdout, without cross-validation.
-A split sample holdout hurts the power of the accuracy test. It either trains a sub-optimal classifier, if the test sample is large. Or is inflates the variance of the accuracy statistic, if the test sample is small. 
-The resubstitution accuracy does not suffer from this inefficiency. 
-Its asymptotic analysis in \citet{golland_permutation_2005}, however, conceals both the discretization of the test statistic, and the effects of its concentration. 
-This analysis renders resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. 
-
-
-\paragraph{Shift Alternatives}
-We focused on shift alternatives. 
-One may argue that empirical alternatives are rarely of shift type, thus limiting our conclusions. 
-We reply that: 
-(a) Shift alternatives are by far the most studied signal type in the statistical literature.
-(b) Our empirical results in Section~\ref{sec:example} favor location tests. 
-More generally: discretization alone suffice to state that there will always be a test statistic with more power than an accuracy test. 
-When looking for a ``one-size fits all'' strategy, it is our experience that location tests are a better candidate than accuracy tests. 
+This type of analysis render resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. \newline
+(b) \textbf{Shift Alternatives}: 
+We focused on shift alternatives, so a NPL type argument will naturally favor location tests. 
+On the other hand:
+(i) Our empirical results in Section~\ref{sec:example} also favors location tests. 
+(ii) Location tests can also be preferable when departing from shift alternative such as in scale alternatives (Fig.~\ref{fig:scale_change}) and mixture alternatives (Fig.~\ref{eq:mixture_alternative}).
+(iii) We have never observed a case where an accuracy test had considerable more power than a location test. 
+The discretization argument alone suffice to state that there will always be a test statistic with more power than an accuracy test. \newline
+(c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
+(d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
 
 
