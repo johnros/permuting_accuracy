@@ -148,7 +148,7 @@ File name: file10
   
   
 File name: file11
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -158,7 +158,7 @@ File name: file11
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): AR(1) rho=0.6
+  Voxel dependence(*) (p): AR(1) rho=0.6. Signal in identity. 
   Trial dependence (n): none
   
 File name: file12
@@ -278,7 +278,7 @@ File name: file19
 
 
 File name: file20
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -288,11 +288,11 @@ File name: file20
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Arbitrary. Signal in high PCs. 
+  Voxel dependence(*) (p): AR(1). Signal in high PCs. 
   Trial dependence (n): none
   
 File name: file21
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -302,7 +302,7 @@ File name: file21
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Arbitrary. Signal in low PCs. 
+  Voxel dependence(*) (p): AR(1). Signal in low PCs. 
   Trial dependence (n): none
 
 File name: file22
@@ -316,7 +316,7 @@ File name: file22
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): browninan motion covariance. signal in high PCs
+  Voxel dependence(*) (p): Browninan motion covariance. signal in high PCs
   Trial dependence (n): none
   
 File name: file23
@@ -330,5 +330,5 @@ File name: file23
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): browninan motion covariance. signal in low PCs
+  Voxel dependence(*) (p): Browninan motion covariance. signal in low PCs
   Trial dependence (n): none
