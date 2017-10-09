@@ -56,7 +56,7 @@ At this point, it becomes unclear which is preferable: a location test or an acc
 The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $1,170$ citations\footnote{GoogleScholar. Accessed Aug 2017.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
 The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
-By comparing the rates of convergence of the power of each statistic to $1$, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
+By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 Rates, however, are only a first stage when comparing test statistics. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
@@ -85,9 +85,9 @@ As put by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website 
 
 The degree of discretization is governed by the number of samples. 
 In our example from \citet{gilron_quantifying_2016}, the classification accuracy is computed using $40$ examples, so that the test statistic may assume only $40$ possible values. 
-This number of examples is not unusual if considering this is the number of trial-repeats, or the number of subjects, in an neuroimaging study. 
+This number of examples is not unusual in an neuroimaging study. 
 
-The discretization effect is aggravated if the test statistic is highly concentrated. 
+Power loss due to discretization is further aggravated if the test statistic is highly concentrated. 
 For an intuition consider the usage of the \emph{resubstitution accuracy} as a test statistic. 
 This statistic simply means that the accuracy is not cross validated, but rather evaluated on the training data.
 If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
@@ -130,8 +130,8 @@ Perhaps more intuitively, it can be shown that $T^2$ equals the Euclidean norm o
 For more background see, for example, \cite{anderson_introduction_2003}.
 
 The major difficulty with these multivariate tests is that $\Sigma$ has $p(p+1)/2$ free parameters, so that $n$ has to be very large to apply these tests.
-If $n$ is not much larger than $p$, or in low signal-to-noise regimes, the test is very low powered, as argued by \cite{bai1996effect}. 
-In these cases, high dimensional versions of the $T^2$ may be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR.
+If $n$ is not much larger than $p$, or in low signal-to-noise regimes, the test is very low powered, as shown by \cite{bai1996effect}. 
+In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR.
 
 
 
@@ -150,7 +150,7 @@ and
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,
 \end{align}
-where $\indicator{A}$ is the indicator function of the set $A$. 
+where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continous $x$ and $y$.} of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
 
@@ -181,13 +181,13 @@ where $|A|$ denotes the cardinality of a set $A$.
 \label{sec:considerations}
 
 Estimating $\accEstim_{\algo}$ requires the following design choices: 
-(a) Should it be resampled and how? 
-(b) If resampling using V-fold cross validation then How many folds? Should the data be refolded after each permutation? Should the folding be balanced? 
+Should it be resampled and how? 
+If resampling using V-fold cross validation then How many folds? Should the data be refolded after each permutation? Should the folding be balanced? 
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross validate or not?}
-Given our goal, a biased estimate of $\accEstim_{\algo}$ is not a problem provided that bias is consistent over all permutations. 
+Given our goal, a biased in of $\acc_{\algo}$ is not a problem provided that bias is consistent over all permutations. 
 The underlying intuition is that a permutation test will be unbiased, provided that the exact same computation is performed over all permutations. 
 We will thus be considering both cross validated accuracies, and resubstitution accuracies.
 
@@ -248,11 +248,10 @@ The various test statistics in Table~\ref{tab:collected} will be compared using 
 Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid in that it has a false positive rate no larger than the desired level. 
 
-\noindent
-The sketch of our permutation test is the following:\newline
-(a) Fix a test statistic.\newline
-(b) Permute labels and recompute the statistic to recover its permutation distribution. \newline
-(c) Declare classes differ if the observed $\statistic$ is beyond its $95\%$'th permutation percentile.  \newline
+The sketch of our permutation test is the following: 
+(a) Fix a test statistic.
+(b) Permute labels and recompute the statistic to recover its permutation distribution. 
+(c) Declare classes differ if the observed statistic's value is beyond its $95\%$'th permutation percentile.  
 
 
 
@@ -270,7 +269,7 @@ We start by presenting the most basic simulation setup, and then its modificatio
 \label{sec:simulation_details}
 
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
+The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO: populate]
 
 Each simulation is based on $1,000$ replications. 
 In each replication, we generate $n$ i.i.d. samples from a shift class 
@@ -278,10 +277,10 @@ In each replication, we generate $n$ i.i.d. samples from a shift class
 \label{eq:distribution}
 	\x_i = \mu \y_i + \eta_i,
 \end{align}
-where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, the noise is distributed as $\eta_i \sim \gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional means vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
-In this basic setup, effects are of shift type and captured by $\mu$. 
-Shifts are equal in all $p$ coordinates of $\mu$, with magnitude varying over $\set{0,1/4,1/2}$.
+In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
+Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
@@ -333,13 +332,13 @@ This is particularly visible for intermediate signal strength (green triangle), 
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file3"}
-		\caption{\textbf{Unbalanced.}} 
+		\caption{\textbf{Unbalanced V-fold CV.}} 
 		\label{fig:simulation_11}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file2"}
-		\caption{\textbf{Balanced.}} 
+		\caption{\textbf{Balanced V-fold CV.}} 
 		\label{fig:simulation_12}
 	\end{subfigure}
 \end{figure}
@@ -353,28 +352,27 @@ This is particularly visible for intermediate signal strength (green triangle), 
 The Neyman-Pearson Lemma (NPL) type reasoning that favors the location test over accuracy tests may fail when the data is not multivariate Gaussian, and Hotelling's $T^2$ statistic no longer a generalized-likelihood-ratio test. 
 
 To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution. 
-The dominance of the location tests was preserved even under a multivariate heavy-tailed distribution, but this does reduce the advantage of the location tests  over accuracy tests (Figure~\ref{fig:t_null}).
+In this heavytailed setup, the dominance of the location tests was preserved, even if less evident than in the Gaussian case (Figure~\ref{fig:t_null}).
 
 
 
+\begin{figure}[ht]
+		\centering
+	\includegraphics[width=0.5\linewidth]{"art/file8"}
+	\caption{TODO: what is wrong here?!?
+		\textbf{Scale Change.} 
+		$Var[\x_i|y_i=0] = I; Var[\x_i|y_i=1] = \Sigma$ where $\Sigma$ is diagonal with $\Sigma_{jj}=exp((j-p/2)/4*effect)$.}  
+\label{fig:scale_change}
+\end{figure}
 
-\begin{figure}[h]
+
+\begin{figure}[th]
 	\centering
 	\caption{\mycaption}	
-	%\label{fig:simulation_1}
-	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file8"}
-		\caption{\textbf{Scale Change.} 
-			$Var[\x_i|y_i=0] = I; Var[\x_i|y_i=1] = \Sigma$ where $\Sigma$ is diagonal with $\Sigma_{jj}=exp((j-p/2)/4*effect)$.}  
-		\label{fig:scale_change}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file9"}
+		\includegraphics[width=0.5\linewidth]{"art/file9"}
 		\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t, with $df=3$ .  } 
 		\label{fig:t_null}
-	\end{subfigure}
 \end{figure}
 
 
@@ -388,35 +386,88 @@ We now test the robustness of our results to the correlations in $x$.
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Intuitively- both location tests and accuracy tests include the estimation of $\Sigma$, so that correlations should be accounted for. 
 The question remains- which test has more power?
-We address this matter in two setups. 
+We address this matter in several setups. 
 The first is a ``short memory'' dependence, for which we use an $AR(1)$ covariance.
 The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
+The third is an arbitrary random covariance.
 
-We would expect \emph{Oracle} to be the best performer within the location tests. 
-We would also expect \emph{SD} to be the worst performer, particularly in the long memory setup, since its assumed diagonal covariance is far from the true covariance. 
-From the long memory setup in Figure~\ref{fig:pink_noise} we see that the Oracle is indeed the best performed, but we are surprised that:
-(a) An SVM with small regularization (\emph{SVM.CV.2}) is the best test statistic.
-(b) \emph{SD} outperforms \emph{Hotelling.shrink} even though is assumes a diagonal covariance, which is far from the true Brownian motion covariance. 
-[TODO: why??]
+
+TODO: figures and discussion.
 
 
 \begin{figure}[h]
 	\centering
-	\caption{\mycaption}	
-	\begin{subfigure}{.4\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file11"}
-		\caption{TODO: Oracle looks bad. 
-			Short memory AR(1) dependence: $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$. } 
-		\label{fig:ar_1}
+	\caption{Short memory, AR(1) covariance. $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
+	\begin{subfigure}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{"art/file20"}
+	\caption{Signal in direction of highest principal components of $\Sigma$.} 
+	\label{fig:dependence_11}
 	\end{subfigure}
-	\begin{subfigure}{.4\textwidth}
+	\begin{subfigure}[t]{.32\textwidth}
 		\centering
-		  \includegraphics[width=1\linewidth]{"art/file16"}
-		\caption{Long-memory Brownian motion dependence: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.2$.} 
-		\label{fig:pink_noise}
+		\includegraphics[width=1\linewidth]{"art/file21"}
+		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\label{fig:dependence_12}
+	\end{subfigure}
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		  \includegraphics[width=1\linewidth]{"art/file11"}
+		\caption{Signal in direction of identity vector.} 
+		\label{fig:dependence_13}
 	\end{subfigure}
 \end{figure}
+
+
+\begin{figure}[h]
+	\centering
+	\caption{Long-memory Brownian motion covariance: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file22"}
+		\caption{Signal in direction of highest principal components of $\Sigma$.} 
+		\label{fig:dependence_21}
+	\end{subfigure}
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file23"}
+		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\label{fig:dependence_22}
+	\end{subfigure}
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file16"}
+		\caption{Signal in direction of identity vector.} 
+		\label{fig:dependence_23}
+	\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[h]
+	\centering
+	\caption{Arbitrary Covariance. $\Sigma:=A'A,$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.}	
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file18"}
+		\caption{Signal in direction of highest principal components of $\Sigma$.} 
+		\label{fig:dependence_31}
+	\end{subfigure}
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file17"}
+		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\label{fig:dependence_32}
+	\end{subfigure}
+	\begin{subfigure}[t]{.32\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file19"}
+		\caption{Signal in direction of identity vector.} 
+		\label{fig:dependence_33}
+	\end{subfigure}
+\end{figure}
+
+
 
 
 
@@ -502,7 +553,7 @@ The type of bootstrap, bLOO versus b$0.632$, does not change the power.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\linewidth]{"art/file13"}
+	\includegraphics[width=0.5\linewidth]{"art/file13"}
 	\caption{
 		TODO: redo whole Bootstrap analysis.
 		\textbf{Bootstrap.}
@@ -571,7 +622,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\linewidth]{"art/file14"}
+	\includegraphics[width=0.5\linewidth]{"art/file14"}
 	\caption{
 		TODO: update labels
 		\textbf{HighDim Classifier.} 
@@ -613,7 +664,7 @@ We emphasize that both test statistics were compared with the same permutation s
 
 \begin{figure}[th]
 \centering
-\includegraphics[width=0.7\linewidth]{"art/svm_vs_SD"}
+\includegraphics[width=0.5\linewidth]{"art/svm_vs_SD"}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{SVM.CV.1}), and a location test (\emph{SD}). 
@@ -803,7 +854,7 @@ Even there are cases where location tests are suboptimal for mixture alternative
 
 \begin{figure}[ht]
 \centering
-	  \includegraphics[width=0.7\linewidth]{"art/file12"}
+	  \includegraphics[width=0.5\linewidth]{"art/file12"}
 	  \caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 	  	$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $p$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
