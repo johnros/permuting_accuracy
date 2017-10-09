@@ -10,7 +10,7 @@ output: html_document
 file.name <- "file13"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <- 1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -31,15 +31,12 @@ Sigma <- diag(p)
 ```{r}
 library(RhpcBLASctl)
 blas_set_num_threads(1)
-registerDoMC(cores=110)
+registerDoMC(cores=100)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r independent noise variable folds}
-# Many statistics are not compute for efficiency. 
-# To compute them, just uncomment them.
-
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=effects, .combine=rbind)  %dopar% {
 
   labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
@@ -48,6 +45,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
   .noise <- rmvnorm(n=n, sigma = Sigma)
 
   # Shift alternative:
+  # effect <- effects[[3]]
   noise <- .noise + effect * labels
 
 
@@ -75,17 +73,22 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
     svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
     svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
     svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-    svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+    svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2),
+    svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=1, cost=cost.2, type=1),
+    svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
+    svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=1, cost=cost.2, type=1),
+    svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+    lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=1, type=1),
+    lda.Boot.2=t_lda_boot(noise, labels, B=10, type2=2, type=1)
   )
   
 
   # Initialize result containers
-  permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+  permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
   
   old.labels <- labels
   old.folds.ids <- fold.ids
-  statistics.names <- names(ts)
-  save(statistics.names, file='names.RData')
+  statistics.names <<- names(ts)
   
   for(i in 1:n.permutations){
     # i <- 1
@@ -114,7 +117,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
       svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
       svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
       svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-      svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+      svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2),
+      svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=1, cost=cost.2, type=1),
+      svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
+      svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=1, cost=cost.2, type=1),
+      svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+      lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=1, type=1),
+      lda.Boot.2=t_lda_boot(noise, labels, B=10, type2=2, type=1)
     )
   } # End permutation
 
@@ -141,7 +150,9 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
+# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
+names(pvals.1.9)[-1] <- statistics.names
+
   
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 

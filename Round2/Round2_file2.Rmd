@@ -1,5 +1,5 @@
 ---
-title: "Round2"
+title: "Basic setup. Balanced folding."
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -30,7 +30,7 @@ Sigma <- diag(p)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=110)
+registerDoMC(cores=100)
 ```
 
 
@@ -44,6 +44,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
+    # effect <- effects[[3]]
     noise <- .noise + effect * labels
     
     ## Compute observed statistic
@@ -59,6 +60,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
       lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -95,6 +97,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        Goeman=t_goeman(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),

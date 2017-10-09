@@ -114,10 +114,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <- names(ts)
+    statistics.names <<- names(ts)
     
     # Initialize permuted statistics
-    permuted <- matrix(-1, ncol=length(ts), nrow=n.permutations)
+    permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
     for(i in 1:n.permutations){
       # i <- 1

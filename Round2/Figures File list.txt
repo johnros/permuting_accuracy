@@ -1,7 +1,7 @@
 #### Now with the cleaned up code ####
 
 File name: file1
-  Status: OK
+  Status: SKIP
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -15,7 +15,7 @@ File name: file1
   Trial dependence (n): none
 
 File name: file2
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -29,7 +29,7 @@ File name: file2
   Trial dependence (n): none
 
 File name: file3
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original(*): unbalanced
@@ -43,7 +43,7 @@ File name: file3
   Trial dependence (n): none
 
 File name: file4
-  Status: 
+  Status: SKIP
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -57,7 +57,7 @@ File name: file4
   Trial dependence (n): none
   
 File name: file5
-  Status: 
+  Status: SKIP
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -73,7 +73,7 @@ File name: file5
   
   
 File name: file6
-  Status: 
+  Status: SKIP
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -87,7 +87,7 @@ File name: file6
   Trial dependence (n): none
   
 File name: file7
-  Status: 
+  Status: SKIP
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -104,7 +104,7 @@ File name: file7
 File name: file8
   Status: 
   Null: Gaussian
-  Effects(*): scale change 
+  Effects(*): scale alternative 
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
