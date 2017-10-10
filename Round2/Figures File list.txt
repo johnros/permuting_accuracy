@@ -1,7 +1,7 @@
 #### Now with the cleaned up code ####
 
 File name: file1
-  Status: SKIP
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -43,7 +43,7 @@ File name: file3
   Trial dependence (n): none
 
 File name: file4
-  Status: SKIP
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -57,7 +57,7 @@ File name: file4
   Trial dependence (n): none
   
 File name: file5
-  Status: SKIP
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -73,7 +73,7 @@ File name: file5
   
   
 File name: file6
-  Status: SKIP
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -87,7 +87,7 @@ File name: file6
   Trial dependence (n): none
   
 File name: file7
-  Status: SKIP
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: unbalanced
@@ -191,7 +191,7 @@ File name: file13
   Trial dependence (n): none
   
 File name: file14
-  Status: OK
+  Status: 
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]
@@ -220,7 +220,7 @@ File name: file15
   Trial dependence (n): none
 
 File name: file16
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -235,7 +235,7 @@ File name: file16
 
 
 File name: file17
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -249,7 +249,7 @@ File name: file17
   Trial dependence (n): none
 
 File name: file18
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -306,7 +306,7 @@ File name: file21
   Trial dependence (n): none
 
 File name: file22
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -316,11 +316,11 @@ File name: file22
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Browninan motion covariance. signal in high PCs
+  Voxel dependence(*) (p): Browninan motion covariance. Signal in high PCs.
   Trial dependence (n): none
   
 File name: file23
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced

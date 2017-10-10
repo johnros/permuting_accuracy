@@ -36,7 +36,7 @@ direction <- rep(1,p)
 library(RhpcBLASctl)
 blas_set_num_threads(1)
 
-registerDoMC(cores=50)
+registerDoMC(cores=100)
 ```
 
 

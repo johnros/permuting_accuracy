@@ -97,6 +97,7 @@ browninan_cov <- function(n, rho){
       result[i,j] <- rho*min(i,j)
     }
   }
+  result <- result/sum(diag(result))*n
   return(result)
 }
 ## Testing

@@ -11,7 +11,7 @@ output: html_document
 file.name <- "file14"
 
 balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
-n.replications <-  5e2# 1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -61,6 +61,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
       sd=t_SD(x1, x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
@@ -70,15 +71,16 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
       lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-      lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
+      lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=2, type=1),
       # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-      svm.boot.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+      svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=1e1, type=1),
+      svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=1e-1,  type=1)
     )
     
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <<- names(ts)
+    statistics.names <- names(ts)
     
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -102,6 +104,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        Goeman=t_goeman(x1, x2),
         sd=t_SD(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
@@ -111,9 +114,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
         lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
         lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=1, type=1),
+        lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=2, type=1),
         # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
-        svm.boot.2=t_svm_highdim_boot(noise, labels, B=50, type2=1, cost=1e-1, type=1)
+        svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=1e1, type=1),
+        svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=1e-1,  type=1)
       )
     } # End permutation
     
