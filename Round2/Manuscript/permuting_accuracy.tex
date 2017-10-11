@@ -367,7 +367,7 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 
 % Dependence
-\subsection{Departure from Independence}
+\subsection{Departure from IID}
 \label{sec:dependence}
 
 We now test the robustness of our results to the correlations in $x$. 
@@ -396,7 +396,7 @@ An example is provided by the long-range dependence setup with signal in the low
 
 
 
-[TODO: performs more replications and update discussion.]
+[TODO: update discussion.]
 
 
 \begin{figure}[h]
@@ -472,6 +472,22 @@ An example is provided by the long-range dependence setup with signal in the low
 \end{figure}
 
 
+Our previous simulations introduce dependence between coordinates but assume all coordinates have equal variance, i.e., homoskedastic. 
+The homoskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variance. 
+Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
+Those that don't normalize the variance, will give less importance to noisier directions. 
+
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{"art/file24"}
+	\caption{
+		\textbf{Heteroskedasticity.} 
+		$\Sigma$ is diagonal with $\Sigma_{jj}=j$.
+		}  
+	\label{fig:heteroskedastic}
+\end{figure}
 
 
 
@@ -490,7 +506,7 @@ If the practitioner were expecting a change in scatter, then a Neyman-Pearson ty
 
 
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{"art/file8"}
 	\caption{TODO: what is wrong here?!?
@@ -541,7 +557,9 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		\hline
 		LDA.Boot.1 & LDA & bLOO 	& $10$ &  -- \\ 
 		SVM.Boot.1 & SVM & bLOO 	& $10$ & cost=10 \\ 
-		SVM.Boot.2 & SVM & bLOO 	& $50$ & cost=10 \\ 
+		SVM.Boot.2 & SVM & bLOO 	& $10$ & cost=0.1 \\ 
+		SVM.Boot.3 & SVM & bLOO 	& $50$ & cost=10 \\ 
+		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=0.1 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -605,7 +623,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		LDA.highdim.1 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.2 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.3 & LDA & V-fold & V=4 \\ 
-		LDA.highdim.4 & LDA & b$0.632$ [TODO: replace with LOO] & B=50 \\ 
+		LDA.highdim.4 & LDA & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
