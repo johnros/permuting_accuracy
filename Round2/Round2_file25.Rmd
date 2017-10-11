@@ -137,7 +137,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file11.RData")
+# load("file25.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
