@@ -76,32 +76,30 @@ ar1_cov <- function(n, rho){
 ## Testing
 # ar1_cov(10,0.8)
 
-comSym_cov <- function(n, rho){
-  result <- diag(n)
-  del <- n/2
-  for(i in 1:(n/2)) {
-    result[i,i+del] <- rho
-    result[i+del,i] <- rho
-  }
-  return(result)
-}
-## Testing:
-# image(comSym_cov(1e1,0.9))
-
-
 
 browninan_cov <- function(n, rho){
-  result <- matrix(NA, n, n)
+  Sigma <- matrix(NA, n, n)
   for(i in 1:n){
     for(j in 1:n){
-      result[i,j] <- rho*min(i,j)
+      Sigma[i,j] <- rho*min(i,j)
     }
   }
-  result <- result/sum(diag(result))*n
-  return(result)
+  D <- 1/sqrt(diag(Sigma))
+  Corr <- diag(D) %*% Sigma %*% diag(D)
+  return(Corr)
 }
 ## Testing
 # lattice::levelplot(browninan_cov(10,0.8))
+
+
+
+seq_cov <- function(p){
+  Sigma0 <- 1:p
+  Sigma.0.trace <- sum(Sigma0)
+  # Sigma <- diag(Sigma0/Sigma.0.trace)
+  Sigma <- diag(Sigma0)
+  return(Sigma)
+}
 
 
 
