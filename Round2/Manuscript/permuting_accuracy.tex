@@ -367,7 +367,7 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 
 % Dependence
-\subsection{Departure from Independence}
+\subsection{Departure from Sphericity}
 \label{sec:dependence}
 
 We now test the robustness of our results to the correlations in $x$. 
@@ -387,21 +387,22 @@ Our results show that this is a false intuition.
 A test with less power than the false positive rate is known as a \emph{biased test} in the statistical literature. 
 The bias in high-dimensional tests has already been observed by \citet{goeman2006testing}, albeit not in the context of permutation tests.
 
-Second, the \emph{Oracle} is not the best performer: the location tests with estimated covariance have more power than a location test with the generative covariance. 
-This may be due to the fact that the permutation covariance differ from the sampling covariance. 
-A difference than grows larger as the dimension of the problem increases. 
+Second, the \emph{Oracle} is not the best performer.
+Perhaps the name Oracle is misleading. 
+From the NPL we know that a true oracle is a Likelihood-Ratio test. 
+A true NPL oracle should be aware of the direction and strength of the signal to detect, and not only the covariance.  
+Our Oracle is thus not a true NPL oracle, and like any other statistic, it has ``blind spots''.
+
 
 Third, It may be possible that even for shift alternatives, an accuracy test has more power than a location test. 
 An example is provided by the long-range dependence setup with signal in the lower PCs of $\Sigma$ (Figure~\ref{fig:dependence_32} [TODO:verify]).
 
 
 
-[TODO: performs more replications and update discussion.]
-
-
 \begin{figure}[h]
 	\centering
-	\caption{Short memory, AR(1) covariance. $\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
+	\caption{Short memory, AR(1) correlation. 
+	$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
 	\begin{subfigure}[t]{.3\textwidth}
 	\centering
 	\includegraphics[width=1\linewidth]{"art/file20"}
@@ -425,7 +426,7 @@ An example is provided by the long-range dependence setup with signal in the low
 
 \begin{figure}[h]
 	\centering
-	\caption{Long-memory Brownian motion covariance: $\Sigma_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
+	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
 	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file22"}
@@ -450,7 +451,9 @@ An example is provided by the long-range dependence setup with signal in the low
 
 \begin{figure}[h]
 	\centering
-	\caption{Arbitrary Covariance. $\Sigma:=A'A,$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.}	
+	\caption{Arbitrary Correlation. 
+		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
+	}
 	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file18"}
@@ -472,32 +475,29 @@ An example is provided by the long-range dependence setup with signal in the low
 \end{figure}
 
 
+Our previous simulations introduce dependence between coordinates but assume all coordinates have equal variance, i.e., homoskedastic. 
+The homoskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variance. 
+Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
+Those that don't normalize the variance, will give less importance to noisier directions. 
 
-
-
-
-% Scale alternatives
-\subsection{Departure from Shift Alternatives}
-\label{sec:scale_alternative}
-Locations tests, as their name suggests, are designed to detect changes in multivariate location.
-Are they also preferable to detect changes in scale, where $\mathbb{E}[x|y=1]=\mathbb{E}[x|y=0]$, but $Var[x|y=1]\neq Var[x|y=0]$?
-There is no universal answer to this question: the preferred test depends on the alternative/signal at hand. 
-
-In Figure~\ref{fig:scale_change} we report a simulation designed to demonstrate a preference for accuracy tests. 
-We could have just as easily designed a simulation to demonstrate a preference for location tests. 
-
-If the practitioner were expecting a change in scatter, then a Neyman-Pearson type reasoning would lead them to abandon both location and accuracy tests, and adopt a bona-fide covariance test \citep[e.g.][]{ley2015high}.
-
-
-
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{"art/file8"}
-	\caption{TODO: what is wrong here?!?
-		\textbf{Scale Change.} 
-		$Var[\x_i|y_i=0] = I; Var[\x_i|y_i=1] = \Sigma$ where $\Sigma$ is diagonal with $\Sigma_{jj}=exp((j-p/2)/4*effect)$.}  
-	\label{fig:scale_change}
+	\includegraphics[width=0.5\linewidth]{"art/file24"}
+	\caption{
+		\textbf{Heteroskedasticity.} 
+		$\Sigma$ is diagonal with $\Sigma_{jj}=j$.
+		}  
+	\label{fig:heteroskedastic}
 \end{figure}
+
+From Figure~\ref{fig:heteroskedastic} we see that the best performer is the \emph{sd} statistic, which is affine-invariant by design. 
+
+
+[TODO: update discussion.]
+
+
+
+
 
 
 
@@ -541,7 +541,9 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		\hline
 		LDA.Boot.1 & LDA & bLOO 	& $10$ &  -- \\ 
 		SVM.Boot.1 & SVM & bLOO 	& $10$ & cost=10 \\ 
-		SVM.Boot.2 & SVM & bLOO 	& $50$ & cost=10 \\ 
+		SVM.Boot.2 & SVM & bLOO 	& $10$ & cost=0.1 \\ 
+		SVM.Boot.3 & SVM & bLOO 	& $50$ & cost=10 \\ 
+		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=0.1 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -557,7 +559,6 @@ It can also be seen that power increases with the number of bootstrap replicatio
 	\centering
 	\includegraphics[width=0.5\linewidth]{"art/file13"}
 	\caption{
-		TODO: redo whole Bootstrap analysis.
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -605,7 +606,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		LDA.highdim.1 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.2 & LDA & V-fold & V=4 \\ 
 		LDA.highdim.3 & LDA & V-fold & V=4 \\ 
-		LDA.highdim.4 & LDA & b$0.632$ [TODO: replace with LOO] & B=50 \\ 
+		LDA.highdim.4 & LDA & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
@@ -624,7 +625,6 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 	\centering
 	\includegraphics[width=0.5\linewidth]{"art/file14"}
 	\caption{
-		TODO: update labels
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -746,7 +746,6 @@ We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{
 
 
 \paragraph{Smooth accuracy.}
-[TODO: verify after updating plot]
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 
