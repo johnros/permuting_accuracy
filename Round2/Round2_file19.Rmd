@@ -27,6 +27,7 @@ effects <- seq(0, 0.5, length=3)
 
 ## Covariance between features
 load(file='Sigma.RData')
+lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
 plot(Sigma.eigen$values, type='h')
 direction <- rep(1,p)

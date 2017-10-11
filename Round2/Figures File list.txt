@@ -263,7 +263,7 @@ File name: file18
   Trial dependence (n): none
 
 File name: file19
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -334,7 +334,7 @@ File name: file23
   Trial dependence (n): none
 
 File name: file24
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -345,4 +345,18 @@ File name: file24
   p=23
   Folds: 4
   Voxel dependence(*) (p): Sequence of variances. Signal in unit direction.
+  Trial dependence (n): none
+
+File name: file25
+  Status: 
+  Null: Gaussian
+  Effects(*): [0.5,1]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1) rho=0.6.  
   Trial dependence (n): none
