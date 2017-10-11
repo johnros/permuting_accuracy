@@ -1,5 +1,5 @@
 ---
-title: "Arbitrary Covariance. Signal in LOW PCs of noise"
+title: "Increasing sequence of variances"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -8,7 +8,7 @@ output: html_document
 
 
 ```{r preliminaries}
-file.name <- "file17"
+file.name <- "file24"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -22,20 +22,12 @@ cost.2 <- 1e-1
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) 
+effects <- seq(0, 0.5, length=3) # change in location
 
-
-## Make correlation matrix
-# A <- matrix(rnorm(p^2), ncol = p, nrow=p)
-# Sigma0 <- crossprod(A,A)
-# D <- diag(1/sqrt(diag(Sigma0)))
-# Sigma <- D %*% Sigma0 %*% D 
-# save(Sigma, file='Sigma.RData')
-
-load(file='Sigma.RData')
-Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
-# plot(Sigma.eigen$values, type='h')
-direction <- sqrt(p) * Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
+## Covariance
+Sigma <- seq_cov(p)
+lattice::levelplot(Sigma)
+direction <- rep(1,p)
 ```
 
 
@@ -55,8 +47,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
-    # matplot(t(.noise), type='l')
-
+    
     ## Shift alternative:
     noise <- .noise
     noise[labels,] <- noise[labels,] + effect * direction
@@ -106,6 +97,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
+      # Checking balance:
+      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
+      
+      # for permuting Xs:
+      # .indexes <- sample(seq(n))
+      #  .noise <- noise[.indexes,] 
+      
       permuted[i,] <- c(
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
@@ -144,7 +142,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file17.RData")
+# load("file24.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
@@ -152,7 +150,7 @@ pvals.1.9 %<>%  as.data.table()
 
 # names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
 names(pvals.1.9)[-1] <- statistics.names
- 
+
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
 pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]

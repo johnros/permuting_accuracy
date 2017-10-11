@@ -191,7 +191,7 @@ File name: file13
   Trial dependence (n): none
   
 File name: file14
-  Status: 
+  Status: OK 
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]
@@ -331,4 +331,18 @@ File name: file23
   p=23
   Folds: 4
   Voxel dependence(*) (p): Browninan motion covariance. signal in low PCs
+  Trial dependence (n): none
+
+File name: file24
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Sequence of variances. Signal in unit direction.
   Trial dependence (n): none
