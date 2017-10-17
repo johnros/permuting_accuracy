@@ -452,7 +452,7 @@ An example is provided by the long-range dependence setup with signal in the low
 \begin{figure}[h]
 	\centering
 	\caption{Arbitrary Correlation. 
-		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
+		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
 	}
 	\begin{subfigure}[t]{.3\textwidth}
 		\centering
@@ -475,6 +475,9 @@ An example is provided by the long-range dependence setup with signal in the low
 \end{figure}
 
 
+
+
+
 Our previous simulations introduce dependence between coordinates but assume all coordinates have equal variance, i.e., homoskedastic. 
 The homoskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variance. 
 Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
@@ -483,15 +486,12 @@ Those that don't normalize the variance, will give less importance to noisier di
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{"art/file24"}
-	\caption{
+	\caption{TODO: add signal in low PCs. 
 		\textbf{Heteroskedasticity.} 
 		$\Sigma$ is diagonal with $\Sigma_{jj}=j$.
 		}  
 	\label{fig:heteroskedastic}
 \end{figure}
-
-From Figure~\ref{fig:heteroskedastic} we see that the best performer is the \emph{sd} statistic, which is affine-invariant by design. 
-
 
 [TODO: update discussion.]
 
@@ -547,10 +547,9 @@ It can also be seen that power increases with the number of bootstrap replicatio
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
-		TODO: remove 0632 from results and update names.
 		The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
 		bLOO is defined in~\ref{def:bloo}.
-		$B$ denotes the number of Bootstrap samples. } 
+		$B$ denotes the number of Bootstrap samples.} 
 	\label{tab:collected_2}
 \end{tcolorbox}
 
@@ -615,7 +614,7 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
 		\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
 		\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-		\emph{LDA.highdim.4} is the same with b$0.632$ [TODO: replace with LOO].
+		\emph{LDA.highdim.4} is the same with bLOO.
 	} 
 	\label{tab:collected_3}
 \end{tcolorbox}
