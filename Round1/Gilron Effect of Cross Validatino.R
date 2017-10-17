@@ -188,19 +188,6 @@ t_Hotelling <- function(x,y, shrinkage){
 
 
 
-# Goeman's high-dim test
-t_goeman <- function(x,y){
-  X <- rbind(x,y)
-  dimnames(X) <- list(NULL,LETTERS[1:ncol(X)])
-  y <- as.matrix(c(rep(FALSE, nrow(x)),rep(TRUE,nrow(y))))
-  result <- globaltest::gt(y,X)
-  result@result[,'Statistic'] %>% unname()
-}
-## Testing
-# t_goeman(x1,x2)
-
-
-
 # Linear SVM. 
 t_svm <- function(train.noise, train.labels, test.noise, test.labels, cost, type){
   svm.1 <- svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear', cost=cost)

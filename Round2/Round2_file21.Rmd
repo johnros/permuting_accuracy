@@ -28,15 +28,15 @@ effects <- seq(0, 0.5, length=3)
 Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
-direction <- sqrt(p) * Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))]
+direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
+RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
 ```
 
@@ -87,8 +87,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <<- names(ts)
-    
+
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -126,6 +125,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
+    names(pvals) <- names(ts)
     
     c(effect=effect, pvals) 
   }

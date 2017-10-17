@@ -201,6 +201,16 @@ t_Hotelling <- function(x,y, shrinkage){
 #             y = rmvnorm(1e2, rep(0,1e1)), 
 #             shrinkage = TRUE)
 
+# Goeman's high-dim test
+t_goeman <- function(x,y){
+  X <- rbind(x,y)
+  dimnames(X) <- list(NULL,LETTERS[1:ncol(X)])
+  y <- as.matrix(c(rep(FALSE, nrow(x)),rep(TRUE,nrow(y))))
+  result <- globaltest::gt(y,X)
+  result@result[,'Statistic'] %>% unname()
+}
+## Testing
+# t_goeman(x1,x2)
 
 
 
