@@ -27,8 +27,9 @@ effects <- seq(0, 0.5, length=3) # change in location
 ## Covariance
 Sigma <- seq_cov(p)
 lattice::levelplot(Sigma)
-direction0 <- 1/(1:p)
-direction <- direction0 *sqrt(p)/sqrt(sum(direction0^0))
+direction0 <- 1/diag(Sigma)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
 ```
 
 
@@ -147,8 +148,6 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
 pvals.1.9 %<>%  as.data.table()
-
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")

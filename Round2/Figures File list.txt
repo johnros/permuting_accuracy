@@ -220,7 +220,7 @@ File name: file15
   Trial dependence (n): none
 
 File name: file16
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -278,7 +278,7 @@ File name: file19
 
 
 File name: file20
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -292,7 +292,7 @@ File name: file20
   Trial dependence (n): none
   
 File name: file21
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -306,7 +306,7 @@ File name: file21
   Trial dependence (n): none
 
 File name: file22
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -320,7 +320,7 @@ File name: file22
   Trial dependence (n): none
   
 File name: file23
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -334,7 +334,7 @@ File name: file23
   Trial dependence (n): none
 
 File name: file24
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -362,7 +362,7 @@ File name: file25
   Trial dependence (n): none
 
 File name: file26
-  Status: OK
+  Status: TODO
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -372,6 +372,6 @@ File name: file26
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Sequence of variances. Signal inversely proportional to covariance.
+  Voxel dependence(*) (p): Sequence of variances. Signal reciproq to covariance (low PCs?)
   Trial dependence (n): none
 
