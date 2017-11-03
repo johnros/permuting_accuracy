@@ -27,10 +27,14 @@ effects <- seq(0, 0.5, length=3)
 ## Dependence
 Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
+isSymmetric(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
+plot(Sigma.eigen$values, type='h')
 direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
 maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
 direction <- direction0 *sqrt(p/maha)
+
+Euclid(direction)
 ```
 
 
@@ -144,15 +148,11 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-names(pvals.1.9)[-1] <- statistics.names
-
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
 pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
-pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+pvals.melt[,c("reject","effect.factor"):=.(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
 
 

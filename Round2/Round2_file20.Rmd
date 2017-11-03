@@ -36,9 +36,7 @@ direction <- direction0 *sqrt(p/maha)
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
+RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
 ```
 

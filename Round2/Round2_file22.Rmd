@@ -1,11 +1,9 @@
 ---
-title: "Browninan covariance. Signal in high PCs"
+title: "Browninan covariance. Signal in HIGH PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
 ---
-
-
 
 ```{r preliminaries}
 file.name <- "file22"

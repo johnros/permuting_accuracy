@@ -11,7 +11,7 @@ output: html_document
 file.name <- "file14"
 
 balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2#1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -26,6 +26,10 @@ source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in scale
 Sigma <- diag(p)
+lattice::levelplot(Sigma)
+direction0 <- rep(1,p)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
 ```
 
 
@@ -47,7 +51,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     # Shift alternative:
     # effect <- effects[[2]]
+    noise <- .noise
     noise <- .noise + effect * labels
+    # noise[labels,] <- noise[labels,] + effect * direction
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -80,8 +86,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <- names(ts)
-    
+
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -92,13 +97,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
-      
-      # Checking balance:
-      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
-      
-      # for permuting Xs:
-      # .indexes <- sample(seq(n))
-      #  .noise <- noise[.indexes,] 
       
       permuted[i,] <- c(
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
@@ -126,7 +124,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
-    
+    names(pvals) <- names(ts)
+
     c(effect=effect, pvals) 
   }
 } 
@@ -144,8 +143,6 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- statistics.names
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 # pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 

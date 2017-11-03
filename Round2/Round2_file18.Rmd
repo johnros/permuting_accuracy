@@ -3,6 +3,8 @@ title: "Arbitrary covariance. Signal in HIGH PCs of noise"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r preliminaries}

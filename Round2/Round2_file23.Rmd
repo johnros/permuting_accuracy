@@ -1,5 +1,5 @@
 ---
-title: "Browninan covariance. Signal in low PCs"
+title: "Browninan covariance. Signal in LOW PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document

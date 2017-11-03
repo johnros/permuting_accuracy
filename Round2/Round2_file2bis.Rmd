@@ -10,7 +10,7 @@ editor_options:
 
 
 ```{r preliminaries}
-file.name <- "file2"
+file.name <- "file2bis"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -52,9 +52,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Shift alternative:
     # effect <- effects[[3]]
     
-    # noise <- .noise
-    # noise[labels,] <- noise[labels,] + effect * direction
-    noise <- .noise + effect * labels
+    noise <- .noise
+    noise[labels,] <- noise[labels,] + effect * direction
+    # noise <- .noise + effect * labels
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -140,7 +140,7 @@ pbPost(type = "note", body = "Done", the.message)
 
 
 ```{r analyze multiple effects}
-# load("file2.RData")
+# load("file2bis.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
