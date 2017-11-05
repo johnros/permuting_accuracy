@@ -148,7 +148,7 @@ File name: file10
   
   
 File name: file11
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -220,7 +220,7 @@ File name: file15
   Trial dependence (n): none
 
 File name: file16
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -235,7 +235,7 @@ File name: file16
 
 
 File name: file17
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -249,7 +249,7 @@ File name: file17
   Trial dependence (n): none
 
 File name: file18
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -263,7 +263,7 @@ File name: file18
   Trial dependence (n): none
 
 File name: file19
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -306,7 +306,7 @@ File name: file21
   Trial dependence (n): none
 
 File name: file22
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -320,7 +320,7 @@ File name: file22
   Trial dependence (n): none
   
 File name: file23
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -334,7 +334,7 @@ File name: file23
   Trial dependence (n): none
 
 File name: file24
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced

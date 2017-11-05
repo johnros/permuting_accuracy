@@ -4,7 +4,7 @@ author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 
@@ -13,7 +13,7 @@ editor_options:
 file.name <- "file28"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e2 #1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2

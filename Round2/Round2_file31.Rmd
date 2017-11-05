@@ -1,5 +1,5 @@
 ---
-title: "Arbitrary Covariance from eigenvalues. Signal in HIGH PCs of noise"
+title: "Arbitrary Covariance from eigenvalues. Signal in LOW PCs with fixed Yuvals-norm"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -10,10 +10,10 @@ editor_options:
 
 
 ```{r preliminaries}
-file.name <- "file27"
+file.name <- "file31"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2 #1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -27,22 +27,14 @@ source('Gilron Effect of Cross Validatino.R')
 effects <- seq(0, 0.5, length=3) 
 
 ## Make correlation matrix
-
-# ei.vals0 <- seq(1:p)
-# ei.vals <- ei.vals0/sum(ei.vals0)*length(ei.vals0)
-# plot(ei.vals, type='h')
-# A <- matrix(rnorm(p^2),nrow=p)
-# V <- eigen(t(A)%*%A)$vectors
-# D <- diag(ei.vals)
-# Sigma <- V%*%D%*%t(V)
-# save(Sigma, D, V, file='Sigma27.RData')
-
 load(file='Sigma27.RData')
 # lattice::levelplot(Sigma)
-direction0 <- V[,p]
-maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
-direction <- direction0 * sqrt(p/maha)
+# plot(diag(D), type='h')
+direction0 <-  V[,1]
+Det <- det(Sigma)
+direction <- direction0 * sqrt(p/Det)
 # mahalanobis(x = direction, center = 0, cov = Sigma)
+# mahalanobis(x = direction, center = 0, cov = diag(p))
 ```
 
 
@@ -150,7 +142,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file27.RData")
+# load("file31.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
