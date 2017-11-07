@@ -3,8 +3,9 @@ title: "Short term memory (AR(1)) with signal in LOW PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
-
 
 
 ```{r preliminaries}
@@ -19,7 +20,7 @@ n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
 
-source('Gilron Effect of Cross Validatino.R')
+source('Round2/Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
 effects <- seq(0, 0.5, length=3) 
@@ -28,9 +29,11 @@ effects <- seq(0, 0.5, length=3)
 Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
+plot(Sigma.eigen$values, type='h')
 direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
 maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
 direction <- direction0 *sqrt(p/maha)
+# Euclid(direction)
 ```
 
 
@@ -52,7 +55,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction 
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
 
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -144,15 +148,11 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-names(pvals.1.9)[-1] <- statistics.names
-
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
 pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
-pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+pvals.melt[,c("reject","effect.factor"):=.(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
 
 

@@ -21,7 +21,7 @@ suppressPackageStartupMessages(library(data.table))
 # biocLite("globaltest")
 suppressPackageStartupMessages(library('globaltest'))
 suppressPackageStartupMessages(library(RobPer))
-
+# suppressPackageStartupMessages(library(fungible))
 
 
 
@@ -34,6 +34,8 @@ the.message <- paste(file.name)
 
 
 tr <- function(A) sum(diag(A))
+
+Euclid <- function(x) sqrt(sum(x^2))
 
 gcd <- function(x,y) {
   r <- x%%y;
@@ -64,17 +66,14 @@ t_stat <- function(x,y){
 ## Testing:
 # t_stat(rnorm(10), rnorm(20,2))
 
-ar1_cov <- function(n, rho){
-  result <- matrix(NA, n, n)
-  for(i in 1:n){
-    for(j in 1:n){
-      result[i,j] <- round(rho^(abs(i-j)) ,2)
-    }
-  }
-  return(result)
+ar1_cov <- function(n, rho, sigma=1){
+  x <- diag(n) 
+  x <- sigma * rho^abs(row(x)-col(x))
+  x
+  return(x)
 }
 ## Testing
-# ar1_cov(10,0.8)
+# lattice::levelplot(ar1_cov(10,0.8))
 
 
 browninan_cov <- function(n, rho){

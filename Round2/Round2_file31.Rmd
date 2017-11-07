@@ -1,17 +1,19 @@
 ---
-title: "HeavyTailed"
+title: "AR(1) Signal in LOW PCs with fixed Euclidean-norm"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 
 
 ```{r preliminaries}
-file.name <- "file9"
+file.name <- "file31"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2 #1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -22,14 +24,18 @@ cost.2 <- 1e-1
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) # change in location
+effects <- seq(0, 0.5, length=3) 
 
+## Make correlation matrix
+Sigma <- ar1_cov(n = p, rho=0.6)
+lattice::levelplot(Sigma)
+Sigma.eigen <- eigen(Sigma)
+plot(Sigma.eigen$values, type='h')
+direction0 <- Sigma.eigen$vectors[,15] 
+direction <- direction0 * sqrt(p)
 
-## Signal in scale
-Sigma <- diag(p)
-direction0 <- rep(1,p)
-maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
-direction <- direction0 *sqrt(p/maha)
+# mahalanobis(x = direction, center = 0, cov = Sigma)
+# mahalanobis(x = direction, center = 0, cov = diag(p))
 ```
 
 
@@ -46,13 +52,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
-    ## t noise
-    .noise <- rmvt(n=n, sigma = Sigma, df=3)
-    
+    ## Gaussian noise
+    .noise <- rmvnorm(n=n, sigma = Sigma)
+    # matplot(t(.noise), type='l')
+
     ## Shift alternative:
     noise <- .noise
-    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
-    noise[labels,] <- noise[labels,] + shift
+    noise[labels,] <- noise[labels,] + effect * direction
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -60,7 +66,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = balance)
-    # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
     ts <- list(
@@ -83,12 +88,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
     
-    
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <- names(ts)
-    
+
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -140,7 +143,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file9.RData")
+# load("file31.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 

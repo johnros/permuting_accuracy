@@ -36,9 +36,7 @@ direction <- direction0 *sqrt(p/maha)
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
+RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
 ```
 
@@ -53,9 +51,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
 
     ## Shift alternative:
-    # noise <- .noise + effect * labels
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction 
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
 
     ## Compute observed statistic
     x1 <- noise[labels,]

@@ -1,19 +1,22 @@
 ---
-title: "Round2"
+title: "Large sample (with appropriately scaled signa)"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 
 
 ```{r preliminaries}
 file.name <- "file10"
+fact <- 10
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e2#1e3
 p <- 23
-n <- 4e1 # total sample size-> n/2 in each group.
+n <- fact* 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -21,20 +24,20 @@ cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
-effects <- seq(0, 0.5, length=3) # change in location
+effects <- 1/sqrt(fact) * seq(0, 0.5, length=3) # change in location
 
-## Signal in scale
 Sigma <- diag(p)
+lattice::levelplot(Sigma)
+direction0 <- rep(1,p)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
-registerDoMC(cores=50)
+RhpcBLASctl::blas_set_num_threads(1)
+registerDoMC(cores=100)
 ```
 
 
@@ -44,11 +47,16 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
-    ## t noise
-    .noise <- rmvt(n=n, sigma = Sigma, df=3)
+    ## Gaussian noise
+    .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
-    noise <- .noise + effect * labels
+    # effect <- effects[[3]]
+    
+    # noise <- .noise
+    noise <- .noise
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -63,6 +71,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
       lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -82,8 +91,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <<- names(ts)
-    
+
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -95,17 +103,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      # Checking balance:
-      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
-      
-      # for permuting Xs:
-      # .indexes <- sample(seq(n))
-      #  .noise <- noise[.indexes,] 
-      
       permuted[i,] <- c(
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        Goeman=t_goeman(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -122,12 +124,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       )
     } # End permutation
     
-    ## Compute p-vals for each statistic
+    # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
-    
+    names(pvals) <- names(ts)
+
     c(effect=effect, pvals) 
   }
 } 
@@ -145,16 +148,16 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```
 
 
-plot.3 <- pvals.melt %>% 
 ```{r}
+plot.3 <- pvals.melt %>% 
   ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
   theme_bw(base_size = 20)+
   theme(legend.position="none")+

@@ -3,6 +3,8 @@ title: "Arbitrary covariance. Signal in HIGH PCs of noise"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r preliminaries}
@@ -52,7 +54,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]

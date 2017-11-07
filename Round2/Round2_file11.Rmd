@@ -49,9 +49,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
 
     ## Shift alternative:
-    # noise <- .noise + effect * labels
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction 
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
 
     ## Compute observed statistic
     x1 <- noise[labels,]

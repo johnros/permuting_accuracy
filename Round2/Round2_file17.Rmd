@@ -28,7 +28,7 @@ effects <- seq(0, 0.5, length=3)
 # A <- matrix(rnorm(p^2), ncol = p, nrow=p)
 # Sigma0 <- crossprod(A,A)
 # D <- diag(1/sqrt(diag(Sigma0)))
-# Sigma <- D %*% Sigma0 %*% D 
+# Sigma <- D %*% Sigma0 %*% D
 # save(Sigma, file='Sigma.RData')
 
 load(file='Sigma.RData')
@@ -59,7 +59,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]

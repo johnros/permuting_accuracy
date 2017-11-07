@@ -3,6 +3,8 @@ title: "Basic setup. Balanced folding."
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 
@@ -49,6 +51,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Shift alternative:
     # effect <- effects[[3]]
+    
+    # noise <- .noise
+    # noise[labels,] <- noise[labels,] + effect * direction
     noise <- .noise + effect * labels
     
     ## Compute observed statistic
@@ -129,7 +134,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
