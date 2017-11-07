@@ -355,7 +355,7 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 
 
-
+TODO: update figure
 \begin{figure}[th]
 		\centering
 		\includegraphics[width=0.5\linewidth]{"art/file9"}
@@ -373,31 +373,24 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 We now test the robustness of our results to the correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Intuitively- both location tests and accuracy tests include the estimation of $\Sigma$, so that correlations should be accounted for. 
-The question remains- which test has more power?
-We address this matter in several setups. 
-The first is a ``short memory'' dependence, for which we use an $AR(1)$ covariance.
-The second is a ``long range'' dependence, for which we use the Brownian motion covariance. 
-The third is an arbitrary random covariance.
+To keep the comparisons ``fair'' as the correlations vary, we kept the Mahalanobis norm of the signal fixed. 
+The question remains- which test has more power: accuracy or location?
+We address this question using various correlation structures.
+We also vary the direction of the signal, $\mu$, and distinguish between signal in the direction of the highest principal component (PC) of $\Sigma$, or the lowest. 
 
 The simulation results reveal some non trivial phenomena.
-First, the power of some tests may be smaller than then false positive rate. 
-Particularly when the signal is in the direction of the lower principal components (PCs) of $\Sigma$. 
-This is particularly counter intuitive since lower PCs are thought of as ``less noisy directions'', so that signal in those directions should be easier to detect. 
-Our results show that this is a false intuition.
-A test with less power than the false positive rate is known as a \emph{biased test} in the statistical literature. 
-The bias in high-dimensional tests has already been observed by \citet{goeman2006testing}, albeit not in the context of permutation tests.
+First, when the signal is in the direction of the highest PC, the high dimensional location tests are far superior than accuracy tests. 
+This holds true for the various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_21}, and the arbitrary correlation in Figure~\ref{fig:dependence_31}.
 
-Second, the \emph{Oracle} is not the best performer.
-Perhaps the name Oracle is misleading. 
-From the NPL we know that a true oracle is a Likelihood-Ratio test. 
-A true NPL oracle should be aware of the direction and strength of the signal to detect, and not only the covariance.  
-Our Oracle is thus not a true NPL oracle, and like any other statistic, it has ``blind spots''.
-
-
-Third, It may be possible that even for shift alternatives, an accuracy test has more power than a location test. 
-An example is provided by the long-range dependence setup with signal in the lower PCs of $\Sigma$ (Figure~\ref{fig:dependence_32} [TODO:verify]).
-
-
+When the signal is in the direction of the lowest PC, a different phenomenon appears.
+There is no clear preference between location or accuracy tests.
+Instead the non-regularized tests are the clear victors. 
+This holds true for the various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_22}, and the arbitrary correlation in Figure~\ref{fig:dependence_32}.
+We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
+This was not apparent when the signal was in the high PC, because it had a large Euclidean norm. 
+When the signal is in the low PC, and $\mu'\Sigma^{-1}\mu$ is fixed, then $\mu$ has a small Euclidean norm. 
+The reader may argue that we should not have fixed $\mu'\Sigma^{-1}\mu$, thus varying $\mu$ with $\Sigma$, but rather fix the Euclidean norm of $\mu$. 
+This matter is discussed in Section~\ref{sec:fix_snr}.
 
 \begin{figure}[h]
 	\centering
@@ -483,14 +476,23 @@ The homoskedastic case, where difference coordinates have different variance, is
 Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
 Those that don't normalize the variance, will give less importance to noisier directions. 
 
+
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\linewidth]{"art/file24"}
-	\caption{TODO: add signal in low PCs. 
-		\textbf{Heteroskedasticity.} 
-		$\Sigma$ is diagonal with $\Sigma_{jj}=j$.
-		}  
-	\label{fig:heteroskedastic}
+		\centering
+		\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
+		\label{fig:heteroskedastic}	
+		\begin{subfigure}[t]{0.7\textwidth}
+			\centering
+		\includegraphics[width=1\linewidth]{"art/file24"}
+		\caption{TODO: caption.}  
+		\label{fig:heteroskedastic_11}	
+		\end{subfigure}
+		\begin{subfigure}[t]{.4\textwidth}
+			\centering
+	\includegraphics[width=0.5\linewidth]{"art/file26"}
+	\caption{TODO: figure.}  
+	\label{fig:heteroskedastic_12}	
+	\end{subfigure}
 \end{figure}
 
 [TODO: update discussion.]
@@ -714,6 +716,7 @@ The discretization argument alone suffice to state that there will always be a t
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
 (d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
+TODO: add n=400 to isolate NPL versus discretization with 1,000 replications
 
 
 \subsection{Interpretation}
@@ -722,6 +725,23 @@ To do so we typically use a NPL type argument, and think of the type of signal a
 Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
+
+
+\subsection{Fixed SNR}
+\label{sec:fix_snr}
+For a fair comparisons between simulations, in particular between those with different correlations, we needed to fix the difficulty of the problem.
+We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
+Formally, in all our simulations we set $\mu \Sigma^{-1} \mu=p$.
+
+Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal, so that detecting signal in the low PCs is not easier than detecting signal in the high PCs.
+Quantitatively, fixing the Mahalanobis norm implies that the Euclidean norm of $\mu$ is proportional to the eigenvalue of the corresponding eigenvector: $\mu$ will have a large Eucliden norm in the high PCs and small Eucliden norm in the low PCs.
+
+[TODO: add simulation with fixed Eucliden norm]
+
+
+
+\subsection{High Versus Low PCs}
+TODO. In particular bias in low PCs.
 
 
 \subsection{Testing in Augmented Spaces}
@@ -838,7 +858,7 @@ and related ``data science'' communities.
 
 \section{Acknowledgments}
 JDR was supported by the ISF 900/60 research grant. 
-JDR also wishes to Jelle Goeman, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
+JDR also wishes to Yuval Benjamini, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
 
 
 
