@@ -28,7 +28,7 @@ lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma)
 direction0 <- Sigma.eigen$vectors[,which.max(abs(Sigma.eigen$values))] 
 maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
-direction <- direction0 *sqrt(p/maha)
+direction <- direction0 * sqrt(p/maha)
 ```
 
 
@@ -50,7 +50,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]

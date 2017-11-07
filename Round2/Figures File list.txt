@@ -133,9 +133,9 @@ File name: file9
   
   
 File name: file10
-  Status: 
+  Status: OK
   Null: Gaussian
-  Effects: 1/sqrt(10) * [0,0.5]
+  Effects(*): 1/sqrt(10) * [0,0.5]
   Original: balanced
   Permuted: balanced
   Permutations: 3e2
@@ -148,7 +148,7 @@ File name: file10
   
   
 File name: file11
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -220,7 +220,7 @@ File name: file15
   Trial dependence (n): none
 
 File name: file16
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -235,7 +235,7 @@ File name: file16
 
 
 File name: file17
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -249,7 +249,7 @@ File name: file17
   Trial dependence (n): none
 
 File name: file18
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -263,7 +263,7 @@ File name: file18
   Trial dependence (n): none
 
 File name: file19
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -306,7 +306,7 @@ File name: file21
   Trial dependence (n): none
 
 File name: file22
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -320,7 +320,7 @@ File name: file22
   Trial dependence (n): none
   
 File name: file23
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -334,7 +334,7 @@ File name: file23
   Trial dependence (n): none
 
 File name: file24
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -344,7 +344,7 @@ File name: file24
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Sequence of variances. Signal in unit direction.
+  Voxel dependence(*) (p): Sequence of variances. Signal in High PC.
   Trial dependence (n): none
 
 File name: file25
@@ -358,7 +358,7 @@ File name: file25
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): AR(1) rho=0.6.  
+  Voxel dependence(*) (p): AR(1) rho=0.6.  Strong Signal.
   Trial dependence (n): none
 
 File name: file26
@@ -372,11 +372,25 @@ File name: file26
   n=40
   p=23
   Folds: 4
-  Voxel dependence(*) (p): Sequence of variances. Signal reciproq to covariance (low PCs?)
+  Voxel dependence(*) (p): Sequence of variances. Signal in LOW PC
   Trial dependence (n): none
 
 File name: file27
-  Status: TODO
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal in high PCs.
+  Trial dependence (n): none
+
+File name: file28
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -388,3 +402,63 @@ File name: file27
   Folds: 4
   Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal in low PCs.
   Trial dependence (n): none
+
+
+File name: file29
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal identity.
+  Trial dependence (n): none
+
+
+File name: file30
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal minus identity.
+  Trial dependence (n): none
+
+File name: file31
+  Status: TODO
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Euclidean norm. Signal in low PC.
+  Trial dependence (n): none
+
+File name: file31
+  Status: TODO
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Euclidean norm. Signal in high PC.
+  Trial dependence (n): none
+
+

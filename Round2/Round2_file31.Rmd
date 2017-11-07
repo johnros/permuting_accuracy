@@ -1,5 +1,5 @@
 ---
-title: "Arbitrary Covariance from eigenvalues. Signal in LOW PCs with fixed Yuvals-norm"
+title: "AR(1) Signal in LOW PCs with fixed Euclidean-norm"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -27,12 +27,13 @@ source('Gilron Effect of Cross Validatino.R')
 effects <- seq(0, 0.5, length=3) 
 
 ## Make correlation matrix
-load(file='Sigma27.RData')
-# lattice::levelplot(Sigma)
-# plot(diag(D), type='h')
-direction0 <-  V[,1]
-Det <- det(Sigma)
-direction <- direction0 * sqrt(p/Det)
+Sigma <- ar1_cov(n = p, rho=0.6)
+lattice::levelplot(Sigma)
+Sigma.eigen <- eigen(Sigma)
+plot(Sigma.eigen$values, type='h')
+direction0 <- Sigma.eigen$vectors[,15] 
+direction <- direction0 * sqrt(p)
+
 # mahalanobis(x = direction, center = 0, cov = Sigma)
 # mahalanobis(x = direction, center = 0, cov = diag(p))
 ```
