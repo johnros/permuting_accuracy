@@ -387,8 +387,8 @@ There is no clear preference between location or accuracy tests.
 Instead the non-regularized tests are the clear victors. 
 This holds true for the various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_22}, and the arbitrary correlation in Figure~\ref{fig:dependence_32}.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
-This was not apparent when the signal was in the high PC, because it had a large Euclidean norm. 
-When the signal is in the low PC, and $\mu'\Sigma^{-1}\mu$ is fixed, then $\mu$ has a small Euclidean norm. 
+This was not apparent when the signal was in the low variance PC, because it had a large Euclidean norm. 
+When the signal is in the high variance PC, and $\mu'\Sigma^{-1}\mu$ is fixed, then $\mu$ has a small Euclidean norm. 
 The reader may argue that we should not have fixed $\mu'\Sigma^{-1}\mu$, thus varying $\mu$ with $\Sigma$, but rather fix the Euclidean norm of $\mu$. 
 This matter is discussed in Section~\ref{sec:fix_snr}.
 
@@ -396,6 +396,7 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 	\centering
 	\caption{Short memory, AR(1) correlation. 
 	$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
+	\label{fig:dependence_1}
 	\begin{subfigure}[t]{.3\textwidth}
 	\centering
 	\includegraphics[width=1\linewidth]{"art/file20"}
@@ -420,6 +421,7 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 \begin{figure}[h]
 	\centering
 	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
+	\label{fig:dependence_2}
 	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file22"}
@@ -447,6 +449,7 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 	\caption{Arbitrary Correlation. 
 		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
 	}
+	\label{fig:dependence_3}
 	\begin{subfigure}[t]{.3\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file18"}
@@ -469,8 +472,6 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 
 
 
-
-
 Our previous simulations introduce dependence between coordinates but assume all coordinates have equal variance, i.e., homoskedastic. 
 The homoskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variance. 
 Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
@@ -478,24 +479,24 @@ Those that don't normalize the variance, will give less importance to noisier di
 
 
 \begin{figure}[h]
+	\centering
+	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
+	\label{fig:heteroskedastic}	
+	\begin{subfigure}[t]{0.4\textwidth}
 		\centering
-		\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
-		\label{fig:heteroskedastic}	
-		\begin{subfigure}[t]{0.7\textwidth}
-			\centering
 		\includegraphics[width=1\linewidth]{"art/file24"}
-		\caption{TODO: caption.}  
+		\caption{$\mu$ in the highest PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_11}	
-		\end{subfigure}
-		\begin{subfigure}[t]{.4\textwidth}
-			\centering
-	\includegraphics[width=0.5\linewidth]{"art/file26"}
-	\caption{TODO: figure.}  
-	\label{fig:heteroskedastic_12}	
+	\end{subfigure}
+	\begin{subfigure}[t]{.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file26"}
+		\caption{TODO: update graphics. $\mu$ in the lowest PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_12}	
 	\end{subfigure}
 \end{figure}
 
-[TODO: update discussion.]
+
 
 
 
@@ -705,7 +706,7 @@ The low power of the accuracy tests compared to location tests can be attributed
 The discrete nature of accuracy test statistics. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
-This type of analysis render resubstitution accuracy estimates a legitimate asymptotic test, while they are a terrible finite sample test. \newline
+This type of analysis render resubstitution accuracy estimates a legitimate asymptotic test, while they are a poor finite sample test. \newline
 (b) \textbf{Shift Alternatives}: 
 We focused on shift alternatives, so a NPL type argument will naturally favor location tests. 
 On the other hand:
@@ -716,7 +717,15 @@ The discretization argument alone suffice to state that there will always be a t
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
 (d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
-TODO: add n=400 to isolate NPL versus discretization with 1,000 replications
+
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{art/file10}
+	\caption{[TODO: more replications] $n=400$}
+	\label{fig:file10}
+\end{figure}
 
 
 \subsection{Interpretation}
@@ -733,15 +742,54 @@ For a fair comparisons between simulations, in particular between those with dif
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
 Formally, in all our simulations we set $\mu \Sigma^{-1} \mu=p$.
 
-Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal, so that detecting signal in the low PCs is not easier than detecting signal in the high PCs.
-Quantitatively, fixing the Mahalanobis norm implies that the Euclidean norm of $\mu$ is proportional to the eigenvalue of the corresponding eigenvector: $\mu$ will have a large Eucliden norm in the high PCs and small Eucliden norm in the low PCs.
+Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal.
+An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_\Sigma$.
 
-[TODO: add simulation with fixed Eucliden norm]
+For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed in stead of $\Vert \mu \Vert_\Sigma$.
+We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
+Our intuition is confirmed in that all statistics find it easier to detect signal in smaller variance PCs.
+It is also consistent with Figure~\ref{fig:dependence_1}, in that 
+(i)\emph{Hotelling.shrink} is a good performed ``on average'', 
+(ii) \emph{sd} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
+
+\begin{figure}[h]
+	\centering
+	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
+	\label{fig:dependence_4}	
+	\begin{subfigure}[t]{0.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file31"}
+		\caption{$\mu$ in PC15 of $\Sigma$.}  
+		\label{fig:dependence_41}	
+	\end{subfigure}
+	\begin{subfigure}[t]{.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file32"}
+		\caption{$\mu$ in PC7 of $\Sigma$.}  
+		\label{fig:dependence_42}	
+	\end{subfigure}
+\end{figure}
+
 
 
 
 \subsection{High Versus Low PCs}
-TODO. In particular bias in low PCs.
+Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the low PCs (i.e. high-variance PCs), is very different than detecting in the high PCs.
+Even when fixing $\Vert \mu \Vert_\Sigma$, so that the difficulty of the problem is fixed, we see power differences? 
+Why is that?
+
+We attribute this phenomenon to regularization.
+While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$ does not. 
+The various regularization methods deflate the high variance directions, thus, inflate the low variance directions.
+If the signal is in the low variance directions, the regularization may mask it. 
+This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
+
+
+
+
+
+
 
 
 \subsection{Testing in Augmented Spaces}
