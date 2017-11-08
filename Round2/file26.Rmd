@@ -1,19 +1,17 @@
 ---
-title: "AR(1) Signal in LOW PCs with fixed Euclidean-norm"
+title: "Increasing sequence of variances. Signal inversly proportional."
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
-editor_options: 
-  chunk_output_type: inline
 ---
 
 
 
 ```{r preliminaries}
-file.name <- "file31"
+file.name <- "file26"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e2 #1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -24,18 +22,14 @@ cost.2 <- 1e-1
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) 
+effects <- seq(0, 0.5, length=3) # change in location
 
-## Make correlation matrix
-Sigma <- ar1_cov(n = p, rho=0.6)
+## Covariance
+Sigma <- seq_cov(p)
 lattice::levelplot(Sigma)
-Sigma.eigen <- eigen(Sigma)
-plot(Sigma.eigen$values, type='h')
-direction0 <- Sigma.eigen$vectors[,15] 
-direction <- direction0 * sqrt(p)
-
-# mahalanobis(x = direction, center = 0, cov = Sigma)
-# mahalanobis(x = direction, center = 0, cov = diag(p))
+direction0 <- 1/diag(Sigma)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
 ```
 
 
@@ -54,8 +48,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
-    # matplot(t(.noise), type='l')
-
+    
     ## Shift alternative:
     noise <- .noise
     noise[labels,] <- noise[labels,] + effect * direction
@@ -91,7 +84,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-
+    
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -102,6 +95,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
+      
+      # Checking balance:
+      # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
+      
+      # for permuting Xs:
+      # .indexes <- sample(seq(n))
+      #  .noise <- noise[.indexes,] 
       
       permuted[i,] <- c(
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
@@ -129,8 +129,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
+    
     names(pvals) <- names(ts)
-
     
     c(effect=effect, pvals) 
   }
@@ -143,7 +143,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r analyze multiple effects}
-# load("file31.RData")
+# load("file26.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 

@@ -13,7 +13,7 @@ editor_options:
 file.name <- "file32"
 
 balance <- TRUE   # set for TRUE for balanced folding and refolding.
-n.replications <-  1e2 #1e3
+n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
@@ -31,7 +31,7 @@ Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma)
 plot(Sigma.eigen$values, type='h')
-direction0 <- Sigma.eigen$vectors[,5] 
+direction0 <- Sigma.eigen$vectors[,7] 
 direction <- direction0 * sqrt(p)
 # mahalanobis(x = direction, center = 0, cov = Sigma)
 # mahalanobis(x = direction, center = 0, cov = diag(p))
@@ -57,7 +57,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
