@@ -423,7 +423,7 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 \begin{figure}[h]
 	\centering
-	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
+	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
 	\label{fig:dependence_2}
 	\begin{subfigure}[t]{.4\textwidth}
 		\centering
@@ -475,31 +475,37 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 
 
-Our previous simulations introduce dependence between coordinates but assume all coordinates have equal variance, i.e., homoskedastic. 
-The homoskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variance. 
-Some test statistics have built-in variance normalization, and are known as \emph{affine invariant} in the statistical literature. 
-Those that don't normalize the variance, will give less importance to noisier directions. 
+\subsection{Departure from Homoskedasticity}
 
+Our previous simulations assume variables a have unit variance. 
+The heteroskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variable-wise variance. 
+Some test statistics have built-in variance normalization, and are known as \emph{scalar invariant}. 
+The \emph{sd} test statistic is scalar invariant. 
+Statistics that are not scalar-invariant such as the \emph{Goeman} statistic, will give less importance to high-variance directions than to low-variance directions. 
+
+In Figure~\ref{fig:heteroskedastic_11} we see that as before, location tests dominate accuracy tests.
+For the first time, we can see the difference between the scalar-invariant \emph{SD} and \emph{Goeman}: the latter gaining power by focusing on low variance coordinates. Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is needed.
+
+When the signal is in the low variance PC, \emph{Goeman} puts emphasis on variables which carry little signal.
+For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:heteroskedastic_12}.
 
 \begin{figure}[h]
 	\centering
 	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
 	\label{fig:heteroskedastic}	
+	\begin{subfigure}[t]{.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file26"}
+		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_11}	
+	\end{subfigure}
 	\begin{subfigure}[t]{0.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file24"}
 		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
-		\label{fig:heteroskedastic_11}	
-	\end{subfigure}
-	\begin{subfigure}[t]{.4\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file26"}
-		\caption{TODO: update graphics. $\mu$ in the high variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_12}	
 	\end{subfigure}
 \end{figure}
-
-
 
 
 
@@ -587,16 +593,17 @@ It can also be seen that power increases with the number of bootstrap replicatio
 Our setup of $n=40$ and $p=23$ is high dimensional in that $p/n$ is not too small. 
 This surfaces finite samples effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
 Our best performing tests, \emph{SD}, \emph{Goeman}, and \emph{Hotelling.shrink}, alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$, thus reducing variance at the cost of some bias. 
-It may thus be argued that the results are driven by the regularization of the covariance, and not the test itself.
-The $l_2$ regularization in our SVM predictors, also regularize the covariance estimation, but it is certainly not the only way to regularize the covariance estimator. 
-We thus try a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where $\hat{Sigma}$ is regularized similarly to \emph{Hotteling.shrink}.
-We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{SD}.
+It may thus be argued that the power advantages of the location tests are driven by the regularization of the covariance, and not the statistic itself.
+We would thus augment the comparison with various covariance-regularized accuracy tests.
+The $l_2$ regularization in our SVM accuracy test, already regularizes the covariance, but it is certainly not the only way to do so. 
+We thus add some covariance-regularized accuracy tests such as a shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where similarly to \emph{Hotteling.shrink}, Tikhonov regularization of $\hat \Sigma$ is employed. 
+We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \citep{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{sd} and \emph{Goeman}.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a location test, can improve power. 
-See, for instance, \emph{SVM.CV.6} which is clearly better regularized than other the V-fold cross-validated accuracy tests. 
-Compounding with a bootstrap instead of V-fold further increases the power of the test (e.g. \emph{LDA.highdim.4}).
-But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have similar, if not better, performance. 
+See, for instance, \emph{SVM.CV.6} which is clearly the best regularized SVM for testing. 
+Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{LDA.highdim.4}.
+Even so, the out-of-the-box location tests outperform the accuracy tests.
 
 \bigskip
 
@@ -606,11 +613,11 @@ But even so, the out-of-the-box \emph{SD} and \emph{Hotelling.shrink} tests have
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		SVM.CV.5 & SVM & V-fold & cost=100, V=4 \\ 
-		SVM.CV.6 & SVM & V-fold & cost=0.01, V=4 \\ 
-		LDA.highdim.1 & LDA & V-fold & V=4 \\ 
-		LDA.highdim.2 & LDA & V-fold & V=4 \\ 
-		LDA.highdim.3 & LDA & V-fold & V=4 \\ 
+		SVM.CV.5 & SVM & V-fold & cost=100 \\ 
+		SVM.CV.6 & SVM & V-fold & cost=0.01\\ 
+		LDA.highdim.1 & LDA & V-fold & -- \\ 
+		LDA.highdim.2 & LDA & V-fold & -- \\ 
+		LDA.highdim.3 & LDA & V-fold & -- \\ 
 		LDA.highdim.4 & LDA & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
