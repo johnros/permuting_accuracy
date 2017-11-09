@@ -125,17 +125,17 @@ Using our notations this statistic is proportional to the difference between gro
 	T^2 \propto \; (\bar{x}_{y=1}-\bar{x}_{y=0})'\; \hat{\Sigma}^{-1} \;(\bar{x}_{y=1}-\bar{x}_{y=0}), 
 \end{align}
 where $\bar{x}_{y=j}$ is the $p$-vector of means in the $y=j$ group, and $\hat{\Sigma}$ is a pooled covariance estimator.
-Perhaps more intuitively, it can be shown that $T^2$ equals the Euclidean norm of the mean difference vector, after decorrelating the coordinates of $x$. 
+Perhaps more intuitively, $T^2$ is Euclidean norm of the mean difference vector, but after transforming to decorrelated scales. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
 The major difficulty with these multivariate tests is that $\Sigma$ has $p(p+1)/2$ free parameters, so that $n$ has to be very large to apply these tests.
-If $n$ is not much larger than $p$, or in low signal-to-noise regimes, the test is very low powered, as shown by \cite{bai1996effect}. 
+If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown by \cite{bai1996effect}. 
 In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR.
 
 
 
 \subsection{Prediction Accuracy as a Test Statistic}
-An accuracy test amounts to setting a test statistic to be some measure prediction accuracy.  
+An accuracy test amounts using a predictor's accuracy as a test statistic.  
 
 A predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
 The accuracy of predictor\footnote{Known as (the complement of) the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
@@ -181,13 +181,15 @@ where $|A|$ denotes the cardinality of a set $A$.
 
 Estimating $\accEstim_{\algo}$ requires the following design choices: 
 Should it be resampled and how? 
-If resampling using V-fold cross validation then How many folds? Should the data be refolded after each permutation? Should the folding be balanced? 
+If resampling using V-fold cross validation then how many folds? 
+Should the folding be balanced?
+If estimation is part of a resampling procedure: should the data be refolded after each resample? 
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross validate or not?}
-Given our goal, a biased in of $\acc_{\algo}$ is not a problem provided that bias is consistent over all permutations. 
-The underlying intuition is that a permutation test will be unbiased, provided that the exact same computation is performed over all permutations. 
+For the purpose of statistical testing, bias in $\acc_{\algo}$ is not a problem, as long as it does not bias the error rates of the test. 
+The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
 We will thus be considering both cross validated accuracies, and resubstitution accuracies.
 
 
@@ -198,13 +200,14 @@ We will report results with both balanced and unbalanced data foldings.
 
 
 \paragraph{Refolding?}
-The standard practice in neuroimaging is to permute labels and refold the data after each permutation, so that the balance of the classes in each fold is preserved.
-We will adhere to this practice due to its popularity, even though it is more computaionally efficient to permute features instead of labels, as done by \citet{golland_permutation_2005}.
+The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
+This is done because permuting labels will unbalance the original balanced folding.
+We will adhere to this practice due to its popularity, even though it is more computationally more efficient to permute features\footnote{The difference between permuting labels or features is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
 Different authors suggest different rules for the number of folds. 
-We will look into the effect of the number of folds. 
+We fix the number of folds to $V=4$, and do dot discuss the effect of $V$ because we will ultimately show that V-fold CV is never recommended for testing. 
 
 \bigskip
 
@@ -245,7 +248,7 @@ Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstitu
 
 The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
 Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid in that it has a false positive rate no larger than the desired level. 
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid even if possibly conservative. 
 
 The sketch of our permutation test is the following: 
 (a) Fix a test statistic.
@@ -260,8 +263,9 @@ The sketch of our permutation test is the following:
 \section{Results}
 \label{sec:results}
 We now compare the power of our various statistics in various configurations. 
-We do so via simulation, which details are now described.
-We start by presenting the most basic simulation setup, and then its modifications. 
+We do so via simulation.
+The basic simulation setup is presented in Section~\ref{sec:simulation_details}.
+Following sections present variations on the basic setup.
 
 
 \subsection{Basic Simulation Setup}
@@ -276,16 +280,18 @@ In each replication, we generate $n$ i.i.d. samples from a shift class
 \label{eq:distribution}
 	\x_i = \mu \y_i + \eta_i,
 \end{align}
-where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional means vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional shift vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
-Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$.
+Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$, which we use to index the signal's strength.
+The (squared) Mahalanobis norm of the signal $\mu$, is thus $\Vert \mu \Vert_\Sigma^2:=\mu'\Sigma^{-1}\mu=\{0,p/16,p/4\}\approx \{0,1.5,5\}$.
+[TODO: should we consider indexing using the Mahalanobis norm of $\mu$?]
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
-We then reject the $\mu_i=0$ null hypothesis against a two sided alternative if the permutation p-value is smaller than $0.05$.
+We then reject the ``$x|y=0$ distributed like $x|y=1$'' null hypothesis if the permutation p-value is smaller than $0.05$.
 The reported power is the proportion of replication where the permutation p-value fell below $0.05$.
 
 
@@ -312,10 +318,10 @@ We may thus proceed and compare the power of each test statistic.
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
 
 From Figure~\ref{fig:simulation_1} we learn that location tests are more powerful than accuracy tests.
-This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
+This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{Goeman}, \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
 
 
-
+[TODO: remove lda.*.2 from all figures]
 \begin{figure}[h]
 	\centering
 	\caption{
@@ -355,7 +361,6 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 
 
-TODO: update figure
 \begin{figure}[th]
 		\centering
 		\includegraphics[width=0.5\linewidth]{"art/file9"}
@@ -373,48 +378,46 @@ TODO: update figure
 We now test the robustness of our results to the correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Intuitively- both location tests and accuracy tests include the estimation of $\Sigma$, so that correlations should be accounted for. 
-To keep the comparisons ``fair'' as the correlations vary, we kept the Mahalanobis norm of the signal fixed. 
-The question remains- which test has more power: accuracy or location?
+To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Sigma:=\sqrt{\mu'\Sigma^{-1}\mu}$ fixed. 
+
+Which test has more power: accuracy or location?
 We address this question using various correlation structures.
-We also vary the direction of the signal, $\mu$, and distinguish between signal in the direction of the highest principal component (PC) of $\Sigma$, or the lowest. 
+We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal components (PC) of $\Sigma$, and in the low variance PC. 
 
 The simulation results reveal some non trivial phenomena.
-First, when the signal is in the direction of the highest PC, the high dimensional location tests are far superior than accuracy tests. 
-This holds true for the various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_21}, and the arbitrary correlation in Figure~\ref{fig:dependence_31}.
+First, when the signal is in the direction of the high variance PC, the high dimensional location tests are far superior than accuracy tests. 
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_21}, and the arbitrary correlation in Figure~\ref{fig:dependence_31}.
 
-When the signal is in the direction of the lowest PC, a different phenomenon appears.
+When the signal is in the direction of the low variance PC, a different phenomenon appears.
 There is no clear preference between location or accuracy tests.
 Instead the non-regularized tests are the clear victors. 
-This holds true for the various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_22}, and the arbitrary correlation in Figure~\ref{fig:dependence_32}.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_22}, and the arbitrary correlation in Figure~\ref{fig:dependence_32}.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
-This was not apparent when the signal was in the low variance PC, because it had a large Euclidean norm. 
-When the signal is in the high variance PC, and $\mu'\Sigma^{-1}\mu$ is fixed, then $\mu$ has a small Euclidean norm. 
-The reader may argue that we should not have fixed $\mu'\Sigma^{-1}\mu$, thus varying $\mu$ with $\Sigma$, but rather fix the Euclidean norm of $\mu$. 
-This matter is discussed in Section~\ref{sec:fix_snr}.
+This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 \begin{figure}[h]
 	\centering
 	\caption{Short memory, AR(1) correlation. 
 	$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
 	\label{fig:dependence_1}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 	\centering
 	\includegraphics[width=1\linewidth]{"art/file20"}
-	\caption{Signal in direction of highest principal components of $\Sigma$.} 
+	\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 	\label{fig:dependence_11}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file21"}
-		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_12}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
-		\centering
-		  \includegraphics[width=1\linewidth]{"art/file11"}
-		\caption{Signal in direction of identity vector.} 
-		\label{fig:dependence_13}
-	\end{subfigure}
+%	\begin{subfigure}[t]{.3\textwidth}
+%		\centering
+%		  \includegraphics[width=1\linewidth]{"art/file11"}
+%		\caption{Signal in direction of identity vector.} 
+%		\label{fig:dependence_13}
+%	\end{subfigure}
 \end{figure}
 
 
@@ -422,24 +425,24 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 	\centering
 	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\rho \min\{k,l\}; \rho=0.2$.}	
 	\label{fig:dependence_2}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file22"}
-		\caption{Signal in direction of highest principal components of $\Sigma$.} 
+		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 		\label{fig:dependence_21}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file23"}
-		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\caption{Signal in direction of lowest lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_22}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file16"}
-		\caption{Signal in direction of identity vector.} 
-		\label{fig:dependence_23}
-	\end{subfigure}
+%	\begin{subfigure}[t]{.3\textwidth}
+%		\centering
+%		\includegraphics[width=1\linewidth]{"art/file16"}
+%		\caption{Signal in direction of identity vector.} 
+%		\label{fig:dependence_23}
+%	\end{subfigure}
 \end{figure}
 
 
@@ -450,24 +453,24 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
 	}
 	\label{fig:dependence_3}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file18"}
-		\caption{Signal in direction of highest principal components of $\Sigma$.} 
+		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 		\label{fig:dependence_31}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
+	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file17"}
-		\caption{Signal in direction of lowest principal components of $\Sigma$.} 
+		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_32}
 	\end{subfigure}
-	\begin{subfigure}[t]{.3\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file19"}
-		\caption{Signal in direction of identity vector.} 
-		\label{fig:dependence_33}
-	\end{subfigure}
+%	\begin{subfigure}[t]{.3\textwidth}
+%		\centering
+%		\includegraphics[width=1\linewidth]{"art/file19"}
+%		\caption{Signal in direction of identity vector.} 
+%		\label{fig:dependence_33}
+%	\end{subfigure}
 \end{figure}
 
 
@@ -485,13 +488,13 @@ Those that don't normalize the variance, will give less importance to noisier di
 	\begin{subfigure}[t]{0.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file24"}
-		\caption{$\mu$ in the highest PC of $\Sigma$.}  
+		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_11}	
 	\end{subfigure}
 	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file26"}
-		\caption{TODO: update graphics. $\mu$ in the lowest PC of $\Sigma$.}  
+		\caption{TODO: update graphics. $\mu$ in the high variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_12}	
 	\end{subfigure}
 \end{figure}
@@ -659,7 +662,7 @@ The data was kindly made available by the authors at the OpenfMRI website\footno
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 To demonstrate our point, we compare the \emph{SD} location test with the \emph{SVM.CV.1} accuracy test. 
 
-In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{SVM.CV.1}).
+In agreement with our simulation results, the location test (\emph{SD}) discovers more brain regions of interest when compared to an accuracy test (\emph{SVM.CV.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -751,7 +754,7 @@ We compare the power of a shift in the direction of some high variance PC (Figur
 Our intuition is confirmed in that all statistics find it easier to detect signal in smaller variance PCs.
 It is also consistent with Figure~\ref{fig:dependence_1}, in that 
 (i)\emph{Hotelling.shrink} is a good performed ``on average'', 
-(ii) \emph{sd} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
+(ii) \emph{SD} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
 
 \begin{figure}[h]
 	\centering
