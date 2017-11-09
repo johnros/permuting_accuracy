@@ -704,7 +704,7 @@ We have set out to understand which of the tests is more powerful: accuracy test
 Our practical advice for the practitioner, is that accuracy tests are never optimal. 
 There is always a multivariate test, possibly a location test, that dominates in power. 
 The class of location tests we examined, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
-They are also typically easier to implement, and faster to run, since no cross validation will be involved. 
+They are also typically easier to implement, and faster to run, since no resampling is required. 
 Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007}, are particularly well suited for empirical problems such as neuroimaging and genetics.
 
 
@@ -716,14 +716,10 @@ The low power of the accuracy tests compared to location tests can be attributed
 The discrete nature of accuracy test statistics. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
-This type of analysis render resubstitution accuracy estimates a legitimate asymptotic test, while they are a poor finite sample test. \newline
+An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. \newline
 (b) \textbf{Shift Alternatives}: 
-We focused on shift alternatives, so a NPL type argument will naturally favor location tests. 
-On the other hand:
-(i) Our empirical results in Section~\ref{sec:example} also favors location tests. 
-(ii) Location tests can also be preferable when departing from shift alternative such as in scale alternatives (Fig.~\ref{fig:scale_change}) and mixture alternatives (Fig.~\ref{eq:mixture_alternative}).
-(iii) We have never observed a case where an accuracy test had considerable more power than a location test. 
-The discretization argument alone suffice to state that there will always be a test statistic with more power than an accuracy test. \newline
+We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.
+We dare argue, based on our empirical experience, that an accuracy test will rarely have more power than a high-dimensional location test. Be it for NPL type arguments, or discretization. \newline
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
 (d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
@@ -740,14 +736,19 @@ The discretization argument alone suffice to state that there will always be a t
 
 \subsection{Interpretation}
 Multivariate tests, and location tests in particular, are easier to interpret. 
-To do so we typically use a NPL type argument, and think of the type of signal a test is sensitive to. 
+To do so we typically use a NPL type argument, and think:
+What type of signal a test is sensitive to?
+What is the direction of the effect? etc.
 Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
+Some authors prefer accuracy tests because they can be seen as effect-size estimates, invariant to the sample size. 
+This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, most directly generalizing Cohen's d, which do not suffer from discretization like accuracy estimates. 
 
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
+
 For a fair comparisons between simulations, in particular between those with different correlations, we needed to fix the difficulty of the problem.
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
 Formally, in all our simulations we set $\mu \Sigma^{-1} \mu=p$.
