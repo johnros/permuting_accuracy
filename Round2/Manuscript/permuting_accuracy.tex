@@ -272,7 +272,7 @@ Following sections present variations on the basic setup.
 \label{sec:simulation_details}
 
 The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO: populate]
+The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO JDR: populate]
 
 Each simulation is based on $1,000$ replications. 
 In each replication, we generate $n$ i.i.d. samples from a shift class 
@@ -285,7 +285,7 @@ The covariance $\Sigma=I$.
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
 Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$, which we use to index the signal's strength.
 The (squared) Mahalanobis norm of the signal $\mu$, is thus $\Vert \mu \Vert_\Sigma^2:=\mu'\Sigma^{-1}\mu=\{0,p/16,p/4\}\approx \{0,1.5,5\}$.
-[TODO: should we consider indexing using the Mahalanobis norm of $\mu$?]
+[TODO ALL: should we consider indexing using the Mahalanobis norm of $\mu$?]
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
@@ -321,7 +321,7 @@ From Figure~\ref{fig:simulation_1} we learn that location tests are more powerfu
 This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{Goeman}, \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
 
 
-[TODO: remove lda.*.2 from all figures]
+[TODO JDR: remove lda.*.2 from all figures]
 \begin{figure}[h]
 	\centering
 	\caption{
@@ -338,13 +338,13 @@ This is particularly visible for intermediate signal strength (green triangle), 
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file3"}
 		\caption{\textbf{Unbalanced V-fold CV.}} 
-		\label{fig:simulation_11}
+		\label{fig:file3}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file2"}
 		\caption{\textbf{Balanced V-fold CV.}} 
-		\label{fig:simulation_12}
+		\label{fig:file2}
 	\end{subfigure}
 \end{figure}
 
@@ -719,19 +719,12 @@ For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016
 An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. \newline
 (b) \textbf{Shift Alternatives}: 
 We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.
-We dare argue, based on our empirical experience, that an accuracy test will rarely have more power than a high-dimensional location test. Be it for NPL type arguments, or discretization. \newline
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
 (d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
+Given the above reasons and based on our empirical experience, we dare argue that an accuracy test will rarely have more power than a high-dimensional location test. 
 
 
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{art/file10}
-	\caption{[TODO: more replications] $n=400$}
-	\label{fig:file10}
-\end{figure}
 
 
 \subsection{Interpretation}
@@ -743,103 +736,116 @@ Accuracy tests are seen as ``black boxes'', even though they can be analyzed in 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
 Some authors prefer accuracy tests because they can be seen as effect-size estimates, invariant to the sample size. 
-This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, most directly generalizing Cohen's d, which do not suffer from discretization like accuracy estimates. 
+This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, most directly generalizing Cohen's d, which do not suffer from discretization like accuracy estimates. [TODO ALL: do we have a canonical reference? Maybe \cite{olejnik2000measures}?]
+
+
 
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
 
-For a fair comparisons between simulations, in particular between those with different correlations, we needed to fix the difficulty of the problem.
+For a fair comparisons between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
-Formally, in all our simulations we set $\mu \Sigma^{-1} \mu=p$.
+Formally, in all our simulations we set $\Vert \mu \Vert_\Sigma^2=p$.
 
 Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
 This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_\Sigma$.
 
-For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed in stead of $\Vert \mu \Vert_\Sigma$.
+For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed instead of $\Vert \mu \Vert_\Sigma$.
 We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
-Our intuition is confirmed in that all statistics find it easier to detect signal in smaller variance PCs.
-It is also consistent with Figure~\ref{fig:dependence_1}, in that 
+The intuition that it is easier to detect signal in the low variance directions is confirmed. 
+It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspects: 
 (i)\emph{Hotelling.shrink} is a good performed ``on average'', 
 (ii) \emph{SD} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
+
+
 
 \begin{figure}[h]
 	\centering
 	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
 	\label{fig:dependence_4}	
-	\begin{subfigure}[t]{0.4\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file31"}
-		\caption{$\mu$ in PC15 of $\Sigma$.}  
-		\label{fig:dependence_41}	
-	\end{subfigure}
 	\begin{subfigure}[t]{.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file32"}
 		\caption{$\mu$ in PC7 of $\Sigma$.}  
+		\label{fig:dependence_41}	
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{"art/file31"}
+		\caption{$\mu$ in PC15 of $\Sigma$.}  
 		\label{fig:dependence_42}	
 	\end{subfigure}
+
 \end{figure}
 
 
 
 
-\subsection{High Versus Low PCs}
-Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the low PCs (i.e. high-variance PCs), is very different than detecting in the high PCs.
-Even when fixing $\Vert \mu \Vert_\Sigma$, so that the difficulty of the problem is fixed, we see power differences? 
+\subsection{Detecting Signal in Different Directions}
+Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
 Why is that?
 
 We attribute this phenomenon to regularization.
 While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$ does not. 
-The various regularization methods deflate the high variance directions, thus, inflate the low variance directions.
+The various regularization methods deflate the high variance directions, thus, relatively inflate the low variance directions.
 If the signal is in the low variance directions, the regularization may mask it. 
 This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
+[TODO JG:what theoretical results support this intuition?]
 
 
 
+\subsection{Implications to Other Problems}
 
+Our work studies signal detection in the multivariate testing, or MANOVA, framework.
+The same problem can be cast in the linear models framework, and in particular, as a Brenoulli Regression problem.
+If any of the predictors, $x$, carries any signal, then $x|y=0$ has a different distribution than $x|y=1$.
+This view is the one adopted \cite{goeman2006testing}.
+[TODO JG: do we want to state some take-home messages for Brenoulli-Regression?]
+
+Another related problem is that of multinomial-regression, i.e., multi-class classification.
+We conjecture that power differences in favor of location tests versus accuracy tests will increase as the number of classes increases.
 
 
 
 
 \subsection{Testing in Augmented Spaces}
-It may be argued that only accuracy tests permits the separation between classes in high dimensions, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+It may be argued that only accuracy tests permits the separation between classes in augmented spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
 This is a false argument--- accuracy tests do not have any more flexibility than location tests. 
 Indeed, it is possible to test for location in the same space the classifier is learned. 
-For independence tests in high dimensional spaces see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
+For independence tests  with kernels see for example \cite{szekely_brownian_2009} or \citet{gretton_kernel_2012-1}.
 
 
 
 \subsection{A Good Accuracy Test}
 Brain-computer interfaces and clinical diagnostics \citep[e.g.][]{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract it. 
 In these cases an accuracy test cannot be replaced by a location, or other, statistical test. 
-For these cases, we collect some conclusions and best practices. 
+For the cases an accuracy test cannot be replaced with other tests, we collect the following observations.
 
-\paragraph{Sample size.} The conservativeness of accuracy tests decrease with sample size. 
+\paragraph{Sample size.} The conservativeness of accuracy tests, due to discretization, decrease with sample size. 
 
 \paragraph{Regularize.}
-Regularization proves crucial to detection power in low SNR regimes, which may be due to strong correlations or high-dimension.
+Regularization proves crucial to detection power in low SNR regimes, such as when $n$ is in the order of $p$, or under strong correlations.
 We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on this matter. 
+Particularly, in the possibility of regularizing in directions orthogonal to $\mu$. 
 
 
 \paragraph{Smooth accuracy.}
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 
-\paragraph{Permute features.} 
-Permuting features, instead of labels, is computationally more efficient than permuting labels, because refolding can be done once, for all permutations.
-It allows to preserve the balance of folds after a permutation, without refolding.
 
 \paragraph{Resubstitution accuracy in high SNR.} 
 Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, because it avoids cross validation without compromising power. 
 In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
- 
+[TODO YB: is this remediable with random tie-breaking? Can ties even be broken with non-arbitrary probabilities? Put differently- can ties be broken without invalidating error controls?] 
 
 
 \subsection{Related Literature}
+We now review some related accuracy-testing literature, with an emphasis on neuroimaging applications.
 \cite{ojala_permutation_2010} study the power of two accuracy tests differing in their permutation scheme:
 One testing the ``no signal'' null hypothesis, and the other testing the ``independent features'' null hypothesis. 
 They perform an asymptotic analysis, and a simulation study. 
@@ -851,15 +857,14 @@ This is a very different emphasis from our own.
 \cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} looked into the problem of choosing a good accuracy test. 
 They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
 We did not include this test in the battery we compared, but we note that the independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. 
-It may thus be improved by regularizing and resampling with replacement, before the application of \cite{olivetti_induction_2012}'s test statistic. 
+It may thus be improved by regularizing and resampling with replacement. 
 
 
 \cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
-Their analytic results formalize our intuition from Section~\ref{sec:introduction} on the effect of concentration of the accuracy statistic:
-The finite Vapnik–Chervonenkis dimension requirement \citep[Sec 4.3]{golland_permutation_2005} prevents the permutation p-value from (asymptotically) concentrating near $1$. 
-Like us, they find that the power increases with the size of the test set. 
+The finite Vapnik–Chervonenkis dimension requirement \citep[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+They find that the power increases with the size of the test set.
 This is seen in Fig.4 of \citet{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
-Since they permute features, not labels, then all their permutation samples are balanced, and there is no issue of refolding. 
+We attribute this to the reduced discretization of the accuracy statistic.
 
 \cite{golland_permutation_2005} simulate the power of accuracy tests by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
 Under their model (with some abuse of notation)
@@ -879,8 +884,8 @@ We re-parameterize so that $\pi=0$ corresponds to the null model:
 	(x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
 \end{split}
 \end{align}
-\citet{rosenblatt2017mixture} show that a location test may be suboptimal for mixture alternatives, but when compared to Wilcoxon's signed rank test, and not to an accuracy tests.
-From our results, reported in Figure~\ref{fig:golland}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred.
+
+From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred over accuracy tests. 
 
 
 
@@ -888,10 +893,11 @@ From our results, reported in Figure~\ref{fig:golland}, we see that for the mixt
 \begin{figure}[ht]
 \centering
 	  \includegraphics[width=0.5\linewidth]{"art/file12"}
-	  \caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
+	  \caption{TODO JDR: update plot after filtering statistics and adding Goeman.
+	  	\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 	  	$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
-	\label{fig:golland}
+	\label{fig:file12}
 \end{figure}
 
 
