@@ -1,5 +1,5 @@
 ---
-title: "Increasing sequence of variances. Signal inversly proportional."
+title: "Increasing sequence of variances. Signal in high variance PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -27,7 +27,8 @@ effects <- seq(0, 0.5, length=3) # change in location
 ## Covariance
 Sigma <- seq_cov(p)
 lattice::levelplot(Sigma)
-direction0 <- 1/diag(Sigma)
+Sigma.eigen <- eigen(Sigma)
+direction0 <- Sigma.eigen$vectors[,which.max(abs(Sigma.eigen$values))] 
 maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
 direction <- direction0 *sqrt(p/maha)
 ```
@@ -51,7 +52,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Shift alternative:
     noise <- .noise
-    noise[labels,] <- noise[labels,] + effect * direction
+    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -150,8 +152,7 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 pvals.1.9 %<>%  as.data.table()
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

@@ -109,9 +109,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
         Goeman=t_goeman(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+        # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+        # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
         sd=t_SD(x1, x2),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
         svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
@@ -149,8 +149,7 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 pvals.1.9 %<>%  as.data.table()
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

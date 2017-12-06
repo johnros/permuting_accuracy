@@ -26,14 +26,13 @@ source('Round2/Gilron Effect of Cross Validatino.R')
 effects <- seq(0, 0.5, length=3) 
 
 ## Dependence
-Sigma <- ar1_cov(n = p, rho=0.6)
+Sigma <- seq_cov(p)
 lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
 plot(Sigma.eigen$values, type='h')
 direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
 maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
 direction <- direction0 *sqrt(p/maha)
-# Euclid(direction)
 ```
 
 
@@ -149,8 +148,7 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 pvals.1.9 %<>%  as.data.table()
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
 
 pvals.melt[,c("reject","effect.factor"):=.(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

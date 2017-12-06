@@ -30,9 +30,7 @@ Sigma <- diag(p)
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
+RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
 ```
 
@@ -64,18 +62,18 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
         Goeman=t_goeman(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+        # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+        # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
         sd=t_SD(x1, x2),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
         svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
         svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
-        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
+        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
     
     
@@ -101,18 +99,18 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
         Goeman=t_goeman(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+        # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+        # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
         sd=t_SD(x1, x2),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
         svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
         svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
-        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
+        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
       )
     } # End permutation
     
@@ -121,6 +119,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
+    names(pvals) <- names(ts)
+
     
     c(effect=effect, pvals) 
   }
@@ -139,12 +139,8 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 
 pvals.1.9 %<>%  as.data.table()
 
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-names(pvals.1.9)[-1] <- statistics.names
-
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

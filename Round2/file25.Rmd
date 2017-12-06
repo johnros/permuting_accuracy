@@ -148,8 +148,7 @@ pvals.1.9 %<>%  as.data.table()
 names(pvals.1.9)[-1] <- statistics.names
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-statistic.filter <- c("SVM.CV.3","SVM.CV.4","SVM.noCV.3","SVM.noCV.4")
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 ```

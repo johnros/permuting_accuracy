@@ -1,12 +1,16 @@
 ---
-title: "AR(1) Signal in LOW PCs with fixed Euclidean-norm"
+title: "Basic setup. With tie breaking"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
+
+
 ```{r preliminaries}
-file.name <- "file31"
+file.name <- "file33"
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -19,16 +23,13 @@ cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
-effects <- seq(0, 0.5, length=3) 
+effects <- seq(0, 0.5, length=3) # change in location
 
-## Dependence
-Sigma <- ar1_cov(n = p, rho=0.6)
+Sigma <- diag(p)
 lattice::levelplot(Sigma)
-Sigma.eigen <- eigen(Sigma)
-plot(Sigma.eigen$values, type='h')
-direction0 <- Sigma.eigen$vectors[,15] 
-direction <- direction0 * sqrt(p)
+direction0 <- rep(1,p)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 * sqrt(p/maha)
 ```
 
 
@@ -47,12 +48,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     .noise <- rmvnorm(n=n, sigma = Sigma)
-
+    
     ## Shift alternative:
+    # effect <- effects[[3]]
+    
     noise <- .noise
-    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
-    noise[labels,] <- noise[labels,] + shift
-
+    noise[labels,] <- noise[labels,] + effect * direction
+  
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
@@ -74,14 +76,15 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       sd=t_SD(x1, x2),
       svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
       svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-      # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-      # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+      svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+      svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
       svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-      svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-      # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-      # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+      svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+      svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+      svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
-
+    
+    
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
@@ -109,48 +112,71 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         sd=t_SD(x1, x2),
         svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
         svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+        svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+        svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
         svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+        svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+        svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
       )
     } # End permutation
     
-    ## Compute p-vals for each statistic
+    # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
+    pvals.strickt <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+      pvals[i] <- mean(ts[i] <= permuted[,i], na.rm=TRUE)
+      pvals.strickt[i] <- mean(ts[i] < permuted[,i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
+    names(pvals.strickt) <- names(ts)
 
-    c(effect=effect, pvals) 
+    c(effect=effect, pvals, pvals.strickt) 
   }
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
-
 ```{r analyze multiple effects}
-# load("file31bis.RData")
-err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
-.limits <- 0.05 + c(-err.bar,0,err.bar)
+# load("file33.RData")
 
-pvals.1.9 %<>%  as.data.table()
+# Inspect ties
+for(j in 2:((length(c.names)-1)/2)){
+  statistic <- c.names[j]
+  pvals.1.9[, c.names == statistic] %>% apply(1,diff) %>% range %>% print
+}
 
-pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
+# Randomized test
+c.names <- colnames(pvals.1.9)
+n.names <- length(c.names)-1
+# paste(c.names, rep(c('weak','strong'), each=n.names/2), sep='.')
 
-pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+wrap.randomizedTest <- function(x) randomizedTest(alpha = 0.05, x[1], x[2])
+
+col.index <- 2:(n.names/2)
+rejections <- c(effect=pvals.1.9[,'effect'])
+for(j in col.index){
+  # j <- 4
+  statistic <- c.names[j]
+  rejections <- cbind(rejections, 
+                      pvals.1.9[, c.names == statistic] %>% 
+                        apply(1, wrap.randomizedTest))
+}
+colnames(rejections) <- c.names[c(1,col.index)]
+
+rejections %<>%  as.data.table()
+
+rejections.melt <- melt(rejections, variable.name='statistic', id.vars = 'effect', value.name = 'reject') 
+rejections.melt <- rejections.melt[!(statistic %in% statistic.filter1),,]
+rejections.melt[,c("effect.factor"):=list(as.factor(effect)),] 
 ```
 
 
 ```{r}
-plot.3 <- pvals.melt %>% 
+plot.3 <- rejections.melt %>% 
   ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
   theme_bw(base_size = 20)+
   theme(legend.position="none")+

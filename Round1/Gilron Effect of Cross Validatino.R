@@ -18,6 +18,7 @@ library(sparsediscrim)
 library(glmnet)
 library(LiblineaR)
 
+statistic.filter1 <- c("svm.CV.3","svm.CV.4","svm.noCV.3","svm.noCV.4","lda.noCV.2","lda.CV.2")
 
 tr <- function(A) sum(diag(A))
 
@@ -120,6 +121,20 @@ my.ecdf <- function(x,t){
   mean(x>=t)
 }
 
+
+randomizedTest <- function(alpha, pval, pval.strickt){
+  stopifnot(pval>=pval.strickt)
+  reject <- NULL
+  if(pval.strickt> alpha) reject <- FALSE
+  else if (pval<alpha) reject <- TRUE
+  else {
+    p.diff <- (alpha-pval.strickt)/(pval- pval.strickt)
+    reject <- rbinom(1, 1, p.diff) %>% as.logical
+  }
+  return(reject)
+}
+## Testing:
+sum(replicate(1e3, randomizedTest(0.05, 0.06, 0.03)))
 
 
 
