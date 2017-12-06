@@ -17,9 +17,13 @@
 %\linenumbers
 
 \begin{abstract}
-We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
+Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether prediction accuracy is better than chance. 
+We show that using a classifier's accuracy as a test statistic is an underpowered strategy for finding differences between populations, compared to a bona-fide statistical test.
 It is also more complicated to implement. 
-For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power. 
+Via simulation, we compare various test statistics: some based on classifier and some based on multivariate tests. 
+Our main conclusions are that testing using classifiers is a low powered approach to signal detection. 
+Neyman-Pearson's Lemma hints at the preferred test given the type of signal expected, and high-dimensional location tests are a good off-the-shelf strategy.
+For the cases that the purposes of the analysis is not signal detection, but rather to evaluate the performance of a particular classifier, we suggest several improvements to increase power. In particular, to replace V-fold cross validation with the leave-one-out Bootstrap.
 \end{abstract}
 
 
@@ -283,9 +287,11 @@ In each replication, we generate $n$ i.i.d. samples from a shift class
 where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional shift vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
-Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$, which we use to index the signal's strength.
-The (squared) Mahalanobis norm of the signal $\mu$, is thus $\Vert \mu \Vert_\Sigma^2:=\mu'\Sigma^{-1}\mu=\{0,p/16,p/4\}\approx \{0,1.5,5\}$.
-[TODO ALL: should we consider indexing using the Mahalanobis norm of $\mu$?]
+Shifts are equal in all $p$ coordinates of $\mu$.
+With $e$ being a $p$-vector of ones, then $\mu:=c \, e$. 
+We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
+The (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=c^2 p$.
+
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
@@ -350,6 +356,25 @@ This is particularly visible for intermediate signal strength (green triangle), 
 
 
 
+\section{Tie Breaking}
+As already stated in the introduction, the accuracy statistic is highly discrete. 
+Especially the resubstitution accuracy tests. 
+Discrete test statistics lose power by not exhausting the permissible false positive rate. 
+A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
+Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
+is greater than  $\alpha$ then we reject the null with probability 
+$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
+
+Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
+It demonstrates than the the power disadvantage of accuracy tests, cannot be remedied by random tie breaking.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{art/file33}
+	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
+	\label{fig:file33}
+\end{figure}
 
 
 
@@ -717,6 +742,7 @@ The discrete nature of accuracy test statistics.
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
 An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. \newline
+[TODO: discuss tie-braking] \newline
 (b) \textbf{Shift Alternatives}: 
 We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
@@ -841,7 +867,6 @@ Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, becaus
 In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
-[TODO YB: is this remediable with random tie-breaking? Can ties even be broken with non-arbitrary probabilities? Put differently- can ties be broken without invalidating error controls?] 
 
 
 \subsection{Related Literature}
@@ -930,111 +955,6 @@ JDR also wishes to Yuval Benjamini, Jesse B.A. Hemerik, Yakir Brechenko, Omer Sh
 \newpage
 \bibliographystyle{abbrvnat}
 \bibliography{Permuting_Accuracy.bib}
-
-\appendix
-
-
-
-
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Analysis pipeline}
-%\label{apx:analysis}
-%
-%Here is the analysis pipeline of \cite{stelzer_statistical_2013} we for the auditory data in \cite{gilron_quantifying_2016}.
-%Denoting by 
-%$i=1,\dots,I$ the subject index, 
-%$v=1,\dots,V$ the voxel index, and 
-%$s = 1,\dots,S$ the permutation index. 
-%Since regions\footnote{\emph{searchlight} or \emph{sphere} in the MVPA parlance} are centered around a unique voxel, the voxel index $v$ also serves as a unique region index.
-%Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is compared to its permutation null distribution computed by Algorithm~\ref{algo:permutation}.
-%
-%
-%\begin{algorithm}[H]
-%\caption{Compute a group parametric map.}
-%\label{algo:statistic}
-%
-% \KwData{fMRI scans, and experimental design.}
-% \KwResult{Brain map of group statistics: $\{\bar{T}_v\}_{v=1}^V$}
-%	 \For{$v \in 1,\dots,V$}{
-%		 \For{$i \in 1,\dots,I$}{
-%			 $T_{i,v} \leftarrow$ test statistic for subject $i$ in a region centered at $v$.
-%			 } 	  
-%	  	 $\bar{T}_{v} \leftarrow \frac{1}{I}\sum_{i=1}^I T_{i,v}$. 
-% 	 }
-%\end{algorithm}
-%
-%
-%\begin{algorithm}[H]
-%\caption{Compute a permutation p-value map.} 
-%\label{algo:permutation}
-%
-% \KwData{fMRI scans of $20$ subjects, experimental design.}
-% \KwResult{Brain map of permutation p-values: $\{p_v\}_{v=1}^V$}
-%  \For{$s \in 1,\dots\,S$}{
-%    	    permute labels\;
-%    	    $\bar{T}_{v}^s \leftarrow$ parametric map 
-%  
-%  	}
-%\end{algorithm}
-%
-%
-
-
-
-
-
-
-
-
-
-
-%\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Simulation Results}
-%\label{apx:simulations}
-%
-%
-%\begin{figure}[h]
-%\centering
-%\caption{\mycaption}	
-%\label{fig:n_folds}
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file4"}
-%	  \caption{\textbf{2-fold} cross validation. Balanced folding.}  
-%	\label{fig:n_folds_1}
-%	\end{subfigure}%
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file6"}
-%	  \caption{\textbf{20-fold} cross validation. Balanced folding} 
-%	\label{fig:n_folds_2}
-%	\end{subfigure}
-%\end{figure}
-
-
-
-%\begin{figure}[h]
-%\centering
-%\caption{\mycaption}	
-%\label{fig:n_folds_unbalanced}
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file5"}
-%	  \caption{\textbf{2-fold} cross validation. Unbalanced folding.} 
-%	\label{fig:n_folds_unbalanced_1}
-%	\end{subfigure}%
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file7"}
-%	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
-%	\label{fig:n_folds_unbalanced_2}
-%	\end{subfigure}
-%\end{figure}
-
 
 
 
