@@ -17,9 +17,13 @@
 %\linenumbers
 
 \begin{abstract}
-We show that using a classifier's accuracy as a test statistic, is an underpowered strategy for the purpose of finding a difference between populations, compared to a bona-fide statistical test.
-It is also more complicated to implement. 
-For the cases that the purposes of the analysis is not the mere existence of a difference between populations, but rather the performance of a particular classifier, we suggest several improvements to increase power. 
+Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether prediction accuracy is better than chance. 
+We show that using a classifier's accuracy as a test statistic is an underpowered strategy for finding differences between populations, compared to a bona-fide statistical test.
+Testing with a classifier accuracy is also vastly more computationaly complex than a multivaraite test. 
+Via simulation, we compare various test statistics: some based on classifiers and some based on multivariate tests. 
+Our main conclusions are that testing using classifiers is a low powered approach to signal detection. 
+Neyman-Pearson's Lemma hints at the preferred test given the type of signal expected, and high-dimensional location tests are a good off-the-shelf strategy.
+For the cases in which the purpose of the analysis is not signal detection, but rather to evaluate the performance of a particular classifier, we suggest several improvements to increase power. In particular, to replace V-fold cross validation with the leave-one-out Bootstrap.\todo{wording ...}%
 \end{abstract}
 
 
@@ -27,6 +31,7 @@ For the cases that the purposes of the analysis is not the mere existence of a d
 \section{Introduction}
 \label{sec:introduction}
 
+Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether prediction accuracy is better than chance. 
 A common workflow in neuroimaging and genetics consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
@@ -35,7 +40,7 @@ For examples in the genetics literature see for example
 
 
 To fix ideas, we will adhere to a concrete example.
-In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions which encode differences between vocal and non-vocal stimuli. 
+In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
 Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the brain's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 We call this an \emph{accuracy test}, because it uses the prediction accuracy as a test statistic. 
 
@@ -62,7 +67,7 @@ Asymptotic relative efficiency measures (ARE) are typically used by statistician
 ARE is the limiting ratio of the samples sizes required by two statistics to achieve similar power. 
 \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
-Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
+Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. [TODO: verify]
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power as the $T^2$ test. 
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the location test. 
@@ -72,7 +77,7 @@ The authors conjectured that a leave-one-out approach, which makes more efficien
 Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
 This eschews the discrete nature of the accuracy statistic, which we will show to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
-Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, and are easier to implement.}
+Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, and are easier to implement, and interpret.}
 
 Our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
 Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
@@ -87,10 +92,10 @@ In our example from \citet{gilron_quantifying_2016}, the classification accuracy
 This number of examples is not unusual in an neuroimaging study. 
 
 Power loss due to discretization is further aggravated if the test statistic is highly concentrated. 
-For an intuition consider the usage of the \emph{resubstitution accuracy} as a test statistic. 
-This statistic simply means that the accuracy is not cross validated, but rather evaluated on the training data.
-If the data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
-In a very high dimensional regime, the resubstitution accuracy will be $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
+For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, as a test statistic. 
+Resubstitution accuracy is the accuracy of the classifier evaluated on the training set.
+If data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
+In a very high dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 
 
@@ -110,11 +115,34 @@ A discussion follows.
 
 Let $y \in \mathcal{Y}$ be a class encoding. 
 Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector. 
-In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
+In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
 
 Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a multivariate test amounts to testing whether the distribution of $x$ given $y=1$ is the same as $x$ given $y=0$. 
-I.e., we test if the multivariate voxel activation pattern has the same distribution when given a vocal stimulus, as when given a non-vocal stimulus. 
-The comparison metric between statistics is their power, i.e., the probability to infer that $x|y=1$ is not distributed like $x|y=0$.
+For example, we can test whether multivariate voxel activation patterns ($x$) are similarly distributed when given a vocal stimulus ($y=1$) or a non-vocal one ($y=0$).
+The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
+The comparison metric between statistics is power, i.e., the probability to infer that $x|y=1$ is not distributed like $x|y=0$.
+
+
+\subsection{From a Test Statistic to a Permutation Test}
+
+The signal detection algorithms we will be considering rely on fixing some test statistic, and comparing it to it's permutation distribution to control false positive rates. 
+The different algorithms we compare differ in the test statistic they employ.
+Our comparison metric is their power, i.e., their true positive rate. 
+We adhere to permutation tests and not parametric inference because our problems of interest are typically high-dimensional. 
+This means that $n \gg p$ does not hold, and central limit laws do not apply.
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid even if possibly conservative. 
+
+The sketch of our permutation test is the following: \newline
+(a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. \newline
+(b) Sample a random permutation, $\pi$, of class labels. \newline
+(c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
+(d) Repeat (a)-(c) $R$ times. \newline
+(e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed $\mathcal{T}$. Formally: 
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
+(f) Declare classes differ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
+\bigskip
+
+We now detail the various test statistics that will be compared.
 
 
 \subsection{Location Tests and Hotelling's $T^2$}
@@ -130,12 +158,12 @@ For more background see, for example, \cite{anderson_introduction_2003}.
 
 The major difficulty with these multivariate tests is that $\Sigma$ has $p(p+1)/2$ free parameters, so that $n$ has to be very large to apply these tests.
 If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown by \cite{bai1996effect}. 
-In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR.
+In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR and power.
 
 
 
 \subsection{Prediction Accuracy as a Test Statistic}
-An accuracy test amounts using a predictor's accuracy as a test statistic.  
+An accuracy test amounts to using a predictor's accuracy as a test statistic.  
 
 A predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
 The accuracy of predictor\footnote{Known as (the complement of) the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
@@ -143,17 +171,17 @@ The accuracy of an algorithm\footnote{Known as (the complement of) the \emph{exp
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write 
 \begin{align}
-	\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure(x,y),
+	\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,
 \end{align}
 and
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,
 \end{align}
-where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continous $x$ and $y$.} of the set $A$. 
+where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continous $y$.} of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
 
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}\footnote{Known as the \emph{train error} in \cite{hastie_elements_2003}.}, and the V-fold Cross Validation (CV) estimate.
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution estimate}, and the V-fold Cross Validation (CV) estimate.
 \begin{definition}[Resubstitution estimate]
 \label{def:resubstitution}
 The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
@@ -180,15 +208,15 @@ where $|A|$ denotes the cardinality of a set $A$.
 \label{sec:considerations}
 
 Estimating $\accEstim_{\algo}$ requires the following design choices: 
-Should it be resampled and how? 
-If resampling using V-fold cross validation then how many folds? 
+Should it be cross-validated (CV) and how? 
+If cross validating using V-fold CV then how many folds? 
 Should the folding be balanced?
-If estimation is part of a resampling procedure: should the data be refolded after each resample? 
+If estimation is part of a permutation test: should the data be refolded after each permutation? 
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross validate or not?}
-For the purpose of statistical testing, bias in $\acc_{\algo}$ is not a problem, as long as it does not bias the error rates of the test. 
+For the purpose of statistical testing, bias in $\acc_{\algo}$ is not a problem, as long as it does not invalidate the error rate guarantees. 
 The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
 We will thus be considering both cross validated accuracies, and resubstitution accuracies.
 
@@ -200,6 +228,7 @@ We will report results with both balanced and unbalanced data foldings.
 
 
 \paragraph{Refolding?}
+In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
 We will adhere to this practice due to its popularity, even though it is more computationally more efficient to permute features\footnote{The difference between permuting labels or features is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \citet{golland_permutation_2005}.
@@ -207,7 +236,7 @@ We will adhere to this practice due to its popularity, even though it is more co
 
 \paragraph{How many folds?}
 Different authors suggest different rules for the number of folds. 
-We fix the number of folds to $V=4$, and do dot discuss the effect of $V$ because we will ultimately show that V-fold CV is never recommended for testing. 
+We fix the number of folds to $V=4$, and do dot discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
 
 \bigskip
 
@@ -244,17 +273,6 @@ Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstitu
 \end{tcolorbox}
 
 
-\subsection{From a Test Statistic to a Permutation Test}
-
-The various test statistics in Table~\ref{tab:collected} will be compared using their power. 
-Because our problems of interest are typically high-dimensional, i.e. $n \gg p$ does not hold, them central limit laws will not apply and we recur to permutation tests.
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid even if possibly conservative. 
-
-The sketch of our permutation test is the following: 
-(a) Fix a test statistic.
-(b) Permute labels and recompute the statistic to recover its permutation distribution. 
-(c) Declare classes differ if the observed statistic's value is beyond its $95\%$'th permutation percentile.  
-
 
 
 
@@ -283,9 +301,11 @@ In each replication, we generate $n$ i.i.d. samples from a shift class
 where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional shift vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
-Shifts are equal in all $p$ coordinates of $\mu$, with coordinate-wise magnitude varying over $\set{0,1/4,1/2}$, which we use to index the signal's strength.
-The (squared) Mahalanobis norm of the signal $\mu$, is thus $\Vert \mu \Vert_\Sigma^2:=\mu'\Sigma^{-1}\mu=\{0,p/16,p/4\}\approx \{0,1.5,5\}$.
-[TODO ALL: should we consider indexing using the Mahalanobis norm of $\mu$?]
+Shifts are equal in all $p$ coordinates of $\mu$.
+With $e$ being a $p$-vector of ones, then $\mu:=c \, e$. 
+We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
+The (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=c^2 p$.
+
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 For test statistics that require data folding, we used $4$ folds. 
@@ -303,7 +323,7 @@ We start with a sanity check.
 Theory suggests that all test statistics should control their false positive rate. 
 Our simulations confirm this.
 In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
-Since the red circles are always below the desired $0.05$ error rate (up to simulation accuracy) then the false positive rate of all test statistics, in all simulations is controlled. 
+Since the red circles are always below the desired $0.05$ error rate then the false positive rate of all test statistics, in all simulations is controlled. 
 We may thus proceed and compare the power of each test statistic. 
 
 
@@ -321,7 +341,6 @@ From Figure~\ref{fig:simulation_1} we learn that location tests are more powerfu
 This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{Goeman}, \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
 
 
-[TODO JDR: remove lda.*.2 from all figures]
 \begin{figure}[h]
 	\centering
 	\caption{
@@ -350,6 +369,27 @@ This is particularly visible for intermediate signal strength (green triangle), 
 
 
 
+\subsection{Tie Breaking}
+\label{sec:ties}
+
+As already stated in the introduction, the accuracy statistic is highly discrete. 
+Especially the resubstitution accuracy tests. 
+Discrete test statistics lose power by not exhausting the permissible false positive rate. 
+A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
+Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
+is greater than  $\alpha$ then we reject the null with probability 
+$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
+
+Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
+It demonstrates that the power disadvantage of accuracy tests, cannot be remedied by random tie breaking.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{art/file33}
+	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
+	\label{fig:file33}
+\end{figure}
 
 
 
@@ -382,7 +422,7 @@ To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \V
 
 Which test has more power: accuracy or location?
 We address this question using various correlation structures.
-We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal components (PC) of $\Sigma$, and in the low variance PC. 
+We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$, and in the low variance PC. 
 
 The simulation results reveal some non trivial phenomena.
 First, when the signal is in the direction of the high variance PC, the high dimensional location tests are far superior than accuracy tests. 
@@ -701,9 +741,9 @@ For the details of the analysis see \cite{gilron_quantifying_2016}.
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: accuracy tests or location tests. 
-Our practical advice for the practitioner, is that accuracy tests are never optimal. 
+Our current observation is that accuracy tests are never optimal.
 There is always a multivariate test, possibly a location test, that dominates in power. 
-The class of location tests we examined, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
+Our advice to the practitioner is that location tests, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
 They are also typically easier to implement, and faster to run, since no resampling is required. 
 Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007}, are particularly well suited for empirical problems such as neuroimaging and genetics.
 
@@ -716,13 +756,14 @@ The low power of the accuracy tests compared to location tests can be attributed
 The discrete nature of accuracy test statistics. 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
-An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. \newline
+An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
+The canonical remedy for ties--- random tie breaking (Sec.~\ref{sec:ties})--- showed only a minor improvement. \newline
 (b) \textbf{Shift Alternatives}: 
-We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.
+We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.\newline
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
 (d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
 
-Given the above reasons and based on our empirical experience, we dare argue that an accuracy test will rarely have more power than a high-dimensional location test. 
+Given the above reasons and based on our professional experience, we dare argue that an accuracy test will rarely have more power than a high-dimensional location test. 
 
 
 
@@ -730,7 +771,7 @@ Given the above reasons and based on our empirical experience, we dare argue tha
 \subsection{Interpretation}
 Multivariate tests, and location tests in particular, are easier to interpret. 
 To do so we typically use a NPL type argument, and think:
-What type of signal a test is sensitive to?
+What type of signal is a test sensitive to?
 What is the direction of the effect? etc.
 Accuracy tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
@@ -774,7 +815,7 @@ It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspec
 	\begin{subfigure}[t]{0.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file31"}
-		\caption{$\mu$ in PC15 of $\Sigma$.}  
+		\caption{TODO: recompute figure. $\mu$ in PC15 of $\Sigma$.}  
 		\label{fig:dependence_42}	
 	\end{subfigure}
 
@@ -841,7 +882,6 @@ Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, becaus
 In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
 In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
-[TODO YB: is this remediable with random tie-breaking? Can ties even be broken with non-arbitrary probabilities? Put differently- can ties be broken without invalidating error controls?] 
 
 
 \subsection{Related Literature}
@@ -922,7 +962,7 @@ and related ``data science'' communities.
 
 \section{Acknowledgments}
 JDR was supported by the ISF 900/60 research grant. 
-JDR also wishes to Yuval Benjamini, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
+JDR also wishes to thank, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
 
 
 
@@ -930,111 +970,6 @@ JDR also wishes to Yuval Benjamini, Jesse B.A. Hemerik, Yakir Brechenko, Omer Sh
 \newpage
 \bibliographystyle{abbrvnat}
 \bibliography{Permuting_Accuracy.bib}
-
-\appendix
-
-
-
-
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Analysis pipeline}
-%\label{apx:analysis}
-%
-%Here is the analysis pipeline of \cite{stelzer_statistical_2013} we for the auditory data in \cite{gilron_quantifying_2016}.
-%Denoting by 
-%$i=1,\dots,I$ the subject index, 
-%$v=1,\dots,V$ the voxel index, and 
-%$s = 1,\dots,S$ the permutation index. 
-%Since regions\footnote{\emph{searchlight} or \emph{sphere} in the MVPA parlance} are centered around a unique voxel, the voxel index $v$ also serves as a unique region index.
-%Algorithm~\ref{algo:statistic} computes a region-wise test statistic, which is compared to its permutation null distribution computed by Algorithm~\ref{algo:permutation}.
-%
-%
-%\begin{algorithm}[H]
-%\caption{Compute a group parametric map.}
-%\label{algo:statistic}
-%
-% \KwData{fMRI scans, and experimental design.}
-% \KwResult{Brain map of group statistics: $\{\bar{T}_v\}_{v=1}^V$}
-%	 \For{$v \in 1,\dots,V$}{
-%		 \For{$i \in 1,\dots,I$}{
-%			 $T_{i,v} \leftarrow$ test statistic for subject $i$ in a region centered at $v$.
-%			 } 	  
-%	  	 $\bar{T}_{v} \leftarrow \frac{1}{I}\sum_{i=1}^I T_{i,v}$. 
-% 	 }
-%\end{algorithm}
-%
-%
-%\begin{algorithm}[H]
-%\caption{Compute a permutation p-value map.} 
-%\label{algo:permutation}
-%
-% \KwData{fMRI scans of $20$ subjects, experimental design.}
-% \KwResult{Brain map of permutation p-values: $\{p_v\}_{v=1}^V$}
-%  \For{$s \in 1,\dots\,S$}{
-%    	    permute labels\;
-%    	    $\bar{T}_{v}^s \leftarrow$ parametric map 
-%  
-%  	}
-%\end{algorithm}
-%
-%
-
-
-
-
-
-
-
-
-
-
-%\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Simulation Results}
-%\label{apx:simulations}
-%
-%
-%\begin{figure}[h]
-%\centering
-%\caption{\mycaption}	
-%\label{fig:n_folds}
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file4"}
-%	  \caption{\textbf{2-fold} cross validation. Balanced folding.}  
-%	\label{fig:n_folds_1}
-%	\end{subfigure}%
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file6"}
-%	  \caption{\textbf{20-fold} cross validation. Balanced folding} 
-%	\label{fig:n_folds_2}
-%	\end{subfigure}
-%\end{figure}
-
-
-
-%\begin{figure}[h]
-%\centering
-%\caption{\mycaption}	
-%\label{fig:n_folds_unbalanced}
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file5"}
-%	  \caption{\textbf{2-fold} cross validation. Unbalanced folding.} 
-%	\label{fig:n_folds_unbalanced_1}
-%	\end{subfigure}%
-%	\begin{subfigure}{.5\textwidth}
-%	  \centering
-%	  \includegraphics[width=1\linewidth]{"art/file7"}
-%	  \caption{\textbf{20-fold} cross validation. Unbalanced folding.} 
-%	\label{fig:n_folds_unbalanced_2}
-%	\end{subfigure}
-%\end{figure}
-
 
 
 
