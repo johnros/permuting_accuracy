@@ -143,12 +143,6 @@ pbPost(type = "note", body = "Done", the.message)
 ```{r analyze multiple effects}
 # load("file33.RData")
 
-# Inspect ties
-for(j in 2:((length(c.names)-1)/2)){
-  statistic <- c.names[j]
-  pvals.1.9[, c.names == statistic] %>% apply(1,diff) %>% range %>% print
-}
-
 # Randomized test
 c.names <- colnames(pvals.1.9)
 n.names <- length(c.names)-1
@@ -170,8 +164,14 @@ colnames(rejections) <- c.names[c(1,col.index)]
 rejections %<>%  as.data.table()
 
 rejections.melt <- melt(rejections, variable.name='statistic', id.vars = 'effect', value.name = 'reject') 
-rejections.melt <- rejections.melt[!(statistic %in% statistic.filter1),,]
 rejections.melt[,c("effect.factor"):=list(as.factor(effect)),] 
+
+# Reorder levels
+rejections.melt$statistic <- factor(rejections.melt$statistic, levels=statistic.levels)
+levels(rejections.melt$statistic)
+
+# Filter statistics
+rejections.melt <- rejections.melt[!is.na(statistic),,]
 ```
 
 

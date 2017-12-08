@@ -20,6 +20,11 @@ library(LiblineaR)
 
 statistic.filter1 <- c("svm.CV.3","svm.CV.4","svm.noCV.3","svm.noCV.4","lda.noCV.2","lda.CV.2")
 
+statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
+  "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
+  "svm.noCV.2")
+
+
 tr <- function(A) sum(diag(A))
 
 gcd <- function(x,y) {

@@ -142,19 +142,25 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 ```{r analyze multiple effects}
 # load(file='file13.RData') 
-
-err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
-.limits <- 0.05 + c(-err.bar,0,err.bar)
-
 pvals.1.9 %<>%  as.data.table()
 
-# names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-names(pvals.1.9)[-1] <- statistics.names
+names(pvals.1.9)[-1] <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
+"lda.CV.1", "lda.CV.2", "lda.noCV.1", "lda.noCV.2", "svm.CV.1", 
+"svm.CV.2", "svm.noCV.1", "svm.noCV.2", "svm.Boot.1", "svm.Boot.2", 
+"svm.Boot.3", "svm.Boot.4", "lda.Boot.1")
 
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+
+# Reorder levels
+file13.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
+"lda.CV.1", "lda.noCV.1", "svm.CV.1", 
+"svm.CV.2", "svm.noCV.1", "svm.noCV.2", "svm.Boot.1", "svm.Boot.2", 
+"svm.Boot.3", "svm.Boot.4", "lda.Boot.1")
+pvals.melt$statistic <- factor(pvals.melt$statistic, levels=file13.levels)
+
+# Filter statistics
+pvals.melt <- pvals.melt[!is.na(statistic),,]
 ```
 
 

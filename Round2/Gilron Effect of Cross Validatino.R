@@ -75,12 +75,12 @@ ar1_cov <- function(n, rho, sigma=1){
 ## Testing
 # lattice::levelplot(ar1_cov(10,0.8))
 
-
-browninan_cov <- function(n, rho){
+# The correlation implies by a brownian motion
+browninan_cov <- function(n){
   Sigma <- matrix(NA, n, n)
   for(i in 1:n){
     for(j in 1:n){
-      Sigma[i,j] <- rho*min(i,j)
+      Sigma[i,j] <- min(i,j)
     }
   }
   D <- 1/sqrt(diag(Sigma))
@@ -90,6 +90,19 @@ browninan_cov <- function(n, rho){
 ## Testing
 # lattice::levelplot(browninan_cov(10,0.8))
 
+
+
+browninan_cov2 <- function(n){
+  Sigma <- matrix(NA, n, n)
+  for(i in 1:n){
+    for(j in 1:n){
+      Sigma[i,j] <- min(i/n,j/n)
+    }
+  }
+  return(Sigma)
+}
+## Testing
+# lattice::levelplot(browninan_cov2(10))
 
 
 seq_cov <- function(p){
