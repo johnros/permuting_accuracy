@@ -6,24 +6,20 @@
 
 
 \begin{document}
-%Sketch: 
-%- The conservativeness of the test. 
-%- What does it detect?
-%- Is it remedied in large samples?
-%- Is conservativeness always there?
 
 
 \maketitle
 %\linenumbers
 
 \begin{abstract}
-Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether prediction accuracy is better than chance. 
+Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether it's prediction accuracy is better than chance. 
 We show that using a classifier's accuracy as a test statistic is an underpowered strategy for finding differences between populations, compared to a bona-fide statistical test.
 Testing with a classifier accuracy is also vastly more computationaly complex than a multivaraite test. 
 Via simulation, we compare various test statistics: some based on classifiers and some based on multivariate tests. 
 Our main conclusions are that testing using classifiers is a low powered approach to signal detection. 
 Neyman-Pearson's Lemma hints at the preferred test given the type of signal expected, and high-dimensional location tests are a good off-the-shelf strategy.
-For the cases in which the purpose of the analysis is not signal detection, but rather to evaluate the performance of a particular classifier, we suggest several improvements to increase power. In particular, to replace V-fold cross validation with the leave-one-out Bootstrap.\todo{wording ...}%
+For the cases in which the purpose of the analysis is not signal detection, but rather to evaluate the performance of a particular classifier, we suggest several improvements to increase power. 
+In particular, to replace V-fold CV with the leave-one-out Bootstrap.
 \end{abstract}
 
 
@@ -31,8 +27,8 @@ For the cases in which the purpose of the analysis is not signal detection, but 
 \section{Introduction}
 \label{sec:introduction}
 
-Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether prediction accuracy is better than chance. 
-A common workflow in neuroimaging and genetics consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
+Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether it's prediction accuracy is better than chance. 
+The workflow in consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
 Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
 For examples in the genetics literature see for example
@@ -53,7 +49,7 @@ As put in \cite{pereira_machine_2009}:
 A practitioner may thus approach the signal detection problem with a two-group location test such as Hotelling's $T^2$ \citep{anderson_introduction_2003}.
 Alternatively, if the size of the brain's region of interest is large compared to the number of observations, so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon.
 Examples of high dimensional multivariate tests include \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, or \cite{srivastava_multivariate_2007} .
-For brevity, and in contrast to \emph{accuracy tests}, we will call these \emph{location tests}, because they test for the equality of location of a multivariate distribution. 
+For brevity, and in contrast to \emph{accuracy tests}, we will call these \emph{location tests}, because they test for the equality of location of two multivariate distributions. 
 
 
 At this point, it becomes unclear which is preferable: a location test or an accuracy test?
@@ -64,7 +60,7 @@ By comparing the rates of convergence of the power of each statistic, \cite{ramd
 Rates, however, are only a first stage when comparing test statistics. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
-ARE is the limiting ratio of the samples sizes required by two statistics to achieve similar power. 
+ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
 \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. [TODO: verify]
@@ -77,10 +73,10 @@ The authors conjectured that a leave-one-out approach, which makes more efficien
 Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
 This eschews the discrete nature of the accuracy statistic, which we will show to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
-Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, and are easier to implement, and interpret.}
+Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, are easier to implement, and interpret.}
 
 Our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
-Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and they cannot exhaust the permissible false positive rate. 
+Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and cannot exhaust the permissible false positive rate. 
 As put by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}}} post back in $2011$:
 \begin{quote}
 	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
@@ -88,11 +84,11 @@ As put by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website 
 
 
 The degree of discretization is governed by the number of samples. 
-In our example from \citet{gilron_quantifying_2016}, the classification accuracy is computed using $40$ examples, so that the test statistic may assume only $40$ possible values. 
-This number of examples is not unusual in an neuroimaging study. 
+In our example from \citet{gilron_quantifying_2016}, the classification accuracy is computed using $40$ samples, so that the test statistic may assume only $40$ possible values. 
+This number of samples is not unusual in an neuroimaging study. 
 
 Power loss due to discretization is further aggravated if the test statistic is highly concentrated. 
-For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, as a test statistic. 
+For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, or \emph{empirical risk}, as a test statistic. 
 Resubstitution accuracy is the accuracy of the classifier evaluated on the training set.
 If data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
 In a very high dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
@@ -125,16 +121,15 @@ The comparison metric between statistics is power, i.e., the probability to infe
 
 \subsection{From a Test Statistic to a Permutation Test}
 
-The signal detection algorithms we will be considering rely on fixing some test statistic, and comparing it to it's permutation distribution to control false positive rates. 
-The different algorithms we compare differ in the test statistic they employ.
+The multivariate tests we will be considering rely on fixing some test statistic, and comparing it to it's permutation distribution. 
+The tests differ in the statistic they employ.
 Our comparison metric is their power, i.e., their true positive rate. 
 We adhere to permutation tests and not parametric inference because our problems of interest are typically high-dimensional. 
 This means that $n \gg p$ does not hold, and central limit laws do not apply.
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid even if possibly conservative. 
-
 The sketch of our permutation test is the following: \newline
 (a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. \newline
-(b) Sample a random permutation, $\pi$, of class labels. \newline
+(b) Sample a random permutation of the class labels, $\pi(y)$. \newline
 (c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
 (d) Repeat (a)-(c) $R$ times. \newline
 (e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed $\mathcal{T}$. Formally: 
@@ -208,7 +203,7 @@ where $|A|$ denotes the cardinality of a set $A$.
 \label{sec:considerations}
 
 Estimating $\accEstim_{\algo}$ requires the following design choices: 
-Should it be cross-validated (CV) and how? 
+Should it be cross-validated and how? 
 If cross validating using V-fold CV then how many folds? 
 Should the folding be balanced?
 If estimation is part of a permutation test: should the data be refolded after each permutation? 
@@ -216,7 +211,7 @@ If estimation is part of a permutation test: should the data be refolded after e
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross validate or not?}
-For the purpose of statistical testing, bias in $\acc_{\algo}$ is not a problem, as long as it does not invalidate the error rate guarantees. 
+For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, as long as it does not invalidate the error rate guarantees. 
 The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
 We will thus be considering both cross validated accuracies, and resubstitution accuracies.
 
@@ -231,7 +226,7 @@ We will report results with both balanced and unbalanced data foldings.
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though it is more computationally more efficient to permute features\footnote{The difference between permuting labels or features is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \citet{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features\footnote{The difference between permuting labels or features is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \citet{golland_permutation_2005}.
 
 
 \paragraph{How many folds?}
@@ -247,28 +242,29 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 Name & Algorithm & Resampling & Parameters\\ 
 \hline
 \hline
-Hotelling & Hotelling & Resubstitution & -- \\ 
 Oracle & Hotelling & Resubstitution & -- \\ 
+Hotelling & Hotelling & Resubstitution & -- \\ 
 Hotelling.shrink & Hotelling & Resubstitution & -- \\ 
-SD & Hotelling & Resubstitution & -- \\ 
-LDA.CV.1 	& LDA & V-fold 			&  -- \\ 
-LDA.noCV.1 	& LDA & Resubstitution 	&  --\\ 
-SVM.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
-SVM.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
-SVM.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
-SVM.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
+Goeman & Hotelling & Resubstitution & -- \\ 
+sd & Hotelling & Resubstitution & -- \\ 
+lda.CV.1 	& LDA & V-fold 			&  -- \\ 
+lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
+svm.CV.1 	& SVM & V-fold 		    & cost=$10$ \\ 
+svm.CV.2 	& SVM & V-fold 		    & cost=$0.1$ \\ 
+svm.noCV.1 	& SVM & Resubstitution  & cost=$10$ \\ 
+svm.noCV.2 	& SVM & Resubstitution  & cost=$0.1$ \\ 
 \end{tabular} 
 \captionsetup{type=table}
 \caption{\footnotesize
 This table collects the various test statistics we will be studying. 
-Location tests include: \textit{Oracle}, \textit{Hotelling}, \textit{Hotelling.shrink}, and \textit{SD}.
-\textit{Hotelling} is the classical two-group $T^2$ statistic \citep{anderson_introduction_2003}. 
+Location tests include: \textit{Oracle}, \textit{Hotelling}, \textit{Hotelling.shrink}, \textit{Goeman}, and \textit{sd}.
 \textit{Oracle} is the same as Hotelling's $T^2$, only using the generative covariance, and not an estimated one.
+\textit{Hotelling} is the classical two-group $T^2$ statistic \citep{anderson_introduction_2003}. 
 \textit{Hotelling.shrink} is a high dimensional version of $T^2$, with the regularized covariance from \citet{schafer_shrinkage_2005}. 
-\textit{SD} is another high dimensional version of the $T^2$, from \citet{srivastava_two_2013}.
+\textit{Goeman} and \textit{sd} are other high dimensional versions of the $T^2$, from \cite{goeman2006testing} and \cite{srivastava_testing_2013}.
 The rest of the tests are accuracy tests, with details given in the table. 
-For example, \textit{SVM.CV.2} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $0.1$ \citep{meyer_e1071:_2015}.
-Another example is \textit{LDA.noCV.1}, which is Fisher's LDA, with a resubstituted accuracy estimate.}
+For example, \textit{svm.CV.2} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $0.1$ \citep{meyer_e1071:_2015}.
+Another example is \textit{lda.noCV.1}, which is Fisher's LDA, with a resubstituted accuracy estimate.}
 \label{tab:collected}
 \end{tcolorbox}
 
@@ -284,13 +280,11 @@ We now compare the power of our various statistics in various configurations.
 We do so via simulation.
 The basic simulation setup is presented in Section~\ref{sec:simulation_details}.
 Following sections present variations on the basic setup.
+The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO JDR: populate]
 
 
 \subsection{Basic Simulation Setup}
 \label{sec:simulation_details}
-
-The following details are common to all the reported simulations, unless stated otherwise in a figure's caption. 
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO JDR: populate]
 
 Each simulation is based on $1,000$ replications. 
 In each replication, we generate $n$ i.i.d. samples from a shift class 
@@ -304,7 +298,8 @@ In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect
 Shifts are equal in all $p$ coordinates of $\mu$.
 With $e$ being a $p$-vector of ones, then $\mu:=c \, e$. 
 We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
-The (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=c^2 p$.
+The (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=c^2 p\approx \{0,1.4,5.7\}$.
+These can be thought as the effect's size. 
 
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
@@ -338,7 +333,7 @@ We may thus proceed and compare the power of each test statistic.
 Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing location tests to accuracy tests. 
 
 From Figure~\ref{fig:simulation_1} we learn that location tests are more powerful than accuracy tests.
-This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{Goeman}, \emph{SD} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
+This is particularly visible for intermediate signal strength (green triangle), and location tests \emph{Goeman}, \emph{sd} and \emph{Hotelling.shrink} defined in Table~\ref{tab:collected}.
 
 
 \begin{figure}[h]
@@ -349,9 +344,9 @@ This is particularly visible for intermediate signal strength (green triangle), 
 		Effects are color and shape coded. 
 		The various statistics on the $y$ axis. 
 		Their details are given in Table~\ref{tab:collected}. 
-		Effects vary over $\mu=(0,\dots,0)$ (red circle), $\mu=(0.25,\dots,0.25)$ (green triangle), and $\mu=(0.5,\dots,0.5)$ (blue square). 
+		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
-		Cross-validation was performed with balanced and unbalanced data folding. See sub-captions.}	
+		Cross-validation was performed with balanced and unbalanced data folding; see sub-captions.}	
 	\label{fig:simulation_1}
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -524,7 +519,7 @@ The \emph{sd} test statistic is scalar invariant.
 Statistics that are not scalar-invariant such as the \emph{Goeman} statistic, will give less importance to high-variance directions than to low-variance directions. 
 
 In Figure~\ref{fig:heteroskedastic_11} we see that as before, location tests dominate accuracy tests.
-For the first time, we can see the difference between the scalar-invariant \emph{SD} and \emph{Goeman}: the latter gaining power by focusing on low variance coordinates. Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is needed.
+For the first time, we can see the difference between the scalar-invariant \emph{sd} and \emph{Goeman}: the latter gaining power by focusing on low variance coordinates. Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is needed.
 
 When the signal is in the low variance PC, \emph{Goeman} puts emphasis on variables which carry little signal.
 For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:heteroskedastic_12}.
@@ -558,7 +553,7 @@ For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:het
 \label{sec:bootstrap}
 
 Intuition suggests we may alleviate the discretization of the accuracy test statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
-The discretization of the accuracy statistic is governed by the number of examples in the union of test sets.
+The discretization of the accuracy statistic is governed by the number of samples in the union of test sets.
 For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
@@ -632,7 +627,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 Our setup of $n=40$ and $p=23$ is high dimensional in that $p/n$ is not too small. 
 This surfaces finite samples effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
-Our best performing tests, \emph{SD}, \emph{Goeman}, and \emph{Hotelling.shrink}, alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$, thus reducing variance at the cost of some bias. 
+Our best performing tests, \emph{sd}, \emph{Goeman}, and \emph{Hotelling.shrink}, alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$, thus reducing variance at the cost of some bias. 
 It may thus be argued that the power advantages of the location tests are driven by the regularization of the covariance, and not the statistic itself.
 We would thus augment the comparison with various covariance-regularized accuracy tests.
 The $l_2$ regularization in our SVM accuracy test, already regularizes the covariance, but it is certainly not the only way to do so. 
@@ -641,8 +636,8 @@ We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive B
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a location test, can improve power. 
-See, for instance, \emph{SVM.CV.6} which is clearly the best regularized SVM for testing. 
-Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{LDA.highdim.4}.
+See, for instance, \emph{svm.CV.6} which is clearly the best regularized SVM for testing. 
+Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{lda.highdim.4}.
 Even so, the out-of-the-box location tests outperform the accuracy tests.
 
 \bigskip
@@ -653,21 +648,21 @@ Even so, the out-of-the-box location tests outperform the accuracy tests.
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		SVM.CV.5 & SVM & V-fold & cost=100 \\ 
-		SVM.CV.6 & SVM & V-fold & cost=0.01\\ 
-		LDA.highdim.1 & LDA & V-fold & -- \\ 
-		LDA.highdim.2 & LDA & V-fold & -- \\ 
-		LDA.highdim.3 & LDA & V-fold & -- \\ 
-		LDA.highdim.4 & LDA & bLOO 	 & B=50 \\ 
+		svm.CV.5 & SVM & V-fold & cost=100 \\ 
+		svm.CV.6 & SVM & V-fold & cost=0.01\\ 
+		lda.highdim.1 & LDA & V-fold & -- \\ 
+		lda.highdim.2 & LDA & V-fold & -- \\ 
+		lda.highdim.3 & LDA & V-fold & -- \\ 
+		lda.highdim.4 & LDA & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
 		The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-		\emph{SVM.CV.5} and \emph{SVM.CV.6} are $l_2$ regularized SVM, with varying regularization penalty.
-		\emph{LDA.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
-		\emph{LDA.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
-		\emph{LDA.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-		\emph{LDA.highdim.4} is the same with bLOO.
+		\emph{svm.CV.5} and \emph{svm.CV.6} are $l_2$ regularized SVM, with varying regularization penalty.
+		\emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
+		\emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
+		\emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
+		\emph{lda.highdim.4} is the same with bLOO.
 	} 
 	\label{tab:collected_3}
 \end{tcolorbox}
@@ -707,9 +702,9 @@ The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-To demonstrate our point, we compare the \emph{SD} location test with the \emph{SVM.CV.1} accuracy test. 
+To demonstrate our point, we compare the \emph{sd} location test with the \emph{svm.CV.1} accuracy test. 
 
-In agreement with our simulation results, the location test (\emph{SD}) discovers more brain regions of interest when compared to an accuracy test (\emph{SVM.CV.1}).
+In agreement with our simulation results, the location test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.CV.1}).
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -719,8 +714,8 @@ We emphasize that both test statistics were compared with the same permutation s
 \includegraphics[width=0.5\linewidth]{"art/svm_vs_SD"}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
-Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{SVM.CV.1}), and a location test (\emph{SD}). 
-\emph{SVM.CV.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
+Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.CV.1}), and a location test (\emph{sd}). 
+\emph{svm.CV.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
 Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 Number of permutations equals $400$.
 The location test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
@@ -757,7 +752,7 @@ The discrete nature of accuracy test statistics.
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
 An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
-The canonical remedy for ties--- random tie breaking (Sec.~\ref{sec:ties})--- showed only a minor improvement. \newline
+The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (Sec.~\ref{sec:ties}). \newline
 (b) \textbf{Shift Alternatives}: 
 We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.\newline
 (c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
@@ -777,7 +772,8 @@ Accuracy tests are seen as ``black boxes'', even though they can be analyzed in 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
 Some authors prefer accuracy tests because they can be seen as effect-size estimates, invariant to the sample size. 
-This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, most directly generalizing Cohen's d, which do not suffer from discretization like accuracy estimates. [TODO ALL: do we have a canonical reference? Maybe \cite{olejnik2000measures}?]
+This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, most directly generalize Cohen's d, and not suffer from discretization like accuracy estimates. 
+Examples can be found, for instance, in \cite{stevens2012applied} and references therein. 
 
 
 
@@ -787,7 +783,7 @@ This is true, but the multivariate-statistics literature provides many multivari
 
 For a fair comparisons between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
-Formally, in all our simulations we set $\Vert \mu \Vert_\Sigma^2=p$.
+Formally, in all our simulations we set $\Vert \mu \Vert_\Sigma^2=c^2 p$.
 
 Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
@@ -798,7 +794,7 @@ We compare the power of a shift in the direction of some high variance PC (Figur
 The intuition that it is easier to detect signal in the low variance directions is confirmed. 
 It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspects: 
 (i)\emph{Hotelling.shrink} is a good performed ``on average'', 
-(ii) \emph{SD} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
+(ii) \emph{sd} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
 
 
 
@@ -815,7 +811,7 @@ It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspec
 	\begin{subfigure}[t]{0.4\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{"art/file31"}
-		\caption{TODO: recompute figure. $\mu$ in PC15 of $\Sigma$.}  
+		\caption{$\mu$ in PC15 of $\Sigma$.}  
 		\label{fig:dependence_42}	
 	\end{subfigure}
 
@@ -833,17 +829,15 @@ While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$
 The various regularization methods deflate the high variance directions, thus, relatively inflate the low variance directions.
 If the signal is in the low variance directions, the regularization may mask it. 
 This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
-[TODO JG:what theoretical results support this intuition?]
 
 
 
 \subsection{Implications to Other Problems}
 
-Our work studies signal detection in the multivariate testing, or MANOVA, framework.
-The same problem can be cast in the linear models framework, and in particular, as a Brenoulli Regression problem.
+Our work studies signal detection in the two-group multivariate testing framework, i.e., MANOVA framework.
+The same problem can be cast in the univariate generalized linear models framework, and in particular, as a Brenoulli Regression problem.
 If any of the predictors, $x$, carries any signal, then $x|y=0$ has a different distribution than $x|y=1$.
 This view is the one adopted \cite{goeman2006testing}.
-[TODO JG: do we want to state some take-home messages for Brenoulli-Regression?]
 
 Another related problem is that of multinomial-regression, i.e., multi-class classification.
 We conjecture that power differences in favor of location tests versus accuracy tests will increase as the number of classes increases.
