@@ -12,16 +12,17 @@
 %\linenumbers
 
 \begin{abstract}
-A common practice in supervised machine learning, is fitting a classifier and then testing if it's prediction accuracies are better than chance level.
+The estimated accuracy of a classifier is a random quantity with variability. 
+A common practice in supervised machine learning, is thus to test if the estimated accuracy is significantly better than chance level.
 This method of signal detection is particularly popular in neuroimaging and genetics.
 We provide evidence that using a classifier's accuracy as a test statistic can be an underpowered strategy for finding differences between populations, compared to a bona-fide statistical test.
 It is also computationally more demanding than a statistical test. 
 Via simulation, we compare test statistics that are based on classification accuracy, to others based on multivariate test statistics. 
-Across many simulation scenarios, we find that probability of identifying non-identical distributions is lower for accuracy based statistics.
+We find that probability of detecting differences between two distributions is lower for accuracy based statistics.
 We examine several candidate causes for the low power of accuracy tests. 
-These include: the discrete nature of the test statistic, the type of signal they are designed to detect, their inefficient use of the data, and their regularization. 
-When the purposes of the analysis is not signal detection, but rather, to evaluate the performance of a particular classifier, we suggest several improvements to increase power. 
-In particular, to replace V-fold cross validation with the leave-one-out Bootstrap.
+These causes include: the discrete nature of the accuracy test statistic, the type of signal accuracy tests are designed to detect, their inefficient use of the data, and their regularization. 
+When the purposes of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
+In particular, to replace V-fold cross validation with the Leave-One-Out Bootstrap.
 \end{abstract}
 
 
@@ -65,7 +66,7 @@ Asymptotic relative efficiency measures (ARE) are typically used by statistician
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
 \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (location) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
-Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. [TODO: verify]
+Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power as the $T^2$ test. 
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the location test. 
@@ -282,7 +283,7 @@ We now compare the power of our various statistics in various configurations.
 We do so via simulation.
 The basic simulation setup is presented in Section~\ref{sec:simulation_details}.
 Following sections present variations on the basic setup.
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.[TODO JDR: populate]
+The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
 
 
 \subsection{Basic Simulation Setup}
