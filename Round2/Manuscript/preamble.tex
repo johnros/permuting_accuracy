@@ -13,8 +13,13 @@
 \usepackage{lineno}
 \usepackage{tcolorbox}
 \usepackage{hyperref}
+\usepackage{fancyhdr}
 \AtBeginDocument{\let\textlabel\label}
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+
+\pagestyle{fancy}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Keywords:}} #1}
 
 
 \captionsetup[figure]{labelfont=it,textfont={it},textfont=footnotesize}
