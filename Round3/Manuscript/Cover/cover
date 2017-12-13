@@ -1,4 +1,19 @@
-1. Authors declare no simiarl submissions have been made to any other venue. 
+In the attached contribution we look into the matter of "accuracy tests", i.e., signal detection using a supervised-classifier's accuracy. 
+Our interest in accuracy tests arises because of their immense popularity, particularly in the neuroscientific and genetics communities. 
+
+Due to our genetic and neuroscientific motivations, we are interested in finite sample results. We thus opt for a simulation study instead of (currently unavailable) analytic analysis. The simulation study was lengthy and computationally demanding because of the need to cross-validate, within each permutation, within each replication, within each configuration.
+
+Our results show that there is always a multivariate test (like Hotelling's T2) that has more power than an accuracy test. This may seem surprising given the popularity of accuracy tests. On the other hand, once we analyze the reasons for which accuracy tests are underpowered compared to multivariate tests, the only surprise is in the popularity of accuracy tests. 
+
+For the cases that hypothesis testing is used to evaluate a particular classifier, and not merely for signal detection, we conclude that V-fold CV should not be used, and Leave-One-Out-Bootstrapping should be preferred (or other resampling schemes *with* replacement).
+
+We hope you find our contribution fit for JMLR
+
+Jonathan Rosenblatt
+
+__________________________
+
+1. Authors declare no similar submissions have been made to any other venue. 
 2. All co-authors are aware of the submission to JMLR.
 3. No conflict of interests to declare. 
 4. Action editors:
