@@ -1,0 +1,172 @@
+---
+title: "HighDim Classifiers"
+author: "Jonathan Rosenblatt"
+date: "8/2/2017"
+output: html_document
+---
+
+
+
+```{r preliminaries}
+file.name <- "file14"
+
+balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
+n.replications <-  1e2#1e3
+p <- 23
+n <- 4e1 # total sample size-> n/2 in each group.
+n.permutations <- 3e2
+n.folds <- 4
+cost.1 <- 1e1
+cost.2 <- 1e-1
+
+## Signal in location
+effects <- seq(0, 0.5, length=3) # change in location
+
+source('Gilron Effect of Cross Validatino.R')
+
+## Signal in scale
+Sigma <- diag(p)
+lattice::levelplot(Sigma)
+direction0 <- rep(1,p)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 *sqrt(p/maha)
+```
+
+
+## Fixed folds. Cross-Validated. All in one.
+```{r}
+RhpcBLASctl::blas_set_num_threads(1)
+registerDoMC(cores=100)
+```
+
+
+```{r independent noise variable folds}
+pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
+  foreach(effect=effects, .combine=rbind)  %do% {
+    
+    labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
+    
+    ## Gaussian noise
+    .noise <- rmvnorm(n=n, sigma = Sigma)
+    
+    # Shift alternative:
+    # effect <- effects[[2]]
+    noise <- .noise
+    noise <- .noise + effect * labels
+    # noise[labels,] <- noise[labels,] + effect * direction
+    
+    ## Compute observed statistic
+    x1 <- noise[labels,]
+    x2 <- noise[!labels,]
+    
+    ## Asign observations to folds. Use the simple label structure to balance folds.
+    fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+    
+    # Observables 
+    ts <- list(
+      Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+      Hotelling=t_Hotelling(x1, x2, FALSE),
+      Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
+      sd=t_SD(x1, x2),
+      lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+      svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
+      svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+      svm.CV.5=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
+      svm.CV.6=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
+      lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
+      lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
+      lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
+      lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=2, type=1),
+      # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+      svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=1e1, type=1),
+      svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=1e-1,  type=1)
+    )
+    
+    # Prepare to permute
+    old.labels <- labels
+    old.folds.ids <- fold.ids
+
+    # Initialize permuted statistics
+    permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
+    
+    for(i in 1:n.permutations){
+      # i <- 1
+      
+      labels <- sample(labels) # make permutation
+      fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+      x1 <- noise[labels,]
+      x2 <- noise[!labels,]
+      
+      permuted[i,] <- c(
+        Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+        Hotelling=t_Hotelling(x1, x2, FALSE),
+        Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        Goeman=t_goeman(x1, x2),
+        sd=t_SD(x1, x2),
+        lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=1e1, type=1),
+        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+        svm.CV.5=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
+        svm.CV.6=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
+        lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
+        lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
+        lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
+        lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=2, type=1),
+        # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1),
+        svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=1e1, type=1),
+        svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=1e-1,  type=1)
+      )
+    } # End permutation
+    
+    # Compute p-vals for each statistic
+    pvals <- rep(NA, length(ts))
+    for(i in seq_along(ts)){
+      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+    }
+    names(pvals) <- names(ts)
+
+    c(effect=effect, pvals) 
+  }
+} 
+  
+pbPost(type = "note", body = "Done", the.message)
+save.image(file=paste(file.name,".RData", sep=''))
+```
+
+
+
+```{r analyze multiple effects}
+# load("file14.RData")
+err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
+.limits <- 0.05 + c(-err.bar,0,err.bar)
+
+pvals.1.9 %<>%  as.data.table()
+
+pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+# pvals.melt <- pvals.melt[!(statistic %in% statistic.filter),,]
+
+pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+```
+
+
+```{r}
+plot.3 <- pvals.melt %>% 
+  ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
+  theme_bw(base_size = 20)+
+  theme(legend.position="none")+
+  # ggtitle("Fixed signal, Gaussian Noise")+
+  ylab('Power')+
+  xlab('')+
+  stat_summary(fun.y='mean', geom="point", cex=4) +
+  geom_hline(yintercept=0.05, lty=2)+
+  geom_vline(xintercept=.limits, lty=c(3,2,3))+
+  coord_flip()
+plot.3
+
+pdf(file = paste('Output/',file.name,'.pdf', sep=''))
+plot.3
+dev.off()
+```
+
+
