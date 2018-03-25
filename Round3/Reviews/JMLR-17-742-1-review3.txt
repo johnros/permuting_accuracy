@@ -1,0 +1,30 @@
+The manuscript by Rosenblatt et al performs an empirical comparison of detectors based on in-sample statistical tests of location versus out-of-sample classifier accuracy. The general message of the work is that traditional in-sample statistical tests outperform tests using classifier accuracy. I am very ready to believe this message, however I find that the manuscript could be more convincing. In addition, I wonder if JMLR is the right venue for this work, given that it is solely empirical, with little general insights, and probably applicable to a narrow community. JMLR is not the best forum to reach such an application community. Besides this point, the main shortcomings that limit my enthusiasm about the manuscript are: i) the experiments are not really high dimensional and the conclusions might change in high-dimensional setting, ii) the manuscript offer little insights and in particular no insight whether it is a limitation of cross-validation or of classifiers. I detail these points, as well as minor comments, below.
+
+The setting p=23, n=40 is certainly not what the machine learning community would call high-dimensional. In particular, for neuroimaging or genomics, there is often a much larger p, for full-brain decoding, or genome-wise analysis. In this sense, the claims of the manuscript may be too general compared to the actual results: the manuscript does not establish that in high-dimensional settings classifier-based tests are not to be preferred. There are good reasons to question whether the conclusions established in the manuscript are valid in these settings (p >> n), as the standard statistical tests become very ill posed. Given how far this regime is from maximum-likelihood estimation, it is unclear to me whether arguments based on the Neyman-Pearson lemma are useful.
+
+The results are spread across many figures. Coming to a recommendation on which test to use requires the reader to have a global view of these figures, which is currently not feasible. It would be important to add a summary figure that unites all these figures. I do realize that it is a challenging visualization, yet it is very important for the reader (and the reviewer) to buy into the conclusion of the manuscript.
+
+Concerning the conclusion that classifier-based tests underperform location based tests, the question of whether it is driven by the inability of the classifier to capture well the difference, or whether it is a shortcoming of cross-validation that gives a poor estimate of expected accuracy. In this sense, bLOO works better than the other cross-validation alternatives and almost as good as location-based test. Given that 50 bootstraps work better than 10, I wonder if using more bootstraps would not have improved even more its performance. In a similar line of thought, it would have been useful to have bLOO used for LDA: the coverage of the set of experiments is incomplete. Also, I am a bit disappointed not to see more focus on the bootstrap 632. It is a principled approach, for which there a strong theoretical results, unlike most of the approaches used by the manuscript.
+
+
+Section 5.1 is where I would have hoped to gain some insight on the experimental results. However, the discussion is really light from a theoretical standpoint. Maybe point (a) could build upon some arguments in Varoquaux 2017 "Cross-validation failure: small sample sizes lead to large error bars". Point (b), using the Neyman Pearson lemma is valid in the asymptotic regime, I believe, but it is clearly valid in a low-n high-p regime, where models must be estimated with bias (regularized method)? I am not convinced that point (c) holds: do the authors have a reference or a theoretical argument? The analysis of Arlot & Celisse 2010 "A survey of cross-validation procedures for model selection" seems to suggest that for model comparison, a large test set is preferable. Point (d) is interesting, but its not obvious to me; is there a simple argument or a reference?
+
+It is interesting that the authors suggest the use of the MANOVA instead of classifiers, as it has indeed be put forward in the neuroimaging community to replace classifier in a searchlight: C Allefeld & JD Haynes 2014 "Searchlight-based multi-voxel pattern analysis of fMRI by cross-validated MANOVA".
+
+With regards to the simulations, it may be useful to note that in neuroimaging or genomic settings there is often noise in the design matrix. Hence the simulations are not true to the application setting. Whether this is important or not, I cannot tell.
+
+I am very puzzled that on figure 4a, the Oracle performs worst than a few other approach. The authors should comment on this. Is it because the Oracle is based on a model different from the simulation?
+
+
+
+# Minor comments
+
+In the caption of table 1, the manuscript mentions the "cost parameter" for the SVM. I suspect that this is regularization parameter of the SVM, however this is to me a very unusual way of naming this parameter.
+
+It would be useful to detail how the span for this regularization parameter was chosen, and to show --possibly via the empirical results-- that it is indeed the right span.
+
+Am I wrong in thinking that definition 1 (resubstitution estimate) is often called "train-set error" in machine learning? Maybe it would be useful to point it out.
+
+At the beginning of the introduction, I believe that there is a typo: "whether it's prediction accuracy" should read "whether its prediction accuracy". Similarly on the second line of 2.2: "comparing it to it's permutation distribution".
+
+There is a missing "by" at the end of the last sentence of the first paragraph of 5.5.

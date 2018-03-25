@@ -1,0 +1,8 @@
+Dear Authors,
+
+The reviewers were rather divided on the significance of the contribution of the manuscript. I think this is largely due to the fact that some of them were looking at the paper from a more applied side, and others from a more theoretical. While from a more applied perspective the results are interesting, from a more theoretical perspective the paper may appear weaker.
+
+I think it would not be a very good idea to publish this paper in JMLR. I think the paper has an interesting contribution, and notwithstanding the reviewers critique, seems to be essentially correct. But the contribution is essentially on a conversation inside certain biomedical sciences. It has little bearing on machine learning in general since the settings are too specific and thus the results lack generality. I think these results would be much more suitable for publication in a biomedical forum. I hope you find the reviewers' comments useful for the purpose of such a submission.
+
+Aapo Hyvarinen
+Action Editor

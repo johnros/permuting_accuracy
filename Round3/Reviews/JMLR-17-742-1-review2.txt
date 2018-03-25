@@ -1,0 +1,113 @@
+In this manuscript, the Authors present a study where location-based
+tests are compared to accuracy tests for signal detection,
+specifically for the domains of neuroscience and genetics, where the
+number of samples is low and the number of dimensions is moderately
+high (n=40, p=27, in their leading example). The main claim in this
+manuscript is that accuracy tests have less power than location-based
+tests. Moreover, the Authors present detailed motivations to explain
+the reduced power of accuracy tests. Additionally, they provide
+indications of how to improve their power. The claims are supported
+with experimental evidence mainly based on simulation.
+
+The manuscript is well written (with exceptions, described below) and
+the claims are appealing. The design of experiments covers many
+interesting cases. The analysis presented in the manuscript is of main
+interest for practitioners in the field of neuroimaging data analysis
+and genetics. Nevertheless, the manuscript has some main issues that
+must be addressed before acceptance. In the following, I describe the
+major comments that the Authors should address and then the minor
+issues.
+
+
+* Major Comments:
+
+- In my opinion, the main issue of this manuscript is the strength of
+  the claims given the evidence. In the introduction, sometimes, the
+  elements presented sound a bit too partial. The results of the
+  analysis of simulated datasets show that location-based tests have
+  more power than accuracy-based test: to me, it is not surprising
+  that location-based tests, which are based on Gaussian assumptions,
+  are more powerful than other tests without that assumption, when the
+  data generation mechanism is essentially Gaussian. The only
+  simulation which departs from Gaussianity (Sec 3.5), shows that the
+  two families of tests are not that different, especially svm.CV
+  vs. location tests. [Notice that tests with resubstitution error may
+  not be much representative of the accuracy-based practice since
+  nobody does that in the communities addressed by the paper, to my
+  knowledge]. In my opinion, the Authors should strengthen the
+  experiments on the side of non-Gaussianity and draw conclusions
+  afterwards. My expectation, is that the difference in power between
+  the two families of tests will not be very strong, in those
+  cases. My specific interest in non-Gaussianity stems from the fact
+  that I see no evidence to assume Gaussianity from typical
+  neuroimaging data on which accuracy tests are
+  conducted. Alternatively, the Authors should provide more evidence
+  that the Gaussian case is prevalent in practice. The Authors also
+  present a neuroimaging example (Sec 4), which supports their
+  claims. To me, such example is indeed interesting but not sufficient
+  to fill the non-Gaussian gap.
+
+
+- Some statements are given with too little explanation in order to be
+  properly understood or accepted. The Authors should improve the
+  readability and accessibility of the manuscript in several parts:
+
+  - p.3 (Sec 1): "Permutation testing with discrete test statistics
+    are known to be conservative" (the reference of Hemerik and Goeman
+    (2017) seems not to be as clear cut as the statement of the
+    Authors, please be more detailed).
+
+  - p.3 (Sec 1): and p.9 (Sec 3.4): "...since they cannot [...]
+    exhaust the permissible false positive rate." (please explain
+    more this concept).
+
+  - p.3 (Sec 1): the quote from Frank Harrell is incomplete and a bit
+    partial, for how it is used. The manipulation which he mentions is
+    substantiated with an example about being fooled by a
+    class-unbalanced dataset. Indeed that may be a problem, even
+    though one that I haven't seen happening in the literature of the
+    communities addressed by this manuscript.
+
+  - p.4 (Sec 1): "Power loss due to discretization is further
+    aggravated if the test statistic is highly concentrated" (the
+    explanation is given only intuitively using the resubstitution
+    accuracy: it's not straightforward that accuracy is easily
+    overfitted as resubstitution accuracy is. Please elaborate more
+    this sentence).
+
+  - p.4 (Sec 2.2): "we know that a label-switching permutation test is
+    valid even if possibly conservative" (please explain more, with
+    references).
+
+  - p.17 (Sec 4): "the location test (sd) discover more brain regions
+    of interest when compared to an accuracy test" (is 'more'
+    necessarily better? Why? The authors should explain more this
+    part).
+
+
+- The Authors consider only the two-sample test case, ignoring that,
+  very frequently, neuroimaging data analysis deals with multiple
+  classes.
+
+
+* Minor Comments:
+
+- p.2, (Sec 1) and p.16 (Sec 4): "Gilron et al. (2016)" seems
+  unavailable now. It's paper ID, arXiv:1605.03482, reported in the
+  References, points to "Gilron et al. (2017), so it should be
+  updated.
+
+- p.3, (Sec 1): "Permutation testing with discrete test statistics are
+  known to be conservative" -> "Permutation testing with discrete test
+  statistics is known to be conservative"
+
+- In multiple places, the threshold on the p-value for rejecting the
+  null hypothesis is set to 0.05. How do the results change when using
+  a more conservative threshold, such as 0.005, as suggested in
+  Benjamin et al. (Nature Human Behavior, 2017)?
+
+- An additional references that the Authors may consider for inclusion
+  in the related works, about an example of accuracy test vs. location
+  test, in the context of neuroimaging experiments:
+  https://doi.org/10.1109/PRNI.2013.41
+  

@@ -1,0 +1,479 @@
+#### Now with the cleaned up code ####
+
+File name: file1
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n(*)=400
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file2
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file3
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original(*): unbalanced
+  Permuted(*): unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file4
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds(*): 2
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+File name: file5
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: unbalanced
+  Permuted: unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds(*): 2
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+  
+  
+File name: file6
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds(*): 20
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+File name: file7
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: unbalanced
+  Permuted: unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds(*): 20
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+  
+File name: file8
+  Status: 
+  Null: Gaussian
+  Effects(*): scale alternative 
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  Note: Oracle uses null covariance. 
+  
+File name: file9 
+  Status: 
+  Null(*): t
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 8
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+  
+  
+File name: file10
+  Status: OK
+  Null: Gaussian
+  Effects(*): 1/sqrt(10) * [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 2e3
+  n(*)=400
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+  
+File name: file11
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1) rho=0.6. Signal in identity. 
+  Trial dependence (n): none
+  
+File name: file12
+  Status: 
+  Null(*): Golland Mixture
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 8
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+File name: file13
+  Status: 
+  Statistic (*): Bootstrapped 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 8
+  Voxel dependence (p): none
+  Trial dependence (n): none
+  
+File name: file14
+  Status: OK 
+  Statistic (*): Highdim classifiers
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 5e2
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file15
+  Statistic (*): Scale alternative 
+  Null: Gaussian
+  Effects: ?
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 2e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): none
+  Trial dependence (n): none
+
+File name: file16
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): browninan motion covariance. Identity signal
+  Trial dependence (n): none
+
+
+File name: file17
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in low PCs. 
+  Trial dependence (n): none
+
+File name: file18
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in high PCs. 
+  Trial dependence (n): none
+
+File name: file19
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Signal in identity. 
+  Trial dependence (n): none
+
+
+File name: file20
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Signal in high PCs. 
+  Trial dependence (n): none
+  
+File name: file21
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Signal in low PCs. 
+  Trial dependence (n): none
+
+File name: file22
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Browninan motion covariance. Signal in high PCs.
+  Trial dependence (n): none
+  
+File name: file23
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Browninan motion covariance. signal in low PCs
+  Trial dependence (n): none
+
+File name: file24
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Sequence of variances. Signal in High PC.
+  Trial dependence (n): none
+
+File name: file25
+  Status: 
+  Null: Gaussian
+  Effects(*): [0.5,1]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1) rho=0.6.  Strong Signal.
+  Trial dependence (n): none
+
+File name: file26
+  Status: TODO
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Sequence of variances. Signal in LOW PC
+  Trial dependence (n): none
+
+File name: file27
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal in high PCs.
+  Trial dependence (n): none
+
+File name: file28
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal in low PCs.
+  Trial dependence (n): none
+
+
+File name: file29
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal identity.
+  Trial dependence (n): none
+
+
+File name: file30
+  Status: 
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): Arbitrary. Generated from eigen values. Signal minus identity.
+  Trial dependence (n): none
+
+File name: file31
+  Status: TODO
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Euclidean norm. Signal in low PC.
+  Trial dependence (n): none
+
+File name: file31
+  Status: TODO
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Euclidean norm. Signal in high PC.
+  Trial dependence (n): none
+
+
+File name: file33
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent.
+  Trial dependence (n): none
+  Tie breaking (*): Yes
+
