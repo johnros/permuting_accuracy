@@ -35,11 +35,12 @@ In particular, to replace V-fold cross validation with the Leave-One-Out Bootstr
 \label{sec:introduction}
 
 Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether it's prediction accuracy is better than chance. 
-The workflow consists of fitting a classifier, and estimating its predictive accuracy using cross validation. 
-Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.  
-Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
+The workflow consists of fitting a classifier, and estimating its predictive accuracy using cross validation.
+Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.
+This general idea has been promoted by \cite{friedman2003multivariate,eric2008testing,lopez2016revisiting}.
+Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
 For examples in the genetics literature see for example
-\citet{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008}.
+\citet{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include speaker verification \citep{gretton_kernel_2012-1}, 
 text classification \citep{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \citep{lopez2016revisiting}, data integration \citep{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \citep{gretton_kernel_2012-1,hall2002permutation}, OCR \citep{perez2009estimation}, multimedia \citep{moreno2004kullback}, and functional data analysis \citep{hall2002permutation}.
 
@@ -61,18 +62,19 @@ The t-test or a Kolmogorov-Smirnov test, are univariate examples of such tests, 
 The canonical multivariate location test is Hotelling's $T^2$ test \citep{hotelling_generalization_1931}.
 Multivariate goodness-of-fit tests date back to \citep{bickel1969distribution}, but see \cite{gretton_kernel_2012-1}, and references therein, for some recent advances.
 
-Many version of these tests exist for the multivariate case, but crucially for our applications, we we assume that the number of samples is similar to the dimension of each sample. 
+
+Crucially for our applications, we will assume that the number of samples is similar to the dimension of each sample. 
 In the statistical literature this is known as a \emph{high-dimensional} problem. 
 In our running example it means that the size of the brain's region of interest is large compared to the number of observations.
+In a seminal contribution, \cite{bai1996effect} noted that in-high dimension, multivariate tests tend to be low powered unless some regularization is involved. 
+Since then, many high-dimensional tests have been proposed. 
+Examples of goodness-of-fit tests include \cite{szekely_brownian_2009,gretton_kernel_2012-1} [TODO:add hall].
+Examples of locations tests include \cite{schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,shen2015adaptive,xu2016adaptive,nishiyama2013testing} and \cite{zhang2016high}.
 
-
- so that the spatial covariance cannot be fully estimated, then a high dimensional version of Hotelling's test can be called upon.
-Examples of high dimensional multivariate tests include \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, or \cite{srivastava_multivariate_2007} .
-For brevity, and in contrast to \emph{accuracy tests}, we will call these \emph{location tests}, because they test for the equality of location of two multivariate distributions. 
-
-
-At this point, it becomes unclear which is preferable: a location test or an accuracy test?
-The former with a heritage dating back to \cite{hotelling_generalization_1931}, and the latter being extremely popular, as the $1,170$ citations\footnote{GoogleScholar. Accessed Aug 2017.} of \cite{kriegeskorte_information-based_2006} suggest. 
+At this point, it becomes unclear which is preferable, in particular for genetics and neuroimaging?
+A location test with a heritage dating back to \cite{hotelling_generalization_1931}?
+A goodness-of-fit-test, with some recent advocates \citep[e.g.][]{olivetti2013kernel}?
+Or an accuracy test, being extremely popular, as the $1,170$ citations\footnote{GoogleScholar. Accessed Aug 2017.} of \cite{kriegeskorte_information-based_2006} suggest. 
 
 The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
 By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
