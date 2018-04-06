@@ -1,10 +1,8 @@
-\usepackage{jmlr2eJDR}
-
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-%\usepackage{amsthm}
+\usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{todonotes}
 \usepackage{natbib}
@@ -15,14 +13,40 @@
 \usepackage{lineno}
 \usepackage{tcolorbox}
 \usepackage{hyperref}
+\usepackage{fancyhdr}
 \AtBeginDocument{\let\textlabel\label}
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+
+\pagestyle{fancy}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Keywords:}} #1}
 
 
 \captionsetup[figure]{labelfont=it,textfont={it},textfont=footnotesize}
 \captionsetup[subfigure]{width=0.8\hsize,labelfont=bf,textfont=footnotesize,singlelinecheck=off,justification=raggedright,format=hang}
 
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
 
+
+
+\author{Jonathan D. Rosenblatt \\ 
+	Department of IE\&M and \\
+	Zlotowsky Center for Neuroscience, \\
+	Ben Gurion University of the Negev, Israel. 
+	\and Yuval Benjamini\\
+	Department of Statistics, \\
+	Hebrew University, Israel
+	\and Roee Gilron \\ 
+	Movement Disorders and Neuromodulation Center,\\
+	University of California, San Francisco. 
+	\and Roy Mukamel \\ 
+	School of Psychological Science\\
+	Tel Aviv University, Israel.
+	\and Jelle Goeman \\ 
+	Department of Medical Statistics and Bioinformatics, \\
+	Leiden University Medical Center, The Netherlands.
+	}
 
 
 %% OPTIONAL MACRO DEFINITIONS

@@ -24,6 +24,10 @@ suppressPackageStartupMessages(library(RobPer))
 # suppressPackageStartupMessages(library(fungible))
 
 
+statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
+                      "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
+                      "svm.noCV.2")
+
 
 balance.log <- 'balance_log.txt'
 file.remove(balance.log)
