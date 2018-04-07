@@ -38,12 +38,12 @@ Many neuroscientists and geneticists detect signal by fitting a classifier and t
 The workflow consists of fitting a classifier, and estimating its predictive accuracy using cross validation.
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.
 This general idea has been promoted by \cite{friedman2003multivariate,eric2008testing,lopez2016revisiting}.
-Examples in the neuroscientific literature include \citet{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
-For examples in the genetics literature see for example
+Examples in the genetics literature include
 \citet{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include speaker verification \citep{gretton_kernel_2012-1}, 
-text classification \citep{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \citep{lopez2016revisiting}, data integration \citep{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \citep{gretton_kernel_2012-1,hall2002permutation}, OCR \citep{perez2009estimation}, multimedia \citep{moreno2004kullback}, and functional data analysis \citep{hall2002permutation}.
+text classification \citep{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \citep{lopez2016revisiting}, data integration \citep{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \citep{gretton_kernel_2012-1,hall2002permutation}, optical character recognition \citep{perez2009estimation}, multimedia \citep{moreno2004kullback}, and functional data analysis \citep{hall2002permutation}.
 
+Examples in the neuroscientific literature, which is our motivating use-case, include \citet{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
 
 To fix ideas, we will adhere to a concrete example.
 In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
@@ -57,26 +57,30 @@ As put in \cite{pereira_machine_2009}:
 ... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
 A practitioner may thus approach the signal detection problem with a two-group hypothesis test.
-Two-groups hypothesis tests may be divided into tests for equality of location (i.e., equality of means), and goodness of fit tests (i.e.equality of the two whole distribution).
+Two-groups hypothesis tests may be divided into tests for equality of location (i.e., equality of means), and two-sample goodness of fit tests (i.e., equality of the two whole distribution).
 The t-test or a Kolmogorov-Smirnov test, are univariate examples of such tests, respectively.
 The canonical multivariate location test is Hotelling's $T^2$ test \citep{hotelling_generalization_1931}.
 Multivariate goodness-of-fit tests date back to \citep{bickel1969distribution}, but see \cite{gretton_kernel_2012-1}, and references therein, for some recent advances.
 
 
 Crucially for our applications, we will assume that the number of samples is similar to the dimension of each sample. 
-In the statistical literature this is known as a \emph{high-dimensional} problem. 
-In our running example it means that the size of the brain's region of interest is large compared to the number of observations.
+In the statistical literature this is known as a \emph{high-dimensional} problem.
+We emphasize that by high-dimension it is not necessarily implied that the sample is large, even if it is often the case. 
+In our running example it means that the size of the brain's region of interest is large compared to the number of subjects in the experiment.
+
 In a seminal contribution, \cite{bai1996effect} noted that in-high dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
-Examples of goodness-of-fit tests include \cite{szekely_brownian_2009,gretton_kernel_2012-1} [TODO:add hall].
-Examples of locations tests include \cite{schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,shen2015adaptive,xu2016adaptive,nishiyama2013testing} and \cite{zhang2016high}.
+Examples of high-dimensional goodness-of-fit tests include \cite{hall2002permutation,szekely_brownian_2009,gretton_kernel_2012-1}.
+Examples of high-dimensional locations tests include \cite{schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}, and certainly others.
+
 
 At this point, it becomes unclear which is preferable, in particular for genetics and neuroimaging?
-A location test with a heritage dating back to \cite{hotelling_generalization_1931}?
-A goodness-of-fit-test, with some recent advocates \citep[e.g.][]{olivetti2013kernel}?
-Or an accuracy test, being extremely popular, as the $1,170$ citations\footnote{GoogleScholar. Accessed Aug 2017.} of \cite{kriegeskorte_information-based_2006} suggest. 
-
-The comparison between location and accuracy tests was precisely the goal of \cite{ramdas_classification_2016}, who compared Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
+Various authors have addressed this matter, often with contradicting conclusions.
+\cite{yu2007two}, for instance, finds that an accuracy test based on a tree predictor is preferable over testing. Their simulated signal is sparse, so that it is no surprise that a tree-type predictors outperforms linear predictors and tests. 
+\cite{olivetti2013kernel} compares the Kernel test of \cite{gretton_kernel_2012-1} to a logistic-regression based accuracy-test. 
+Their results are inconclusive with a slight advantage to the logistic regression.
+\cite{lopez2016revisiting} compare several accuracy tests to several location and GOF tests and conclude that a neural-net based accuracy test is preferable. Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional. This feature learning is typically impossible in high-dimension.
+\cite{ramdas_classification_2016}, is currently the only analytic analysis. Comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
 By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 Rates, however, are only a first stage when comparing test statistics. 
 
@@ -89,37 +93,27 @@ This means that Fisher's LDA requires at least $6.3$ more samples to achieve the
 In this light, the accuracy test is remarkably inefficient compared to the location test.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the location test. 
 
-Before discarding accuracy tests as inefficient, we recall that \cite{ramdas_classification_2016} analyzed a \emph{half-sample} holdout. 
-The authors conjectured that a leave-one-out approach, which makes more efficient use of the data, may have better performance. 
-Also, the analysis in \cite{ramdas_classification_2016} is asymptotic. 
+The analysis in \cite{ramdas_classification_2016} is asymptotic. 
 This eschews the discrete nature of the accuracy statistic, which we will show to have  crucial impact. 
 Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
-Our conclusion will be quite simple: {\em location tests typically have more power than accuracy tests, are easier to implement, and interpret.}
+Our conclusion  can be summarized as follows:\newline \textbf{
+(1) There is always a location test that dominates an accuracy test.\newline
+(2) In high-dimension, performing a location test in the original sample/feature space is a practical and good-powered strategy.
+}
 
-Our statement rests upon the observation that with typical sample sizes, the accuracy test statistic is highly discrete. 
-Permutation testing with discrete test statistics are known to be conservative \citep{hemerik_exact_2014}, since they are insensitive to mild perturbations of the data, and cannot exhaust the permissible false positive rate. 
-As put by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}}} post back in $2011$:
-\begin{quote}
-	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
-\end{quote}
+Our statement rests upon the following observations, which rely on a battery of simulations and the discussion that follows.
+\begin{enumerate}
+	\item In our typical sample sizes, the accuracy test statistic is highly discrete, and needlessly so. 
+	\item In high-dimension, learning a feature map may introduce more variance than it reduces bias, so that performing the test in the original space is a competitive strategy.
+\end{enumerate}
 
-
-The degree of discretization is governed by the number of samples. 
-In our example from \citet{gilron_quantifying_2016}, the classification accuracy is computed using $40$ samples, so that the test statistic may assume only $40$ possible values. 
-This number of samples is not unusual in an neuroimaging study. 
-
-Power loss due to discretization is further aggravated if the test statistic is highly concentrated. 
-For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, or \emph{empirical risk}, as a test statistic. 
-Resubstitution accuracy is the accuracy of the classifier evaluated on the training set.
-If data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
-In a very high dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
-The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 
 
 To compare the power of accuracy tests and location tests in finite samples, we study a battery of test statistics by means of simulation. 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
 The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}.
-A discussion follows. 
+The sample sizes in the simulations were typical for a neuroimaging study, which can be thought of as a high-dimension--small-sample setup, but we also show that our conclusions apply to a high-dimension--large-sample setup.
+We conclude with a discussion.
 
 
 
@@ -768,19 +762,39 @@ Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{go
 
 \subsection{Where do Accuracy Tests Lose Power?}
 The low power of the accuracy tests compared to location tests can be attributed to the following causes: \newline
-(a) \textbf{Discretization}: 
-The discrete nature of accuracy test statistics. 
+(a) \textbf{Shift Alternatives}: 
+We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.\newline
+(b) \textbf{Inefficient} use of the data when validating with a holdout set:
+the variability of the test statistic is governed by the size of the test set, which may be several orders smaller than the whole data.
+\newline
+(c) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. 
+Intuitively, when the signal is in the location $\mu$, then predicting requires a regularizing bias in the order of $\Vert \mu \Vert_2$, while testing requires a bias in the order of $\Vert \mu \Vert_\infty$.
+The gap may be considerable in high-dimension.
+This phenomenon was also observed by \cite{cheng2017multiple}, which observe that recovering the support of a function requires less regularization than recovering the whole function.
+\newline
+(d) \textbf{Discretization}: discussed in the next section.
+
+
+\subsubsection{Discretization}
+Permutation testing with discrete test statistics are known to be conservative.
+Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \citep{hemerik_exact_2014}.
+Secondly, because of the presence of ties.
+And thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data. 
+For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, or \emph{empirical risk}, as a test statistic. 
+Resubstitution accuracy is the accuracy of the classifier evaluated on the training set.
+If data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
+In a very high dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
+The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
+
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
 An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
-The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (Sec.~\ref{sec:ties}). \newline
-(b) \textbf{Shift Alternatives}: 
-We focused on shift alternative so that location tests are expectedly superior via an NPL type argument.\newline
-(c) \textbf{Inefficient} use of the data when validating with a holdout set. \newline
-(d) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. \newline
+The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (Sec.~\ref{sec:ties}).
 
-Given the above reasons and based on our professional experience, we dare argue that an accuracy test will rarely have more power than a high-dimensional location test. 
-
+The matter of discretization was summarized in a $2011$ post by by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}}}:
+\begin{quote}
+	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
+\end{quote}
 
 
 
@@ -793,7 +807,7 @@ Accuracy tests are seen as ``black boxes'', even though they can be analyzed in 
 \citet{gilron2017s} demonstrate that the type of signal captured by accuracy tests is less interpretable to neuroimaging practitioners than location tests. 
 
 Some authors prefer accuracy tests because they can be seen as effect-size estimates, invariant to the sample size. 
-This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, that generalize Cohen's d, and do not suffer from discretization like accuracy estimates. 
+This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, that generalize Cohen's d. 
 Examples can be found, for instance, in \cite{stevens2012applied} and references therein. 
 
 
@@ -890,6 +904,7 @@ Particularly, in the possibility of regularizing in directions orthogonal to $\m
 \paragraph{Smooth accuracy.}
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
+This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
 
 
 \paragraph{Resubstitution accuracy in high SNR.} 
