@@ -1,19 +1,22 @@
 ---
-title: "Round2"
+title: "Basic setup. Large Sample"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
-
 
 
 ```{r preliminaries}
 file.name <- "file1"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
-p <- 23
-n <- 4e2 # total sample size-> n/2 in each group.
+n.replications <-  1e1
+large.sample <- 1e0
+p <- 23*large.sample
+n <- 4e1*large.sample # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -21,21 +24,21 @@ cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
 
 Sigma <- diag(p)
+lattice::levelplot(Sigma)
+direction0 <- rep(1,p)
+maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
+direction <- direction0 * sqrt(n/maha)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
-library(RhpcBLASctl)
-blas_set_num_threads(1)
-
-registerDoMC(cores=110)
+RhpcBLASctl::blas_set_num_threads(1)
+registerDoMC(cores=60)
 ```
-
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
@@ -47,7 +50,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
-    noise <- .noise + effect * labels
+    # effect <- effects[[3]]
+    
+    noise <- .noise
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -62,6 +69,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Oracle=t_Oracle(x1, x2, Sigma, Sigma),
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
+      MMD=t_kmmd(x1, x2),
+      dCOV=t_dcov(x1,x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
       lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -77,11 +87,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
     
-    
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <<- names(ts)
     
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -98,6 +106,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Oracle=t_Oracle(x1, x2, Sigma, Sigma),
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+        Goeman=t_goeman(x1, x2),
+        MMD=t_kmmd(x1, x2),
+        dCOV=t_dcov(x1,x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -119,30 +130,33 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in seq_along(ts)){
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
+    names(pvals) <- names(ts)
     
     c(effect=effect, pvals) 
   }
 } 
-  
+
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 
 ```{r analyze multiple effects}
-# load("file1.RData")
+# load("file2.RData")
 err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c('Oracle','Hotelling','Hotelling.shrink', 'LDA.CV.1', 'LDA.CV.2', 'LDA.noCV.1', 'LDA.noCV.2',  'SD','SVM.CV.1', 'SVM.CV.2', 'SVM.CV.3',  'SVM.CV.4','SVM.noCV.1', 'SVM.noCV.2', 'SVM.noCV.3','SVM.noCV.4')
-  
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-pvals.melt <- pvals.melt[!(statistic %in% statistic.filter1),,]
-
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+
+# Reorder levels
+pvals.melt$statistic <- factor(pvals.melt$statistic, levels=statistic.levels)
+
+# Filter statistics
+pvals.melt <- pvals.melt[!is.na(statistic),,]
 ```
 
 
