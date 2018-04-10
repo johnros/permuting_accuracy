@@ -20,7 +20,7 @@ n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
 
-source('Round2/Gilron Effect of Cross Validatino.R')
+source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
 effects <- seq(0, 0.5, length=3) 
