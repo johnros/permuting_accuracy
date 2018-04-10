@@ -13,7 +13,7 @@ file.name <- "file1"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e1
+n.replications <-  1e3
 large.sample <- 1e0
 p <- 23*large.sample
 n <- 4e1*large.sample # total sample size-> n/2 in each group.

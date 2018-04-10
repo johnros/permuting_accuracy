@@ -1,3 +1,8 @@
+statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", "MMD","dCOV", 
+                      "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
+                      "svm.noCV.2")
+
+
 suppressPackageStartupMessages(library(magrittr))
 suppressPackageStartupMessages(library(mvtnorm))
 suppressPackageStartupMessages(library(foreach))
