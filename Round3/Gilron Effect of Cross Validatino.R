@@ -500,7 +500,7 @@ t_kmmd <- function(x,y,...){
 }
 
 t_dcov <- function(x,y){
- dcov(x,y)
+  unname(eqdist.e(rbind(x,y), sizes = c(nrow(x), nrow(y))))
 }
 ## Testing:
-dcov(rmvnorm(n = 20,rep(0,10)),rmvnorm(n = 20,rep(0,10)))
+# t_dcov(rmvnorm(n = 20,rep(10,10)),rmvnorm(n = 20,rep(0,10)))
