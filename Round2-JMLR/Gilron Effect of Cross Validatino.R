@@ -22,6 +22,7 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library('globaltest'))
 suppressPackageStartupMessages(library(RobPer))
 # suppressPackageStartupMessages(library(fungible))
+suppressPackageStartupMessages(library(kernlab))
 
 
 
@@ -493,3 +494,6 @@ t_svm_highdim_boot <- function(noise, labels, B, cost, type2, type){
 }
 
 
+t_kmmd <- function(x,y,...){
+  kmmd(x,y,...)@mmdstats[[1]]
+}

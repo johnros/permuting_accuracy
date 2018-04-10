@@ -4,13 +4,13 @@ author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
-
 
 
 ```{r preliminaries}
 file.name <- "file2"
+setwd('~/workspace/permuting_accuracy/Round4/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -36,7 +36,7 @@ direction <- direction0 *sqrt(p/maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=60)
 ```
 
 
@@ -52,9 +52,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Shift alternative:
     # effect <- effects[[3]]
     
-    # noise <- .noise
-    # noise[labels,] <- noise[labels,] + effect * direction
-    noise <- .noise + effect * labels
+    noise <- .noise
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -70,6 +70,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       Hotelling=t_Hotelling(x1, x2, FALSE),
       Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
       Goeman=t_goeman(x1, x2),
+      MMD=t_kmmd(x1, x2),
       lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
       lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
       lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -85,11 +86,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
     )
     
-    
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-
+    
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -106,6 +106,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
         Hotelling=t_Hotelling(x1, x2, FALSE),
         Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
         Goeman=t_goeman(x1, x2),
+        MMD=t_kmmd(x1, x2),
         lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
         lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
         lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
@@ -125,14 +126,14 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(permuted[,i]<=ts[i], na.rm=TRUE)
+      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
-
+    
     c(effect=effect, pvals) 
   }
 } 
-  
+
 pbPost(type = "note", body = "Done", the.message)
 # save.image(file=paste(file.name,".RData", sep=''))
 ```
