@@ -155,6 +155,21 @@ my.ecdf <- function(x,t){
 }
 
 
+randomizedTest <- function(alpha, pval, pval.strickt){
+  stopifnot(pval>=pval.strickt)
+  reject <- NULL
+  if(pval.strickt> alpha) reject <- FALSE
+  else if (pval<alpha) reject <- TRUE
+  else {
+    p.diff <- (alpha-pval.strickt)/(pval- pval.strickt)
+    reject <- rbinom(1, 1, p.diff) %>% as.logical
+  }
+  return(reject)
+}
+## Testing:
+# sum(replicate(1e3, randomizedTest(0.05, 0.06, 0.03)))
+
+
 
 
 # A cross validation wrapper.
@@ -509,3 +524,59 @@ t_dcov <- function(x,y){
 }
 ## Testing:
 # t_dcov(rmvnorm(n = 20,rep(10,10)),rmvnorm(n = 20,rep(0,10)))
+
+
+
+t_simes <- function(x,y){
+  stopifnot(ncol(y)==ncol(x))
+  p <- ncol(x)
+  group <- as.factor(c(rep('x', nrow(x)), rep('y',nrow(y))))
+  my.t <- function(z) t.test(z~group)$p.value
+  p.vals <- apply(rbind(x,y), 2, my.t) # Compute variable-wise pvalues
+  p.Simes <- p * min(sort(p.vals)/seq_along(p.vals)) # Compute the Simes statistic
+  return(c(pvalue=p.Simes))
+}
+## Testing
+# library(mvtnorm)
+# t_simes(rmvnorm(n = 20,rep(0,10)),rmvnorm(n = 30,rep(0,10)))
+
+
+
+statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+  result <- c(
+    Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+    Hotelling=t_Hotelling(x1, x2, FALSE),
+    Schafer=t_Hotelling(x1, x2, TRUE),
+    Goeman=t_goeman(x1, x2),
+    Srivastava=t_SD(x1, x2),
+    Gretton=t_kmmd(x1, x2),
+    dCOV=t_dcov(x1,x2),
+    Simes=t_Simes(x1,x2),
+    lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+    # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+    lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+    # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+    svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+    svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+    # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+    # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+    svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+    svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
+    # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+    # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+  )
+  return(result)
+}
+## Testing:
+
+
+statistics.2 <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+  c(
+    statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
+    svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.1, type=1),
+    svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
+    svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1, type=1),
+    svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+    lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=2, type=1)
+  )
+}

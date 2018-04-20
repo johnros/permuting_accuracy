@@ -1,0 +1,21 @@
+    c(
+      Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+      Hotelling=t_Hotelling(x1, x2, FALSE),
+      Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
+      Goeman=t_goeman(x1, x2),
+      sd=t_SD(x1, x2),
+      MMD=t_kmmd(x1, x2),
+      dCOV=t_dcov(x1,x2),
+      lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+      lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
+      lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+      lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
+      svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+      svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+      svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
+      svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
+      svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+      svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1),
+      svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
+      svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
+    )

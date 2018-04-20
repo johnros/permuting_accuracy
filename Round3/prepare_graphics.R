@@ -7,7 +7,7 @@ pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic')
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 
 # Reorder levels
-pvals.melt$statistic <- factor(pvals.melt$statistic, levels=statistic.levels)
+pvals.melt$statistic <- factor(pvals.melt$statistic)
 
 # Filter statistics
 pvals.melt <- pvals.melt[!is.na(statistic),,]

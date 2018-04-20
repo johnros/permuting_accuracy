@@ -1,19 +1,22 @@
 ---
-title: "Basic setup. Unbalanced folding. "
+title: "Basic setup. Unbalanced Folding."
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
-
 
 
 ```{r preliminaries}
 file.name <- "file3"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- FALSE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
-p <- 23
-n <- 4e1 # total sample size-> n/2 in each group.
+large.sample <- 1e0
+p <- 23*large.sample
+n <- 4e1*large.sample # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -23,21 +26,24 @@ source('Gilron Effect of Cross Validatino.R')
 
 effects <- seq(0, 0.5, length=3) # change in location
 
-## Signal in scale
 Sigma <- diag(p)
+# lattice::levelplot(Sigma)
+direction0 <- rep(1,p)
+maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
+direction <- 23 * direction0 / sqrt(n/2*maha)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=60)
 ```
 
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
-  foreach(effect=effects, .combine=rbind)  %do% {
+  foreach(effect=effects, .combine=rbind) %do% {
     
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
@@ -45,7 +51,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
-    noise <- .noise + effect * labels
+    # effect <- effects[[3]]
+    
+    noise <- .noise
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
+    noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -56,31 +66,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- list(
-        Oracle=t_Oracle(x1, x2, Sigma, Sigma),
-        Hotelling=t_Hotelling(x1, x2, FALSE),
-        Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-        Goeman=t_goeman(x1, x2),
-        lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-        lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-        sd=t_SD(x1, x2),
-        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-        svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-    )
-    
+    ts <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    statistics.names <<- names(ts)
     
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -93,53 +83,58 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- c(
-        Oracle=t_Oracle(x1, x2, Sigma, Sigma),
-        Hotelling=t_Hotelling(x1, x2, FALSE),
-        Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-        Goeman=t_goeman(x1, x2),
-        lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-        lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-        sd=t_SD(x1, x2),
-        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-        svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-      )
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     } # End permutation
     
     # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+      pvals[i] <- mean(permuted[,i]>=ts[i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
-
     
     c(effect=effect, pvals) 
   }
 } 
-  
+
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 
 ```{r analyze multiple effects}
-# load("file3.RData")
-source('prepare_graphics.R')
-plot.3
+# load("file2.RData")
+err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
+.limits <- 0.05 + c(-err.bar,0,err.bar)
+
+pvals.1.9 %<>%  as.data.table()
+
+pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
+pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
+
+# Reorder levels
+pvals.melt$statistic <- factor(pvals.melt$statistic, levels=statistic.levels)
+
+# Filter statistics
+pvals.melt <- pvals.melt[!is.na(statistic),,]
 ```
 
 
 ```{r}
+plot.3 <- pvals.melt %>% 
+  ggplot(aes(y=reject, x=statistic, group=effect.factor, shape=effect.factor, color=effect.factor)) +
+  theme_bw(base_size = 20)+
+  theme(legend.position="none")+
+  # ggtitle("Fixed signal, Gaussian Noise")+
+  ylab('Power')+
+  xlab('')+
+  stat_summary(fun.y='mean', geom="point", cex=4) +
+  geom_hline(yintercept=0.05, lty=2)+
+  geom_vline(xintercept=.limits, lty=c(3,2,3))+
+  coord_flip()
+plot.3
+
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
 plot.3
 dev.off()
