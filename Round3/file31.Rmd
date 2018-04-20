@@ -7,6 +7,7 @@ output: html_document
 
 ```{r preliminaries}
 file.name <- "file31"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -24,9 +25,9 @@ effects <- seq(0, 0.5, length=3)
 
 ## Dependence
 Sigma <- ar1_cov(n = p, rho=0.6)
-lattice::levelplot(Sigma)
+# lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma)
-plot(Sigma.eigen$values, type='h')
+# plot(Sigma.eigen$values, type='h')
 direction0 <- Sigma.eigen$vectors[,15] 
 direction <- direction0 * sqrt(p)
 ```

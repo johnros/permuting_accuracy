@@ -3,10 +3,14 @@ title: "Arbitrary Covariance. Signal in LOW PCs of noise"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r preliminaries}
 file.name <- "file17"
+setwd('~/workspace/permuting_accuracy/Round3/')
+
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -41,7 +45,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=60)
+registerDoMC(cores=100)
 ```
 
 

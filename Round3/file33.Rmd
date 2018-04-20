@@ -38,7 +38,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=60)
+registerDoMC(cores=100)
 ```
 
 
@@ -102,7 +102,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
 
 pbPost(type = "note", body = "Done", the.message)
-# save.image(file=paste(file.name,".RData", sep=''))
+save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
@@ -133,8 +133,8 @@ rejections.melt <- melt(rejections, variable.name='statistic', id.vars = 'effect
 rejections.melt[,c("effect.factor"):=list(as.factor(effect)),] 
 
 # Reorder levels
-rejections.melt$statistic <- factor(rejections.melt$statistic, levels=statistic.levels)
-levels(rejections.melt$statistic)
+# rejections.melt$statistic <- factor(rejections.melt$statistic, levels=statistic.levels)
+# levels(rejections.melt$statistic)
 
 # Filter statistics
 rejections.melt <- rejections.melt[!is.na(statistic),,]

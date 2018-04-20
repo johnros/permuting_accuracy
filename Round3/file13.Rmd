@@ -3,6 +3,8 @@ title: "Bootstrapped effect"
 author: "Jonathan Rosenblatt"
 date: "Aug 8, 2016"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -102,10 +104,10 @@ save.image(file=paste(file.name,".RData", sep=''))
 # load(file='file13.RData') 
 pvals.1.9 %<>%  as.data.table()
 
-names(pvals.1.9)[-1] <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
-"lda.CV.1", "lda.CV.2", "lda.noCV.1", "lda.noCV.2", "svm.CV.1", 
-"svm.CV.2", "svm.noCV.1", "svm.noCV.2", "svm.Boot.1", "svm.Boot.2", 
-"svm.Boot.3", "svm.Boot.4", "lda.Boot.1")
+# names(pvals.1.9)[-1] <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
+# "lda.CV.1", "lda.CV.2", "lda.noCV.1", "lda.noCV.2", "svm.CV.1", 
+# "svm.CV.2", "svm.noCV.1", "svm.noCV.2", "svm.Boot.1", "svm.Boot.2", 
+# "svm.Boot.3", "svm.Boot.4", "lda.Boot.1")
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
