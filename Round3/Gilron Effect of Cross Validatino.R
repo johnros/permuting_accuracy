@@ -1,3 +1,8 @@
+statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", "MMD","dCOV", 
+                      "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
+                      "svm.noCV.2")
+
+
 suppressPackageStartupMessages(library(magrittr))
 suppressPackageStartupMessages(library(mvtnorm))
 suppressPackageStartupMessages(library(foreach))
@@ -22,11 +27,9 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library('globaltest'))
 suppressPackageStartupMessages(library(RobPer))
 # suppressPackageStartupMessages(library(fungible))
+suppressPackageStartupMessages(library(kernlab))
+suppressPackageStartupMessages(library(energy))
 
-
-statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", 
-                      "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
-                      "svm.noCV.2")
 
 
 balance.log <- 'balance_log.txt'
@@ -497,3 +500,12 @@ t_svm_highdim_boot <- function(noise, labels, B, cost, type2, type){
 }
 
 
+t_kmmd <- function(x,y,...){
+  kmmd(x,y,...)@mmdstats[[1]]
+}
+
+t_dcov <- function(x,y){
+  unname(eqdist.e(rbind(x,y), sizes = c(nrow(x), nrow(y))))
+}
+## Testing:
+# t_dcov(rmvnorm(n = 20,rep(10,10)),rmvnorm(n = 20,rep(0,10)))
