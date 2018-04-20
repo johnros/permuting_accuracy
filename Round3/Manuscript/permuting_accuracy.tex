@@ -41,7 +41,7 @@ This general idea has been promoted by \cite{friedman2003multivariate,eric2008te
 Examples in the genetics literature include
 \citet{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include speaker verification \citep{gretton_kernel_2012-1}, 
-text classification \citep{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \citep{lopez2016revisiting}, data integration \citep{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \citep{gretton_kernel_2012-1,hall2002permutation}, optical character recognition \citep{perez2009estimation}, multimedia \citep{moreno2004kullback}, and functional data analysis \citep{hall2002permutation}.
+text classification \citep{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \citep{lopez2016revisiting}, data integration \citep{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \citep{gretton_kernel_2012-1,hall2002permutation,vayatis_auc_2009}, optical character recognition \citep{perez2009estimation}, multimedia \citep{moreno2004kullback}, and functional data analysis \citep{hall2002permutation}.
 
 Examples in the neuroscientific literature, which is our motivating use-case, include \citet{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework of \citet{kriegeskorte_information-based_2006}.
 
@@ -776,6 +776,8 @@ This phenomenon was also observed by \cite{cheng2017multiple}, which observe tha
 
 
 \subsubsection{Discretization}
+[TODO: explain that LDA is Hotelling+discretization]
+
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \citep{hemerik_exact_2014}.
 Secondly, because of the presence of ties.
@@ -798,6 +800,8 @@ The matter of discretization was summarized in a $2011$ post by by Prof. Frank H
 
 
 
+
+
 \subsection{Interpretation}
 Multivariate tests, and location tests in particular, are easier to interpret. 
 To do so we typically use a NPL type argument, and think:
@@ -815,6 +819,8 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
+
+[TODO: discuss fixing Frobenius norm like Chen and Quin]
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
@@ -865,6 +871,25 @@ The various regularization methods deflate the high variance directions, thus, r
 If the signal is in the low variance directions, the regularization may mask it. 
 This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
 
+
+
+\subsection{Sparse Alternatives}
+In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
+Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
+In a genetic application, a ``sparse'' alternative may be more plausible. 
+This has several implications:
+\begin{itemize}
+	\item One of the challenges with dense signal is fixing the SNR as $p$ grows. In Section~\ref{sec:fix_snr} we explained why we fixed the SNR by fixing the Mahalanobis norm between the means of the two-groups. If the signal is sparse, then the SNR can be controlled by fixind the sparsity of the signal. This was done by \cite{ramdas2015decreasing} to achieve ``fair alternatives''
+	
+	\item The discretization introduced by the classification, like in the previous case, introduce a power loss. 
+	
+	\item For a sparse signal the most powerful test will probably not be an $l_2$-type test like the Hotelling variants, but rather an $l_\infty$ type test like \cite{tony2014two}.
+
+	\item If the level of sparsity is unknown, then one may probably use a test which \emph{adapts} to the known sparsity like the location tests of  \cite{simes1986improved,donoho2004higher,fan2007many,kosorok2007marginal,lopes2011more,zhong2013tests} or \cite{shen2015adaptive} and the tree-based (accuracy) test in \cite{yu2007two}.
+		
+\end{itemize}
+
+[TODO: add simulation with very sparse alternative]
 
 
 \subsection{Implications to Other Problems}
