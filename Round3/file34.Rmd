@@ -1,5 +1,5 @@
 ---
-title: "Basic setup"
+title: "Sparse signal"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -9,7 +9,7 @@ editor_options:
 
 
 ```{r preliminaries}
-file.name <- "file2"
+file.name <- "file34"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
@@ -28,7 +28,7 @@ effects <- seq(0, 0.5, length=3) # change in location
 
 Sigma <- diag(p)
 # lattice::levelplot(Sigma)
-direction0 <- rep(1,p)
+direction0 <- c(1,rep(0,p-1))
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
 direction <- 23 * direction0 / sqrt(n/2*maha)
 ```

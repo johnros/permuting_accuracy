@@ -380,7 +380,7 @@ t_Simes <- function(x,y){
   my.t <- function(z) t.test(z~group)$p.value
   p.vals <- apply(rbind(x,y), 2, my.t) # Compute variable-wise pvalues
   p.Simes <- p * min(sort(p.vals)/seq_along(p.vals)) # Compute the Simes statistic
-  return(as.numeric(p.Simes))
+  return(as.numeric(-log(p.Simes)))
 }
 ## Testing
 # library(mvtnorm)
