@@ -57,30 +57,44 @@ As put in \cite{pereira_machine_2009}:
 ... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
 A practitioner may thus approach the signal detection problem with a two-group hypothesis test.
-Two-groups hypothesis tests may be divided into tests for equality of location (i.e., equality of means), and two-sample goodness of fit tests (i.e., equality of the two whole distribution).
+Two-groups hypothesis tests may be divided into tests for equality of location (i.e., equality of means), and two-sample goodness of fit tests (i.e., equality of the two whole distribution, GOF in short).
 The t-test or a Kolmogorov-Smirnov test, are univariate examples of such tests, respectively.
 The canonical multivariate location test is Hotelling's $T^2$ test \citep{hotelling_generalization_1931}.
 Multivariate goodness-of-fit tests date back to \citep{bickel1969distribution}, but see \cite{gretton_kernel_2012-1}, and references therein, for some recent advances.
 
 
-Crucially for our applications, we will assume that the number of samples is similar to the dimension of each sample. 
-In the statistical literature this is known as a \emph{high-dimensional} problem.
+Crucially for our applications, we will assume that the number of samples is in the order of the dimension of each sample, or smaller. 
+In the statistical literature this is known as a \emph{high-dimensional} problem. 
 We emphasize that by high-dimension it is not necessarily implied that the sample is large, even if it is often the case. 
 In our running example it means that the size of the brain's region of interest is large compared to the number of subjects in the experiment.
 
 In a seminal contribution, \cite{bai1996effect} noted that in-high dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
-Examples of high-dimensional goodness-of-fit tests include \cite{hall2002permutation,szekely_brownian_2009,gretton_kernel_2012-1}.
-Examples of high-dimensional locations tests include \cite{schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}, and certainly others.
+These can be classified along the following lines:
+\begin{itemize}
+	\item \textbf{High-dim GOF}: Tests that seek for any difference between two distributions, such as  \cite{hall2002permutation,szekely_brownian_2009,gretton_kernel_2012-1}.
 
+	\item \textbf{High-dim location test for sparse shift}: Tests the seek for a sparse shift in mean vectors such as \cite{tony2014two,chang2014simulation}.
+	
+	\item \textbf{High-dim location test for dense shift}: Tests the seek for a dense shift in mean vectors such as  \cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}.
+	
+	\item \textbf{High-dim location test for shift with unknown sparsity}: Tests the seek for a shift in mean vectors, but adapt to the unknown sparsity, such as \cite{donoho2004higher,zhong2013tests,moscovich2016exact}.
+	
+\end{itemize}
 
-At this point, it becomes unclear which is preferable, in particular for genetics and neuroimaging?
-Various authors have addressed this matter, often with contradicting conclusions.
-\cite{yu2007two}, for instance, finds that an accuracy test based on a tree predictor is preferable over testing. Their simulated signal is sparse, so that it is no surprise that a tree-type predictors outperforms linear predictors and tests. 
+At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging?
+In this manuscript, we do not provide a full answer to the matter.
+Instead, we merely seek to demonstrate that accuracy tests are never optimal, compared to bona-fide two-group tests. 
+
+Various authors have compared accuracy tests to two-group tests, often with contradicting conclusions.
+\cite{yu2007two}, for instance, find that an accuracy test based on a tree predictor is preferable over a two-group test. 
+Their simulated shift is sparse, so that it is no surprise that a tree-type predictors outperforms linear predictors and tests. 
 \cite{olivetti2013kernel} compares the Kernel test of \cite{gretton_kernel_2012-1} to a logistic-regression based accuracy-test. 
 Their results are inconclusive with a slight advantage to the logistic regression.
-\cite{lopez2016revisiting} compare several accuracy tests to several location and GOF tests and conclude that a neural-net based accuracy test is preferable. Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional. This feature learning is typically impossible in high-dimension.
-\cite{ramdas_classification_2016}, is currently the only analytic analysis. Comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
+\cite{lopez2016revisiting} compare several accuracy tests to several location and GOF tests and conclude that a neural-net based accuracy test is preferable. 
+Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
+
+\cite{ramdas_classification_2016}, currently offers the only analytic comparison; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
 By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} concluded that accuracy and location tests are rate equivalent. 
 Rates, however, are only a first stage when comparing test statistics. 
 
@@ -187,7 +201,7 @@ and
 \begin{align}
 	\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,
 \end{align}
-where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continous $y$.} of the set $A$. 
+where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continuous $y$.} of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
 
@@ -609,7 +623,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{
-		The same as Table~\ref{tab:collected} for bootstraped accuracy estimates. 
+		The same as Table~\ref{tab:collected} for bootstrapped accuracy estimates. 
 		bLOO is defined in~\ref{def:bloo}.
 		$B$ denotes the number of Bootstrap samples.} 
 	\label{tab:collected_2}
@@ -883,7 +897,7 @@ This has several implications:
 	
 	\item The discretization introduced by the classification, like in the previous case, introduce a power loss. 
 	
-	\item For a sparse signal the most powerful test will probably not be an $l_2$-type test like the Hotelling variants, but rather an $l_\infty$ type test like \cite{tony2014two}.
+	\item For a sparse signal the most powerful test will probably not be an $l_2$-type test like the Hotelling variants, but rather an $l_\infty$ type test like \cite{tony2014two} or \cite{chang2014simulation}.
 
 	\item If the level of sparsity is unknown, then one may probably use a test which \emph{adapts} to the known sparsity like the location tests of  \cite{simes1986improved,donoho2004higher,fan2007many,kosorok2007marginal,lopes2011more,zhong2013tests} or \cite{shen2015adaptive} and the tree-based (accuracy) test in \cite{yu2007two}.
 		
