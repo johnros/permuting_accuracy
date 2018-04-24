@@ -125,12 +125,12 @@ pvals.melt <- pvals.melt[!is.na(statistic),,]
 
 ```{r}
 source('prepare_graphics.R')
-plot.3
+plot(plot.3)
 ```
 
 ```{r}
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
-plot.3
+plot(plot.3)
 dev.off()
 ```
 
