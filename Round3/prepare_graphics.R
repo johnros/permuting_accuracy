@@ -23,4 +23,4 @@ plot.3 <- pvals.melt %>%
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+
   coord_flip()
-plot.3
+plot(plot.3)

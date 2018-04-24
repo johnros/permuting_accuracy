@@ -13,7 +13,7 @@ file.name <- "file2"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
+n.replications <-  1e1
 large.sample <- 1e0
 p <- 23*large.sample
 n <- 4e1*large.sample # total sample size-> n/2 in each group.
@@ -103,12 +103,12 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 ```{r}
 source('prepare_graphics.R')
-plot.3
+plot(plot.3)
 ```
 
 ```{r}
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
-plot.3
+plot(plot.3)
 dev.off()
 ```
 

@@ -13,7 +13,6 @@ file.name <- "file3"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- FALSE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
 large.sample <- 1e0
 p <- 23*large.sample
 n <- 4e1*large.sample # total sample size-> n/2 in each group.
@@ -98,7 +97,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
 
 pbPost(type = "note", body = "Done", the.message)
-# save.image(file=paste(file.name,".RData", sep=''))
+save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
@@ -133,10 +132,10 @@ plot.3 <- pvals.melt %>%
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+
   coord_flip()
-plot.3
+plot(plot.3)
 
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
-plot.3
+plot(plot.3)
 dev.off()
 ```
 

@@ -1,8 +1,3 @@
-statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", "MMD","dCOV", 
-                      "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
-                      "svm.noCV.2")
-
-
 suppressPackageStartupMessages(library(magrittr))
 suppressPackageStartupMessages(library(mvtnorm))
 suppressPackageStartupMessages(library(foreach))
@@ -32,10 +27,16 @@ suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
 
 
+n.replications <-  1e3
+
+
 balance.log <- 'balance_log.txt'
 file.remove(balance.log)
 file.create(balance.log)
 the.message <- paste(file.name)
+
+
+
 
 
 tr <- function(A) sum(diag(A))
@@ -149,4 +150,12 @@ randomizedTest <- function(alpha, pval, pval.strickt){
 ## Testing:
 # sum(replicate(1e3, randomizedTest(0.05, 0.06, 0.03)))
 
+
+# statistic.levels <- c("Oracle", "Hotelling", "Hotelling.shrink", "Goeman", "sd", "MMD","dCOV", 
+#                       "lda.CV.1", "lda.noCV.1", "svm.CV.1", "svm.CV.2", "svm.noCV.1", 
+#                       "svm.noCV.2")
+
+
 source('statistics.R')
+
+

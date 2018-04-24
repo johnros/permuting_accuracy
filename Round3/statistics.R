@@ -412,12 +412,12 @@ statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
     # lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
     lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
     # lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-    svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-    svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
+    svm.CV.c10=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
+    svm.CV.c01=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
     # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
     # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-    svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-    svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
+    svm.noCV.c10=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
+    svm.noCV.c01=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
     # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
     # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
   )
@@ -429,11 +429,11 @@ statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
 statistics.2 <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
   c(
     statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
-    svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.1, type=1),
-    svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
-    svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1, type=1),
-    svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
-    lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=2, type=1)
+    svm.Boot.c10.b10=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.1, type=1),
+    svm.Boot.c01.b10=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
+    svm.Boot.c10.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1, type=1),
+    svm.Boot.c01.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+    lda.Boot.b10=t_lda_boot(noise, labels, B=10, type2=2, type=1)
   )
 }
 
@@ -443,15 +443,15 @@ statistics.3 <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
     statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
     # svm.Boot.1=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.1, type=1),
     # svm.Boot.2=t_svm_boot(noise, labels, B=10, type2=2, cost=cost.2, type=1),
-    svm.Boot.3=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1, type=1),
-    svm.Boot.4=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
+    svm.Boot.c10.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.1, type=1),
+    svm.Boot.c01.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=cost.2,  type=1),
     # lda.Boot.1=t_lda_boot(noise, labels, B=10, type2=2, type=1),
-    svm.CV.5=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
-    svm.CV.6=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
+    svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
+    svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
     lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
     lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
     lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.highdim.4=t_sdlda_boot(noise, labels, B=50, type2=2, type=1)
+    lda.highdim.b50=t_sdlda_boot(noise, labels, B=50, type2=2, type=1)
     # svm.highdim.1=t_svml2_cv(noise, labels, labels, fold.ids, cost=1e-1, type=1)
   )
 }
