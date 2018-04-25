@@ -19,8 +19,6 @@ p <- 23*large.sample
 n <- 4e1*large.sample # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 

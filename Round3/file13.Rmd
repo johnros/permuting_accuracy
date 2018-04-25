@@ -64,7 +64,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
   x1 <- noise[labels,]
   x2 <- noise[!labels,]
   
-  ts <- statistics.2(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+  ts <- statisticsBootstrap(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
   
   # Initialize result containers
   permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -83,7 +83,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
     # Checking balance:
     # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
     
-    permuted[i,] <- statistics.2(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    permuted[i,] <- statisticsBootstrap(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     
   } # End permutation
 
