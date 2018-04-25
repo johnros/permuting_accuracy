@@ -40,6 +40,7 @@ the.message <- paste(file.name)
 
 
 tr <- function(A) sum(diag(A))
+Frob <- function(A) sum(A^2)
 
 Euclid <- function(x) sqrt(sum(x^2))
 
