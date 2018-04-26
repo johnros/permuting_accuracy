@@ -152,6 +152,35 @@ t_svml2_cv <- function(noise, new.labels, old.labels, fold.ids, cost, type){
 
 
 
+# Compute cross validated test statistics with cross validated regularization
+# noise: the predictors 
+# labels: 
+# fold.ids: the asignemt of observations to folds
+# cost: the svm cost parameter. 
+t_svm_cvCV <- function(noise, new.labels, old.labels, fold.ids){
+  t_cv(FUN = t_svm_cvLambda, noise, new.labels, old.labels, fold.ids)
+}
+## Testing:
+# t_svm_cvCV(noise, labels, labels, fold.ids)
+
+
+
+t_svm_cvLambda <- function(train.noise, train.labels, test.noise, test.labels, type=1){
+  svm.1 <- best.svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear')
+  accuracy <- mean(predict(svm.1, newdata=test.noise)==test.labels)
+  
+  if(type==1){
+    statistic <- accuracy
+  }
+  else if(type==2){
+    .p <- mean(test.labels)
+    p <- max(.p,1-.p)
+    statistic <- abs(accuracy-p)/sqrt(p*(1-p))
+  }
+  return(statistic)
+}
+## Testing:
+# t_svm_cvLambda(train.noise, train.labels, test.noise, test.labels)
 
 
 
@@ -413,7 +442,8 @@ statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
     svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
     svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
     svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
-    svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
+    svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1),
+    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids)
   )
   return(result)
 }

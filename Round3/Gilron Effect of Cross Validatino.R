@@ -25,13 +25,6 @@ suppressPackageStartupMessages(library(RobPer))
 suppressPackageStartupMessages(library(kernlab))
 suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
-suppressPackageStartupMessages(library(emojifont))
-
-paste('hello',emoji('collision'))
-paste('hello') <- 10
-`emoji('collision')` <- rnorm(100)
-plot(`emoji('collision')`, ylab=emoji('collision'))
-
 
 n.replications <-  1e3
 
