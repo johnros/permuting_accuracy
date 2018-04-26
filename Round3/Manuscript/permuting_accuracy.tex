@@ -838,6 +838,7 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
 We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
+This is equivalent to fixing the Kullback–Leibler between the sample averages. 
 Formally, in all our simulations we set $\Vert \mu \Vert_\Sigma^2=c^2 p$.
 
 Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal.
@@ -850,8 +851,6 @@ The intuition that it is easier to detect signal in the low variance directions 
 It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspects: 
 (i)\emph{Hotelling.shrink} is a good performed ``on average'', 
 (ii) \emph{sd} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
-
-
 
 \begin{figure}[h]
 	\centering
@@ -872,6 +871,15 @@ It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspec
 
 \end{figure}
 
+Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
+\cite{ramdas2015decreasing} prefer to use sparse alternatives. 
+With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not the dimension of the data. 
+\cite{chen2010two}, instead, fix $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ where $\Vert \Sigma \Vert_{Frob}=\sqrt{\Tr(\Sigma'\Sigma)}$ is the Frobenius matrix norm. 
+Clearly, $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ is a scaled Euclidean norm, thus, invariant to the direction of the signal. 
+For this reason, we prefer fixing $\Vert \mu \Vert_\Sigma$.
+
+
+
 
 
 
@@ -885,6 +893,7 @@ The various regularization methods deflate the high variance directions, thus, r
 If the signal is in the low variance directions, the regularization may mask it. 
 This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
 
+[TODO: discuss signal in intermediate PCs? (file 35 and 37)].
 
 
 \subsection{Sparse Alternatives}
@@ -903,7 +912,17 @@ This has several implications:
 		
 \end{itemize}
 
-[TODO: add simulation with very sparse alternative]
+
+\begin{figure}[ht]
+	\centering
+	\label{fig:sparse}	
+		\centering
+		\includegraphics[width=0.5\linewidth]{"art/file34"}
+		\caption{Sparse $\mu$.}  
+\end{figure}
+
+
+
 
 
 \subsection{Implications to Other Problems}
