@@ -492,3 +492,46 @@ File name: file34
   Voxel dependence (p): Independent.
   Trial dependence (n): none
   Tie breaking: No
+
+File name: file35
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Frobenius norm. Signal in low PC.
+  Trial dependence (n): none
+
+File name: file36
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Frobenius norm. Signal in high PC.
+  Trial dependence (n): none
+
+
+File name: file37
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence(*) (p): AR(1). Fixed Mahalanobis norm. Signal in mid-way PC.
+  Trial dependence (n): none

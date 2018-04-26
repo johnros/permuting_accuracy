@@ -26,7 +26,6 @@ suppressPackageStartupMessages(library(kernlab))
 suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
 
-
 n.replications <-  1e3
 
 

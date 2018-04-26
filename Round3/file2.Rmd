@@ -13,14 +13,11 @@ file.name <- "file2"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e1
-large.sample <- 1e0
-p <- 23*large.sample
-n <- 4e1*large.sample # total sample size-> n/2 in each group.
+n.replications <-  1e2
+p <- 23
+n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
@@ -37,7 +34,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=30)
 ```
 
 ```{r independent noise variable folds}
@@ -102,7 +99,6 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r}
-load('file12.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

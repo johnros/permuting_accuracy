@@ -14,13 +14,11 @@ setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e2
-large.sample <- 1e1
+large.sample <- 1e2
 p <- 23*large.sample
 n <- 40*large.sample # total sample size-> n/2 in each group.
-n.permutations <- 3e2
-n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
+n.permutations <- 1.5e2
+n.folds <- 2
 
 source('Gilron Effect of Cross Validatino.R')
 
@@ -37,7 +35,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=60)
+registerDoMC(cores=100)
 ```
 
 ```{r independent noise variable folds}
@@ -98,25 +96,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 
 pbPost(type = "note", body = "Done", the.message)
 save.image(file=paste(file.name,".RData", sep=''))
-```
-
-
-
-```{r analyze multiple effects}
-# load("file1.RData")
-err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-value
-.limits <- 0.05 + c(-err.bar,0,err.bar)
-
-pvals.1.9 %<>%  as.data.table()
-
-pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
-pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
-
-# Reorder levels
-pvals.melt$statistic <- factor(pvals.melt$statistic, levels=statistic.levels)
-
-# Filter statistics
-pvals.melt <- pvals.melt[!is.na(statistic),,]
 ```
 
 
