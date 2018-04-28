@@ -399,7 +399,6 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 
 
 
-
 %%%% Section %%%%
 \section{Results}
 \label{sec:results}
@@ -498,29 +497,29 @@ The results are reported in Figure~\ref{fig:large-sample}, and are qualitatively
 
 
 
-
-\subsection{Tie Breaking}
-\label{sec:ties}
-
-As already stated in the introduction, the accuracy statistic is highly discrete. 
-Especially the resubstitution accuracy tests. 
-Discrete test statistics lose power by not exhausting the permissible false positive rate. 
-A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
-Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
-$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
-is greater than  $\alpha$ then we reject the null with probability 
-$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
-
-Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
-It demonstrates that the power disadvantage of accuracy tests, cannot be remedied by random tie breaking.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.5\columnwidth]{art/file33}
-	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
-	\label{fig:file33}
-\end{figure}
-
+%
+%\subsection{Tie Breaking}
+%\label{sec:ties}
+%
+%As already stated in the introduction, the accuracy statistic is highly discrete. 
+%Especially the resubstitution accuracy tests. 
+%Discrete test statistics lose power by not exhausting the permissible false positive rate. 
+%A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
+%Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
+%$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
+%is greater than  $\alpha$ then we reject the null with probability 
+%$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
+%
+%Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
+%It demonstrates that the power disadvantage of accuracy tests, cannot be remedied by random tie breaking.
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=0.5\columnwidth]{art/file33}
+%	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
+%	\label{fig:file33}
+%\end{figure}
+%
 
 
 \subsection{Departure From Gaussianity}
@@ -648,13 +647,19 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 \subsection{Departure from Homoskedasticity}
 
 Our previous simulations assume variables a have unit variance. 
-The heteroskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variable-wise variance. 
 Some test statistics have built-in variance normalization, and are known as \emph{scalar invariant}. 
-The \emph{sd} test statistic is scalar invariant. 
-Statistics that are not scalar-invariant such as the \emph{Goeman} statistic, will give less importance to high-variance directions than to low-variance directions. 
+Dealing with the heteroskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variable-wise variance. 
+Indeed, practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression).
+
+The \emph{Srivastava} statistic, for instance, is scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of mean-difference vector.
+The \emph{Goeman} statistic, for instance, is not scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of the vector of univariate $t^2$ statistics.
+The \emph{Goeman} statistic will thus give less importance signal in the high-variance directions than signal in the low-variance directions, whereas \emph{Srivastava} will give all coordinates the same importance. 
 
 In Figure~\ref{fig:heteroskedastic_11} we see that as before, two-group tests dominate accuracy tests.
-For the first time, we can see the difference between the scalar-invariant \emph{sd} and \emph{Goeman}: the latter gaining power by focusing on low variance coordinates. Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is needed.
+We can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics: the latter gaining power by focusing on low variance coordinates. 
+Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is most informative.
 
 When the signal is in the low variance PC, \emph{Goeman} puts emphasis on variables which carry little signal.
 For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:heteroskedastic_12}.
