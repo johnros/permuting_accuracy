@@ -3,5 +3,6 @@
 - SVM with more/less regularization.
 - CART for sparse signal.
 - Visual cues for covariance regulirizes statistics on plot.
+- SVM with Gaussian Kernel classifier
 
     
