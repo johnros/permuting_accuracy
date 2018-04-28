@@ -957,7 +957,7 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Kullback–Leibler Divergence between distributions of sample means: $KL[\bar x_1,\bar x_0]=c^2 p$.
+For ``a fair comparison'' we fix the Kullback–Leibler Divergence between distributions of sample means. Abusing notation, we fix $KL[\bar x_1,\bar x_0]=c^2 p$.
 
 Our choice implies that the Euclidean norm of $\delta:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
@@ -987,11 +987,11 @@ The intuition that it is easier to detect signal in the low variance directions 
 \end{figure}
 
 Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
-\cite{ramdas2015decreasing} prefer to use sparse alternatives. 
-With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not the dimension of the data. 
-\cite{chen2010two}, instead, fix $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ where $\Vert \Sigma \Vert_{Frob}=\sqrt{\Tr(\Sigma'\Sigma)}$ is the Frobenius matrix norm. 
-Clearly, $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ is a scaled Euclidean norm, thus, invariant to the direction of the signal. 
-For this reason, we prefer fixing $\Vert \mu \Vert_\Sigma$.
+In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
+With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
+In \cite{chen2010two}, authors fix $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ where $\Vert \Sigma \Vert_{Frob}=\sqrt{\Tr(\Sigma'\Sigma)}$ is the Frobenius matrix norm. 
+Clearly, $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
+For this reason, we prefer our own approach.
 
 
 
@@ -1004,6 +1004,19 @@ Why is that?
 
 We attribute this phenomenon to regularization.
 While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$ does not. 
+We borrow intuition from ridge regression where closed form solutions are available. 
+We first recall that in ridge regression 
+$$\hat y = X'(\hat \Sigma +\lambda I)^{-1}X'y,$$
+so that penalizing $\Vert \beta \Vert_2^2$, ends up regularizing the covariance estimator.
+Using the SVD decomposition of the design, then 
+\begin{align}
+\label{eq:ridge-svd}
+	\hat y= \sum_{j=1}^p \left( u_j \frac{d_j^2}{d_j^2+\lambda}u'_j \right)y,
+\end{align}
+where
+$X=(u_1,\dots,u_p)diag(d_1,\dots,d_p)(v'_1,\dots,v'_p)$.
+From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j$, i.e., the smaller noise components. 
+
 The various regularization methods deflate the high variance directions, thus, relatively inflate the low variance directions.
 If the signal is in the low variance directions, the regularization may mask it. 
 This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
