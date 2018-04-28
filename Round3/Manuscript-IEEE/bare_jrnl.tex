@@ -876,49 +876,60 @@ We emphasize that both test statistics were compared with the same permutation s
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: accuracy tests or two-group tests. 
-Our current observation is that accuracy tests are never optimal.
-There is always a multivariate test that dominates in power. 
-Our advice to the practitioner is that two-group tests, in particular their regularized versions, are good performers in a wide range of simulation setups and empirically. 
+Our current observation is that accuracy tests are never optimal; there is always a two-group test that dominates in power. 
+Our advice to the practitioner is that two-group tests, in particular their high-dim versions, are good performers in a wide range of simulation setups. 
 They are also typically easier to implement, and faster to run, since no resampling is required. 
-Their high-dimensional versions, such as \cite{schafer_shrinkage_2005}, \cite{goeman2006testing}, and \cite{srivastava_multivariate_2007}, are particularly well suited for empirical problems such as neuroimaging and genetics.
-
+Statistics such as \emph{Schafer}\cite{schafer_shrinkage_2005}, \emph{Goeman}\cite{goeman2006testing}, \emph{Srivastava}\cite{srivastava_multivariate_2007}, \emph{dCOV}\cite{szekely2004testing}, and \emph{Gretton}\cite{gretton_kernel_2012-1}, are particularly well suited for the dense signal expected in neuroimaging.
 
 
 
 \subsection{Where do Accuracy Tests Lose Power?}
-The low power of the accuracy tests compared to two-group tests can be attributed to the following causes: \newline
-(a) \textbf{Shift Alternatives}: 
-We focused on shift alternative so that two-group tests are expectedly superior via an NPL type argument.\newline
-(b) \textbf{Inefficient} use of the data when validating with a holdout set:
-the variability of the test statistic is governed by the size of the test set, which may be several orders smaller than the whole data.
-\newline
-(c) Inappropriate \textbf{regularization} in high SNR regimes: testing requires less regularization than predicting. 
+The low power of the accuracy tests compared to two-group tests can be attributed to the following causes.
+
+\subsubsection{Data Splitting}
+Cross-validated statistics split the data.
+The train set serves to learn a statistic, and the test set to compute it.
+In a train-test validation scheme, the effective sample size is that of the test set.
+This is clearly inefficient. 
+In V-fold validation scheme, the statistic is the average over all test sets, so the effective sample size is less obvious. 
+We still argue that this is an inefficient use of the data, as seen in the distributed learning literature, where splitting the sample and averaging is less accurate then learning with the whole data \cite{rosenblatt2016optimality}.
+
+The superiority of the Bootstrap over V-fold was independently observed in \cite{yu2007two}. 
+According to these authors, this superiority is due to the larger test-samples when Bootstrapping, compared to V-folding.
+
+
+\subsubsection{Inappropriate Regularization}
+The fact that \emph{svm.CV.cCV} is less accurate then \emph{svm.CV.c001} we learn than testing requires different regularization than predicting.
+Does testing require more or less regularization?
+[TODO: compare costs of cv svm to fixed cost]
 Intuitively, when the signal is in the location $\mu$, then predicting requires a regularizing bias in the order of $\Vert \mu \Vert_2$, while testing requires a bias in the order of $\Vert \mu \Vert_\infty$.
 The gap may be considerable in high-dimension.
 This phenomenon was also observed by \cite{cheng2017multiple}, which observe that recovering the support of a function requires less regularization than recovering the whole function.
-\newline
-(d) \textbf{Discretization}: discussed in the next section.
 
 
 \subsubsection{Discretization}
 [TODO: explain that LDA is Hotelling+discretization]
-
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \cite{hemerik_exact_2014}.
-Secondly, because of the presence of ties.
-And thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data. 
+Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
+Thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data.
 For an intuition consider the usage of the \emph{resubstitution accuracy}, a.k.a.\ the \emph{train error}, or \emph{empirical risk}, as a test statistic. 
 Resubstitution accuracy is the accuracy of the classifier evaluated on the training set.
 If data is high dimensional, the resubstitution accuracy will be very high due to over fitting. 
 In a very high dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
+This explains the terrible power of \emph{svm.noCV.c100}.
 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization\footnote{This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.}.
 An asymptotic analysis may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
 The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (Sec.~\ref{sec:ties}).
 
-The matter of discretization was summarized in a $2011$ post by by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}. And also ``Problems with Classification of Predictions'' in his book: \url{http://www.fharrell.com/doc/bbr.pdf}}}:
+Using our simulations we may quantify the power loss due to discretization. 
+This is because Figher's LDA is essentially ordinary least squares with a discretization stage. 
+[TODO: add figure with OLS classifier]
+
+The matter of discretization can be summarized by a $2011$ post by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}. And also ``Problems with Classification of Predictions'' in his book: \url{http://www.fharrell.com/doc/bbr.pdf}}}:
 \begin{quote}
 	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
 \end{quote}
@@ -945,23 +956,16 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
 
-[TODO: discuss fixing Frobenius norm like Chen and Quin]
-
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Mahalanobis norm of $\mu$. 
-This is equivalent to fixing the Kullback–Leibler between the sample averages. 
-Formally, in all our simulations we set $\Vert \mu \Vert_\Sigma^2=c^2 p$.
+We defined ``a fair comparison'' to be such that a maximal power test would have the same power, justifying our choice of fixing the Kullback–Leibler Divergence between distributions of sample means: $KL[\bar x_1,\bar x_0]=c^2 p$.
 
-Our choice implies that the Euclidean norm of $\mu$ varies with the covariance, and with the direction of the signal.
+Our choice implies that the Euclidean norm of $\delta:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
-This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_\Sigma$.
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $KL[\bar x_1,\bar x_0]$.
 
-For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed instead of $\Vert \mu \Vert_\Sigma$.
+For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed.
 We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
 The intuition that it is easier to detect signal in the low variance directions is confirmed. 
-It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspects: 
-(i)\emph{Hotelling.shrink} is a good performed ``on average'', 
-(ii) \emph{sd} and \emph{Goeman} have the best power to detect signal in the noisiest directions, but low power for signal in the noiseless directions. 
 
 \begin{figure}[h]
 	\centering
