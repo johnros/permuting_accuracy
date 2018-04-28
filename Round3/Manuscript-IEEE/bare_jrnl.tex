@@ -1,5 +1,6 @@
 \documentclass[journal]{IEEEtran}
 %\documentclass[draft]{IEEEtran}
+%\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
 
 \input{preamble.tex}
 
@@ -766,20 +767,24 @@ It can also be seen that power increases with the number of bootstrap replicatio
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 
-Our setup of $n=40$ and $p=23$ is high dimensional in that $p/n$ is not too small. 
-This surfaces finite samples effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
-Our best performing tests, \emph{sd}, \emph{Goeman}, and \emph{Hotelling.shrink}, alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$, thus reducing variance at the cost of some bias. 
-It may thus be argued that the power advantages of the two-group tests are driven by the regularization of the covariance, and not the statistic itself.
-We would thus augment the comparison with various covariance-regularized accuracy tests.
-The $l_2$ regularization in our SVM accuracy test, already regularizes the covariance, but it is certainly not the only way to do so. 
-We thus add some covariance-regularized accuracy tests such as a shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where similarly to \emph{Hotteling.shrink}, Tikhonov regularization of $\hat \Sigma$ is employed. 
+Our setup of $n=40$ and $p=23$ is high-dim--small-sample, which surfaces finite-sample effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
+Our best performing tests alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$. 
+Shrinking, or thresholding the entries of $\hat{\Sigma}$ reduces variance at the cost of some (possible) bias. 
+The power advantages of the two-group tests may be driven by the regularization of the covariance, and not the statistic itself.
+To answer this question we augment the comparison with some accuracy tests that have explicit covariance regularization built in.
+
+We now some covariance-regularized accuracy tests such as a shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where similarly to \emph{Schafer}, Tikhonov regularization of $\hat \Sigma$ is employed. 
 We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \cite{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{sd} and \emph{Goeman}.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
-See, for instance, \emph{svm.CV.6} which is clearly the best regularized SVM for testing. 
-Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{lda.highdim.4}.
+See, for instance, \emph{svm.CV.c001} which is clearly the best regularized SVM for testing. 
+Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{lda.highdim.Pang.b50}.
 Even so, the out-of-the-box two-group tests outperform the accuracy tests.
+
+It is interesting to note that \emph{svm.CV.cCV} is not a good performer. 
+In SVMs, the cost parameter governs the magnitude of the margins, and thus the regularization. 
+In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to argue that the optimal cost for predicting is not the same as the optimal cost for testing.
 
 \bigskip
 
@@ -790,21 +795,14 @@ Even so, the out-of-the-box two-group tests outperform the accuracy tests.
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		svm.CV.5 & SVM & V-fold & cost=100 \\ 
-		svm.CV.6 & SVM & V-fold & cost=0.01\\ 
-		lda.highdim.1 & LDA & V-fold & -- \\ 
-		lda.highdim.2 & LDA & V-fold & -- \\ 
-		lda.highdim.3 & LDA & V-fold & -- \\ 
-		lda.highdim.4 & LDA & bLOO 	 & B=50 \\ 
+		lda.highdim.Dudoit & \cite{dudoit_comparison_2002} & V-fold & -- \\ 
+		lda.highdim.Ramey & \cite{ramey_high-dimensional_2016} & V-fold & -- \\ 
+		lda.highdim.Pang.CV & \cite{pang_shrinkage-based_2009} & V-fold & -- \\ 
+		lda.highdim.Pang.b50 & \cite{pang_shrinkage-based_2009} & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
 		The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
-		\emph{svm.CV.5} and \emph{svm.CV.6} are $l_2$ regularized SVM, with varying regularization penalty.
-		\emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
-		\emph{lda.highdim.2} is the High-Dimensional Regularized Discriminant Analysis of \cite{ramey_high-dimensional_2016}.
-		\emph{lda.highdim.3} is the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009}.
-		\emph{lda.highdim.4} is the same with bLOO.
 	} 
 	\label{tab:collected_3}
 \end{tcolorbox}
@@ -841,12 +839,12 @@ Figure~\ref{fig:read_data} is an application of both a two-group and an accuracy
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
-The data was kindly made available by the authors at the OpenfMRI website\footnote{\url{https://openfmri.org/}}.
+The data was kindly made available by the authors at the OpenNeuro website\footnote{\url{http://reproducibility.stanford.edu/}}.
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-To demonstrate our point, we compare the \emph{Srivastava} two-group test with the \emph{svm.CV.1} accuracy test. 
+To demonstrate our point, we compare the \emph{Srivastava} two-group test with the linear SVM accuracy test. 
 
-In agreement with our simulation results, the two-group test (\emph{sd}) discovers more brain regions of interest when compared to an accuracy test (\emph{svm.CV.1}).
+In agreement with our simulation results, the two-group test (\emph{Srivastava}) discovers more brain regions of interest when compared to an accuracy test.
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
 We emphasize that both test statistics were compared with the same permutation scheme, and the same error controls, so that any difference in detections is due to their different power.
 
@@ -856,8 +854,8 @@ We emphasize that both test statistics were compared with the same permutation s
 	\includegraphics[width=1\columnwidth]{"art/svm_vs_SD"}
 	\caption{\footnotesize
 		Brain regions encoding information discriminating between vocal and non-vocal stimuli.
-		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.CV.1}), and a two-group test (\emph{sd}). 
-		\emph{svm.CV.1} was computed using $5$-fold cross validation, and a cost parameter of $1$. 
+		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test u and a two-group test (\emph{Srivastava}). 
+		The linear SVM was computed using $5$-fold cross validation, and a cost parameter of $1$. 
 		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \cite{benjamini_controlling_1995}.
 		Number of permutations equals $400$.
 		The two-group test detect $1,232$ regions, and the accuracy test $441$, $399$ of which are common to both.
