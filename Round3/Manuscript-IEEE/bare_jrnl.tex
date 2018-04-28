@@ -178,18 +178,18 @@ Out recommendations to the practitioner in these high-dim problems:
 Various authors have compared accuracy tests to two-group tests, often with contradicting conclusions.
 In \cite{yu2007two} for instance, authors find that an accuracy test based on a tree predictor is preferable over a two-group test. 
 Their simulated shift is sparse, so that it is no surprise that a tree-type predictors outperforms linear predictors and tests. 
-Authors of \cite{olivetti2013kernel} compare the Kernel test of \cite{gretton_kernel_2012-1} to a logistic-regression based accuracy-test. 
+Authors of \cite{olivetti2013kernel} compare the Kernel test of \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
 Their results are inconclusive with a slight advantage to the logistic regression.
-In \cite{lopez2016revisiting}, authors compare several accuracy tests to several two-group tests and conclude that a neural-net based accuracy test is preferable. 
+In \cite{lopez2016revisiting}, authors compare several accuracy tests to several two-group tests and conclude that an accuracy test based on a neural-net is preferable. 
 Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
 
-\cite{ramdas_classification_2016}, currently offers the only analytic comparison; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
-By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} concluded LDA and $T^2$ are rate equivalent. 
+Ramdas et al. \cite{ramdas_classification_2016} currently offer the only analytic comparison; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy test. 
+By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent. 
 Rates, however, are only a first stage when comparing test statistics. 
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \cite{vaart_asymptotic_1998}.
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
-\cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
+The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power as the $T^2$ test. 
@@ -197,34 +197,18 @@ In this light, the accuracy test is remarkably inefficient.
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \cite{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
 
 The analysis in \cite{ramdas_classification_2016} is asymptotic. 
-This eschews the discrete nature of the accuracy statistic, which we will show to have  crucial impact. 
-Since typical sample sizes in neuroscience are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
-Our conclusion  can be summarized as follows:\newline \textbf{
-	(1) There is always a two-group test that dominates an accuracy test.\newline
-	(2) In high-dimension, performing a location test in the original sample/feature space is a practical and good-powered strategy.
-}
+Since typical sample sizes in neuroscience and genetics are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
+Lacking a unifying mathematical framework for the finite sample power analysis, we opt for a simulation study. 
 
-Our statement rests upon the following observations, which rely on a battery of simulations and the discussion that follows.
-\begin{enumerate}
-	\item In our typical sample sizes, the accuracy test statistic is highly discrete, and needlessly so. 
-	\item In high-dimension, learning a feature map may introduce more variance than it reduces bias, so that performing the test in the original space is a competitive strategy.
-\end{enumerate}
-
-
-
-To compare the power of accuracy tests and location tests in finite samples, we study a battery of test statistics by means of simulation. 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
 The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}.
-The sample sizes in the simulations were typical for a neuroimaging study, which can be thought of as a high-dimension--small-sample setup, but we also show that our conclusions apply to a high-dimension--large-sample setup.
 We conclude with a discussion.
 
 
 
+%\hfill mds
 
-
-\hfill mds
-
-\hfill August 26, 2015
+%\hfill August 26, 2015
 
 
 
@@ -239,20 +223,22 @@ Let $y \in \mathcal{Y}$ be a class encoding.
 Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector. 
 In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
 
-Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a multivariate test amounts to testing whether the distribution of $x$ given $y=1$ is the same as $x$ given $y=0$. 
-For example, we can test whether multivariate voxel activation patterns ($x$) are similarly distributed when given a vocal stimulus ($y=1$) or a non-vocal one ($y=0$).
+We denote a sample from $x$ given $y$ with $x_y$.
+We denote the distribution of $x_1$ by $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
+Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
+For example, we can test whether multivariate voxel activation patterns are similarly distributed when given a vocal stimulus ($x_1$) or a non-vocal one ($x_0$).
 The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
-The comparison metric between statistics is power, i.e., the probability to infer that $x|y=1$ is not distributed like $x|y=0$.
+The comparison metric between statistics is power, i.e., the probability to infer that $\mathcal{F}\neq\mathcal{G}$.
 
 
 \subsection{From a Test Statistic to a Permutation Test}
 
-The multivariate tests we will be considering rely on fixing some test statistic, and comparing it to it's permutation distribution. 
+The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing it to it's permutation distribution. 
 The tests differ in the statistic they employ.
 Our comparison metric is their power, i.e., their true positive rate. 
-We adhere to permutation tests and not parametric inference because our problems of interest are typically high-dimensional. 
-This means that $n \gg p$ does not hold, and central limit laws do not apply.
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid even if possibly conservative. 
+We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically small-sample, and central limit approximations poor.
+
+Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
 The sketch of our permutation test is the following: \newline
 (a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. \newline
 (b) Sample a random permutation of the class labels, $\pi(y)$. \newline
@@ -267,20 +253,27 @@ We now detail the various test statistics that will be compared.
 
 
 \subsection{Two-Group Tests}
-The most prevalent interpretation of ``$x|y=1$ is not distributed like $x|y=0$'' is to assume they differ in means. 
-In his seminal work, \cite{hotelling_generalization_1931} has proposed the $T^2$ test statistic for testing the equality in means of two multivariate distributions. 
-Using our notations this statistic is proportional to the difference between group means, measured with the Mahalanobis norm: 
-\begin{align}
-T^2 \propto \; (\bar{x}_{y=1}-\bar{x}_{y=0})'\; \hat{\Sigma}^{-1} \;(\bar{x}_{y=1}-\bar{x}_{y=0}), 
-\end{align}
-where $\bar{x}_{y=j}$ is the $p$-vector of means in the $y=j$ group, and $\hat{\Sigma}$ is a pooled covariance estimator.
-Perhaps more intuitively, $T^2$ is Euclidean norm of the mean difference vector, but after transforming to decorrelated scales. 
+The most prevalent interpretation of ``$x_1$ is not distributed like $x_0$'' is to assume they differ in means\footnote{This is not a logical equivalence. The Behrnes-Fisher problem is an example of this non-equivalence.}. 
+Difference in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
+In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \cite{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
-The major difficulty with these multivariate tests is that $\Sigma$ has $p(p+1)/2$ free parameters, so that $n$ has to be very large to apply these tests.
-If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown by \cite{bai1996effect}. 
+The major difficulty with the $T^2$ statistic is that it has $p(p+1)/2=\mathcal{O}(p^2)$ free parameters, introduced in the estimation of the covariance matrix.
+If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown in \cite{bai1996effect}. 
 In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR and power.
+Examples of High-dim tests for dense shifts include 
+\cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008,chen_two-sample_2010,lopes2011more,ahmad2014u,thulin2014high,feng2015note}
 
+If $\mathbb{E}(x_1)$ differs from $\mathbb{E}(x_0)$ we say the \emph{signal is sparse}.
+To detect a sparse signal there is potentially no need to estimate all the coordinates of $\mathbb{E}(x_1)-\mathbb{E}(x_0)$, as done in the $T^2$ statistic and its high-dim variants. 
+Examples of high-dim tests statistics for sparse shifts include \cite{cai_two-sample_2013} and \cite{chang2014simulation}.
+
+It is possible that the practitioner is unaware of the amount of sparsity in the signal. 
+Some high-dim test statistics that \emph{adapt} to the level of (unknown) sparsity include \cite{simes1986improved,donoho2004higher,zhong2013tests,shen2015adaptive,moscovich2016exact}.
+
+It is possible that the signal is present (not only) in means. 
+We would thus opt for a two-group GOF test, instead of a location test. 
+Examples of multivariate GOF tests include \cite{bickel1969distribution,friedman1979multivariate,hall2002permutation,szekely2004testing,Biau2005,Rosenbaum2005,eric2008testing,perez2009estimation,vayatis_auc_2009,gretton_kernel_2012-1}.
 
 
 \subsection{Prediction Accuracy as a Test Statistic}
