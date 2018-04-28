@@ -722,16 +722,16 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 \begin{tcolorbox}
 	\centering
-	\tiny
+	\footnotesize
 	\begin{tabular}{l|c|c|c|c}
-		Name & Algorithm & Resampling & B  & Parameters\\ 
+		Name & Algorithm & Resampling & B  & Remark\\ 
 		\hline
 		\hline
-		LDA.Boot.1 & LDA & bLOO 	& $10$ &  -- \\ 
-		SVM.Boot.1 & SVM & bLOO 	& $10$ & cost=10 \\ 
-		SVM.Boot.2 & SVM & bLOO 	& $10$ & cost=0.1 \\ 
-		SVM.Boot.3 & SVM & bLOO 	& $50$ & cost=10 \\ 
-		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=0.1 \\ 
+		lda.Boot.b10 & LDA & bLOO 	& $10$ &  -- \\ 
+		svm.Boot.c001.b50 & SVM & bLOO 	& $10$ & cost=0.01 \\ 
+		svm.Boot.c100.b50 & SVM & bLOO 	& $10$ & cost=100 \\ 
+		svm.Boot.c001.b10 & SVM & bLOO 	& $50$ & cost=0.01 \\ 
+		svm.Boot.c100.b10 & SVM & bLOO 	& $50$ & cost=100 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
