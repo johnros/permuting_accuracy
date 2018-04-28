@@ -31,9 +31,7 @@
         Roy~Mukamel,~\IEEEmembership{Member,~IEEE,}
         and~Jelle~J.~Goeman,~\IEEEmembership{Member,~IEEE,}%
 
-\thanks{JDR was supported by the ISF 900/60 research grant. 
-	JDR also wishes to thank, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
-	}% <-this % stops a space
+\thanks{JDR was supported by the ISF 900/60 research grant.}% <-this % stops a space
 \thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
 \thanks{Manuscript received April 19, 2005; revised August 26, 2015.}}
 
@@ -126,7 +124,7 @@ signal-detection, multivariate-testing, supervised-learning, hypothesis-testing,
 \IEEEPARstart{M}{any} neuroscientists and geneticists detect signal by fitting a classifier and testing whether it's prediction accuracy is better than chance. 
 The workflow consists of fitting a classifier, and estimating its predictive accuracy using cross validation.
 Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.
-This general idea has been promoted by \cite{friedman2003multivariate,eric2008testing,lopez2016revisiting}.
+This general idea has been promoted by \cite{friedman2003multivariate,eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include
 \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include speaker verification \cite{gretton_kernel_2012-1}, 
@@ -463,7 +461,7 @@ From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerf
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.9\columnwidth]{"art/file2"}
+	\includegraphics[width=0.7\columnwidth]{"art/file2"}
 	\caption{
 		The power of the permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -490,7 +488,7 @@ The results are reported in Figure~\ref{fig:large-sample}, and are qualitatively
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=1\columnwidth]{"art/file1"}
+	\includegraphics[width=0.7\columnwidth]{"art/file1"}
 	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
 	\label{fig:large-sample}
 \end{figure}
@@ -516,7 +514,7 @@ The results are reported in Figure~\ref{fig:large-sample}, and are qualitatively
 %
 %\begin{figure}[ht]
 %	\centering
-%	\includegraphics[width=0.5\columnwidth]{art/file33}
+%	\includegraphics[width=0.7\columnwidth]{art/file33}
 %	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
 %	\label{fig:file33}
 %\end{figure}
@@ -810,7 +808,7 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file14"}
+	\includegraphics[width=0.7\columnwidth]{"art/file14"}
 	\caption{
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
@@ -971,13 +969,13 @@ The intuition that it is easier to detect signal in the low variance directions 
 	\centering
 	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
 	\label{fig:dependence_4}	
-	\begin{subfigure}[t]{.4\columnwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file32"}
 		\caption{$\mu$ in PC7 of $\Sigma$.}  
 		\label{fig:dependence_41}	
 	\end{subfigure}
-	\begin{subfigure}[t]{0.4\columnwidth}
+	\begin{subfigure}[t]{0.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file31"}
 		\caption{$\mu$ in PC15 of $\Sigma$.}  
@@ -1017,39 +1015,25 @@ where
 $X=(u_1,\dots,u_p)diag(d_1,\dots,d_p)(v'_1,\dots,v'_p)$.
 From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j$, i.e., the smaller noise components. 
 
-The various regularization methods deflate the high variance directions, thus, relatively inflate the low variance directions.
-If the signal is in the low variance directions, the regularization may mask it. 
-This is what we see in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the unregularized tests have more power than the regularized. 
-
-[TODO: discuss signal in intermediate PCs? (file 35 and 37)].
+This intuition explains figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the fact that unregularized tests have more power than the regularized. 
 
 
 \subsection{Sparse Alternatives}
+\label{sec:sparse}
+
 In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
 Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
-This has several implications:
-\begin{itemize}
-	\item One of the challenges with dense signal is fixing the SNR as $p$ grows. In Section~\ref{sec:fix_snr} we explained why we fixed the SNR by fixing the Mahalanobis norm between the means of the two-groups. If the signal is sparse, then the SNR can be controlled by fixind the sparsity of the signal. This was done by \cite{ramdas2015decreasing} to achieve ``fair alternatives''
-	
-	\item The discretization introduced by the classification, like in the previous case, introduce a power loss. 
-	
-	\item For a sparse signal the most powerful test will probably not be an $l_2$-type test like the Hotelling variants, but rather an $l_\infty$ type test like \cite{tony2014two} or \cite{chang2014simulation}.
-	
-	\item If the level of sparsity is unknown, then one may probably use a test which \emph{adapts} to the known sparsity like the two-group tests of  \cite{simes1986improved,donoho2004higher,fan2007many,kosorok2007marginal,lopes2011more,zhong2013tests} or \cite{shen2015adaptive} and the tree-based (accuracy) test in \cite{yu2007two}.
-	
-\end{itemize}
-
+Figure~\ref{fig:sparse} reports the usual results, where $\mu$ is sparse. 
+As usual, two-group tests dominate accuracy tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
 \begin{figure}[ht]
 	\centering
 	\label{fig:sparse}	
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file34"}
+	\includegraphics[width=0.7\columnwidth]{"art/file34"}
 	\caption{Sparse $\mu$.}  
 \end{figure}
-
-
 
 
 
@@ -1057,7 +1041,7 @@ This has several implications:
 
 Our work studies signal detection in the two-group multivariate testing framework, i.e., MANOVA framework.
 The same problem can be cast in the univariate generalized linear models framework, and in particular, as a Brenoulli Regression problem.
-If any of the predictors, $x$, carries any signal, then $x|y=0$ has a different distribution than $x|y=1$.
+If any of the predictors, $x$, carries any signal, then $x_0$ has a different distribution than $x_1$.
 This view is the one adopted \cite{goeman2006testing}.
 
 Another related problem is that of multinomial-regression, i.e., multi-class classification.
@@ -1066,28 +1050,33 @@ We conjecture that power differences in favor of two-group tests versus accuracy
 
 
 
-\subsection{Testing in Augmented Spaces}
+\subsection{Feature Mapping}
 It may be argued that only accuracy tests permits the separation between classes in augmented spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
 This is a false argument--- accuracy tests do not have any more flexibility than two-group tests. 
-Indeed, it is possible to test for two-group in the same space the classifier is learned. 
-For independence tests  with kernels see for example \cite{szekely_brownian_2009} or \cite{gretton_kernel_2012-1}.
+One can always perform a two-group test after mapping the original features to some augmented space. 
+This is the case, for instance, of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}.
 
+A slightly different argument is that the feature mapping may not be known, but rather learned from the data. 
+We find this to be a weak argument.
+First, tests may also learn feature mappings that maximize power. 
+This is explicit in the constriction of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, and also in \cite{vayatis_auc_2009}.
+Secondly, and perhaps more importantly to our setup, in high-dim problem is data is barely sufficient to learn covariances in the original space. We thus have little hope of learning covariances in augments spaces. 
+This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
 
 
 \subsection{A Good Accuracy Test}
-Brain-computer interfaces and clinical diagnostics \cite{olivetti_induction_2012,wager_fmri-based_2013} are examples where we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract it. 
-In these cases an accuracy test cannot be replaced by a two-group, or other, statistical test. 
+Brain-computer interfaces and clinical diagnostics \cite{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract it. 
+In these cases an accuracy test cannot be replaced by a two-group test. 
 For the cases an accuracy test cannot be replaced with other tests, we collect the following observations.
 
-\paragraph{Sample size.} The conservativeness of accuracy tests, due to discretization, decrease with sample size. 
+\paragraph{Sample size} The conservativeness of accuracy tests, due to discretization, decrease with the size of the test set. 
 
-\paragraph{Regularize.}
+\paragraph{Regularize}
 Regularization proves crucial to detection power in low SNR regimes, such as when $n$ is in the order of $p$, or under strong correlations.
 We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on this matter. 
-Particularly, in the possibility of regularizing in directions orthogonal to $\mu$. 
 
 
-\paragraph{Smooth accuracy.}
+\paragraph{Smooth accuracy}
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
@@ -1097,32 +1086,10 @@ This was also observed by \cite{yu2007two}, albeit attributed to the stability o
 Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, because it avoids cross validation without compromising power. 
 In low SNR, the power loss is considerable. 
 We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
-In high SNR, the concentration is less impactful, and the computational burden of cross validation can be avoided by using the resubstitution accuracy. \newline
 
 
-\subsection{Related Literature}
-We now review some related accuracy-testing literature, with an emphasis on neuroimaging applications.
-\cite{ojala_permutation_2010} study the power of two accuracy tests differing in their permutation scheme:
-One testing the ``no signal'' null hypothesis, and the other testing the ``independent features'' null hypothesis. 
-They perform an asymptotic analysis, and a simulation study. 
-They also apply various classifiers to various data sets. 
-Their emphasis is the effect of the underlying classifier on the power, and the potential of the ``independent features'' test for feature selection.
-This is a very different emphasis from our own.
 
-
-\cite{olivetti_induction_2012} and \cite{olivetti_statistical_2014} looked into the problem of choosing a good accuracy test. 
-They propose a new test they call an \emph{independence test}, and demonstrate by simulation that it has more power than other accuracy tests, and can deal with non-balanced data sets. 
-We did not include this test in the battery we compared, but we note that the independence test of \cite{olivetti_induction_2012} relies on a discrete test statistic. 
-It may thus be improved by regularizing and resampling with replacement. 
-
-
-\cite{schreiber2013statistical} used null simulations to study the statistical properties of linear SVM's for signal detection, and in particular, false positive rates. 
-They did not study the matter of power.
-They recommended to test the significance of accuracy estimates using permutation testing instead of parametric t-tests, or binomial tests.
-They recommend so due to the correlations between data folds in V-fold CV.
-The authors were also concerned with temporal correlations, which biases accuracy estimates even if cross validated. 
-Bias in accuracy estimates is of great concern when studying a classifier, but it is of lesser concern when using the accuracy merely for localization. 
-Their recommendations differ from ours: they recommend to ensure independent data foldings in V-fold CV, whereas we claim discretization is the real concern, and thus recommend bLOO.
+\subsection{Mixture Classes}
 
 \cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
 The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
@@ -1148,15 +1115,12 @@ We re-parameterize so that $\pi=0$ corresponds to the null model:
 (x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
 \end{split}
 \end{align}
-
 From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred over accuracy tests. 
-
-
 
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file12"}
+	\includegraphics[width=0.7\columnwidth]{"art/file12"}
 	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
@@ -1184,10 +1148,7 @@ As put by \cite{ramdas_classification_2016}:
 
 % use section* for acknowledgment
 \section*{Acknowledgment}
-
-
-The authors would like to thank...
-
+JDR wishes to thank, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
