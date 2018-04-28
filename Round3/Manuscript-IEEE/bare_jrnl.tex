@@ -1,4 +1,5 @@
 \documentclass[journal]{IEEEtran}
+%\documentclass[draft]{IEEEtran}
 
 \input{preamble.tex}
 
@@ -363,22 +364,22 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 		Name & Algorithm & Resampling & Remark\\ 
 		\hline
 		\hline
-		Oracle & $T^2$ & Resubstitution & Known $\Sigma$\\ 
-		Hotelling & $T^2$ & Resubstitution & -- \\
-		Schafer & \cite{schafer_shrinkage_2005} & Resubstitution & -- \\ 
-		Goeman & \cite{goeman2006testing} & Resubstitution & -- \\ 
-		Srivastava & \cite{srivastava_test_2008} & Resubstitution & -- \\ 
-		Gretton & \cite{gretton_kernel_2012-1} & Resubstitution & -- \\ 
-		dCOV & \cite{szekely2004testing} & Resubstitution & -- \\ 
-		Simes & \cite{simes1986improved} & Resubstitution & -- \\ 
-		Cai & \cite{cai_two-sample_2013} & Resubstitution & -- \\ 
-		lda.CV.1 	& LDA & V-fold 			&  -- \\ 
-		lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
-		svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
-		svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
-		svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
-		svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ 
 		svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
+		svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ -
+		svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
+		svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
+		svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
+		lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
+		lda.CV.1 	& LDA & V-fold 			&  -- \\ 
+		Cai & \cite{cai_two-sample_2013} & Resubstitution & -- \\ 
+		Simes & \cite{simes1986improved} & Resubstitution & -- \\ 
+		dCOV & \cite{szekely2004testing} & Resubstitution & -- \\ 
+		Gretton & \cite{gretton_kernel_2012-1} & Resubstitution & -- \\ 
+		Srivastava & \cite{srivastava_test_2008} & Resubstitution & -- \\ 
+		Goeman & \cite{goeman2006testing} & Resubstitution & -- \\ 
+		Schafer & \cite{schafer_shrinkage_2005} & Resubstitution & -- \\ 
+		Hotelling & $T^2$ & Resubstitution & -- \\
+		Oracle & $T^2$ & Resubstitution & Known $\Sigma$\\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
@@ -421,7 +422,7 @@ In each replication, we generate $n$ i.i.d. samples from a shift class
 where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ is a $p$-dimensional shift vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
-Shifts are equal in all $p$ coordinates of $\mu$.
+Shifts are dense and equal in all $p$ coordinates of $\mu$.
 With $e$ being a $p$-vector of ones, then $\mu:=c \, e$. 
 We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
 The (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=c^2 p\approx \{0,1.4,5.7\}$.
@@ -443,7 +444,7 @@ The reported power is the proportion of replication where the permutation p-valu
 We start with a sanity check. 
 Theory suggests that all test statistics should control their false positive rate. 
 Our simulations confirm this.
-In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x|y=1$ has the same distribution as $x|y=0$, by a red circle. 
+In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where no signal is present and $x_1$ has the same distribution as $x_0$, by a red circle. 
 Since the red circles are always below the desired $0.05$ error rate then the false positive rate of all test statistics, in all simulations is controlled. 
 We may thus proceed and compare the power of each test statistic. 
 
@@ -462,18 +463,7 @@ From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerf
 
 \begin{figure}[h]
 	\centering
-	%	\begin{subfigure}{.5\columnwidth}
-	%		\centering
-	%		\includegraphics[width=1\columnwidth]{"art/file3"}
-	%		\caption{\textbf{Unbalanced V-fold CV.}} 
-	%		\label{fig:file3}
-	%	\end{subfigure}%
-	\begin{subfigure}{.7\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file2"}
-		%		\caption{\textbf{Balanced 4-fold CV.}} 
-		\label{fig:file2}
-	\end{subfigure}
+	\includegraphics[width=0.9\columnwidth]{"art/file2"}
 	\caption{
 		The power of the permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -485,6 +475,27 @@ From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerf
 		Cross-validation was performed with balanced and unbalanced data folding; see sub-captions.}	
 	\label{fig:simulation_1}
 \end{figure}
+
+
+
+
+\subsection{Large Sample}
+\label{sec:large-sample}
+
+We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
+Our results, however, are quantitatively invariant to the small sample, and hold also in high-dim--large-sample configurations.
+To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
+The results are reported in Figure~\ref{fig:large-sample}, and are qualitatively the same as the high-dim--small-sample case in Figure~\ref{fig:simulation_1}.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\columnwidth]{"art/file1"}
+	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
+	\label{fig:large-sample}
+\end{figure}
+
+
 
 
 
