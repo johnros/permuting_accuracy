@@ -3,5 +3,6 @@
 - More replications for heavytailed-t. 
 - CART for sparse signal.
 - Visual cues for covariance regulirizes statistics on plot.
+- SVM with Gaussian Kernel classifier
 
     

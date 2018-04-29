@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 
 \input{preamble.tex}
 
@@ -267,6 +267,7 @@ We fix the number of folds to $V=4$, and do dot discuss the effect of $V$ becaus
 Table~\ref{tab:collected} collects an initial battery of tests we will be comparing. 
 \begin{tcolorbox}
 \centering
+\footnotesize
 \begin{tabular}{l|c|c|c}
 Name & Algorithm & Resampling & Parameters\\ 
 \hline
@@ -367,28 +368,28 @@ This is particularly visible for intermediate signal strength (green triangle), 
 
 \begin{figure}[h]
 	\centering
-	\caption{
-		The power of the permutation test with various test statistics. 
-		The power on the $x$ axis. 
-		Effects are color and shape coded. 
-		The various statistics on the $y$ axis. 
-		Their details are given in Table~\ref{tab:collected}. 
-		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
-		Simulation details in Section~\ref{sec:simulation_details}.
-		Cross-validation was performed with balanced and unbalanced data folding; see sub-captions.}	
-	\label{fig:simulation_1}
-	\begin{subfigure}{.5\textwidth}
+%	\begin{subfigure}{.5\columnwidth}
+%		\centering
+%		\includegraphics[width=1\columnwidth]{"art/file3"}
+%		\caption{\textbf{Unbalanced V-fold CV.}} 
+%		\label{fig:file3}
+%	\end{subfigure}%
+	\begin{subfigure}{.7\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file3"}
-		\caption{\textbf{Unbalanced V-fold CV.}} 
-		\label{fig:file3}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{"art/file2"}
-		\caption{\textbf{Balanced V-fold CV.}} 
+		\includegraphics[width=1\columnwidth]{"art/file2"}
+%		\caption{\textbf{Balanced 4-fold CV.}} 
 		\label{fig:file2}
 	\end{subfigure}
+		\caption{
+			The power of the permutation test with various test statistics. 
+			The power on the $x$ axis. 
+			Effects are color and shape coded. 
+			The various statistics on the $y$ axis. 
+			Their details are given in Table~\ref{tab:collected}. 
+			Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
+			Simulation details in Section~\ref{sec:simulation_details}.
+			Cross-validation was performed with balanced and unbalanced data folding; see sub-captions.}	
+		\label{fig:simulation_1}
 \end{figure}
 
 
@@ -410,7 +411,7 @@ It demonstrates that the power disadvantage of accuracy tests, cannot be remedie
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\linewidth]{art/file33}
+	\includegraphics[width=0.5\columnwidth]{art/file33}
 	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
 	\label{fig:file33}
 \end{figure}
@@ -427,7 +428,7 @@ In this heavytailed setup, the dominance of the location tests was preserved, ev
 
 \begin{figure}[th]
 		\centering
-		\includegraphics[width=0.5\linewidth]{"art/file9"}
+		\includegraphics[width=0.7\columnwidth]{"art/file9"}
 		\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t, with $df=3$ .  } 
 		\label{fig:t_null}
 \end{figure}
@@ -464,21 +465,21 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 	\caption{Short memory, AR(1) correlation. 
 	$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
 	\label{fig:dependence_1}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 	\centering
-	\includegraphics[width=1\linewidth]{"art/file20"}
+	\includegraphics[width=1\columnwidth]{"art/file20"}
 	\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 	\label{fig:dependence_11}
 	\end{subfigure}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file21"}
+		\includegraphics[width=1\columnwidth]{"art/file21"}
 		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_12}
 	\end{subfigure}
-%	\begin{subfigure}[t]{.3\textwidth}
+%	\begin{subfigure}[t]{.3\columnwidth}
 %		\centering
-%		  \includegraphics[width=1\linewidth]{"art/file11"}
+%		  \includegraphics[width=1\columnwidth]{"art/file11"}
 %		\caption{Signal in direction of identity vector.} 
 %		\label{fig:dependence_13}
 %	\end{subfigure}
@@ -489,21 +490,21 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 	\centering
 	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
 	\label{fig:dependence_2}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file22"}
+		\includegraphics[width=1\columnwidth]{"art/file22"}
 		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 		\label{fig:dependence_21}
 	\end{subfigure}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file23"}
+		\includegraphics[width=1\columnwidth]{"art/file23"}
 		\caption{Signal in direction of lowest lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_22}
 	\end{subfigure}
-%	\begin{subfigure}[t]{.3\textwidth}
+%	\begin{subfigure}[t]{.3\columnwidth}
 %		\centering
-%		\includegraphics[width=1\linewidth]{"art/file16"}
+%		\includegraphics[width=1\columnwidth]{"art/file16"}
 %		\caption{Signal in direction of identity vector.} 
 %		\label{fig:dependence_23}
 %	\end{subfigure}
@@ -517,21 +518,21 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
 	}
 	\label{fig:dependence_3}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file18"}
+		\includegraphics[width=1\columnwidth]{"art/file18"}
 		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
 		\label{fig:dependence_31}
 	\end{subfigure}
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file17"}
+		\includegraphics[width=1\columnwidth]{"art/file17"}
 		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
 		\label{fig:dependence_32}
 	\end{subfigure}
-%	\begin{subfigure}[t]{.3\textwidth}
+%	\begin{subfigure}[t]{.3\columnwidth}
 %		\centering
-%		\includegraphics[width=1\linewidth]{"art/file19"}
+%		\includegraphics[width=1\columnwidth]{"art/file19"}
 %		\caption{Signal in direction of identity vector.} 
 %		\label{fig:dependence_33}
 %	\end{subfigure}
@@ -557,15 +558,15 @@ For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:het
 	\centering
 	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
 	\label{fig:heteroskedastic}	
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file26"}
+		\includegraphics[width=1\columnwidth]{"art/file26"}
 		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_11}	
 	\end{subfigure}
-	\begin{subfigure}[t]{0.4\textwidth}
+	\begin{subfigure}[t]{0.45\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file24"}
+		\includegraphics[width=1\columnwidth]{"art/file24"}
 		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_12}	
 	\end{subfigure}
@@ -611,6 +612,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 \begin{tcolorbox}
 	\centering
+	\tiny
 	\begin{tabular}{l|c|c|c|c}
 		Name & Algorithm & Resampling & B  & Parameters\\ 
 		\hline
@@ -622,7 +624,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		SVM.Boot.4 & SVM & bLOO 	& $50$ & cost=0.1 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
-	\caption{
+	\caption{\footnotesize
 		The same as Table~\ref{tab:collected} for bootstrapped accuracy estimates. 
 		bLOO is defined in~\ref{def:bloo}.
 		$B$ denotes the number of Bootstrap samples.} 
@@ -632,7 +634,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\linewidth]{"art/file13"}
+	\includegraphics[width=0.7\columnwidth]{"art/file13"}
 	\caption{
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
@@ -673,6 +675,7 @@ Even so, the out-of-the-box location tests outperform the accuracy tests.
 
 \begin{tcolorbox}
 	\centering
+	\tiny
 	\begin{tabular}{l|c|c|c}
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
@@ -685,7 +688,7 @@ Even so, the out-of-the-box location tests outperform the accuracy tests.
 		lda.highdim.4 & LDA & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
-	\caption{
+	\caption{\footnotesize
 		The same as Table~\ref{tab:collected} for regularized (high dimensional) predictors. 
 		\emph{svm.CV.5} and \emph{svm.CV.6} are $l_2$ regularized SVM, with varying regularization penalty.
 		\emph{lda.highdim.1} is the Diagonal Linear Discriminant Analysis of \cite{dudoit_comparison_2002}.
@@ -699,7 +702,7 @@ Even so, the out-of-the-box location tests outperform the accuracy tests.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\linewidth]{"art/file14"}
+	\includegraphics[width=0.5\columnwidth]{"art/file14"}
 	\caption{
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
@@ -740,7 +743,7 @@ We emphasize that both test statistics were compared with the same permutation s
 
 \begin{figure}[th]
 \centering
-\includegraphics[width=0.5\linewidth]{"art/svm_vs_SD"}
+\includegraphics[width=1\columnwidth]{"art/svm_vs_SD"}
 \caption{\footnotesize
 Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy test (\emph{svm.CV.1}), and a location test (\emph{sd}). 
@@ -856,15 +859,15 @@ It is also consistent with Figure~\ref{fig:dependence_1}, in the following aspec
 	\centering
 	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
 	\label{fig:dependence_4}	
-	\begin{subfigure}[t]{.4\textwidth}
+	\begin{subfigure}[t]{.4\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file32"}
+		\includegraphics[width=1\columnwidth]{"art/file32"}
 		\caption{$\mu$ in PC7 of $\Sigma$.}  
 		\label{fig:dependence_41}	
 	\end{subfigure}
-	\begin{subfigure}[t]{0.4\textwidth}
+	\begin{subfigure}[t]{0.4\columnwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{"art/file31"}
+		\includegraphics[width=1\columnwidth]{"art/file31"}
 		\caption{$\mu$ in PC15 of $\Sigma$.}  
 		\label{fig:dependence_42}	
 	\end{subfigure}
@@ -917,7 +920,7 @@ This has several implications:
 	\centering
 	\label{fig:sparse}	
 		\centering
-		\includegraphics[width=0.5\linewidth]{"art/file34"}
+		\includegraphics[width=0.5\columnwidth]{"art/file34"}
 		\caption{Sparse $\mu$.}  
 \end{figure}
 
@@ -1028,7 +1031,7 @@ From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{go
 
 \begin{figure}[ht]
 \centering
-	  \includegraphics[width=0.5\linewidth]{"art/file12"}
+	  \includegraphics[width=0.5\columnwidth]{"art/file12"}
 	  \caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 	  	$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 	  The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
