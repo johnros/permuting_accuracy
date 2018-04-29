@@ -535,3 +535,17 @@ File name: file37
   Folds: 4
   Voxel dependence(*) (p): AR(1). Fixed Mahalanobis norm. Signal in mid-way PC.
   Trial dependence (n): none
+
+File name: file38
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent
+  Trial dependence (n): none

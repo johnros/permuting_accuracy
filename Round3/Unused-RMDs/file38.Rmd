@@ -1,5 +1,5 @@
 ---
-title: "Sparse signal"
+title: "Radial Basis SVM"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -9,18 +9,15 @@ editor_options:
 
 
 ```{r preliminaries}
-file.name <- "file34"
+file.name <- "file38"
 setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
-large.sample <- 1e0
-p <- 23*large.sample
-n <- 4e1*large.sample # total sample size-> n/2 in each group.
+n.replications <-  1e2
+p <- 23
+n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
@@ -28,7 +25,7 @@ effects <- seq(0, 0.5, length=3) # change in location
 
 Sigma <- diag(p)
 # lattice::levelplot(Sigma)
-direction0 <- c(1,rep(0,p-1))
+direction0 <- rep(1,p)
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
 direction <- 23 * direction0 / sqrt(n/2*maha)
 ```
@@ -37,7 +34,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=30)
 ```
 
 ```{r independent noise variable folds}
@@ -65,7 +62,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statisticsSparse(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     
     # Prepare to permute
     old.labels <- labels
@@ -82,7 +79,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statisticsSparse(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     } # End permutation
     
     # Compute p-vals for each statistic

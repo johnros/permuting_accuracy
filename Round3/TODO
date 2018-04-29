@@ -1,6 +1,6 @@
+- Radial Basis SVM.
 - Large sample (X100)
 - More replications for heavytailed-t. 
-- SVM with more/less regularization.
 - CART for sparse signal.
 - Visual cues for covariance regulirizes statistics on plot.
 

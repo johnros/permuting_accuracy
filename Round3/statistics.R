@@ -111,6 +111,32 @@ t_svm <- function(train.noise, train.labels, test.noise, test.labels, cost, type
   return(statistic)
 }
 
+
+t_svm_Gauss <- function(train.noise, train.labels, test.noise, test.labels, cost, type){
+  svm.1 <- svm(x=train.noise, y=train.labels, type='C-classification', cost=cost)
+  accuracy <- mean(predict(svm.1, newdata=test.noise)==test.labels)
+  
+  if(type==1){
+    statistic <- accuracy
+  }
+  else if(type==2){
+    .p <- mean(test.labels)
+    p <- max(.p,1-.p)
+    statistic <- abs(accuracy-p)/sqrt(p*(1-p))
+  }
+  return(statistic)
+}
+
+
+t_svm_cv_Gaus <- function(noise, new.labels, old.labels, fold.ids, cost, type){
+  t_cv(FUN = t_svm, noise, new.labels, old.labels, fold.ids, cost, type)
+}
+## Testing:
+# t_svm_cv_Gaus(noise, labels, labels, fold.ids, cost=100, type=1)
+# svm(x=noise,y=labels, type='C-classification', cost=100)
+
+
+
 # Compute cross validated test statistics
 # noise: the predictors 
 # labels: 
@@ -119,6 +145,10 @@ t_svm <- function(train.noise, train.labels, test.noise, test.labels, cost, type
 t_svm_cv <- function(noise, new.labels, old.labels, fold.ids, cost, type){
   t_cv(FUN = t_svm, noise, new.labels, old.labels, fold.ids, cost, type)
 }
+## Testing:
+# t_svm_cv(noise, labels, noise, labels, cost=100, type=1)
+# svm(x=noise,y=labels, type='C-classification', cost=100)
+
 
 
 
@@ -441,9 +471,9 @@ statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
     lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
     svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
     svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
+    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids),
     svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
-    svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1),
-    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids)
+    svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )
   return(result)
 }
@@ -488,11 +518,7 @@ statisticsLargeSample <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.
     dCOV=t_dcov(x1,x2),
     Simes=t_Simes(x1,x2),
     Cai=t_CLX(x1,x2),
-    lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-    svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
     svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
-    svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
     svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )
   return(result)
@@ -502,6 +528,15 @@ statisticsLargeSample <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.
 statisticsSparse <- function(){
   c(
     statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
-    )
-  # Add CART and other adaptive tests. 
+    # Add CART and other adaptive tests. 
+  )
+}
+
+statisticsGausSVM <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+  result <- c(
+    statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
+    svmGAUS.CV.c100=t_svm_cv_Gaus(noise, labels, labels, fold.ids, cost=100, type=1),
+    svmGAUS.CV.c001=t_svm_cv_Gaus(noise, labels, labels, fold.ids, cost=100, type=1)
+  )
+  return(result)
 }

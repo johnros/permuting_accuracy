@@ -17,5 +17,5 @@ files <- files[!grepl(exceptions, files, fixed = TRUE)]
 
 for(.file in files){
   try(ksource(.file))
-  pbPost(type = "note", body = "Done", "All files finished")
-  }
+}
+pbPost(type = "note", body = "Done", "All files finished")
