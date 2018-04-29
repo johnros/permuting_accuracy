@@ -56,8 +56,8 @@
 
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
-{Shell \MakeLowercase{\textit{et al.}}: Classification for Signal Detection}
+\markboth{}%
+{Rosenblatt \MakeLowercase{\textit{et al.}}: Classification for Signal Detection}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 
@@ -122,13 +122,12 @@ signal-detection, multivariate-testing, supervised-learning, hypothesis-testing,
 \label{sec:introduction}
 
 \IEEEPARstart{M}{any} neuroscientists and geneticists detect signal by fitting a classifier and testing whether it's prediction accuracy is better than chance. 
-The workflow consists of fitting a classifier, and estimating its predictive accuracy using cross validation.
-Given that the cross validated accuracy is a random quantity, it is then common to test if the cross validated accuracy is significantly better than chance using a permutation test.
+The workflow consists of fitting a classifier, estimating its predictive accuracy using cross validation, and test the hypothesis that this accuracy can be attributed to chance alone. 
 This general idea has been promoted by \cite{friedman2003multivariate,eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include
 \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include speaker verification \cite{gretton_kernel_2012-1}, 
-text classification \cite{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \cite{lopez2016revisiting}, data integration \cite{gretton_kernel_2012-1}, attribute matching in databases systems (a.k.a. record linkage) \cite{gretton_kernel_2012-1,hall2002permutation,vayatis_auc_2009}, optical character recognition \cite{perez2009estimation}, multimedia \cite{moreno2004kullback}, and functional data analysis \cite{hall2002permutation}.
+text classification \cite{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \cite{lopez2016revisiting}, data integration \cite{gretton_kernel_2012-1}, record linkage in databases systems \cite{gretton_kernel_2012-1,hall2002permutation,vayatis_auc_2009}, optical character recognition \cite{perez2009estimation}, multimedia \cite{moreno2004kullback}, and functional data analysis \cite{hall2002permutation}.
 
 Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
 
@@ -137,7 +136,7 @@ In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions that
 Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the brain's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 We call this an \emph{accuracy test}, because it uses the prediction accuracy as a test statistic. 
 
-This same signal detection task can also be approached as a multivariate two-group test.
+This same signal detection task can also be approached as a multivariate \emph{two-group} test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
 As put in \cite{pereira_machine_2009}: 
 \begin{quote}
@@ -151,7 +150,7 @@ The former generalizing the t-test, and the latter (roughly) generalizing Kolmog
 Crucially for our applications, we will assume that the number of samples is in the order of the dimension of each sample, if not smaller. 
 In the statistical literature this is known as a \emph{high-dimensional} problem. 
 We emphasize that by high-dimension it is not necessarily implied that the sample is large, even if it is often the case. 
-In our running example it means that the size of the brain's region of interest is large compared to the number of subjects in the experiment. 
+In our motivating example it means that the size of the brain's region of interest is large compared to the number of subjects in the experiment. 
 It is thus a high-dim--small-sample problem. 
 
 In a seminal contribution, \cite{bai1996effect} noted that in-high dimension, multivariate tests tend to be low powered unless some regularization is involved. 
@@ -170,7 +169,7 @@ These can be classified along the following lines:[TODO: verify references]
 
 At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging?
 In this manuscript, we do not provide a full answer to the matter.
-Instead, we merely seek to demonstrate that \textbf{accuracy tests are never optimal, compared to bona-fide two-group tests}.
+Instead, we merely seek to demonstrate that \textbf{accuracy tests are never optimal, compared to two-group tests}.
 Out recommendations to the practitioner in these high-dim problems:
 (i) Prefer a two-group test over an accuracy test. 
 (ii) Appropriate regularization is crucial. 
@@ -178,7 +177,7 @@ Out recommendations to the practitioner in these high-dim problems:
 Various authors have compared accuracy tests to two-group tests, often with contradicting conclusions.
 In \cite{yu2007two} for instance, authors find that an accuracy test based on a tree predictor is preferable over a two-group test. 
 Their simulated shift is sparse, so that it is no surprise that a tree-type predictors outperforms linear predictors and tests. 
-Authors of \cite{olivetti2013kernel} compare the Kernel test of \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
+Authors of \cite{olivetti2013kernel} compare the kernel test of \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
 Their results are inconclusive with a slight advantage to the logistic regression.
 In \cite{lopez2016revisiting}, authors compare several accuracy tests to several two-group tests and conclude that an accuracy test based on a neural-net is preferable. 
 Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
@@ -189,7 +188,7 @@ Rates, however, are only a first stage when comparing test statistics.
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \cite{vaart_asymptotic_1998}.
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
-The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, which allows to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
+The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$. 
 This means that Fisher's LDA requires at least $6.3$ more samples to achieve the same (asymptotic) power as the $T^2$ test. 
@@ -236,7 +235,7 @@ The comparison metric between statistics is power, i.e., the probability to infe
 The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing it to it's permutation distribution. 
 The tests differ in the statistic they employ.
 Our comparison metric is their power, i.e., their true positive rate. 
-We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically small-sample, and central limit approximations poor.
+We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically poor.
 
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
 The sketch of our permutation test is the following: \newline
@@ -253,19 +252,19 @@ We now detail the various test statistics that will be compared.
 
 
 \subsection{Two-Group Tests}
-The most prevalent interpretation of ``$x_1$ is not distributed like $x_0$'' is to assume they differ in means\footnote{This is not a logical equivalence. The Behrnes-Fisher problem is an example of this non-equivalence.}. 
+The most prevalent interpretation of ``$x_1$ is not distributed like $x_0$'' is to assume they differ in means\footnote{This is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions.}. 
 Difference in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \cite{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
-The major difficulty with the $T^2$ statistic is that it has $p(p+1)/2=\mathcal{O}(p^2)$ free parameters, introduced in the estimation of the covariance matrix.
+The major difficulty with the $T^2$ statistic is that it requires estimating a covariance matrix, thus introducing $p(p+1)/2=\mathcal{O}(p^2)$ unknown parameters.
 If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown in \cite{bai1996effect}. 
 In these cases, high dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR and power.
 Examples of High-dim tests for dense shifts include 
-\cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008,chen_two-sample_2010,lopes2011more,ahmad2014u,thulin2014high,feng2015note}
+\cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008,chen_two-sample_2010,lopes2011more,ahmad2014u,thulin2014high,feng2015note}.
 
-If $\mathbb{E}(x_1)$ differs from $\mathbb{E}(x_0)$ we say the \emph{signal is sparse}.
-To detect a sparse signal there is potentially no need to estimate all the coordinates of $\mathbb{E}(x_1)-\mathbb{E}(x_0)$, as done in the $T^2$ statistic and its high-dim variants. 
+If $\mathbb{E}(x_1)$ differs from $\mathbb{E}(x_0)$ in a small number of coordinates we say the \emph{signal is sparse}.
+To detect a sparse signal there is potentially no need to estimate all the coordinates of $\mathbb{E}(x_1)-\mathbb{E}(x_0)$, as done in the $T^2$ statistic, and its high-dim variants. 
 Examples of high-dim tests statistics for sparse shifts include \cite{cai_two-sample_2013} and \cite{chang2014simulation}.
 
 It is possible that the practitioner is unaware of the amount of sparsity in the signal. 
@@ -275,14 +274,14 @@ It is possible that the signal is present (not only) in means.
 We would thus opt for a two-group GOF test, instead of a location test. 
 Examples of multivariate GOF tests include \cite{bickel1969distribution,friedman1979multivariate,hall2002permutation,szekely2004testing,Biau2005,Rosenbaum2005,eric2008testing,perez2009estimation,vayatis_auc_2009,gretton_kernel_2012-1}.
 
-In contrast to bona-fide two-group tests, we now explain how the classification accuracy can be used as a test statistic.
+As previously mentioned, a classifier's accuracy may also be used as a test statistic. We now explain how this statistic is constructed. 
+
 
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy test amounts to using a predictor's accuracy as a test statistic.  
-
 A predictor\footnote{Known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
-The accuracy of predictor\footnote{Known as (the complement of) the \emph{test error} in \cite{hastie_elements_2003}}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
-The accuracy of a learning algorithm\footnote{Known as (the complement of) the \emph{expected test error} in \cite{hastie_elements_2003}}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+The accuracy of predictor\footnote{Known as (the complement of) the \emph{test error} in \cite{hastie_elements_2003}.}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
+The accuracy of a learning algorithm\footnote{Known as (the complement of) the \emph{expected test error} in \cite{hastie_elements_2003}.}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write 
 \begin{align}
@@ -295,24 +294,19 @@ and
 where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continuous $y$.} of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
-
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}\footnote{Known as (the complement of) the \emph{train error} in \cite{hastie_elements_2003}}, and the V-fold Cross Validation (CV) estimate.
-\begin{definition}[Resubstitution estimate]
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}\footnote{Known as (the complement of) the \emph{train error} in \cite{hastie_elements_2003}.}, and the V-fold Cross Validation (CV) estimate.
+\begin{definition}[Resubstitution accuracy]
 	\label{def:resubstitution}
 	The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
-	\begin{align}
-	\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{x_i}=y_i}.
-	\end{align}
+$\accEstim_{\algo}^{Resub} := \frac 1n \sum_{i=1}^{n} \indicator{\hypFun{\data}{x_i}=y_i}.$
 \end{definition}
 
 
-\begin{definition}[V-fold CV estimate]
+\begin{definition}[V-fold CV accuracy]
 	\label{def:v-fold}
 	Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, denoted $\accEstim_{\algo}^{Vfold}$, is defined as 	
-	\begin{align}
-	\accEstim_{\algo}^{Vfold} := 
-	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{x_i}=y_i},
-	\end{align}
+$\accEstim_{\algo}^{Vfold} := 
+	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{x_i}=y_i},$
 	where $|A|$ denotes the cardinality of a set $A$.
 \end{definition}
 
@@ -346,7 +340,7 @@ We will report results only with balanced folding, mostly because we will conclu
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features\footnote{The difference between permuting labels or features is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \cite{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features\footnote{The difference between permuting labels, $\pi(y)$, or features, $\pi(X)$, is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \cite{golland_permutation_2005}.
 
 
 \paragraph{How many folds}
@@ -364,7 +358,7 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 		\hline
 		\hline
 		svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
-		svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ -
+		svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ 
 		svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
 		svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
 		svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
@@ -412,7 +406,7 @@ The \R code for the simulations can be found in \url{http://www.john-ros.com/per
 \label{sec:simulation_details}
 
 Each simulation is based on $1,000$ replications. 
-In each replication, we generate $n$ i.i.d. samples from a shift class 
+In each replication, we generate $n$ independent samples from a shift class 
 \begin{align}
 \label{eq:distribution}
 \x_i = \mu \y_i + \eta_i,
@@ -455,8 +449,6 @@ We may thus proceed and compare the power of each test statistic.
 \subsection{Power}
 \label{sec:power}
 
-Having established that all of the tests in our battery control the false positive rate, it remains to be seen if they have similar power-- especially when comparing two-group tests to accuracy tests. 
-
 From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerful than accuracy tests.
 
 \begin{figure}[h]
@@ -481,9 +473,9 @@ From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerf
 \label{sec:large-sample}
 
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
-Our results, however, are quantitatively invariant to the small sample, and hold also in high-dim--large-sample configurations.
+Our results, however, are qualitatively invariant to the small sample, and hold also in high-dim--large-sample configurations.
 To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-The results are reported in Figure~\ref{fig:large-sample}, and are qualitatively the same as the high-dim--small-sample case in Figure~\ref{fig:simulation_1}.
+The results are reported in Figure~\ref{fig:large-sample}.
 
 
 \begin{figure}[h]
@@ -793,8 +785,8 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		lda.highdim.Dudoit & \cite{dudoit_comparison_2002} & V-fold & -- \\ 
-		lda.highdim.Ramey & \cite{ramey_high-dimensional_2016} & V-fold & -- \\ 
+		lda.highdim.Dudoit.CV & \cite{dudoit_comparison_2002} & V-fold & -- \\ 
+		lda.highdim.Ramey.CV & \cite{ramey_high-dimensional_2016} & V-fold & -- \\ 
 		lda.highdim.Pang.CV & \cite{pang_shrinkage-based_2009} & V-fold & -- \\ 
 		lda.highdim.Pang.b50 & \cite{pang_shrinkage-based_2009} & bLOO 	 & B=50 \\ 
 	\end{tabular} 

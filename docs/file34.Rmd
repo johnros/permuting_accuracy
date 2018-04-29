@@ -1,5 +1,5 @@
 ---
-title: "Browninan covariance. Signal in LOW PCs"
+title: "Sparse signal"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
@@ -9,12 +9,14 @@ editor_options:
 
 
 ```{r preliminaries}
-file.name <- "file23"
+file.name <- "file34"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
-p <- 23
-n <- 4e1 # total sample size-> n/2 in each group.
+large.sample <- 1e0
+p <- 23*large.sample
+n <- 4e1*large.sample # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
 cost.1 <- 1e1
@@ -22,13 +24,11 @@ cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
 effects <- seq(0, 0.5, length=3) # change in location
 
-## Covariance
-Sigma <- browninan_cov(p)
-Sigma.eigen <- eigen(Sigma)
-direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
+Sigma <- diag(p)
+# lattice::levelplot(Sigma)
+direction0 <- c(1,rep(0,p-1))
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
 direction <- 23 * direction0 / sqrt(n/2*maha)
 ```
@@ -37,9 +37,8 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=60)
+registerDoMC(cores=100)
 ```
-
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
@@ -51,10 +50,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     .noise <- rmvnorm(n=n, sigma = Sigma)
     
     ## Shift alternative:
+    # effect <- effects[[3]]
+    
     noise <- .noise
-    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
     noise[labels,] <- noise[labels,] + shift
-
     
     ## Compute observed statistic
     x1 <- noise[labels,]
@@ -62,9 +62,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+    # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statisticsSparse(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     
     # Prepare to permute
     old.labels <- labels
@@ -81,38 +82,33 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statisticsSparse(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     } # End permutation
     
-    ## Compute p-vals for each statistic
+    # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+      pvals[i] <- mean(permuted[,i]>=ts[i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
-
     
     c(effect=effect, pvals) 
   }
 } 
-  
+
 pbPost(type = "note", body = "Done", the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
-
-```{r analyze multiple effects}
-# load("file23.RData")
+```{r}
 source('prepare_graphics.R')
 plot(plot.3)
 ```
-
 
 ```{r}
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
 plot(plot.3)
 dev.off()
 ```
-
 
