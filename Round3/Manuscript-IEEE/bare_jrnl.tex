@@ -461,8 +461,7 @@ From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerf
 		The various statistics on the $y$ axis. 
 		Their details are given in Table~\ref{tab:collected}. 
 		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
-		Simulation details in Section~\ref{sec:simulation_details}.
-		Cross-validation was performed with balanced and unbalanced data folding; see sub-captions.}	
+		Simulation details in Section~\ref{sec:simulation_details}.}	
 	\label{fig:simulation_1}
 \end{figure}
 
@@ -545,7 +544,7 @@ We address this question using various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$, and in the low variance PC. 
 
 The simulation results reveal some non trivial phenomena.
-First, when the signal is in the direction of the high variance PC, the high dimensional two-group tests are far superior than accuracy tests. 
+First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accuracy tests. 
 This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_21}, and the arbitrary correlation in Figure~\ref{fig:dependence_31}.
 
 When the signal is in the direction of the low variance PC, a different phenomenon appears.
@@ -635,20 +634,20 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 
 
-\subsection{Departure from Homoskedasticity}
+\subsection{Departure from Homoskedasticity and Scalar Invariance}
 
-Our previous simulations assume variables a have unit variance. 
 Some test statistics have built-in variance normalization, and are known as \emph{scalar invariant}. 
-Dealing with the heteroskedastic case, where difference coordinates have different variance, is of lesser importance, since we can typically normalize the variable-wise variance. 
-Indeed, practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression).
+Our previous simulations assume variables a have unit variance so that scale had no effect. 
+Also, dealing with heteroskedasticity is of lesser importance, since we can typically force predictors to have a fixed variance. 
+Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression).
 
 The \emph{Srivastava} statistic, for instance, is scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of mean-difference vector.
+It can be (roughly) thought of as the $l_2$ norm of the vector of coordinate-wise t-statistics.
 The \emph{Goeman} statistic, for instance, is not scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the vector of univariate $t^2$ statistics.
-The \emph{Goeman} statistic will thus give less importance signal in the high-variance directions than signal in the low-variance directions, whereas \emph{Srivastava} will give all coordinates the same importance. 
+It can be (roughly) thought of as the $l_2$ norm of the vector of variable-wise mean estimates.
+Under heteroskedasticity, the \emph{Goeman} statistic will give less importance signal in the high-variance directions than signal in the low-variance directions, whereas \emph{Srivastava} will give all coordinates the same importance. 
 
-In Figure~\ref{fig:heteroskedastic_11} we see that as before, two-group tests dominate accuracy tests.
+In Figure~\ref{fig:heteroskedastic_11} we see that as before, two-group tests dominate accuracy tests.	
 We can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics: the latter gaining power by focusing on low variance coordinates. 
 Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is most informative.
 
@@ -694,14 +693,10 @@ An algorithm that samples test sets with replacement is the \emph{leave-one-out 
 	Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
 	Also denote by $C^{(i)}$ the index set of bootstrap samples not containing observation $i$.
 	The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
-	\begin{align}
-	\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
-	\end{align}
+$\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.$
 	An equivalent formulation, which stresses the Bootstrap nature of the algorithm is the following. 
 	Denoting by $S^{(b)}$ the indexes of observations that are \emph{not} in the bootstrap sample $b$ and are not empty, 
-	\begin{align}
-	\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.
-	\end{align}
+$\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.$
 \end{definition}
 
 
@@ -760,11 +755,11 @@ It can also be seen that power increases with the number of bootstrap replicatio
 Our setup of $n=40$ and $p=23$ is high-dim--small-sample, which surfaces finite-sample effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
 Our best performing tests alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$. 
 Shrinking, or thresholding the entries of $\hat{\Sigma}$ reduces variance at the cost of some (possible) bias. 
-The power advantages of the two-group tests may be driven by the regularization of the covariance, and not the statistic itself.
-To answer this question we augment the comparison with some accuracy tests that have explicit covariance regularization built in.
-
-We now some covariance-regularized accuracy tests such as a shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where similarly to \emph{Schafer}, Tikhonov regularization of $\hat \Sigma$ is employed. 
-We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \cite{dudoit_comparison_2002}, which regularizes $\hat{\Sigma}$ similarly to \emph{sd} and \emph{Goeman}.
+We know that this regularization increases power, just by comparing the non-regulirized $T^2$ to its regularized versions. 
+Can we do the same for classifiers? 
+To answer this question we augment the comparison with some accuracy tests that have explicit covariance regularization in them. 
+These include shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} statistic.
+We also try we try a diagonalized LDA\footnote{Known as \emph{Gaussian Na\"ive Bayes}.} \cite{dudoit_comparison_2002}, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
@@ -774,13 +769,13 @@ Even so, the out-of-the-box two-group tests outperform the accuracy tests.
 
 It is interesting to note that \emph{svm.CV.cCV} is not a good performer. 
 In SVMs, the cost parameter governs the magnitude of the margins, and thus the regularization. 
-In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to argue that the optimal cost for predicting is not the same as the optimal cost for testing.
+In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to argue that the optimal regularization for prediction is not the same as the optimal for testing.
 
 \bigskip
 
 \begin{tcolorbox}
 	\centering
-	\tiny
+	\footnotesize
 	\begin{tabular}{l|c|c|c}
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
@@ -825,14 +820,13 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 \section{Neuroimaging Example}
 \label{sec:example}
 
-Figure~\ref{fig:read_data} is an application of both a two-group and an accuracy test to the neuroimaging data of \cite{pernet_human_2015}. 
+Figure~\ref{fig:read_data} is an application of the Srivastava two-group test, and a linear SVM accuracy test, to the neuroimaging data of \cite{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenNeuro website\footnote{\url{http://reproducibility.stanford.edu/}}.
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
-To demonstrate our point, we compare the \emph{Srivastava} two-group test with the linear SVM accuracy test. 
 
 In agreement with our simulation results, the two-group test (\emph{Srivastava}) discovers more brain regions of interest when compared to an accuracy test.
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
@@ -889,12 +883,15 @@ According to these authors, this superiority is due to the larger test-samples w
 
 
 \subsubsection{Inappropriate Regularization}
-The fact that \emph{svm.CV.cCV} is less accurate then \emph{svm.CV.c001} we learn than testing requires different regularization than predicting.
+From the fact that \emph{svm.CV.cCV} is less accurate then \emph{svm.CV.c001} we learn than testing requires different regularization than predicting.
 Does testing require more or less regularization?
-[TODO: compare costs of cv svm to fixed cost]
-Intuitively, when the signal is in the location $\mu$, then predicting requires a regularizing bias in the order of $\Vert \mu \Vert_2$, while testing requires a bias in the order of $\Vert \mu \Vert_\infty$.
-The gap may be considerable in high-dimension.
-This phenomenon was also observed by \cite{cheng2017multiple}, which observe that recovering the support of a function requires less regularization than recovering the whole function.
+In our simulations the optimal cross validated cost parameter for SVM was larger then the most powerful SVM (\emph{svm.CV.c001}), so that testing requires \emph{more} regularization  than predicting. 
+Why would this happen?
+Regularization introduces bias and reduces bias. 
+For testing, we only care about the bias in the largest coordinates of $\mu$. 
+For predictions we care about the bias in all coordinates of $\mu$. 
+If the smallest coordinates of $\mu$ limit the bias for prediction, but not for testing, it means that more variance can removed if aiming only at testing. 
+This phenomenon was also observed by \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization than the \emph{matched filter theorem}, optimal for recovering the whole function.
 
 
 \subsubsection{Discretization}
@@ -1072,6 +1069,7 @@ We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{
 Smooth accuracy estimate by cross validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
+We believe bootstraping enjoys from both smoothing and stabilizing (compared to V-folding), but we currently cannot quantify the contributions of each. 
 
 
 \paragraph{Resubstitution accuracy in high SNR.} 
