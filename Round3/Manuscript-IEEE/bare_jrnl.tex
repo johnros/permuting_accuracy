@@ -537,7 +537,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 We now test the robustness of our results to the correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Intuitively- almost all tests include some estimator of $\Sigma$, so that correlations should be accounted for.
-To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Sigma:=\sqrt{\mu'\Sigma^{-1}\mu}$ fixed. 
+To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed, where $\Theta:=\Sigma^{-1}$.
 
 Which test has more power: accuracy or two-group?
 We address this question using various correlation structures.
@@ -952,7 +952,7 @@ Because sample sizes are fixed in our simulation, with the exception of Section~
 
 Our choice implies that the Euclidean norm of $\delta:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
-This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $KL[\bar x_1,\bar x_0]$.
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
 
 For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed.
 We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
@@ -980,8 +980,8 @@ The intuition that it is easier to detect signal in the low variance directions 
 Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
 In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
 With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
-In \cite{chen2010two}, authors fix $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ where $\Vert \Sigma \Vert_{Frob}=\sqrt{\Tr(\Sigma'\Sigma)}$ is the Frobenius matrix norm. 
-Clearly, $\Vert \mu \Vert^2/\Vert \Sigma \Vert_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
+In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
+Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
 For this reason, we prefer our own approach.
 
 
@@ -989,7 +989,7 @@ For this reason, we prefer our own approach.
 
 
 
-\subsection{Detecting Signal in Different Directions}
+\subsection{Effect of Covariance Regularization}
 Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
 Why is that?
 
@@ -998,8 +998,8 @@ While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$
 We borrow intuition from ridge regression where closed form solutions are available. 
 We first recall that in ridge regression 
 $$\hat y = X'(\hat \Sigma +\lambda I)^{-1}X'y,$$
-so that penalizing $\Vert \beta \Vert_2^2$, ends up regularizing the covariance estimator.
-Using the SVD decomposition of the design, then 
+so that penalizing $\Vert \beta \Vert_2^2$, ends up with a Tikhonov regularization of the covariance estimator.
+Using the SVD decomposition of $X$, then 
 \begin{align}
 \label{eq:ridge-svd}
 	\hat y= \sum_{j=1}^p \left( u_j \frac{d_j^2}{d_j^2+\lambda}u'_j \right)y,
@@ -1007,8 +1007,7 @@ Using the SVD decomposition of the design, then
 where
 $X=(u_1,\dots,u_p)diag(d_1,\dots,d_p)(v'_1,\dots,v'_p)$.
 From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j$, i.e., the smaller noise components. 
-
-This intuition explains figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}: the fact that unregularized tests have more power than the regularized. 
+This intuition explains the fact that unregularized tests have more power than the regularized, as seen in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}.
 
 
 \subsection{Sparse Alternatives}
@@ -1022,10 +1021,10 @@ As usual, two-group tests dominate accuracy tests, only this time, the winners a
 
 \begin{figure}[ht]
 	\centering
-	\label{fig:sparse}	
 	\centering
 	\includegraphics[width=0.7\columnwidth]{"art/file34"}
 	\caption{Sparse $\mu$.}  
+	\label{fig:sparse}	
 \end{figure}
 
 
@@ -1035,7 +1034,7 @@ As usual, two-group tests dominate accuracy tests, only this time, the winners a
 Our work studies signal detection in the two-group multivariate testing framework, i.e., MANOVA framework.
 The same problem can be cast in the univariate generalized linear models framework, and in particular, as a Brenoulli Regression problem.
 If any of the predictors, $x$, carries any signal, then $x_0$ has a different distribution than $x_1$.
-This view is the one adopted \cite{goeman2006testing}.
+This view is the one adopted in \cite{goeman2006testing}.
 
 Another related problem is that of multinomial-regression, i.e., multi-class classification.
 We conjecture that power differences in favor of two-group tests versus accuracy tests will increase as the number of classes increases.
@@ -1049,16 +1048,16 @@ This is a false argument--- accuracy tests do not have any more flexibility than
 One can always perform a two-group test after mapping the original features to some augmented space. 
 This is the case, for instance, of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}.
 
-A slightly different argument is that the feature mapping may not be known, but rather learned from the data. 
+A different argument is that the feature mapping may not be known, but rather learned from the data. 
 We find this to be a weak argument.
-First, tests may also learn feature mappings that maximize power. 
-This is explicit in the constriction of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, and also in \cite{vayatis_auc_2009}.
-Secondly, and perhaps more importantly to our setup, in high-dim problem is data is barely sufficient to learn covariances in the original space. We thus have little hope of learning covariances in augments spaces. 
+First, two-group tests may also learn feature mappings that maximize power. 
+This is explicit in the constriction of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, and also in the AUC optimization of \cite{vayatis_auc_2009}.
+Secondly, and perhaps more importantly to our setup, in high-dim problem data is barely sufficient to learn covariances in the original space. We thus have little hope of learning covariances in augments spaces. 
 This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
 
 
 \subsection{A Good Accuracy Test}
-Brain-computer interfaces and clinical diagnostics \cite{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract it. 
+Brain-computer interfaces and clinical diagnostics \cite{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract this information. 
 In these cases an accuracy test cannot be replaced by a two-group test. 
 For the cases an accuracy test cannot be replaced with other tests, we collect the following observations.
 
@@ -1076,22 +1075,16 @@ This was also observed by \cite{yu2007two}, albeit attributed to the stability o
 We believe bootstraping enjoys from both smoothing and stabilizing (compared to V-folding), but we currently cannot quantify the contributions of each. 
 
 
-\paragraph{Resubstitution accuracy in high SNR.} 
-Resubstitution accuracy is useful in high SNR regimes, such as $n \gg p$, because it avoids cross validation without compromising power. 
-In low SNR, the power loss is considerable. 
-We attribute this to the compounding of discretization and concentration effects: the difference between the sampling distribution of the resubstitution accuracy is simply indistinguishable under the null and under the alternative. 
-
-
 
 \subsection{Mixture Classes}
 
-\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
-The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
-They find that the power increases with the size of the test set.
-This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
-We attribute this to the reduced discretization of the accuracy statistic.
+%\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy tests using simulation, neuroimaging data, genetic data, and analytically.
+%The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+%They find that the power increases with the size of the test set.
+%This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
+%We attribute this to the reduced discretization of the accuracy statistic.
 
-\cite{golland_permutation_2005} simulate the power of accuracy tests by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+When discussing the power of the resubstitution accuracy, the authors of \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
 Under their model (with some abuse of notation)
 \begin{align*}
 \begin{split}
