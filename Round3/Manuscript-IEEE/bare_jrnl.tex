@@ -806,6 +806,47 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 
 
 
+\subsection{Mixture Classes}
+
+%\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
+%The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+%They find that the power increases with the size of the test set.
+%This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
+%We attribute this to the reduced discretization of the accuracy statistic.
+
+When discussing the power of the resubstitution accuracy, the authors of \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+Under their model (with some abuse of notation)
+\begin{align*}
+\begin{split}
+(x_i|y_i=1) & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
+(x_i|y_i=0) & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
+\end{split}
+\end{align*}
+Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
+We now perform the same simulation as \cite{golland_permutation_2005}, and in the same dimensionality as our previous simulations.
+We re-parameterize so that $\pi=0$ corresponds to the null model:
+\begin{align}
+\begin{split}
+\label{eq:mixture_alternative}
+(x_i|y_i=1) & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
+(x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
+\end{split}
+\end{align}
+From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred over accuracy-tests. 
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\columnwidth]{"art/file12"}
+	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
+		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
+		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
+	\label{fig:file12}
+\end{figure}
+
+
+
+
 
 
 
@@ -972,7 +1013,7 @@ In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
 With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
 In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
 Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
-For this reason, we prefer our own approach.
+For this reason, we prefer fixing $\Vert \mu \Vert_\Theta$.
 
 
 
@@ -985,7 +1026,7 @@ Why is that?
 
 We attribute this phenomenon to regularization.
 While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$ does not. 
-We borrow intuition from ridge regression where closed form solutions are available. 
+We borrow intuition from ridge regression where closed form solutions are available, and is equivalent to LDA with Tikhonov regularization. 
 We first recall that in ridge regression 
 $$\hat y = X'(\hat \Sigma +\lambda I)^{-1}X'y,$$
 so that penalizing $\Vert \beta \Vert_2^2$, ends up with a Tikhonov regularization of the covariance estimator.
@@ -996,7 +1037,7 @@ Using the SVD decomposition of $X$, then
 \end{align}
 where
 $X=(u_1,\dots,u_p)diag(d_1,\dots,d_p)(v'_1,\dots,v'_p)$.
-From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j$, i.e., the smaller noise components. 
+From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j^2$, i.e., the smaller PCs of $\hat \Sigma$. 
 This intuition explains the fact that unregularized tests have more power than the regularized, as seen in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}.
 
 
@@ -1033,7 +1074,7 @@ We conjecture that power differences in favor of two-group tests versus accuracy
 
 
 \subsection{Feature Mapping}
-It may be argued that only accuracy-tests permits the separation between classes in augmented spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS) by using non-linear predictors. 
+It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS). 
 This is a false argument--- accuracy-tests do not have any more flexibility than two-group tests. 
 One can always perform a two-group test after mapping the original features to some augmented space. 
 This is the case, for instance, of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}.
@@ -1041,7 +1082,6 @@ This is the case, for instance, of the \emph{Gretton} statistic \cite{gretton_ke
 A different argument is that the feature mapping may not be known, but rather learned from the data. 
 We find this to be a weak argument.
 First, two-group tests may also learn feature mappings that maximize power. 
-This is explicit in the constriction of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, and also in the AUC optimization of \cite{vayatis_auc_2009}.
 Secondly, and perhaps more importantly to our setup, in high-dim problem data is barely sufficient to learn covariances in the original space. We thus have little hope of learning covariances in augments spaces. 
 This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
 
@@ -1055,7 +1095,7 @@ For the cases an accuracy-test cannot be replaced with other tests, we collect t
 
 \paragraph{Regularize}
 Regularization proves crucial to detection power in low SNR regimes, such as when $n$ is in the order of $p$, or under strong correlations.
-We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on this matter. 
+We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on optimal regularization for testing. 
 
 
 \paragraph{Smooth accuracy}
@@ -1064,45 +1104,6 @@ The bLOO estimator, in particular, is preferable over V-fold.
 This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
 We believe bootstraping enjoys from both smoothing and stabilizing (compared to V-folding), but we currently cannot quantify the contributions of each. 
 
-
-
-\subsection{Mixture Classes}
-
-%\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
-%The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
-%They find that the power increases with the size of the test set.
-%This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
-%We attribute this to the reduced discretization of the accuracy statistic.
-
-When discussing the power of the resubstitution accuracy, the authors of \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
-Under their model (with some abuse of notation)
-\begin{align*}
-\begin{split}
-(x_i|y_i=1) & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
-(x_i|y_i=0) & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
-\end{split}
-\end{align*}
-Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, and in the same dimensionality as our previous simulations.
-We re-parameterize so that $\pi=0$ corresponds to the null model:
-\begin{align}
-\begin{split}
-\label{eq:mixture_alternative}
-(x_i|y_i=1) & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
-(x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
-\end{split}
-\end{align}
-From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred over accuracy-tests. 
-
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file12"}
-	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
-		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
-		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
-	\label{fig:file12}
-\end{figure}
 
 
 
