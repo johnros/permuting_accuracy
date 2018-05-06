@@ -553,9 +553,6 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 \begin{figure}[h]
 	\centering
-	\caption{Short memory, AR(1) correlation. 
-		$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$}	
-	\label{fig:dependence_1}
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file20"}
@@ -574,13 +571,14 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 	%		\caption{Signal in direction of identity vector.} 
 	%		\label{fig:dependence_13}
 	%	\end{subfigure}
+		\caption{Short memory, AR(1) correlation. 
+			$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$.}
+		\label{fig:dependence_1}
 \end{figure}
 
 
 \begin{figure}[h]
 	\centering
-	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
-	\label{fig:dependence_2}
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file22"}
@@ -599,16 +597,14 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 	%		\caption{Signal in direction of identity vector.} 
 	%		\label{fig:dependence_23}
 	%	\end{subfigure}
+		\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
+		\label{fig:dependence_2}
 \end{figure}
 
 
 
 \begin{figure}[h]
 	\centering
-	\caption{Arbitrary Correlation. 
-		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
-	}
-	\label{fig:dependence_3}
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file18"}
@@ -627,34 +623,31 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 	%		\caption{Signal in direction of identity vector.} 
 	%		\label{fig:dependence_33}
 	%	\end{subfigure}
+		\caption{Arbitrary Correlation. 
+			$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
+		}
+		\label{fig:dependence_3}
 \end{figure}
 
 
 
 \subsection{Departure from Homoskedasticity and Scalar Invariance}
 
-Some test statistics have built-in variance normalization, and are known as \emph{scalar invariant}. 
-Our previous simulations assume variables a have unit variance so that scale had no effect. 
-Also, dealing with heteroskedasticity is of lesser importance, since we can typically force predictors to have a fixed variance. 
-Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression).
-
+Our previous simulations assume variables a have unit variance. 
+Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
+Implicit z-scoring is sometime an integral part of a test statistic. 
+This is known as \emph{scalar invariance}.
 The \emph{Srivastava} statistic, for instance, is scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the vector of coordinate-wise t-statistics.
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
 The \emph{Goeman} statistic, for instance, is not scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the vector of variable-wise mean estimates.
-Under heteroskedasticity, the \emph{Goeman} statistic will give less importance signal in the high-variance directions than signal in the low-variance directions, whereas \emph{Srivastava} will give all coordinates the same importance. 
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
 
-In Figure~\ref{fig:heteroskedastic_11} we see that as before, two-group tests dominate accuracy-tests.	
-We can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics: the latter gaining power by focusing on low variance coordinates. 
-Since the signal's magnitude is the same in all coordinates, \emph{Goeman} gains power by putting emphasis where it is most informative.
+Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. \emph{Srivastava} will give all coordinates the same importance.
 
-When the signal is in the low variance PC, \emph{Goeman} puts emphasis on variables which carry little signal.
-For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:heteroskedastic_12}.
+In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
 
 \begin{figure}[h]
 	\centering
-	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
-	\label{fig:heteroskedastic}	
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file26"}
@@ -667,6 +660,8 @@ For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:het
 		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
 		\label{fig:heteroskedastic_12}	
 	\end{subfigure}
+		\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
+		\label{fig:heteroskedastic}	
 \end{figure}
 
 
@@ -681,7 +676,7 @@ For this reason it has less power than \emph{sd}, as seen in Figure~\ref{fig:het
 
 Intuition suggests we may alleviate the discretization of the accuracy-test statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
 The discretization of the accuracy statistic is governed by the number of samples in the union of test sets.
-For V-fold CV, for instance, the accuracy may assume as many values as the sample size. 
+For V-fold CV, for instance, the accuracy may assume $n$ values. 
 This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \cite[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
@@ -698,7 +693,7 @@ $\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i 
 
 
 Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
-As expected, selecting test sets with replacement does increase the power of accuracy-tests, when compared to V-fold cross validation, but still falls short from the power of two-group tests. 
+As expected, sampling test sets with replacement does increase the power of accuracy-tests, when compared to V-fold cross validation, but still falls short from the power of two-group tests. 
 It can also be seen that power increases with the number of bootstrap replications, since more replications reduce the level of discretization.
 
 \bigskip
@@ -749,14 +744,14 @@ It can also be seen that power increases with the number of bootstrap replicatio
 \subsection{The Effect of High Dimension}
 \label{sec:highdim}
 
-Our setup of $n=40$ and $p=23$ is high-dim--small-sample, which surfaces finite-sample effects, not manifested in classical $p/n \to 0$ asymptotic analysis.
+Our setup of $n=40$ and $p=23$ is high-dim--small-sample, which surfaces finite-sample effects, not manifested in low-dim, $p/n \to 0$ asymptotic analysis.
 Our best performing tests alleviate the dimensionality of the problem by regularizing the estimation of $\Sigma$. 
 Shrinking, or thresholding the entries of $\hat{\Sigma}$ reduces variance at the cost of some (possible) bias. 
-We know that this regularization increases power, just by comparing the non-regulirized $T^2$ to its regularized versions. 
+We know that this regularization increases power, just by comparing the non-regularized $T^2$ to its regularized versions. 
 Can we do the same for classifiers? 
 To answer this question we augment the comparison with some accuracy-tests that have explicit covariance regularization in them. 
 These include shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} statistic.
-We also try we try a diagonalized LDA\footnote{Also known as \emph{Gaussian Na\"ive Bayes}.} \cite{dudoit_comparison_2002}, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
+We also try we try a diagonalized LDA~\cite{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
@@ -793,7 +788,7 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{"art/file14"}
-	\caption{
+	\caption{[TODO: sync figure with names in table]
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -857,10 +852,10 @@ We emphasize that both test statistics were compared with the same permutation s
 \label{sec:discussion}
 
 We have set out to understand which of the tests is more powerful: accuracy-tests or two-group tests. 
-Our current observation is that accuracy-tests are never optimal; there is always a two-group test that dominates in power. 
-Our advice to the practitioner is that two-group tests, in particular their high-dim versions, are good performers in a wide range of simulation setups. 
-They are also typically easier to implement, and faster to run, since no resampling is required. 
-Statistics such as \emph{Schafer}\cite{schafer_shrinkage_2005}, \emph{Goeman}\cite{goeman2006testing}, \emph{Srivastava}\cite{srivastava_multivariate_2007}, \emph{dCOV}\cite{szekely2004testing}, and \emph{Gretton}\cite{gretton_kernel_2012-1}, are particularly well suited for the dense signal expected in neuroimaging.
+Our current observation is that in various setups, accuracy-tests are never optimal in high-dim; there is always a two-group test that dominates in power.
+We conjecture that they are never optimal, simply because of the needless discretization of the test statistic. 
+Two-group tests are also typically easier to implement, and faster to run, since no resampling is required. 
+Statistics such as \emph{Schafer}\cite{schafer_shrinkage_2005}, \emph{Goeman}\cite{goeman2006testing}, \emph{Srivastava}\cite{srivastava_multivariate_2007}, \emph{dCOV}\cite{szekely2004testing}, and \emph{Gretton}\cite{gretton_kernel_2012-1}, are particularly well suited for detecting dense signal in high-dim.
 
 
 
@@ -887,8 +882,8 @@ Why would this happen?
 Regularization introduces bias and reduces bias. 
 For testing, we only care about the bias in the largest coordinates of $\mu$. 
 For predictions we care about the bias in all coordinates of $\mu$. 
-If the smallest coordinates of $\mu$ limit the bias for prediction, but not for testing, it means that more variance can removed if aiming only at testing. 
-This phenomenon was also observed by \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization than the \emph{matched filter theorem}, optimal for recovering the whole function.
+This means that when testing, the bias introduced by regularization is not limited by the smaller coordinates of $\mu$, permitting to remove move variance. 
+This phenomenon was also observed in \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization (i.e. smoothing) than the \emph{matched filter theorem}, optimal for recovering the whole function.
 
 
 \subsubsection{Discretization}
@@ -957,8 +952,6 @@ The intuition that it is easier to detect signal in the low variance directions 
 
 \begin{figure}[h]
 	\centering
-	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
-	\label{fig:dependence_4}	
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file32"}
@@ -971,7 +964,8 @@ The intuition that it is easier to detect signal in the low variance directions 
 		\caption{$\mu$ in PC15 of $\Sigma$.}  
 		\label{fig:dependence_42}	
 	\end{subfigure}
-	
+	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
+	\label{fig:dependence_4}		
 \end{figure}
 
 Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
