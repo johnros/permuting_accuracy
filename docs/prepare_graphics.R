@@ -7,7 +7,7 @@ pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic')
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 
 
 # Reorder levels
-pvals.melt$statistic <- factor(pvals.melt$statistic, levels=statistic.levels)
+pvals.melt$statistic <- factor(pvals.melt$statistic)
 
 # Filter statistics
 pvals.melt <- pvals.melt[!is.na(statistic),,]
@@ -23,4 +23,4 @@ plot.3 <- pvals.melt %>%
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+
   coord_flip()
-plot.3
+plot(plot.3)

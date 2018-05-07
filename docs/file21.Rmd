@@ -1,15 +1,17 @@
 ---
-title: "Short term memory (AR(1)) with signal in LOW PCs"
+title: "Short term memory (AR(1)) with signal in Low PCs"
 author: "Jonathan Rosenblatt"
 date: "8/2/2017"
 output: html_document
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
+
 
 
 ```{r preliminaries}
 file.name <- "file21"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -20,26 +22,25 @@ n.folds <- 4
 cost.1 <- 1e1
 cost.2 <- 1e-1
 
-source('Round2/Gilron Effect of Cross Validatino.R')
+source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
 effects <- seq(0, 0.5, length=3) 
 
 ## Dependence
-Sigma <- seq_cov(p)
+Sigma <- ar1_cov(n = p, rho=0.6)
 lattice::levelplot(Sigma)
 Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
-plot(Sigma.eigen$values, type='h')
 direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
-maha <- mahalanobis(x = direction0, center = 0, cov = Sigma)
-direction <- direction0 *sqrt(p/maha)
+maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
+direction <- 23 * direction0 / sqrt(n/2*maha)
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=60)
 ```
 
 
@@ -66,31 +67,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- list(
-      Oracle=t_Oracle(x1, x2, Sigma, Sigma),
-      Hotelling=t_Hotelling(x1, x2, FALSE),
-      Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-      Goeman=t_goeman(x1, x2),
-      lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-      lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-      lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-      lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-      sd=t_SD(x1, x2),
-      svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-      svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-      # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-      # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-      svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-      svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-      # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-      # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-    )
-    
+    ts <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     
     # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-
+    
     # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
@@ -102,25 +84,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- c(
-        Oracle=t_Oracle(x1, x2, Sigma, Sigma),
-        Hotelling=t_Hotelling(x1, x2, FALSE),
-        Hotelling.shrink=t_Hotelling(x1, x2, TRUE),
-        Goeman=t_goeman(x1, x2),
-        lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
-        lda.CV.2=t_lda_cv(noise, labels, labels, fold.ids, type=2),
-        lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
-        lda.noCV.2=t_lda(noise, labels, noise, labels, type=2),
-        sd=t_SD(x1, x2),
-        svm.CV.1=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=1),
-        svm.CV.2=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=1),
-        # svm.CV.3=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.1, type=2),
-        # svm.CV.4=t_svm_cv(noise, labels, labels, fold.ids, cost=cost.2, type=2),
-        svm.noCV.1=t_svm(noise, labels, noise, labels, cost=cost.1, type=1),
-        svm.noCV.2=t_svm(noise, labels, noise, labels, cost=cost.2, type=1)
-        # svm.noCV.3=t_svm(noise, labels, noise, labels, cost=cost.1, type=2),
-        # svm.noCV.4=t_svm(noise, labels, noise, labels, cost=cost.2, type=2)
-      )
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
     } # End permutation
     
     ## Compute p-vals for each statistic
@@ -129,7 +93,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
-    
+
     c(effect=effect, pvals) 
   }
 } 
@@ -143,13 +107,13 @@ save.image(file=paste(file.name,".RData", sep=''))
 ```{r analyze multiple effects}
 # load("file21.RData")
 source('prepare_graphics.R')
-plot.3
+plot(plot.3)
 ```
 
 
 ```{r}
 pdf(file = paste('Output/',file.name,'.pdf', sep=''))
-plot.3
+plot(plot.3)
 dev.off()
 ```
 
