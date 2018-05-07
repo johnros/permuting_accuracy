@@ -14,7 +14,7 @@ setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e1
-p <- 23
+p <- 2
 n <- 4e1 # total sample size-> n/2 in each group.
 n.permutations <- 3e2
 n.folds <- 4
@@ -34,7 +34,7 @@ direction <- 23 * direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=30)
+registerDoMC(cores=100)
 ```
 
 ```{r independent noise variable folds}
@@ -62,7 +62,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
     
     # Prepare to permute
     old.labels <- labels
@@ -79,7 +79,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
     } # End permutation
     
     # Compute p-vals for each statistic
@@ -99,6 +99,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r}
+# load('file2.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```
@@ -108,4 +109,5 @@ pdf(file = paste('Output/',file.name,'.pdf', sep=''))
 plot(plot.3)
 dev.off()
 ```
+
 

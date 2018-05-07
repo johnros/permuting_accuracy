@@ -46,19 +46,11 @@ t_cv <- function(FUN, noise, new.labels, old.labels, fold.ids, ...){
 
 
 
-t_Oracle <- function(x,y, Sx, Sy){
+t_Oracle <- function(x,y,S){
   x.bar <- colMeans(x)
   y.bar <- colMeans(y)
   delta <- x.bar - y.bar
   
-  nx <- nrow(x)
-  ny <- nrow(y)
-  n <- nx + ny
-  nx1 <- nx
-  ny1 <- ny
-  n1 <- n
-  
-  S <- (nx1*Sx + ny1*Sy)/n1
   S.inv <- solve(S)
   
   T2 <- delta %*% S.inv %*% delta
@@ -68,6 +60,24 @@ t_Oracle <- function(x,y, Sx, Sy){
 # t_Oracle(x = rmvnorm(1e2, rep(0,1e1)),
 #          y = rmvnorm(1e2, rep(0,1e1)),
 #          Sx=diag(1e1), Sy=diag(1e1))
+
+t_Oracle_NP <- function(x,y, mu.x, mu.y, S){
+  
+  S.inv <- solve(S)
+  x.bar <- colMeans(x)
+  y.bar <- colMeans(y)
+  
+  l1.y <- (y.bar - mu.y) %*% S.inv %*% (y.bar - mu.y)
+  l0.y <- (y.bar - mu.x) %*% S.inv %*% (y.bar - mu.x)
+  
+  T2 <- l1.y-l0.y
+  return(T2)
+}
+### Testing:
+# t_Oracle_NP(x = rmvnorm(1e2, rep(0,1e1)), 
+            # y = rmvnorm(1e2, rep(1,1e1)),
+            # mu.x=0, mu.y=1,
+            # S=diag(1e1))
 
 
 
@@ -196,8 +206,9 @@ t_svm_cvCV <- function(noise, new.labels, old.labels, fold.ids){
 
 
 t_svm_cvLambda <- function(train.noise, train.labels, test.noise, test.labels, type=1){
-  svm.1 <- best.svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear')
+  svm.1 <- best.svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear', cost = 10^(-3:3))
   accuracy <- mean(predict(svm.1, newdata=test.noise)==test.labels)
+  capture.output(svm.1$cost, file='svmCV.txt', append=TRUE)
   
   if(type==1){
     statistic <- accuracy
@@ -456,9 +467,10 @@ t_CLX <- function(x,y,alpha=0.05,input='dummy'){
 
 
 
-statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,shift.vec){
   result <- c(
-    Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+    Oracle.Cov=t_Oracle(x1, x2, Sigma),
+    # Oracle.Cov.Mu=t_Oracle_NP(x1, x2, mu.x=0, mu.y=shift.vec, Sigma),
     Hotelling=t_Hotelling(x1, x2, FALSE),
     Schafer=t_Hotelling(x1, x2, TRUE),
     Goeman=t_goeman(x1, x2),
@@ -497,19 +509,17 @@ statisticsHighDim <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
     statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
     svm.Boot.c100.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=10, type=1),
     svm.Boot.c001.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=0.01,  type=1),
-    svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=1e2, type=1),
-    svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=1e-2, type=1),
-    lda.highdim.1=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.highdim.2=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.highdim.3=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
-    lda.highdim.b50=t_sdlda_boot(noise, labels, B=50, type2=2, type=1)
+    lda.highdim.Dudoit.CV=t_dlda_cv(noise, labels, labels, fold.ids, type=1),
+    lda.highdim.Ramey.CV=t_hdrda_cv(noise, labels, labels, fold.ids, type=1),
+    lda.highdim.Pang.CV=t_sdlda_cv(noise, labels, labels, fold.ids, type=1),
+    lda.highdim.Pang.b50=t_sdlda_boot(noise, labels, B=50, type2=2, type=1)
   )
 }
 
 
 statisticsLargeSample <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
   result <- c(
-    Oracle=t_Oracle(x1, x2, Sigma, Sigma),
+    Oracle=t_Oracle(x1, x2, Sigma),
     Hotelling=t_Hotelling(x1, x2, FALSE),
     Schafer=t_Hotelling(x1, x2, TRUE),
     Goeman=t_goeman(x1, x2),
@@ -540,3 +550,6 @@ statisticsGausSVM <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
   )
   return(result)
 }
+
+
+

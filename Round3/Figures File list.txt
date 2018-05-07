@@ -536,7 +536,7 @@ File name: file37
   Voxel dependence(*) (p): AR(1). Fixed Mahalanobis norm. Signal in mid-way PC.
   Trial dependence (n): none
 
-File name: file38
+File name: file38 (radial basis SVM)
   Status: OK
   Null: Gaussian
   Effects: [0,0.5]
@@ -549,3 +549,18 @@ File name: file38
   Folds: 4
   Voxel dependence (p): Independent
   Trial dependence (n): none
+
+File name: file39 (run time)
+  Status: OK
+  Null: Gaussian
+  Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent
+  Trial dependence (n): none
+

@@ -67,7 +67,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
     
     # Prepare to permute
     old.labels <- labels

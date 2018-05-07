@@ -72,7 +72,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     fold.ids <- balanced_folding(labels, n.folds, balance = balance)
     
     # Observables 
-    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
     
     # Prepare to permute
     old.labels <- labels
@@ -89,7 +89,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
       
     } # End permutation
     

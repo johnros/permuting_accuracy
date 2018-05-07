@@ -2,6 +2,7 @@ err.bar <- round(3*sqrt(.05*.95/(n.replications)),3) # confidence limits of p-va
 .limits <- 0.05 + c(-err.bar,0,err.bar)
 
 pvals.1.9 %<>%  as.data.table()
+names(pvals.1.9)
 
 pvals.melt <- melt(pvals.1.9, id.vars=c("effect"), variable.name='statistic') 
 pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.factor(effect)),] 

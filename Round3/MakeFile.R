@@ -12,10 +12,10 @@ list.files("~/workspace/permuting_accuracy/Round3/Output/", full.names = TRUE) %
 
 # Run with exceptions
 files <- list.files('~/workspace/permuting_accuracy/Round3', pattern = '.Rmd', full.names = TRUE)
-exceptions <- c('file1.Rmd')
+exceptions <- c('file1.Rmd', 'file39.Rmd')
 files <- files[!grepl(exceptions, files, fixed = TRUE)]
 
 for(.file in files){
-  try(ksource(.file))
+  try({ksource(.file))
 }
 pbPost(type = "note", body = "Done", "All files finished")

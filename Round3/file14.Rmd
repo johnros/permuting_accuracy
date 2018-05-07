@@ -10,6 +10,7 @@ editor_options:
 
 ```{r preliminaries}
 file.name <- "file14"
+setwd('~/workspace/permuting_accuracy/Round3/')
 
 balance <- TRUE   # Set for TRUE for balanced folding ana refolding.
 n.replications <-  1e2#1e3

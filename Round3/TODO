@@ -1,8 +1,9 @@
-- Radial Basis SVM.
 - Large sample (X100)
-- More replications for heavytailed-t. 
-- CART for sparse signal.
 - Visual cues for covariance regulirizes statistics on plot.
-- SVM with Gaussian Kernel classifier
+
+
+Future: 
+- CART for sparse signal.
+- More replications for heavytailed-t. 
 
     
