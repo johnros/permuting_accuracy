@@ -1,6 +1,5 @@
-%\documentclass[journal]{IEEEtran}
-%\documentclass[draft]{IEEEtran}
-\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
+\documentclass[journal]{IEEEtran}
+%\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
 
 \input{preamble.tex}
 
@@ -378,7 +377,7 @@ Table~\ref{tab:collected} collects an initial battery of tests we will be compar
 		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $100$ \cite{meyer_e1071:_2015}.
 		\textit{svm.CV.cCV} is a linear SVM, with V-fold CV accuracy, and cost parameter optimized with (an inner) CV. 
 		\textit{lda.noCV.1} is Fisher's LDA, with a resubstituted accuracy estimate.
-		Also recall that in LIBSVM, the \emph{cost} is inversely proportional to the regularization \cite{chang2011libsvm}: larger cost=less regularization. 
+		Also recall that in LIBSVM, the \emph{cost} is inversely proportional to the regularization \cite{chang2011libsvm}: larger cost implies less regularization. 
 		}
 	\label{tab:collected}
 \end{tcolorbox}
@@ -789,7 +788,7 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{"art/file14"}
-	\caption{[TODO: sync figure with names in table]
+	\caption{
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
 		The power on the $x$ axis. 
