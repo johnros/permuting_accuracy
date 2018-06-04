@@ -130,12 +130,12 @@ Examples in the neuroscientific literature, which is our motivating use-case, in
 
 To fix ideas, we will adhere to a concrete example.
 In \cite{gilron_quantifying_2016}, Gilron et al. seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
-Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the brain's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
-We call this an \emph{accuracy-test}, because it uses the prediction accuracy as a test statistic. 
+Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the brain region's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+We call this an \emph{accuracy-test}, because it uses prediction accuracy as a test statistic. 
 
 This same signal detection task can also be approached as a multivariate \emph{two-group} test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
-As put in \cite{pereira_machine_2009}: 
+As put by Pereira et al.~\cite{pereira_machine_2009}: 
 \begin{quote}
 	... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
@@ -288,7 +288,7 @@ $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
 where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continuous $y$.} of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}\footnote{Also known as (the complement of) the \emph{train error}.}, and the V-fold Cross Validation (CV) estimate.
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}\footnote{Also known as (the complement of) the \emph{train-error}. We use \emph{resubstitution} in accordance with Arlot et Celisse~\cite{arlot_survey_2010}, and to emphasize the data has not been split to train-set and test-set.}, and the V-fold Cross Validation (CV) estimate.
 \begin{definition}[Resubstitution accuracy]
 	\label{def:resubstitution}
 	The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
