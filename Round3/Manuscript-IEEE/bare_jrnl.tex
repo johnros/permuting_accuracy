@@ -543,7 +543,7 @@ We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig
 
 Which test has more power: accuracy or two-group?
 We address this question using various correlation structures.
-We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$, and in the low variance PC. 
+We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$ and in the low variance PC. 
 To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
 This matter is discussed in Section~\ref{sec:fix_snr}.
 
@@ -682,10 +682,12 @@ In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the sca
 \subsection{Departure from V-fold CV}
 \label{sec:bootstrap}
 
-Intuition suggests we may alleviate the discretization of the accuracy-test statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
-The discretization of the accuracy statistic is governed by the number of samples in the union of test sets.
-For V-fold CV, for instance, the accuracy may assume $n$ values. 
-This suggests that the accuracy can be ``smoothed'' by allowing the test sample to be drawn with replacement. 
+The more a test statistic is discretized, the more it's power diminishes. 
+This phenomenon is quite basic in information theory: the more coarse the coding, the smaller the divergence between two channels [TODO: add reference].
+
+In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
+This is the case whenever resampling without replacement. 
+Intuition suggests we may alleviate the discretization of the accuracy statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \cite[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 	\label{def:bloo}
