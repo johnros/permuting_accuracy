@@ -907,12 +907,12 @@ We have set out to understand which of the tests is more powerful: accuracy-test
 Our current observation is that we have never found accuracy tests to be optimal in high-dim regimes; there was always a two-group test that dominated in power.
 We conjecture that they are never optimal, simply because of the needless discretization of the test statistic. 
 Two-group tests are also typically easier to implement, and faster to run, since no resampling is required. 
-Statistics such as \emph{Schafer}\cite{schafer_shrinkage_2005}, \emph{Goeman}\cite{goeman2006testing}, \emph{Srivastava}\cite{srivastava_multivariate_2007}, \emph{dCOV}\cite{szekely2004testing}, and \emph{Gretton}\cite{gretton_kernel_2012-1}, are particularly well suited for detecting dense signal in high-dim.
+Statistics such as \emph{Schafer}, \emph{Goeman}, \emph{Srivastava}, \emph{dCOV}, and \emph{Gretton}, are particularly well suited for detecting dense signal in high-dim.
 
 
 
 \subsection{Where do accuracy-tests Lose Power?}
-The low power of the accuracy-tests compared to two-group tests can be attributed to the following causes.
+The low power of the accuracy-tests compared to two-group tests can be attributed to some of the following causes.
 
 \subsubsection{Data Splitting}
 Cross-validated statistics split the data.
