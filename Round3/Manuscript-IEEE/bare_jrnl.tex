@@ -544,7 +544,7 @@ We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig
 Which test has more power: accuracy or two-group?
 We address this question using various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$ and in the low variance PC. 
-To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
+To keep the comparisons fair as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
 This matter is discussed in Section~\ref{sec:fix_snr}.
 
 
@@ -978,7 +978,7 @@ Accuracy-tests are seen as ``black boxes'', even though they can be analyzed in 
 Gilron et at.\cite{gilron2017s} demonstrate that the type of signal captured by accuracy-tests is less interpretable to neuroimaging practitioners than two-group tests. 
 
 Some authors prefer accuracy-tests because they can be seen as effect-size estimates, invariant to the sample size. 
-This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators, that generalize Cohen's d. 
+This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators. 
 Examples can be found, for instance, in \cite{stevens2012applied} and references therein. 
 
 
@@ -988,7 +988,7 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-For ``a fair comparison'' we fix the Kullback–Leibler Divergence between distributions of sample means. 
+For a fair comparison we fix the Kullback–Leibler Divergence between distributions of sample means. 
 Abusing notation, we fix $KL[\bar x_1,\bar x_0]=c^2 p$, which is the same as fixing $\Vert \mu \Vert^2_\Theta$, with the exception of the large sample (\ref{sec:large-sample}) and the heavytailed analysis (\ref{sec:heavytailed}). 
 
 Our choice implies that the Euclidean norm of $\delta:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
@@ -1034,8 +1034,8 @@ Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} a
 Why is that?
 
 We attribute this phenomenon to regularization.
-While the signal, $\mu$ varies in direction, the regularization of $\hat \Sigma$ does not. 
-We borrow intuition from ridge regression where closed form solutions are available, and is equivalent to LDA with Tikhonov regularization. 
+Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sigma$ does not. 
+We borrow intuition from ridge regression, for which closed form solutions are available, and is equivalent to LDA with Tikhonov regularization. 
 We first recall that in ridge regression 
 $$\hat y = X'(\hat \Sigma +\lambda I)^{-1}X'y,$$
 so that penalizing $\Vert \beta \Vert_2^2$, ends up with a Tikhonov regularization of the covariance estimator.
@@ -1084,14 +1084,14 @@ We conjecture that power differences in favor of two-group tests versus accuracy
 
 \subsection{Feature Mapping}
 It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS). 
-This is a false argument--- accuracy-tests do not have any more flexibility than two-group tests. 
+The \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, is an example where the a two-group test is performed after augmenting the features to RKHS.
+We thus disagree with this argument: accuracy-tests do not have any more flexibility than two-group tests. 
 One can always perform a two-group test after mapping the original features to some augmented space. 
-This is the case, for instance, of the \emph{Gretton} statistic \cite{gretton_kernel_2012-1}.
+
 
 A different argument is that the feature mapping may not be known, but rather learned from the data. 
-We find this to be a weak argument.
-First, two-group tests may also learn feature mappings that maximize power. 
-Secondly, and perhaps more importantly to our setup, in high-dim problem data is barely sufficient to learn covariances in the original space. We thus have little hope of learning covariances in augmented spaces. 
+This is true but requires large amounts of data: in high-dim problems data is barely sufficient to learn covariances in the original space. 
+We are thus very skeptical of the possibility of learning covariances in augmented spaces. 
 This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
 
 
