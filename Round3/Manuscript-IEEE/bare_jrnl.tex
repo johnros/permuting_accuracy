@@ -413,9 +413,9 @@ where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of subject $i$, $\mu$ i
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
 Shifts are dense and equal in all $p$ coordinates of $\mu$.
-With $e$ being a $p$-vector of ones, then $\mu:=c \, e$. 
+We set $\mu:=c \, e$ where $e$ is a $p$-vector of ones. 
 We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
-When setting $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Theta^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$, where $\Theta:=\Sigma^{-1}$. 
+With $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Theta^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$, where $\Theta:=\Sigma^{-1}$. 
 These can be thought as the effect's size. 
 
 
@@ -435,7 +435,7 @@ We start with a sanity check.
 Theory suggests that all test statistics should control their false positive rate. 
 Our simulations confirm this.
 In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where $\mathcal{F}=\mathcal{G}$, by a red circle. 
-Since the red circles are always below the desired $0.05$ error rate then the false positive rate of all test statistics, in all simulations is controlled. 
+Since the red circles are always below the desired $0.05$ error rate then the false positive rate of all test statistics, in all simulations, is controlled. 
 We may thus proceed and compare the power of each test statistic. 
 
 
@@ -447,7 +447,7 @@ We may thus proceed and compare the power of each test statistic.
 \subsection{Power}
 \label{sec:power}
 
-From Figure~\ref{fig:simulation_1} we learn that two-group tests are more powerful than accuracy-tests.
+From the power of the various statistics (green and blue dots in Figure~\ref{fig:simulation_1}) we learn that in our simulation setup two-group tests are more powerful than accuracy-tests.
 
 \begin{figure}[h]
 	\centering
@@ -709,7 +709,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		Name & Algorithm & Resampling & B  & Remark\\ 
 		\hline
 		\hline
-		lda.Boot.b10 & LDA & bLOO 	& $10$ &  -- \\ 
+		\cue lda.Boot.b10 & LDA & bLOO 	& $10$ &  -- \\ 
 		svm.Boot.c001.b50 & SVM & bLOO 	& $10$ & cost=0.01 \\ 
 		svm.Boot.c100.b50 & SVM & bLOO 	& $10$ & cost=100 \\ 
 		svm.Boot.c001.b10 & SVM & bLOO 	& $50$ & cost=0.01 \\ 
@@ -1188,26 +1188,28 @@ He is a member of Ben-Gurion University's Zlotowski Center for Neuroscience.
 \end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{Yuval Benjamini}
-Biography text here.
+\begin{IEEEbiographynophoto}
+	{Yuval Benjamini} is a senior lecturer at the Department of Statistics in the Hebrew University of Jerusalem, Israel. 
+	His research interests include high-dimensional prediction models and spatial statistics, specializing in the analysis of neuroscience and genomic data. 
+	YB received his Ph.D. degree in Statistics from UC Berkeley, and was a Stein Fellow at the Department of Statistics at Stanford University. 
 \end{IEEEbiographynophoto}
 
 % insert where needed to balance the two columns on the last page with
 % biographies
 %\newpage
 
-\begin{IEEEbiographynophoto}{Roee Gilron}
-Biography text here.
+\begin{IEEEbiographynophoto}
+	{Roee Gilron} is currently a postdoc in the Starr Lab at- UCSF. His research probes various aspects of motor control in health and disease using functional imaging and deep brain stimulation (DBS) in Parkinson's disease. He has developed methods for multidimensional analysis of neuroimaging data and is currently developing platforms for use in adaptive DBS. He received his B.S degree in Neuroscience from Brandeis University and completed his PhD in Cognitive Neuroscience from Tel Aviv University (TAU). 
 \end{IEEEbiographynophoto}
 
 
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{art/mukamel}}]{Roy Mukamel}
-Roy Mukamel performed his undergraduate studies in computer science and biology and received his Ph.D. from the department of neuroscience at the Weizmann Institute of Science. Following post-doctoral training at the University of California at Los-Angeles (UCLA), he joined Tel-Aviv University. Today he is an associate Professor at the School of Psychological Sciences and Sagol School of Neuroscience at Tel-Aviv University, Israel.
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{art/mukamel}}]
+	{Roy Mukamel} performed his undergraduate studies in computer science and biology and received his Ph.D. from the department of neuroscience at the Weizmann Institute of Science. Following post-doctoral training at the University of California at Los-Angeles (UCLA), he joined Tel-Aviv University. Today he is an associate Professor at the School of Psychological Sciences and Sagol School of Neuroscience at Tel-Aviv University, Israel.
 \end{IEEEbiography}
 
 
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{art/Goeman}}]{Jelle J. Goeman}
-is professor of biostatistics at Leiden University Medical Center in The Netherlands.His research focuses on high-dimensional data as they occur in e.g. transcriptomics and neuroimaging. He has worked on methods for penalized estimation and multiple hypothesis testing. He received his PhD from Leiden University and has worked at Imperial College in London and at Radboud University in Nijmegen.
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{art/Goeman}}]
+	{Jelle J. Goeman} is professor of biostatistics at Leiden University Medical Center in The Netherlands.His research focuses on high-dimensional data as they occur in e.g. transcriptomics and neuroimaging. He has worked on methods for penalized estimation and multiple hypothesis testing. He received his PhD from Leiden University and has worked at Imperial College in London and at Radboud University in Nijmegen.
 \end{IEEEbiography}
 
 
