@@ -354,13 +354,13 @@ We selected two-group tests based on their popularity, and so that various types
 		Name & Algorithm & Resampling & Remark\\ 
 		\hline
 		\hline
-		svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
-		svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ 
-		svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
-		svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
-		svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
-		lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
-		lda.CV.1 	& LDA & V-fold 			&  -- \\ 
+		\cue svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
+		\cue svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ 
+		\cue svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
+		\cue svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
+		\cue svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
+		\cue lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
+		\cue lda.CV.1 	& LDA & V-fold 			&  -- \\ 
 		Cai & \cite{cai_two-sample_2013} & Resubstitution & -- \\ 
 		Simes & \cite{simes1986improved} & Resubstitution & -- \\ 
 		dCOV & \cite{szekely2004testing} & Resubstitution & -- \\ 
@@ -377,7 +377,7 @@ We selected two-group tests based on their popularity, and so that various types
 		Two-group tests for dense shifts include: \textit{Oracle}, \textit{Hotelling}, \textit{Schafer}, \textit{Goeman}, and \textit{Srivastava}.
 		Two-group tests for sparse shifts include \textit{Cai}.
 		Two-group adaptive tests for shifts include \textit{Simes}.
-		The rest are accuracy-tests with details given in the table. 	
+		The rest are accuracy-tests, marked with a \cue, and details given in the table. 	
 		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $100$ \cite{meyer_e1071:_2015}.
 		\textit{svm.CV.cCV} is a linear SVM, with V-fold CV accuracy, and cost parameter optimized with (an inner) CV. 
 		\textit{lda.noCV.1} is Fisher's LDA, with a resubstituted accuracy estimate.
@@ -710,10 +710,10 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		\hline
 		\hline
 		\cue lda.Boot.b10 & LDA & bLOO 	& $10$ &  -- \\ 
-		svm.Boot.c001.b50 & SVM & bLOO 	& $10$ & cost=0.01 \\ 
-		svm.Boot.c100.b50 & SVM & bLOO 	& $10$ & cost=100 \\ 
-		svm.Boot.c001.b10 & SVM & bLOO 	& $50$ & cost=0.01 \\ 
-		svm.Boot.c100.b10 & SVM & bLOO 	& $50$ & cost=100 \\ 
+		\cue svm.Boot.c001.b50 & SVM & bLOO 	& $10$ & cost=0.01 \\ 
+		\cue svm.Boot.c100.b50 & SVM & bLOO 	& $10$ & cost=100 \\ 
+		\cue svm.Boot.c001.b10 & SVM & bLOO 	& $50$ & cost=0.01 \\ 
+		\cue svm.Boot.c100.b10 & SVM & bLOO 	& $50$ & cost=100 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
@@ -776,10 +776,10 @@ In \emph{svm.CV.cCV} this regularization is optimized with CV which leads us to 
 		Name & Algorithm & Resampling &  Parameters\\ 
 		\hline
 		\hline
-		lda.highdim.Dudoit.CV & \cite{dudoit_comparison_2002} & V-fold & -- \\ 
-		lda.highdim.Ramey.CV & \cite{ramey_high-dimensional_2016} & V-fold & -- \\ 
-		lda.highdim.Pang.CV & \cite{pang_shrinkage-based_2009} & V-fold & -- \\ 
-		lda.highdim.Pang.b50 & \cite{pang_shrinkage-based_2009} & bLOO 	 & B=50 \\ 
+		\cue lda.highdim.Dudoit.CV & \cite{dudoit_comparison_2002} & V-fold & -- \\ 
+		\cue lda.highdim.Ramey.CV & \cite{ramey_high-dimensional_2016} & V-fold & -- \\ 
+		\cue lda.highdim.Pang.CV & \cite{pang_shrinkage-based_2009} & V-fold & -- \\ 
+		\cue lda.highdim.Pang.b50 & \cite{pang_shrinkage-based_2009} & bLOO 	 & B=50 \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
