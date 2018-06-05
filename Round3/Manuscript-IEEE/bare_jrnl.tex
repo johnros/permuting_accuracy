@@ -447,7 +447,8 @@ We may thus proceed and compare the power of each test statistic.
 \subsection{Power}
 \label{sec:power}
 
-From the power of the various statistics (green and blue dots in Figure~\ref{fig:simulation_1}) we learn that in our simulation setup two-group tests are more powerful than accuracy-tests.
+Figure~\ref{fig:simulation_1}) we learn that in our simulation setup two-group tests are more powerful than accuracy-tests.
+This is most notable for the intermediate signal strength (green triangles). 
 
 \begin{figure}[h]
 	\centering
@@ -472,7 +473,7 @@ From the power of the various statistics (green and blue dots in Figure~\ref{fig
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
 Our results, however hold also in high-dim--large-sample configurations.
 To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-The results are reported in Figure~\ref{fig:large-sample}.
+The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
 
 
 \begin{figure}[h]
@@ -512,9 +513,10 @@ The results are reported in Figure~\ref{fig:large-sample}.
 
 \subsection{Departure From Gaussianity}
 \label{sec:heavytailed}
-The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations, may fail when the data is not multivariate Gaussian, and Hotelling's $T^2$ statistic no longer a generalized-likelihood-ratio test. 
+The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not multivariate Gaussian.
+This is because Hotelling's $T^2$ statistic is no longer a generalized-likelihood-ratio test. 
 
-To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution. 
+To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
 In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the Gaussian case (Figure~\ref{fig:t_null}).
 
 
@@ -535,9 +537,9 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 
 We now test the robustness of our results to the correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
-Almost all tests include some estimator of $\Sigma$, so that correlations should be accounted for.
-Then again, estimating $\Sigma$ introduces variance, at the cost of reduced bias.
-We thus have no a-priori guess on the effect of the added correlations. 
+Some tests try to account for $\Sigma$ by estimating it. 
+Estimating $\Sigma$ reduces possible bias at the cost of some variance. 
+We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig:simulation_1}) we repeat themselves in the presence of correlation. 
 To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
 
 Which test has more power: accuracy or two-group?
