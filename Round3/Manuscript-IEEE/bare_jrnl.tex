@@ -1,5 +1,5 @@
-\documentclass[journal]{IEEEtran}
-%\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
+%\documentclass[journal]{IEEEtran}
+\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
 
 \input{preamble.tex}
 
@@ -540,11 +540,13 @@ In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity 
 Some tests try to account for $\Sigma$ by estimating it. 
 Estimating $\Sigma$ reduces possible bias at the cost of some variance. 
 We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig:simulation_1}) we repeat themselves in the presence of correlation. 
-To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
 
 Which test has more power: accuracy or two-group?
 We address this question using various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$, and in the low variance PC. 
+To keep the comparisons ``fair'' as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
+This matter is discussed in Section~\ref{sec:fix_snr}.
+
 
 The simulation results reveal some non trivial phenomena.
 First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accuracy-tests. 
