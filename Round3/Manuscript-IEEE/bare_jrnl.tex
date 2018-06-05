@@ -929,7 +929,8 @@ According to these authors, this superiority is due to the larger test-samples w
 \subsubsection{Inappropriate Regularization}
 From the fact that \emph{svm.CV.cCV} is less accurate then \emph{svm.CV.c001} we learn than testing requires different regularization than predicting.
 Does testing require more or less regularization?
-In our simulations the optimal cross validated cost parameter for SVM was larger then the most powerful SVM (\emph{svm.CV.c001}), so that testing requires \emph{more} regularization  than predicting. 
+In our simulations, the optimal cross validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
+We thus conclude that that testing requires \emph{more} regularization  than predicting. 
 Why would this happen?
 Regularization introduces bias and reduces bias. 
 For testing, we only care about the bias in the largest coordinates of $\mu$. 
@@ -944,7 +945,7 @@ Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \cite{hemerik_exact_2014}.
 Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
 Thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data.
-For an intuition consider the usage of the \emph{resubstitution accuracy} as a test statistic. 
+For an intuition consider the usage of the \emph{resubstitution accuracy}, i.e. the train-accuracy, as a test statistic. 
 In a very high-dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
 This explains the terrible power of \emph{svm.noCV.c100}, which has barely any regularization\footnote{Recall that the cost parameter in LIBSVM is inversely proportional to the regularization.}. 
