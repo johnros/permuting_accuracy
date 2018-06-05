@@ -940,7 +940,6 @@ This phenomenon was also observed in \cite{cheng2017multiple}, which observe tha
 
 
 \subsubsection{Discretization}
-[TODO: explain that LDA is Hotelling+discretization]
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \cite{hemerik_exact_2014}.
 Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
@@ -956,8 +955,7 @@ An asymptotic analysis, which eschews the discretization effect,  may suggest re
 One of the effects of discretization is ties. 
 The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (not reported herein).
 
-Using our simulations we may quantify the power loss due to discretization. 
-This is because Figher's LDA is equivalent to Hotelling's $T^2$ followed by a discretization stage. 
+Using our simulations we may quantify the power loss due to discretization, this is because Figher's LDA is equivalent to Hotelling's $T^2$ followed by a discretization stage. 
 From Figure~\ref{fig:simulation_1} we see that for the intermediate signal's strength, \emph{Hotelling} has roughly twice the power of \emph{lda.noCV.1}.
 We thus conclude that the effect of discretization may be considerable. 
 
@@ -973,10 +971,10 @@ The matter of discretization was addressed by a $2011$ post by Prof. Frank Harre
 
 \subsection{Interpretation}
 Two-group tests, and location tests in particular, are easier to interpret. 
-To do so we typically use a NPL type argument, and think:
+To do so we typically use a Neyman-Pearson Lemma type argument, and think:
 What type of signal is a test sensitive to?
-What is the direction of the effect? etc.
-accuracy-tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
+What is the direction of the effect? 
+Accuracy-tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
 Gilron et at.\cite{gilron2017s} demonstrate that the type of signal captured by accuracy-tests is less interpretable to neuroimaging practitioners than two-group tests. 
 
 Some authors prefer accuracy-tests because they can be seen as effect-size estimates, invariant to the sample size. 
