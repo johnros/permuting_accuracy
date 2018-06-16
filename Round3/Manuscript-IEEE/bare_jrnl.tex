@@ -1,5 +1,5 @@
-%\documentclass[journal]{IEEEtran}
-\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
+\documentclass[journal]{IEEEtran}
+%\documentclass[onecolumn,draftclsnofoot]{IEEEtran}
 
 \input{preamble.tex}
 
@@ -190,7 +190,7 @@ Asymptotic relative efficiency measures (ARE) are typically used by statistician
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
 The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we are able to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
-Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$.[TODO: verify] 
+Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$.
 This means that Fisher's LDA requires at least $6.3$ times more samples to achieve the same (asymptotic) power as the $T^2$ test. 
 In this light, the accuracy-test is remarkably inefficient.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \cite{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
@@ -482,7 +482,7 @@ The results, reported in Figure~\ref{fig:large-sample}, are qualitatively simila
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{"art/file1"}
-	\caption{[TODO: update figure] The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
+	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
 	\label{fig:large-sample}
 \end{figure}
 
@@ -682,12 +682,6 @@ In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the sca
 \subsection{Departure from V-fold CV}
 \label{sec:bootstrap}
 
-The more a test statistic is discretized, the more it's power diminishes. 
-This can be shown by observing that a classification is a quantization of a continuous prediction. 
-The information processing inequality thus applies \cite{cover2012elements}. 
-Because testing power is monotone in the mutual information, a non-quantized test statistic will have no less power than a quantized one. [TODO: verify]
-
-
 In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
 This is the case whenever resampling without replacement. 
 Intuition suggests we may alleviate the discretization of the accuracy statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
@@ -832,25 +826,25 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 %This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
 %We attribute this to the reduced discretization of the accuracy statistic.
 
-When discussing the power of the resubstitution accuracy, the authors of \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+When discussing the power of the resubstitution accuracy, Golland et al.~\cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
 Under their model (with some abuse of notation)
 \begin{align*}
 \begin{split}
-(x_i|y_i=1) & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
-(x_i|y_i=0) & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
+x_1 & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
+x_0 & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
 \end{split}
 \end{align*}
 Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, and in the same dimensionality as our previous simulations.
+We now perform the same simulation as \cite{golland_permutation_2005}, but in the same dimensionality of our previous simulations.
 We re-parameterize so that $\pi=0$ corresponds to the null model:
 \begin{align}
 \begin{split}
 \label{eq:mixture_alternative}
-(x_i|y_i=1) & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
-(x_i|y_i=0) & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
+x_1 & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
+x_0 & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
 \end{split}
 \end{align}
-From Figure~\ref{fig:file12}, we see that also for the mixture class of \cite{golland_permutation_2005} locations tests are to be preferred over accuracy-tests. 
+From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are still preferred over accuracy-tests. 
 
 
 \begin{figure}[ht]
@@ -913,7 +907,7 @@ We emphasize that both test statistics were compared with the same permutation s
 
 We have set out to understand which of the tests is more powerful: accuracy-tests or two-group tests. 
 Our current observation is that we have never found accuracy tests to be optimal in high-dim regimes; there was always a two-group test that dominated in power.
-We conjecture that they are never optimal, simply because of the needless discretization of the test statistic. 
+We conjecture that accuracy are never optimal, simply because of the needless discretization of the test statistic. 
 Two-group tests are also typically easier to implement, and faster to run, since no resampling is required. 
 Statistics such as \emph{Schafer}, \emph{Goeman}, \emph{Srivastava}, \emph{dCOV}, and \emph{Gretton}, are particularly well suited for detecting dense signal in high-dim.
 
