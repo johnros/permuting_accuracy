@@ -1,9 +1,15 @@
-1. Authors declare no simiarl submissions have been made to any other venue. 
-2. All co-authors are aware of the submission to JMLR.
-3. No conflict of interests to declare. 
-4. Action editors:
-     - Sara van de Geer
-     - Aapo Hyvärinen
-     - Saharon Rosset
-     - Robert E. McCulloch
+In our contribution we compare various multivariate signal detection algorithms. Starting with Hotelling's classical T2 statistic from 1931, to cutting edge detectors based on supervised learning. Lacking a mathematical framework allowing this analysis for finite samples, we revert to simulations.
+
+The main motivating question was the comparison of signal detectors based on two-class classifiers ("accuracy tests"), versus more classical statistics such as Hotelling's T2 (a two-group GLR test), and its variants. 
+We find that despite the popularity of accuracy tests, especially in the neuroimaging literature, they are low powered. Put differently: there is always a "classical" two-group test that dominates an accuracy-test with respect to power. We provide a lengthy discussion to the source of this power loss. Given their low power, the tremendous popularity of accuracy tests in the literature is quite surprising. 
+
+This work also surfaces other non-trivial finite sample effects in multivariate signal detectors:
+- In finite-samples, regularizing the covariance estimator is crucial to the power of a signal detector. 
+- The optimal regularization for testing is larger than the optimal for predicting. I.e., tuning a learning algorithm for good prediction (e.g. using cross-validation), makes it suboptimal for signal detection.
+- The power of accuracy tests can be improved by Bootstrapping instead of V-fold cross-validating. This may be useful for designing brain-machine interfaces. 
+
+We believe this large simulation study adds important insights for designing multivariate signal detectors, and will motivate further research that formalizes and quantifies our findings. 
+
+
+
 

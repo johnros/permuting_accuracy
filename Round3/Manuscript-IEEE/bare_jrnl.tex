@@ -180,7 +180,8 @@ Their simulated shift is sparse, so that it is no surprise that a tree-type pred
 Authors of \cite{olivetti2013kernel} compare the kernel test of Gretton et al. \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
 Their results are inconclusive with a slight advantage to the logistic regression.
 In \cite{lopez2016revisiting}, authors compare several accuracy-tests to several two-group tests and conclude that an accuracy-test based on a neural-net is preferable. 
-Their argument is that the neural-net is able to learn the features that best separate the samples. Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
+Their argument is that the neural-net is able to learn the features that best separate the samples. 
+Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
 
 Ramdas et al. \cite{ramdas_classification_2016} currently offer the only analytic comparison; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
 By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent. 
@@ -476,15 +477,17 @@ This is most notable for the intermediate signal strength (green triangles).
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
 Our results, however, hold also in high-dim--large-sample configurations.
 To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
+This simulation required roughly 11 years of computing time.
+The results are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1} and thus not reported herein.
 
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file1"}
-	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
-	\label{fig:large-sample}
-\end{figure}
+%The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=0.7\columnwidth]{"art/file1"}
+%	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
+%	\label{fig:large-sample}
+%\end{figure}
 
 
 
