@@ -103,35 +103,35 @@ These can be classified along the following lines:
 \begin{itemize}
 	\item \textbf{High-dim GOF}: Tests that seek for any difference between two distributions, such as  \cite{hall2002permutation,szekely_brownian_2009,gretton_kernel_2012-1}.
 	
-	\item \textbf{High-dim location test for sparse shift}: Tests the seek for a sparse shift in mean vectors such as \cite{tony2014two,chang2014simulation}.
+	\item \textbf{High-dim location test for sparse shifts}: Tests the seek for a sparse shift in mean vectors such as \cite{tony2014two,chang2014simulation}.
 	
-	\item \textbf{High-dim location test for dense shift}: Tests the seek for a dense shift in mean vectors such as  \cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}.
+	\item \textbf{High-dim location test for dense shifts}: Tests the seek for a dense shift in mean vectors such as  \cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}.
 	
-	\item \textbf{High-dim location test for shift with unknown sparsity}: Tests the seek for a shift in mean vectors, but adapt to the unknown sparsity, such as \cite{donoho2004higher,zhong2013tests,moscovich2016exact}.
+	\item \textbf{High-dim location test for shifts with unknown sparsity}: Tests the seek for a shift in mean vectors, but adapt to the unknown sparsity, such as \cite{donoho2004higher,zhong2013tests,moscovich2016exact}.
 	
 \end{itemize}
 
 At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging?
 In this manuscript, we do not provide a full answer to the matter.
 Instead, we merely seek to demonstrate that \textbf{accuracy-tests are never optimal, compared to high-dim two-group tests}.
-Out recommendations to the practitioner in these high-dim problems:
+Our recommendations to the practitioner in these high-dim problems:
 (i) Prefer a two-group test over an accuracy-test. 
 (ii) Appropriate regularization is crucial. 
 
 Various authors have compared accuracy-tests to two-group tests, often with contradicting conclusions.
 In \cite{yu2007two} for instance, authors find that an accuracy-test based on a tree predictor is preferable over a two-group test. 
-Their simulated shift is sparse, so that it is no surprise that a tree-type predictor outperforms linear predictors and tests. 
+Their simulated shift is sparse, which may be favorable for tree type predictors, over linear ones. 
 Authors of \cite{olivetti2013kernel} compare the kernel test of Gretton et al. \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
 Their results are inconclusive with a slight advantage to the logistic regression.
 In \cite{lopez2016revisiting}, authors compare several accuracy-tests to several two-group tests and conclude that an accuracy-test based on a neural-net is preferable. 
 Their argument is that the neural-net is able to learn the features that best separate the samples. 
-Their examples, however, are low-dimensional (even if large-sample), and such feature learning is typically impossible in high-dimension.
+Their examples, however, are low-dimensional (even if large-sample), and such feature learning may be impossible in high-dimension.
 
-Ramdas et al. \cite{ramdas_classification_2016} currently offer the only analytic comparison; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
-By comparing the rates of convergence of the power of each statistic, \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent. 
+Ramdas et al. \cite{ramdas_classification_2016} currently offer the only analytic analysis; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
+By comparing the consistency rates \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent.
 Rates, however, are only a first stage when comparing test statistics. 
 
-Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \cite{vaart_asymptotic_1998}.
+Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
 The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we are able to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
