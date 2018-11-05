@@ -37,7 +37,7 @@
 
 % Add a footnote for the corresponding author if one has been
 % identified in the author list
-\footnotetext{johnros@bgu.ac.il.}
+\footnotetext{johnros@bgu.ac.il}
 
 \begin{abstract}
 {
@@ -197,7 +197,7 @@ We now detail the various test statistics that will be compared.
 
 
 \subsection{Two-Group Tests}
-The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means\footnote{This is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions.}. 
+The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions). 
 Difference in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \cite{hotelling_generalization_1931}. 
 Hotelling's statistic was later shown to be the generalized-likelihood-ratio statistic in the Gaussian shift class. 
@@ -226,17 +226,17 @@ We now explain how an accuracy-test is constructed.
 
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
-Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor\footnote{Also known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
-The accuracy of predictor\footnote{Also known as (the complement of) the \emph{test error}.}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
-The accuracy of a learning algorithm\footnote{Also known  as (the complement of) the \emph{expected test error}.}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
+The accuracy of predictor, also known as (the complement of) the \emph{test error}., $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
+The accuracy of a learning algorithm, also known  as (the complement of) the \emph{expected test error}., $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
 $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
-where $\indicator{A}$ is the indicator function\footnote{Mutatis mutandis for continuous $y$.} of the set $A$. 
+where $\indicator{A}$ is the indicator function of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}\footnote{Also known as (the complement of) the \emph{train-error}. We use \emph{resubstitution} in accordance with Arlot et Celisse~\cite{arlot_survey_2010}, and to emphasize the data has not been split to train-set and test-set.}, and the V-fold Cross Validation (CV) estimate.
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}, also known as (the complement of) the \emph{train-error}, and the V-fold Cross Validation (CV) estimate.
 \begin{definition}[Resubstitution accuracy]
 	\label{def:resubstitution}
 	The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
@@ -282,7 +282,7 @@ We will report results only with balanced folding, mostly because we will conclu
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features\footnote{The difference between permuting labels, $\pi(y)$, or features, $\pi(X)$, is in the mapping to folds. When permuting features, the \textit{label} assignment to folds is fixed. When permuting labels, the \textit{feature} assignment to folds is fixed.} instead of labels, as done by \cite{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels, as done by \cite{golland_permutation_2005}.
 
 
 \paragraph{How many folds}
@@ -817,7 +817,7 @@ Figure~\ref{fig:read_data} is an application of (a) the Srivastava two-group tes
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
-The data was kindly made available by the authors at the OpenNeuro website\footnote{\url{http://reproducibility.stanford.edu/}}.
+The data was kindly made available by the authors at the OpenNeuro website (\url{http://reproducibility.stanford.edu/}).
 
 We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
 
@@ -896,7 +896,7 @@ Thirdly, because a highly discrete test-statistic, is insensitive to mild pertur
 For an intuition consider the usage of the \emph{resubstitution accuracy}, i.e. the train-accuracy, as a test statistic. 
 In a very high-dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
-This explains the terrible power of \emph{svm.noCV.c100}, which has barely any regularization\footnote{Recall that the cost parameter in LIBSVM is inversely proportional to the regularization.}. 
+This explains the terrible power of \emph{svm.noCV.c100}, which has barely any regularization (recall that the cost parameter in LIBSVM is inversely proportional to the regularization). 
 
 The degree of discretization is governed by the sample size. 
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization. This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.
@@ -909,7 +909,7 @@ From Figure~\ref{fig:simulation_1} we see that for the intermediate signal's str
 We thus conclude that the effect of discretization may be considerable. 
 
 
-The matter of discretization was addressed by a $2011$ post by Prof. Frank Harrell in \textsf{CrossValidated\footnote{A Q\&A website for statistical questions: \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}. And also ``Problems with Classification of Predictions'' in his book: \url{http://www.fharrell.com/doc/bbr.pdf}}}:
+The matter of discretization was addressed by a $2011$ post by Prof. Frank Harrell in \textsf{CrossValidated}; a Q\&A website for statistical questions \url{http://stats.stackexchange.com/questions/17408/how-to-assess-statistical-significance-of-the-accuracy-of-a-classifier}. :
 \begin{quote}
 	... your use of proportion classified correctly as your accuracy score. This is a discontinuous improper scoring rule that can be easily manipulated because it is arbitrary and insensitive.
 \end{quote}
