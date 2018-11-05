@@ -133,12 +133,12 @@ Rates, however, are only a first stage when comparing test statistics.
 
 Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
 ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
-The authors of \cite{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we are able to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
+\citet{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we are able to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
 Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
 Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$.
 This means that Fisher's LDA requires at least $6.3$ times more samples to achieve the same (asymptotic) power as the $T^2$ test. 
 In this light, the accuracy-test is remarkably inefficient.  
-For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \cite{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
+For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
 
 The analysis in \cite{ramdas_classification_2016} is asymptotic. 
 Since typical sample sizes in neuroscience and genetics are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
@@ -167,9 +167,9 @@ Let $y \in \mathcal{Y}$ be a class encoding.
 Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector. 
 In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
 
-We denote a sample from $x$ given $y$ with $x_y$.
+We denote with $x_y$ a sample of $x$ from group $y$ .
 We denote the distribution of $x_1$ by $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
-Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
+A two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
 For example, we can test whether multivariate voxel activation patterns are similarly distributed when given a vocal stimulus ($x_1$) or a non-vocal one ($x_0$).
 The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
 The comparison metric between statistics is power, i.e., the probability to infer that $\mathcal{F}\neq\mathcal{G}$.
@@ -226,7 +226,7 @@ We now explain how an accuracy-test is constructed.
 
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
-A predictor\footnote{Also known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
+Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor\footnote{Also known as a \emph{hypothesis} in the machine learning literature.}, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
 The accuracy of predictor\footnote{Also known as (the complement of) the \emph{test error}.}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
 The accuracy of a learning algorithm\footnote{Also known  as (the complement of) the \emph{expected test error}.}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
