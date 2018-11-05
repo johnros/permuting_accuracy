@@ -177,9 +177,9 @@ The comparison metric between statistics is power, i.e., the probability to infe
 
 \subsection{From a Test Statistic to a Permutation Test}
 
-The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing it to it's permutation distribution. 
-The tests differ in the statistic they employ.
-Our comparison metric is their power, i.e., their true positive rate. 
+The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing its observed value to it's permutation distribution. 
+Tests differ in the statistic they employ.
+Comparison metric is power, i.e., their true positive rate. 
 We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically poor.
 
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
@@ -187,7 +187,7 @@ The sketch of our permutation test is the following: \newline
 (a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. \newline
 (b) Sample a random permutation of the class labels, $\pi(y)$. \newline
 (c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
-(d) Repeat (a)-(c) $R$ times. \newline
+(d) Repeat (b)-(c) $R$ times. \newline
 (e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed $\mathcal{T}$. Formally: 
 $\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R+1} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
 (f) Declare $\mathcal{F}\neq \mathcal{G}$ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
