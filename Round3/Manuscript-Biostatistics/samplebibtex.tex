@@ -61,21 +61,28 @@
 
 Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether its prediction accuracy is better than chance. 
 The workflow consists of fitting a classifier, estimating its predictive accuracy using cross validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
-This general idea has been promoted in the statistical literature \cite{friedman2003multivariate}, and separately by in the machine-learning literature \cite{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
+This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
-Other examples include speaker verification \cite{gretton_kernel_2012-1}, 
-text classification \cite{dhillon2003divisive,lopez2016revisiting}, distinguishing between facial expressions \cite{lopez2016revisiting}, data integration \cite{gretton_kernel_2012-1}, record linkage in databases systems \cite{gretton_kernel_2012-1,hall2002permutation,zhou2018statistical}, optical character recognition \cite{perez2009estimation}, multimedia \cite{moreno2004kullback}, and functional data analysis \cite{hall2002permutation}.
+Other examples include 
+speaker verification \citep{gretton_kernel_2012-1}, 
+text classification \citep{dhillon2003divisive,lopez2016revisiting}, 
+distinguishing between facial expressions \citep{lopez2016revisiting}, 
+data integration \citep{gretton_kernel_2012-1}, 
+record linkage in databases systems \citep{gretton_kernel_2012-1,hall2002permutation,zhou2018statistical}, 
+optical character recognition \citep{perez2009estimation}, 
+multimedia \citep{moreno2004kullback}, 
+and functional data analysis \citep{hall2002permutation}.
 
 Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
 
 To fix ideas, we will adhere to a concrete example.
-In \cite{gilron_quantifying_2016}, Gilron et al. seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
-Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of the stimulus can be predicted from the brain region's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
+In \cite{gilron_quantifying_2016}, authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
+Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of stimulus can be predicted from the brain region's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 We call this an \emph{accuracy-test}, because it uses prediction accuracy as a test statistic. 
 
 This same signal detection task can also be approached as a multivariate \emph{two-group} test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
-As put by Pereira et al.~\cite{pereira_machine_2009}: 
+As put by ~\cite{pereira_machine_2009}: 
 \begin{quote}
 	... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
@@ -87,10 +94,10 @@ The former generalizing the t-test, and the latter (roughly) generalizing Kolmog
 Crucially for our applications, we will assume that the number of samples is in the order of the dimension of each sample, if not smaller. 
 In the statistical literature this is known as a \emph{high-dimensional} problem. 
 We emphasize that by high-dimension it is not necessarily implied that the sample is large, even if it is often the case. 
-In our motivating example it means that the size of the brain's region of interest is large compared to the number of subjects in the experiment. 
+In our motivating example it means that the size of the brain's region of interest is large compared to the number of administrations of each stimulus. 
 It is thus a \emph{high-dim--small-sample} problem. 
 
-In a seminal contribution, Bai and Saranadasa \cite{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
+In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
 These can be classified along the following lines:
 \begin{itemize}
