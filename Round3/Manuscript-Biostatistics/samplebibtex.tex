@@ -325,10 +325,10 @@ We selected two-group tests based on their popularity, and so that various types
 		Two-group tests for sparse shifts include \textit{Cai}.
 		Two-group adaptive tests for shifts include \textit{Simes}.
 		The rest are accuracy-tests, marked with a \cue, and details given in the table. 	
-		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $100$ \cite{meyer_e1071:_2015}.
+		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $100$ \citep{meyer_e1071:_2015}.
 		\textit{svm.CV.cCV} is a linear SVM, with V-fold CV accuracy, and cost parameter optimized with (an inner) CV. 
 		\textit{lda.noCV.1} is Fisher's LDA, with a resubstituted accuracy estimate.
-		Also recall that in LIBSVM, the \emph{cost} is inversely proportional to the regularization \cite{chang2011libsvm}: larger cost implies less regularization. 
+		Also recall that in LIBSVM, the \emph{cost} is inversely proportional to the regularization \citep{chang2011libsvm}: larger cost implies less regularization. 
 	}
 	\label{tab:collected}
 \end{tcolorbox}
@@ -363,11 +363,10 @@ Shifts are dense and equal in all $p$ coordinates of $\mu$.
 We set $\mu:=c \, e$ where $e$ is a $p$-vector of ones. 
 We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
 With $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Theta^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$, where $\Theta:=\Sigma^{-1}$. 
-These can be thought as the effect's size. 
+These can be thought as the SNR. 
 
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
-For test statistics that require data folding, we used $4$ folds. 
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
 We then reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
@@ -394,7 +393,7 @@ We may thus proceed and compare the power of each test statistic.
 \subsection{Power}
 \label{sec:power}
 
-From Figure~(\ref{fig:simulation_1}) we learn that in our simulation setup, two-group tests are more powerful than accuracy-tests.
+From Figure (\ref{fig:simulation_1}) we learn that in our simulation setup, two-group tests are more powerful than accuracy-tests.
 This is most notable for the intermediate signal strength (green triangles). 
 
 \begin{figure}[h]
@@ -462,17 +461,17 @@ The results are qualitatively similar to the high-dim--small-sample of Figure~\r
 
 \subsection{Departure From Gaussianity}
 \label{sec:heavytailed}
-The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not multivariate Gaussian.
+The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not Gaussian.
 This is because Hotelling's $T^2$ statistic is no longer a generalized-likelihood-ratio test. 
 To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
-In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the Gaussian case (Figure~\ref{fig:t_null}).
+In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the light-tailed Gaussian case (Figure~\ref{fig:t_null}).
 
 
 
 \begin{figure}[th]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{"art/file9"}
-	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t, with $df=3$ .  } 
+	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
 	\label{fig:t_null}
 \end{figure}
 
@@ -489,7 +488,7 @@ Some tests try to account for $\Sigma$ by estimating it.
 Estimating $\Sigma$ reduces possible bias at the cost of some variance. 
 We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig:simulation_1}) repeat themselves in the presence of correlation. 
 
-We simulate using correlation structures.
+We simulate various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$ and in the low variance PC. 
 To keep the comparisons fair as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
 This matter is discussed in Section~\ref{sec:fix_snr}.
@@ -695,7 +694,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 
 
-\subsection{The Effect of high-dimension}
+\subsection{The Effect of High-Dimension}
 \label{sec:highdim}
 
 Our best performing tests alleviate the high dimensionality of the problem by regularizing the estimation of $\Sigma$. 
@@ -706,8 +705,8 @@ Thresholding is used in the \emph{Goeman} and \emph{Srivastava} statistics.
 
 Can we explicitly regularize the covariance estimate of a classifier?
 To answer this question we augment the simulation with some accuracy-tests that have explicit covariance regularization in them. 
-These include shrinkage based LDA \cite{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} statistic.
-We also try a diagonalized LDA~\cite{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by thresholding, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
+These include shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} statistic.
+We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by thresholding, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
@@ -772,7 +771,7 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 %This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
 %We attribute this to the reduced discretization of the accuracy statistic.
 
-When discussing the power of the resubstitution accuracy, Golland et al.~\cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+When discussing the power of the resubstitution accuracy, \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
 Under their model (with some abuse of notation)
 \begin{align*}
 \begin{split}
