@@ -50,7 +50,7 @@
 	We find that the probability of detecting differences between two distributions is lower for accuracy based statistics.
 	We examine several candidate causes for the low power of accuracy-tests. 
 	These causes include: the discrete nature of the accuracy-test statistic, the type of signal accuracy-tests are designed to detect, their inefficient use of the data, and their regularization. 
-	When the purposes of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
+	When the purpose of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
 	In particular, to replace V-fold cross validation with the Leave-One-Out Bootstrap.
 	}
 \end{abstract}
@@ -76,7 +76,7 @@ and functional data analysis \citep{hall2002permutation}.
 Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
 
 To fix ideas, we will adhere to a concrete example.
-In \cite{gilron_quantifying_2016}, authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
+In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
 Following the MVPA workflow, the localization problem is cast as a supervised learning problem: if the type of stimulus can be predicted from the brain region's activation pattern significantly better than chance, then a region is declared to encode vocal/non-vocal information. 
 We call this an \emph{accuracy-test}, because it uses prediction accuracy as a test statistic. 
 
@@ -87,14 +87,14 @@ As put by ~\cite{pereira_machine_2009}:
 	... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
 \end{quote}
 A practitioner may thus approach the signal detection problem with a two-group hypothesis test.
-Multivariate two-groups hypothesis-tests may be divided into tests for equality of location (i.e. means), and two-sample goodness of fit tests (equality of the two whole distribution, GOF in short).
+Multivariate two-group hypothesis-tests may be divided into tests for equality of location (i.e. means), and two-sample goodness of fit tests (equality of the two whole distribution, GOF in short).
 The former generalizing the t-test, and the latter (roughly) generalizing Kolmogorov-Smirnov's test.
 
 
 Crucially for our applications, we will assume that the number of samples is in the order of the dimension of each sample, if not smaller. 
 In the statistical literature this is known as a \emph{high-dimensional} problem. 
 We emphasize that by high-dimension it is not necessarily implied that the sample is large, even if it is often the case. 
-In our motivating example it means that the size of the brain's region of interest is large compared to the number of administrations of each stimulus. 
+In our motivating example it means that the size of the brain's region of interest is large compared to the number replications of a treatment/stimulus. 
 It is thus a \emph{high-dim--small-sample} problem. 
 
 In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
@@ -205,19 +205,18 @@ It can also be thought of as the empirical Mahalanobis norm of the mean differen
 For more background see, for example, \cite{anderson_introduction_2003}.
 
 The major difficulty with the $T^2$ statistic is that it requires estimating a covariance matrix, thus introducing $p(p+1)/2=\mathcal{O}(p^2)$ unknown parameters.
-If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown in \cite{bai1996effect}. 
-In these cases, high-dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving the SNR and power.
+If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown by \cite{bai1996effect}. 
+In these cases, high-dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving SNR and power.
 Examples of high-dim tests for (dense) shifts include 
 \cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008,chen_two-sample_2010,lopes2011more,ahmad2014u,thulin2014high,feng2015note}.
 
 If $\mathbb{E}(x_1)$ differs from $\mathbb{E}(x_0)$ in a small number of coordinates we say the \emph{signal is sparse}.
-Examples of high-dim tests statistics for sparse shifts include \cite{cai_two-sample_2013} and \cite{chang2014simulation}.
+Examples of high-dim test statistics for sparse shifts include \cite{cai_two-sample_2013} and \cite{chang2014simulation}.
 
 It is possible that the practitioner is unaware of the amount of sparsity in the signal. 
 Some high-dim test statistics that \emph{adapt} to the level of (unknown) sparsity include \cite{simes1986improved,donoho2004higher,zhong2013tests,shen2015adaptive,moscovich2016exact}.
 
-It is possible that the signal is present not (only) in means. 
-We would thus opt for a two-group GOF test, instead of a location test. 
+If the signal is present not (only) in means we opt for a two-group GOF test, instead of a location test. 
 Examples of multivariate GOF tests include \cite{bickel1969distribution,friedman1979multivariate,hall2002permutation,szekely2004testing,Biau2005,Rosenbaum2005,eric2008testing,perez2009estimation,vayatis_auc_2009,gretton_kernel_2012-1}.
 
 As previously mentioned, a classifier's accuracy may also be used as a test statistic. 
