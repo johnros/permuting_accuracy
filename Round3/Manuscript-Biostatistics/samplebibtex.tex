@@ -811,7 +811,7 @@ From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland
 \section{Neuroimaging Example}
 \label{sec:example}
 
-Figure~\ref{fig:read_data} is an application of (a) the Srivastava two-group test, and (b) a linear SVM accuracy-test, to the neuroimaging data of Pernet et al. \cite{pernet_human_2015}. 
+Figure~\ref{fig:read_data} is an application of (a) the Srivastava two-group test, and (b) a linear SVM accuracy-test, to the neuroimaging data of \citet{pernet_human_2015}. 
 The authors of \cite{pernet_human_2015} collected fMRI data while subjects were exposed to the sounds of human speech (vocal), and other non-vocal sounds. 
 Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
@@ -867,7 +867,7 @@ The train set serves to learn a statistic, and the test set to compute it.
 In a train-test validation scheme, the effective sample size is that of the test set.
 This is clearly inefficient. 
 In V-fold validation scheme, the statistic is the average over all test sets, so the effective sample size is less obvious. 
-We argue that this is an inefficient use of the data, as seen in the distributed learning literature, where splitting the sample and averaging is less accurate then learning with the whole data \cite{rosenblatt2016optimality}.
+We argue that this is still an inefficient use of the data, as seen in the distributed learning literature, where splitting the sample and averaging is less accurate then learning with the whole data \citep{rosenblatt2016optimality}.
 
 The superiority of the Bootstrap over V-fold was independently observed in \cite{yu2007two}. 
 According to these authors, this superiority is due to the larger test-samples when Bootstrapping, compared to V-folding.
