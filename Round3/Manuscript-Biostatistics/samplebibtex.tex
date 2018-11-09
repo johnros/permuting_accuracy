@@ -226,7 +226,7 @@ We now explain how an accuracy-test is constructed.
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
 Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
-The accuracy of predictor, also known as (the complement of) the \emph{test error}., $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
+The accuracy of a predictor, also known as (the complement of) the \emph{test error}., $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
 The accuracy of a learning algorithm, also known  as (the complement of) the \emph{expected test error}., $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
@@ -315,7 +315,7 @@ We selected two-group tests based on their popularity, and so that various types
 		Srivastava & \cite{srivastava_test_2008} & Resubstitution & -- \\ 
 		Goeman & \cite{goeman2006testing} & Resubstitution & -- \\ 
 		Schafer & \cite{schafer_shrinkage_2005} & Resubstitution & -- \\ 
-		Hotelling & $T^2$ & Resubstitution & -- \\
+		Hotelling & \cite{hotelling_generalization_1931} & Resubstitution & -- \\
 		Oracle & $T^2$ & Resubstitution & Known $\Sigma$\\ 
 	\end{tabular} 
 	\captionsetup{type=table}
