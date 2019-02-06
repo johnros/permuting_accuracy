@@ -13,7 +13,7 @@ suppressPackageStartupMessages(library(RPushbullet))
 suppressPackageStartupMessages(library(reshape2))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(plotly))
-suppressPackageStartupMessages(library(sparsediscrim))
+# suppressPackageStartupMessages(library(sparsediscrim))
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(LiblineaR))
 suppressPackageStartupMessages(library(data.table))
@@ -25,6 +25,7 @@ suppressPackageStartupMessages(library(RobPer))
 suppressPackageStartupMessages(library(kernlab))
 suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
+suppressPackageStartupMessages(library(RcppZiggurat))
 
 n.replications <-  1e3
 

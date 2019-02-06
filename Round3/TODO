@@ -1,9 +1,7 @@
+- ROC curve. 
 - Large sample (X100)
-- Visual cues for covariance regulirizes statistics on plot.
-
-
-Future: 
-- CART for sparse signal.
 - More replications for heavytailed-t. 
+- CART for sparse signal.
+- Visual cues for covariance regulirizes statistics on plot.
 
     

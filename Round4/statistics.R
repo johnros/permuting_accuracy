@@ -46,12 +46,10 @@ t_cv <- function(FUN, noise, new.labels, old.labels, fold.ids, ...){
 
 
 
-t_Oracle <- function(x,y,S){
+t_Oracle <- function(x,y,S.inv){
   x.bar <- colMeans(x)
   y.bar <- colMeans(y)
   delta <- x.bar - y.bar
-  
-  S.inv <- solve(S)
   
   T2 <- delta %*% S.inv %*% delta
   return(T2)
@@ -60,6 +58,7 @@ t_Oracle <- function(x,y,S){
 # t_Oracle(x = rmvnorm(1e2, rep(0,1e1)),
 #          y = rmvnorm(1e2, rep(0,1e1)),
 #          Sx=diag(1e1), Sy=diag(1e1))
+
 
 t_Oracle_NP <- function(x,y, mu.x, mu.y, S){
   
@@ -467,10 +466,25 @@ t_CLX <- function(x,y,alpha=0.05,input='dummy'){
 
 
 
-statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,shift.vec){
+
+#' Title Compute all statistics
+#'
+#' @param x1 Matrix of first group observations
+#' @param x2 Matrix of second group observations
+#' @param Sigma.inv Oracle precision matrix
+#' @param noise All data
+#' @param labels Group assignments
+#' @param fold.ids 
+#' @param shift.vec True shift. For NP Oracle Only.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
   result <- c(
-    Oracle.Cov=t_Oracle(x1, x2, Sigma),
-    # Oracle.Cov.Mu=t_Oracle_NP(x1, x2, mu.x=0, mu.y=shift.vec, Sigma),
+    ### Two Group Tests:
+    Oracle.Cov=t_Oracle(x1, x2, Sigma.inv),
     Hotelling=t_Hotelling(x1, x2, FALSE),
     Schafer=t_Hotelling(x1, x2, TRUE),
     Goeman=t_goeman(x1, x2),
@@ -479,6 +493,7 @@ statistics <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,shift.vec
     dCOV=t_dcov(x1,x2),
     Simes=t_Simes(x1,x2),
     Cai=t_CLX(x1,x2),
+    ### Accuracy Tests:
     lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
     lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
     svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),

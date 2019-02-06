@@ -10,7 +10,7 @@ editor_options:
 
 ```{r preliminaries}
 file.name <- "file20"
-setwd('~/workspace/permuting_accuracy/Round3/')
+setwd('~/workspace/permuting_accuracy/Round4/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 n.replications <-  1e3
@@ -33,13 +33,15 @@ Sigma.eigen <- eigen(Sigma, symmetric=TRUE)
 direction0 <- Sigma.eigen$vectors[,which.max(abs(Sigma.eigen$values))] 
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
 direction <- 23 * direction0 / sqrt(n/2*maha)
+
+Sigma.sqrt <- t(chol(Sigma))
 ```
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=60)
+registerDoMC(cores=100)
 ```
 
 
@@ -50,8 +52,9 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
     ## Gaussian noise
-    .noise <- rmvnorm(n=n, sigma = Sigma)
-
+    dim(Sigma.sqrt)
+    .noise <-t(Sigma.sqrt%*%matrix(rnorm(n*p), ncol = n, nrow=p))
+    
     ## Shift alternative:
     noise <- .noise
     shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
@@ -66,7 +69,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids)
     
     # Prepare to permute
     old.labels <- labels
@@ -83,7 +86,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids)
     } # End permutation
     
     ## Compute p-vals for each statistic

@@ -1,5 +1,5 @@
 ---
-title: "Interactions"
+title: "Logistic Regression (no interactions)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
@@ -8,8 +8,8 @@ editor_options:
 ---
 
 ```{r}
-n.permutations <- 1e2
-n.replications <-  1e2
+n.permutations <- 2e2
+n.replications <-  3e2
 ```
 
 
@@ -25,7 +25,9 @@ n.folds <- 4
 source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
-beta <- rnorm(p)
+Sigma.inv <- solve(Sigma)
+beta0 <- rnorm(p)
+effects <- c(0,1,2)
 ```
 
 
@@ -33,8 +35,6 @@ beta <- rnorm(p)
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
-# library(doRNG)
-# registerDoRNG()
 ```
 
 ```{r independent noise variable folds}
@@ -45,8 +45,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     noise <- matrix(dqrnorm(n*p), ncol=p, nrow=n)
 
     ## Logistic regression
+    beta <- beta0*effect
     link <- noise%*%beta
     probs <- plogis(link)
+    
+    # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
     while(sum(labels)!=n/2){
       labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
@@ -67,8 +70,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
                     labels = labels, 
-                    fold.ids = fold.ids, 
-                    shift.vec = effect*direction)
+                    fold.ids = fold.ids)
     
     # Prepare to permute
     old.labels <- labels
@@ -90,8 +92,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                                  Sigma.inv =Sigma.inv, 
                                  noise = noise,
                                  labels = labels,
-                                 fold.ids = fold.ids, 
-                                 shift.vec = effect*direction)
+                                 fold.ids = fold.ids)
     } # End permutation
     
     # Compute p-vals for each statistic
@@ -112,7 +113,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 
 ```{r}
-# load('file2.RData')
+# load('file40.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

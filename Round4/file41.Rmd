@@ -1,5 +1,5 @@
 ---
-title: "Basic setup"
+title: "Logistic Regression (interactions)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
@@ -7,28 +7,28 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+n.permutations <- 1e3
+n.replications <-  3e2
+```
+
 
 ```{r preliminaries}
-file.name <- "file2"
+file.name <- "file41"
 setwd('~/workspace/permuting_accuracy/Round4/')
-n.replications <-  1e3
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
-n.permutations <- 4e2
 n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
-effects <- seq(0, 0.5, length=3) # change in location
-
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-# lattice::levelplot(Sigma)
-direction0 <- rep(1,p)
-maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
-direction <- p * direction0 / sqrt(n/2*maha)
+n.predictors <- choose(p,2)+p+1
+beta0 <- rnorm(n.predictors)
+effects <- c(0,1,2)
 ```
 
 
@@ -36,28 +36,32 @@ direction <- p * direction0 / sqrt(n/2*maha)
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
 registerDoMC(cores=100)
-# library(doRNG)
-# registerDoRNG()
 ```
 
 ```{r independent noise variable folds}
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
-    
-    labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
+    # effect <- effects[[1]]
     
     ## Gaussian noise
     noise <- matrix(dqrnorm(n*p), ncol=p, nrow=n)
+    noise.augment <- model.matrix(~.^2, as.data.frame(noise))
     
-    ## Shift alternative:
-    # effect <- effects[[1]]
+    ## Logistic regression
+    beta <- beta0*effect
+    link <- noise.augment%*%beta
+    probs <- plogis(link)
     
-    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
-    noise[labels,] <- noise[labels,] + shift
+    # Force balanced groups:
+    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    while(sum(labels)!=n/2){
+      labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    }
     
     ## Compute observed statistic
-    x1 <- noise[labels,]+ shift
+    x1 <- noise[labels,]
     x2 <- noise[!labels,]
+    # plot(colMeans(x1)~colMeans(x2), xlim=c(-3,3), ylim=c(-3,3)); abline(0,1,lty=2, v=0, h=0)
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = balance)
@@ -69,8 +73,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
                     labels = labels, 
-                    fold.ids = fold.ids, 
-                    shift.vec = effect*direction)
+                    fold.ids = fold.ids)
     
     # Prepare to permute
     old.labels <- labels
@@ -92,8 +95,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                                  Sigma.inv =Sigma.inv, 
                                  noise = noise,
                                  labels = labels,
-                                 fold.ids = fold.ids, 
-                                 shift.vec = effect*direction)
+                                 fold.ids = fold.ids)
     } # End permutation
     
     # Compute p-vals for each statistic
@@ -112,9 +114,9 @@ pbPost(type = "note", body = "File2", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
-
+## Analysis
 ```{r}
-# load('file2.RData')
+# load('file41.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

@@ -29,7 +29,7 @@ File name: file2
   Trial dependence (n): none
 
 File name: file3
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original(*): unbalanced
@@ -133,7 +133,7 @@ File name: file9
   
   
 File name: file10
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects(*): 1/sqrt(10) * [0,0.5]
   Original: balanced
@@ -148,7 +148,7 @@ File name: file10
   
   
 File name: file11
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -191,7 +191,7 @@ File name: file13
   Trial dependence (n): none
   
 File name: file14
-  Status: OK 
+  Status:  
   Statistic (*): Highdim classifiers
   Null: Gaussian
   Effects: [0,0.5]
@@ -206,6 +206,7 @@ File name: file14
   Trial dependence (n): none
 
 File name: file15
+  Status: 
   Statistic (*): Scale alternative 
   Null: Gaussian
   Effects: ?
@@ -220,7 +221,7 @@ File name: file15
   Trial dependence (n): none
 
 File name: file16
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -235,7 +236,7 @@ File name: file16
 
 
 File name: file17
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -249,7 +250,7 @@ File name: file17
   Trial dependence (n): none
 
 File name: file18
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -263,7 +264,7 @@ File name: file18
   Trial dependence (n): none
 
 File name: file19
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -278,7 +279,7 @@ File name: file19
 
 
 File name: file20
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -292,7 +293,7 @@ File name: file20
   Trial dependence (n): none
   
 File name: file21
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -306,7 +307,7 @@ File name: file21
   Trial dependence (n): none
 
 File name: file22
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -320,7 +321,7 @@ File name: file22
   Trial dependence (n): none
   
 File name: file23
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -334,7 +335,7 @@ File name: file23
   Trial dependence (n): none
 
 File name: file24
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -362,7 +363,7 @@ File name: file25
   Trial dependence (n): none
 
 File name: file26
-  Status: TODO
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -434,7 +435,7 @@ File name: file30
   Trial dependence (n): none
 
 File name: file31
-  Status: TODO
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -448,7 +449,7 @@ File name: file31
   Trial dependence (n): none
 
 File name: file31
-  Status: TODO
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -463,7 +464,7 @@ File name: file31
 
 
 File name: file33
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -494,7 +495,7 @@ File name: file34
   Tie breaking: No
 
 File name: file35
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -508,7 +509,7 @@ File name: file35
   Trial dependence (n): none
 
 File name: file36
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -523,7 +524,7 @@ File name: file36
 
 
 File name: file37
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -537,7 +538,7 @@ File name: file37
   Trial dependence (n): none
 
 File name: file38 (radial basis SVM)
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
   Original: balanced
@@ -551,9 +552,23 @@ File name: file38 (radial basis SVM)
   Trial dependence (n): none
 
 File name: file39 (run time)
-  Status: OK
+  Status: 
   Null: Gaussian
   Effects: [0,0.5]
+  Original: balanced
+  Permuted: balanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent
+  Trial dependence (n): none
+
+File name: file40 (logistic regression)
+  Status: 
+  Null: Gaussian
+  Effects: Interaction [0,0.5]
   Original: balanced
   Permuted: balanced
   Permutations: 3e2

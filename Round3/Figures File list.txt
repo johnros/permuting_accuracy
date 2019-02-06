@@ -9,7 +9,7 @@ File name: file1
   Permutations: 3e2
   Replications: 1e3
   n(*)=400
-  p=23
+  p=230
   Folds: 4
   Voxel dependence (p): none
   Trial dependence (n): none
