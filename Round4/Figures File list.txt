@@ -565,12 +565,12 @@ File name: file39 (run time)
   Voxel dependence (p): Independent
   Trial dependence (n): none
 
-File name: file40 (logistic regression)
+File name: file40 (logistic regression, no intercations)
   Status: 
   Null: Gaussian
-  Effects: Interaction [0,0.5]
-  Original: balanced
-  Permuted: balanced
+  Effects: Signal in original space. No interaction [0,0.25, 0.5]
+  Original: unbalanced
+  Permuted: unbalanced
   Permutations: 3e2
   Replications: 1e3
   n=40
@@ -579,3 +579,30 @@ File name: file40 (logistic regression)
   Voxel dependence (p): Independent
   Trial dependence (n): none
 
+File name: file41 (logistic regression, with interactions, isotropic signal)
+  Status: 
+  Null: Gaussian
+  Effects: Signal in augmented space. Isotropic Interactions. [0,0.25, 0.5]
+  Original: unbalanced
+  Permuted: unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent
+  Trial dependence (n): none
+
+File name: file42 (logistic regression, with interactions, anisotropic-signal)
+  Status: 
+  Null: Gaussian
+  Effects: Signal in augmented space. Non-Isotropic Interactions. [0,0.25, 0.5]
+  Original: unbalanced
+  Permuted: unbalanced
+  Permutations: 3e2
+  Replications: 1e3
+  n=40
+  p=23
+  Folds: 4
+  Voxel dependence (p): Independent
+  Trial dependence (n): none

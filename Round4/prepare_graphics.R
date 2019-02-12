@@ -18,10 +18,13 @@ plot.3 <- pvals.melt %>%
   theme_bw(base_size = 20)+
   theme(legend.position="none")+
   # ggtitle("Fixed signal, Gaussian Noise")+
-  ylab('Power')+
+  ylab('Power')+ 
   xlab('')+
+  xlim(c(0,1))+
   stat_summary(fun.y='mean', geom="point", cex=4) +
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+
   coord_flip()
 plot(plot.3)
+
+pvals.melt[,.(Power=mean(value<0.05)),.(effect,statistic)]

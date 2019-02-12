@@ -4,8 +4,11 @@ library(doRNG)
 registerDoRNG()
 
 data <- foreach(j=1:1e3, .combine=rbind) %dopar%{
-  runif(1e0)
+  c(dqrnorm(1), rnorm(1))
+  
 }
+
+# dqrnorm does not parallelize!!!!!
 
 dim(data)
 plot(data, type='l', cex=0.1)

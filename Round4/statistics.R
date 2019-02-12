@@ -207,7 +207,7 @@ t_svm_cvCV <- function(noise, new.labels, old.labels, fold.ids){
 t_svm_cvLambda <- function(train.noise, train.labels, test.noise, test.labels, type=1){
   svm.1 <- best.svm(x=train.noise, y=train.labels, type='C-classification', kernel='linear', cost = 10^(-3:3))
   accuracy <- mean(predict(svm.1, newdata=test.noise)==test.labels)
-  capture.output(svm.1$cost, file='svmCV.txt', append=TRUE)
+  # capture.output(svm.1$cost, file='svmCV.txt', append=TRUE)
   
   if(type==1){
     statistic <- accuracy

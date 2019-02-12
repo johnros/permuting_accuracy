@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (interactions)"
+title: "Logistic Regression (structured interactions)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
@@ -9,12 +9,12 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  5e2
+n.replications <-  1e3
 ```
 
 
 ```{r preliminaries}
-file.name <- "file41"
+file.name <- "file42"
 setwd('~/workspace/permuting_accuracy/Round4/')
 
 p <- 23
@@ -26,7 +26,9 @@ source('Gilron Effect of Cross Validatino.R')
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 n.predictors <- choose(p,2)+p+1
-beta0 <- rnorm(n.predictors)
+beta0 <- rnorm(n.predictors, sd = seq(n.predictors,1)/n.predictors)
+# beta0 <- runif(n.predictors, max = seq(n.predictors,1)/n.predictors)
+plot(beta0, type='h')
 effects <- c(0,0.25,0.5)
 ```
 
@@ -61,7 +63,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
     # plot(colMeans(x1)~colMeans(x2), xlim=c(-1,1), ylim=c(-1,1)); abline(0,1,lty=2, v=0, h=0)
-    # plot(colMeans(noise.augment[labels,])~colMeans(noise.augment[!labels,]), xlim=c(-1,1), ylim=c(-1,1), cex=0.1); abline(0,1,lty=2, v=0, h=0)
+    # plot(colMeans(noise.augment[labels,])~colMeans(noise.augment[!labels,]), xlim=c(-1,1), ylim=c(-1,1)); abline(0,1,lty=2, v=0, h=0)
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = FALSE)
@@ -85,7 +87,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in 1:n.permutations){
       # i <- 1
       
-      labels <- sample(labels) # label switching
+      labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # label switching
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
@@ -116,7 +118,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 ## Analysis
 ```{r}
-# load('file41.RData')
+# load('file42.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```
