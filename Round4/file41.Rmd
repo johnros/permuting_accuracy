@@ -86,7 +86,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # i <- 1
       
       labels <- sample(labels) # label switching
-      fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+      fold.ids <- balanced_folding(labels, n.folds, FALSE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       

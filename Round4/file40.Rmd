@@ -80,8 +80,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in 1:n.permutations){
       # i <- 1
       
-      labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # label switching
-      fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+      labels <- sample(labels) # label switching
+      fold.ids <- balanced_folding(labels, n.folds, FALSE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
