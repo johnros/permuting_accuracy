@@ -374,7 +374,7 @@ The reported power is the proportion of replication where the permutation p-valu
 
 
 
-\subsection{False Positive Rate}
+\subsubsection{False Positive Rate}
 \label{sec:type_i}
 
 We start with a sanity check. 
@@ -390,7 +390,7 @@ We may thus proceed and compare the power of each test statistic.
 
 
 %%%% Section %%%%
-\subsection{Power}
+\subsubsection{Power}
 \label{sec:power}
 
 From Figure (\ref{fig:simulation_1}) we learn that in our simulation setup, two-group tests are more powerful than accuracy-tests.
@@ -398,7 +398,7 @@ This is most notable for the intermediate signal strength (green triangles).
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file2"}
+	\includegraphics[width=0.5\columnwidth]{"art/file2"}
 	\caption{
 		The power of the permutation test with various test statistics. 
 		The power on the $x$ axis. 
@@ -413,50 +413,7 @@ This is most notable for the intermediate signal strength (green triangles).
 
 
 
-\subsection{Large Sample}
-\label{sec:large-sample}
 
-We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
-Our results, however, hold also in high-dim--large-sample configurations.
-To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-This simulation required roughly 11 years of computing time.
-The results are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1} and thus not reported herein.
-
-
-%The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=0.7\columnwidth]{"art/file1"}
-%	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
-%	\label{fig:large-sample}
-%\end{figure}
-
-
-
-
-%
-%\subsection{Tie Breaking}
-%\label{sec:ties}
-%
-%As already stated in the introduction, the accuracy statistic is highly discrete. 
-%Especially the resubstitution accuracy-tests. 
-%Discrete test statistics lose power by not exhausting the permissible false positive rate. 
-%A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
-%Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
-%$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
-%is greater than  $\alpha$ then we reject the null with probability 
-%$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
-%
-%Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
-%It demonstrates that the power disadvantage of accuracy-tests, cannot be remedied by random tie breaking.
-%
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=0.7\columnwidth]{art/file33}
-%	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
-%	\label{fig:file33}
-%\end{figure}
-%
 
 
 \subsection{Departure From Gaussianity}
@@ -470,7 +427,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 
 \begin{figure}[th]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file9"}
+	\includegraphics[width=0.5\columnwidth]{"art/file9"}
 	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
 	\label{fig:t_null}
 \end{figure}
@@ -531,97 +488,35 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 \end{figure}
 
 
-\begin{figure}[h]
+
+\subsection{Departure From Shift Alternatives}
+% logistic regression
+% mixture class
+
+
+\begin{figure}[th]
 	\centering
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file22"}
-		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
-		\label{fig:dependence_21}
-	\end{subfigure}
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file23"}
-		\caption{Signal in direction of lowest lowest variance PC of $\Sigma$.} 
-		\label{fig:dependence_22}
-	\end{subfigure}
-	%	\begin{subfigure}[t]{.3\columnwidth}
-	%		\centering
-	%		\includegraphics[width=1\columnwidth]{"art/file16"}
-	%		\caption{Signal in direction of identity vector.} 
-	%		\label{fig:dependence_23}
-	%	\end{subfigure}
-	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
-	\label{fig:dependence_2}
+	\includegraphics[width=0.5\columnwidth]{"art/file21"}
+	\caption{\textbf{Interactions.} TODO} 
+	\label{fig:interactions}
 \end{figure}
 
 
 
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file18"}
-		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
-		\label{fig:dependence_31}
-	\end{subfigure}
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file17"}
-		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
-		\label{fig:dependence_32}
-	\end{subfigure}
-	%	\begin{subfigure}[t]{.3\columnwidth}
-	%		\centering
-	%		\includegraphics[width=1\columnwidth]{"art/file19"}
-	%		\caption{Signal in direction of identity vector.} 
-	%		\label{fig:dependence_33}
-	%	\end{subfigure}
-	\caption{Arbitrary Correlation. 
-		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
-	}
-	\label{fig:dependence_3}
-\end{figure}
+\subsection{Other Variations of the Simulation Setup}
+% large sample
+% tie breaking
+
+\paragraph{Large Sample}
+We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
+Our results, however, hold also in high-dim--large-sample configurations.
+To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
+This simulation required roughly 11 years of computing time.
+The results are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1} and thus not reported herein.
 
 
-
-\subsection{Departure from Homoskedasticity and Scalar Invariance}
-
-Our previous simulations assume variables have unit variance. 
-Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
-Implicit z-scoring is sometime an integral part of a test statistic. 
-This is known as \emph{scalar invariance}.
-The \emph{Srivastava} statistic, for instance, is scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
-The \emph{Goeman} statistic, for instance, is not scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
-Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. \emph{Srivastava} will give all coordinates the same importance.
-
-In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
-
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file26"}
-		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
-		\label{fig:heteroskedastic_11}	
-	\end{subfigure}
-	\begin{subfigure}[t]{0.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file24"}
-		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
-		\label{fig:heteroskedastic_12}	
-	\end{subfigure}
-	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
-	\label{fig:heteroskedastic}	
-\end{figure}
-
-
-
-
-
-
+\paragraph{Tie Breaking}
+TODO
 
 % Resampling with replacement
 \subsection{Departure from V-fold CV}
@@ -675,7 +570,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file13"}
+	\includegraphics[width=0.5\columnwidth]{"art/file13"}
 	\caption{
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
@@ -694,7 +589,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 
 
-\subsection{The Effect of High-Dimension}
+\subsection{High-Dim Regularized Accuracy Tests}
 \label{sec:highdim}
 
 Our best performing tests alleviate the high dimensionality of the problem by regularizing the estimation of $\Sigma$. 
@@ -745,7 +640,7 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file14"}
+	\includegraphics[width=0.5\columnwidth]{"art/file14"}
 	\caption{
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
@@ -761,45 +656,6 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 
 
 
-
-
-\subsection{Mixture Classes}
-
-%\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
-%The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
-%They find that the power increases with the size of the test set.
-%This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
-%We attribute this to the reduced discretization of the accuracy statistic.
-
-When discussing the power of the resubstitution accuracy, \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
-Under their model (with some abuse of notation)
-\begin{align*}
-\begin{split}
-x_1 & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
-x_0 & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
-\end{split}
-\end{align*}
-Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
-We now perform the same simulation as \cite{golland_permutation_2005}, but in the same dimensionality of our previous simulations.
-We re-parameterize so that $\pi=0$ corresponds to the null model:
-\begin{align}
-\begin{split}
-\label{eq:mixture_alternative}
-x_1 & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
-x_0 & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
-\end{split}
-\end{align}
-From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are still preferred over accuracy-tests. 
-
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file12"}
-	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
-		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
-		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
-	\label{fig:file12}
-\end{figure}
 
 
 
@@ -826,7 +682,7 @@ We emphasize that both test statistics were compared with the same permutation s
 
 \begin{figure}[th]
 	\centering
-	\includegraphics[width=1\columnwidth]{"art/svm_vs_SD"}
+	\includegraphics[width=0.5\columnwidth]{"art/svm_vs_SD"}
 	\caption{\footnotesize
 		Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy-test u and a two-group test (\emph{Srivastava}). 
@@ -933,45 +789,7 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
-
-For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We fix the Kullback–Leibler Divergence between distributions of sample means. 
-Abusing notation, we fix $KL[\bar x_1,\bar x_0]=c^2 p$, which is the same as fixing $\Vert \mu \Vert^2_\Theta$, with the exception of the large sample (\ref{sec:large-sample}) and the heavytailed analysis (\ref{sec:heavytailed}). 
-
-Our choice implies that the Euclidean norm of $\mu:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
-An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
-This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
-
-For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed.
-We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
-The intuition that it is easier to detect signal in the low variance directions is confirmed. 
-
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file32"}
-		\caption{$\mu$ in PC7 of $\Sigma$.}  
-		\label{fig:dependence_41}	
-	\end{subfigure}
-	\begin{subfigure}[t]{0.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file31"}
-		\caption{$\mu$ in PC15 of $\Sigma$.}  
-		\label{fig:dependence_42}	
-	\end{subfigure}
-	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
-	\label{fig:dependence_4}		
-\end{figure}
-
-Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
-In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
-With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
-In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
-Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
-For this reason, we prefer fixing $\Vert \mu \Vert_\Theta$.
-
-
+TODO
 
 
 
@@ -999,21 +817,7 @@ This intuition explains the fact that unregularized tests have more power than t
 
 \subsection{Sparse Alternatives}
 \label{sec:sparse}
-
-In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
-Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
-In a genetic application, a ``sparse'' alternative may be more plausible. 
-Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
-As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
-
-\begin{figure}[ht]
-	\centering
-	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file34"}
-	\caption{Sparse $\mu$.}  
-	\label{fig:sparse}	
-\end{figure}
-
+TODO
 
 
 \subsection{Implications to Other Problems}
@@ -1086,7 +890,7 @@ TODO
 % use section* for acknowledgment
 \section*{Acknowledgment}
 JDR wishes to thank, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
-JDR also thanks ISF grant 900/16 and 924/16. 
+JDR was funded by the Israeli Science Foundation grants 900/16 and 924/16. 
 
 
 \newpage
