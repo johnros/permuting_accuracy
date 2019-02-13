@@ -20,7 +20,7 @@ plot.3 <- pvals.melt %>%
   # ggtitle("Fixed signal, Gaussian Noise")+
   ylab('Power')+ 
   xlab('')+
-  xlim(c(0,1))+
+  ylim(0,1)+
   stat_summary(fun.y='mean', geom="point", cex=4) +
   geom_hline(yintercept=0.05, lty=2)+
   geom_vline(xintercept=.limits, lty=c(3,2,3))+

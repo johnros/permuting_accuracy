@@ -29,7 +29,7 @@ n.predictors <- choose(p,2)+p+1
 beta0 <- rnorm(n.predictors, sd = seq(n.predictors,1)/n.predictors)
 # beta0 <- runif(n.predictors, max = seq(n.predictors,1)/n.predictors)
 plot(beta0, type='h')
-effects <- c(0,0.25,0.5)
+effects <- c(0,0.5,1)
 ```
 
 
@@ -88,7 +88,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # i <- 1
       
       labels <- sample(labels) # label switching
-      fold.ids <- balanced_folding(labels, n.folds, false) # refold
+      fold.ids <- balanced_folding(labels, n.folds, FALSE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       

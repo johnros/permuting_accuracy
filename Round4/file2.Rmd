@@ -10,7 +10,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 4e2
-n.replications <-  5e2
+n.replications <-  2e2
 ```
 
 
@@ -60,7 +60,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
-    x1 <- noise[labels,]+ shift
+    x1 <- noise[labels,]
     x2 <- noise[!labels,]
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
@@ -85,7 +85,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in 1:n.permutations){
       # i <- 1
       
-      labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # label switching
+      labels <- sample(labels) # label switching
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
