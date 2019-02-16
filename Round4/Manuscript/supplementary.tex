@@ -111,7 +111,104 @@ The results, reported in Figure~\ref{fig:large-sample}, are qualitatively simila
 
 
 
-\subsection{Logistic Regression}
+\subsection{Logistic Regression and Interactions}
+
+In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power simulation, when generating from the logistic setup, with both main effects and second order interactions.
+We emphasize that all tests are performed in the original $x$ space, i.e., ignore the presence of interactions.
+
+Formally, the logistic assumption implies that 
+$P(Y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
+Main-effects and second order interaction imply that 
+$\eta=x'\beta+x'Bx$, for some $p$-vector $\beta$, and symmetric matrix $B$.
+We also assume $X\sim \mathcal{N}(0,I_{p\times p})$.
+
+From Figure~\ref{fig:logistic-main-and-interactions} we see that in the logistic setup, with interactions, two-group tests still dominate. 
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file42"}
+	\caption{\textbf{Logistic Regression. Main effects and interactions.} 
+		Data generated via 
+		$Y|x \sim Binom(1,p(x));p(x)=\exp(\eta)/[1+\exp(\eta)];\eta=x'\beta+x'Bx; X\sim \mathcal{N}(0,I_{p\times p})$.  } 
+	\label{fig:logistic-main-and-interactions}
+\end{figure}
+
+The logistic assumption differs from our original setup in that the logistic assumption states $Y|x$, instead of $X|y$, as in Fisher's LDA setup. 
+The logistic assumption implies that $X_0$ is no longer a shifted versions of $X_1$, even in the presence of main effects alone. 
+I.e., when $B$ is a $p\times p$ matrix of zeroes.
+While not a ``pure shift'', we expect that lacking interactions, the logistic model is very close to a shift. 
+This is verified in Figure \ref{fig:logistic-main-only}.
+
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file40"}
+	\caption{\textbf{Logistic Regression. Main effects only.} 
+		Data generated via 
+		$Y|x \sim Binom(1,p(x));
+		p(x)=\exp(\eta)/[1+\exp(\eta)];
+		\eta=x'\beta; 
+		X\sim \mathcal{N}(0,I_{p\times p})$.  } 
+	\label{fig:logistic-main-only}
+\end{figure}
+
+
+It is possible to use the logistic setup to generate data with no shift at all. 
+For instance, if $\eta=\beta_0+x'x$. 
+In this case, $X_1$ is a rescaled version $X_0$, depicted for $p=2$ in Figure~\ref{fig:quadratic-form}.
+This example is typically encountered in the machine learning literature, to motivate learning with kernels. 
+
+
+
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.3\columnwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{art/quadratic-form}
+		\caption{Illustration with $p=2$.}
+		\label{fig:quadratic-form}
+	\end{subfigure}
+	\begin{subfigure}[t]{.3\columnwidth}
+		\centering
+	\includegraphics[width=1\columnwidth]{"art/file41"}
+	\caption{Detection power in \textbf{original} space.} 
+	\label{fig:logistic-interactions-only}
+	\end{subfigure}
+	\begin{subfigure}[t]{.3\columnwidth}
+	\centering
+	\includegraphics[width=1\columnwidth]{"art/file41"}
+	\caption{Detection power in \textbf{augmented} space.} 
+	\label{fig:logistic-interactions-only-augmented}
+	\end{subfigure}
+	\caption{\textbf{Logistic Regression. No main effects.}
+		An example of a ``pure rescaling'', with no shift.
+		First class in red squares. Second class in black rhombus.
+		Data generated via 
+		$Y|x \sim Binom(1,p(x));
+		p(x)=\exp(\eta)/[1+\exp(\eta)];
+		\eta=\beta_0+x'x; 
+		X \sim \mathcal{N}(0,\sigma^2 I_{p\times p})$.
+	}
+	\label{fig:dependence_1}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+Interactions are understood as statements on $Y|x$. 
+In particular, that the gradient of $P(Y=1|x)$ is a function of multiple coordinates. 
+In this sense, the shift model includes interactions.
+
+
+
 
 \subsection{Mixture Class}
 

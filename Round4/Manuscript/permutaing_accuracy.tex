@@ -347,9 +347,10 @@ Following sections present variations on the basic setup.
 The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
 
 
-\subsection{Basic Simulation Setup and Notation}
+\subsection{Basic Simulation Setup-- Fisher's LDA}
 \label{sec:simulation_details}
 
+The basic simulation setup is essentially the sampling distribution underlying Fisher's Linear Discriminant Analysis. 
 Each simulation is based on $1,000$ replications. 
 In each replication, we generate $n$ independent samples from a shift class 
 \begin{align}
@@ -364,7 +365,6 @@ We set $\mu:=c \, e$ where $e$ is a $p$-vector of ones.
 We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
 With $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Theta^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$, where $\Theta:=\Sigma^{-1}$. 
 These can be thought as the SNR. 
-
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
@@ -411,9 +411,13 @@ This is most notable for the intermediate signal strength (green triangles).
 \end{figure}
 
 
-
-
-
+\subsubsection{Sample Size}
+We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
+Our results, however, hold also in high-dim--large-sample configurations.
+[TODO]
+To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
+This simulation required roughly 11 years of computing time.
+The results are qualitatively similar to the high-dim--small-sample of, and reported in the SM.
 
 
 \subsection{Departure From Gaussianity}
@@ -422,8 +426,6 @@ The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tes
 This is because Hotelling's $T^2$ statistic is no longer a generalized-likelihood-ratio test. 
 To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
 In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the light-tailed Gaussian case (Figure~\ref{fig:t_null}).
-
-
 
 \begin{figure}[th]
 	\centering
@@ -453,12 +455,12 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 
 The simulation results reveal some non trivial phenomena.
 First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accuracy-tests. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_21}, and the arbitrary correlation in Figure~\ref{fig:dependence_31}.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
 
 When the signal is in the direction of the low variance PC, a different phenomenon appears.
 There is no clear preference between two-group or accuracy-tests.
 Instead, the non-regularized tests are the clear victors. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in Figure~\ref{fig:dependence_22}, and the arbitrary correlation in Figure~\ref{fig:dependence_32}.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
 This matter is further discussed in Section~\ref{sec:fix_snr}.
 
@@ -490,33 +492,39 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 
 \subsection{Departure From Shift Alternatives}
+% importance of shifts
 % logistic regression
 % mixture class
+Shift alternatives are by far the most studied in the statistical literature. 
+This is due to mathematical convenience, but also for empirical reasons: 
+(a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale, or a second degree interaction in the augmented space. 
+(b) Many effects are not ``pure shifts'', but have a shift component. In fact, it would be quite unorthodox to assume an effect is manifested in higher moments alone. 
 
+For completeness, we also report power for logistic regression.
+Logistic regression is not a shift, because when fixing $P(Y|x)$, there is no marginal distribution of $X$ for which $X_1 $ is a shifted version of $X_0$.
+To further depart from a shift class, we add second order interactions.
+In Figure~\ref{fig:interactions} we report the usual power of our tests under these assumptions.
+The figure demonstrates that two-group tests still dominate in power, even when the problem gravely departs from the shift class. 
 
 \begin{figure}[th]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file21"}
-	\caption{\textbf{Interactions.} TODO} 
+	\includegraphics[width=0.5\columnwidth]{"art/file42"}
+	\caption{\textbf{Interactions In Logistic Regression.} 
+		Data generated via $Y|x \sim Binom(1,p(x));p(x)=\exp(\eta)/[1+\exp(\eta)];\eta=x'Bx; X\sim \mathcal{N}(0,I_{p\times p})$.
+	Data analyzed in the original $x$ space.  } 
 	\label{fig:interactions}
 \end{figure}
 
 
-
-\subsection{Other Variations of the Simulation Setup}
-% large sample
-% tie breaking
-
-\paragraph{Large Sample}
-We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
-Our results, however, hold also in high-dim--large-sample configurations.
-To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-This simulation required roughly 11 years of computing time.
-The results are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1} and thus not reported herein.
+More variations on the logistic setup can be found in the Supplementary Material (SM). 
+In particular: 
+(i) Logistic regression with main effects only.
+(ii) Logistic regression with second order interactions only. 
 
 
-\paragraph{Tie Breaking}
-TODO
+
+
+
 
 % Resampling with replacement
 \subsection{Departure from V-fold CV}
