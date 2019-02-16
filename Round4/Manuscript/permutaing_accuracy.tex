@@ -414,9 +414,7 @@ This is most notable for the intermediate signal strength (green triangles).
 \subsubsection{Sample Size}
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
 Our results, however, hold also in high-dim--large-sample configurations.
-[TODO]
-To prove this point, we fix $p/n$ at $23/40$, and set $n=4,000, p=2,300$. 
-This simulation required roughly 11 years of computing time.
+To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=4,00, p=2,30$. 
 The results are qualitatively similar to the high-dim--small-sample of, and reported in the SM.
 
 
@@ -797,7 +795,17 @@ Examples can be found, for instance, in \cite{stevens2012applied} and references
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
-TODO
+
+For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
+We fix the Kullback–Leibler Divergence between distributions of sample means. 
+In the Gaussian shift-class examples, we fix $KL[\bar x_1,\bar x_0]=c^2 p$, which is the same as fixing $\Vert \mu \Vert^2_\Theta$.
+
+Our choice implies that the Euclidean norm of $\mu:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
+
+For verification, in the SM we also report the power when fixing the Euclidean norm between population means. 
+
 
 
 

@@ -158,11 +158,14 @@ For instance, if $\eta=\beta_0+x'x$.
 In this case, $X_1$ is a rescaled version $X_0$, depicted for $p=2$ in Figure~\ref{fig:quadratic-form}.
 This example is typically encountered in the machine learning literature, to motivate learning with kernels. 
 
+When analyzing the quadratic form logistic regression we need to distinguish between analysis in the original $x$ space, and in the augmented interaction space. 
+In the original space, $X_0$ is a ``pure rescaling'' of $X_1$. 
+In particular, tests for shifts, or linear classifiers are ill equipped for this setup.
+The only tests that deal with this are the GOF tests, as seen in Figure~\ref{fig:logistic-interactions-only}.
+When augmenting the $x$ space with interactions, then the problem collapses to a linear regression with main effects only. Figure~\ref{fig:logistic-interactions-only-augmented} thus resembles Figure~\ref{fig:logistic-main-only}.
 
 
-
-
-\begin{figure}[h]
+\begin{figure}[th]
 	\centering
 	\begin{subfigure}[t]{.3\columnwidth}
 		\centering
@@ -172,13 +175,13 @@ This example is typically encountered in the machine learning literature, to mot
 	\end{subfigure}
 	\begin{subfigure}[t]{.3\columnwidth}
 		\centering
-	\includegraphics[width=1\columnwidth]{"art/file41"}
+	\includegraphics[width=1\columnwidth]{"art/file42"}
 	\caption{Detection power in \textbf{original} space.} 
 	\label{fig:logistic-interactions-only}
 	\end{subfigure}
 	\begin{subfigure}[t]{.3\columnwidth}
 	\centering
-	\includegraphics[width=1\columnwidth]{"art/file41"}
+%	\includegraphics[width=1\columnwidth]{"art/file43"}
 	\caption{Detection power in \textbf{augmented} space.} 
 	\label{fig:logistic-interactions-only-augmented}
 	\end{subfigure}
@@ -200,18 +203,9 @@ This example is typically encountered in the machine learning literature, to mot
 
 
 
-
-
-
-Interactions are understood as statements on $Y|x$. 
-In particular, that the gradient of $P(Y=1|x)$ is a function of multiple coordinates. 
-In this sense, the shift model includes interactions.
-
-
-
-
 \subsection{Mixture Class}
 
+Another example where $X_1$ is not a shifted version of $X_0$ is a mixture class. 
 \cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
 The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
 They find that the power increases with the size of the test set.
@@ -261,9 +255,11 @@ The \emph{Srivastava} statistic, for instance, is scalar invariant.
 It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
 The \emph{Goeman} statistic, for instance, is not scalar invariant. 
 It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
-Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. \emph{Srivastava} will give all coordinates the same importance.
+Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. 
+\emph{Srivastava} will give all coordinates the same importance.
 
-In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
+In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. 
+We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
 
 \begin{figure}[h]
 	\centering
@@ -289,8 +285,7 @@ In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the sca
 \subsection{Tie Breaking}
 \label{sec:ties}
 
-As already stated in the introduction, the accuracy statistic is highly discrete. 
-Especially the resubstitution accuracy-tests. 
+As previously stated, the accuracy statistic is highly discrete. 
 Discrete test statistics lose power by not exhausting the permissible false positive rate. 
 A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
 Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
@@ -324,7 +319,7 @@ As usual, two-group tests dominate accuracy-tests, only this time, the winners a
 \begin{figure}[ht]
 	\centering
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file34"}
+	\includegraphics[width=0.7\columnwidth]{"art/file34"}
 	\caption{Sparse $\mu$.}  
 	\label{fig:sparse}	
 \end{figure}
