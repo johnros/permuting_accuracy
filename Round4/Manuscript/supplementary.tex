@@ -47,11 +47,12 @@
 We have focused on the him-dim--small-sample setup because it is appropriate for many problems in neuroimaging and genetics. 
 To show that our conclusions are not due to the \emph{small-sample}, but rather, to the \emph{high-dim}, we scale our basic setup ten-fold. 
 Fixing $p/n$, we simulate with $p=230$ and $n=400$. 
-The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample in the main text.
+The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample in the main text. 
+In particular with respect to the dominance of two-group tests. 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file1"}
-	\caption{\textbf{Large sample}: The basic simulation setup, with $n=400; p=230$.}
+	\caption{\textbf{Large sample}: The basic simulation setup scaled ten-fold: $n=400; p=230$.}
 	\label{fig:large-sample}
 \end{figure}
 
@@ -62,8 +63,9 @@ The results, reported in Figure~\ref{fig:large-sample}, are qualitatively simila
 %%%% Sphericity
 \section{Departure From Sphericity}
 In the main text, we have departed from the sphericity assumption, by allowing $\Sigma$ to be an $AR(1)$ covariance. 
-To verify that two-group tests have more power that accuracy tests, and that the power depends on the direction of the signal with respect to the PCs of the noise, we try other covariance structures. 
-As seen in Figures \ref{fig:dependence_2} and \ref{fig:dependence_3}, our findings hold also for long-memory Brownian motion correlations, and for an arbitrary (random) correlation.
+We try other covariance structures: a long-memory Brownian motion correlation structure, and an arbitrary (random) covariance structure. 
+As seen in Figures \ref{fig:dependence_2} and \ref{fig:dependence_3}, our findings hold for these correlation structures. 
+In particular: two-group tests dominate accuracy tests, and signal is masked in the low PCs of the noise. 
 
 
 
@@ -133,12 +135,13 @@ We thus verify our statements in models which are not ``pure shifts''.
 These include logistic regression, and a mixture class. 
 
 
-\subsection{Logistic Regression and Interactions}
+\subsection{Logistic Regression}
 
-In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power simulation, when generating from the logistic setup, with both main effects and second order interactions (also reported in the main text).
+In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power simulation, when generating from a logistic regression setup with both main effects, and second order interactions.
+This setup is also reported in the main text.
 
 Formally, the logistic assumption implies that 
-$P(Y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
+$P(y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
 Main-effects and second order interaction imply that 
 $\eta=x'\beta+x'Bx$, for some $p$-vector $\beta$, and symmetric matrix $B$.
 We also assume $X\sim \mathcal{N}(0,I_{p\times p})$.
@@ -172,10 +175,10 @@ $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots
 
 
 
-The logistic assumption differs from our original setup in that the logistic assumption states $y|x$, instead of $x|y$. 
-The logistic assumption implies that $x_0$ is no longer a shifted versions of $x_1$, even in the presence of main effects alone. 
-I.e., when $B=0$.
-While not a ``pure shift'', we still expect that lacking interactions, the logistic model is very close to a shift. 
+The logistic assumption differs from our original setup in that it states $y|x$, instead of $x|y$. 
+The logistic assumption implies that $x_0$ is no longer a shifted versions of $x_1$, even in the presence of main effects alone ($B=0$).
+While not a ``pure shift'', the logistic model with main effects has a strong shift component. 
+We thus expect it to behave like the basic setup. 
 This is verified in Figure \ref{fig:logistic-main-only}.
 
 
