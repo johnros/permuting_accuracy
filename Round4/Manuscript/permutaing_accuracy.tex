@@ -479,7 +479,7 @@ This matter is further discussed in Section~\ref{sec:regularizaton}.
 
 \subsection{Departure From Shift Alternatives}
 \label{sec:logistic}
-Shift alternatives are by far the most studied in the statistical literature. 
+Shift alternatives are by far the most studied in the univariate statistical literature. 
 This is due to mathematical convenience, but also for empirical reasons: 
 (a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale. 
 (b) Many effects are not ``pure shifts'', but have a shift component. In fact, it would be quite controversial to assume an effect is manifested in higher moments alone. 
@@ -833,9 +833,8 @@ If one can perform an accuracy test after mapping the original features to some 
 
 
 A different argument is that the feature mapping may not be known, but rather learned from the data. 
-This is true but requires large amounts of data: in high-dim problems data is barely sufficient to learn covariances in the original space. 
-We are thus very skeptical of the possibility of learning covariances in augmented spaces. 
-This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
+This is true but requires large amounts of data: in high-dim problems data is barely sufficient to learn covariances in the original space, let alone in an augmented space.  
+This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using an oracle covariance, and did not try to estimate it from data. 
 
 
 
@@ -843,17 +842,17 @@ This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using th
 
 \subsection{A Good accuracy-test}
 Brain-computer interfaces and clinical diagnostics \citep{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract this information. 
-In these cases an accuracy-test cannot be replaced by a two-group test. 
 For the cases an accuracy-test cannot be replaced with other tests, we collect the following observations.
 
 \paragraph{Sample size} The conservativeness of accuracy-tests, due to discretization, decrease with the size of the test set. 
 
 \paragraph{Regularize}
 Regularization proves crucial to detection power in low SNR regimes, such as when $n$ is in the order of $p$, or under strong correlations.
+There is a rich literature on optimal covariance regularization for prediction, but less so for testing.
 We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{pang_shrinkage-based_2009} is a particularly good performer, but more research is required on optimal regularization for testing. 
 
 
-\paragraph{Smooth accuracy}
+\paragraph{Resample with Replacement}
 Smooth accuracy estimate by cross-validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
@@ -878,7 +877,8 @@ As put by \cite{ramdas_classification_2016}:
 
 
 \section{Supplementary Material}
-The web supplementary material, available at [TODO: add url]. 
+The web supplementary material is available at [TODO: add url]. 
+It includes 
 
 
 
