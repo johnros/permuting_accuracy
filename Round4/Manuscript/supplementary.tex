@@ -50,8 +50,8 @@ Fixing
 The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file1"}
-	\caption{The same as Figure~\ref{fig:simulation_1} with $n=4,000; p=2,300$.}
+	\includegraphics[width=0.5\columnwidth]{"art/file1"}
+	\caption{\textbf{Large sample}: The basic simulation setup, with $n=400; p=230$.}
 	\label{fig:large-sample}
 \end{figure}
 
@@ -210,16 +210,16 @@ This is verified in Figure \ref{fig:logistic-main-only}.
 
 
 It is possible to use the logistic setup to generate data with no shift at all. 
-For instance, if $\eta=\beta_0+x'x$. 
-In this case, $X_1$ is a rescaled version $X_0$, depicted for $p=2$ in Figure~\ref{fig:quadratic-form}.
+For instance, if effects have a quadratic form in link scale: $\eta=\beta_0+x'x$. 
+In this case, $x_1$ is akin to a rescaling of $x_0$.
+This is depicted for $p=2$ in Figure~\ref{fig:quadratic-form}.
 This example is typically encountered in the machine learning literature, to motivate learning with kernels. 
 
 When analyzing the quadratic form logistic regression we need to distinguish between analysis in the original $x$ space, and in the augmented interaction space. 
-In the original space, $X_0$ is a ``pure rescaling'' of $X_1$. 
-In particular, tests for shifts, or linear classifiers are ill equipped for this setup.
-The only tests that deal with this are the GOF tests, as seen in Figure~\ref{fig:logistic-interactions-only}.
-When augmenting the $x$ space with interactions, then the problem collapses to a linear regression with main effects only. Figure~\ref{fig:logistic-interactions-only-augmented} thus resembles Figure~\ref{fig:logistic-main-only}.
-
+In the original space, $x_1$ is more akin to a rescaling of $x_0$ than a shift.
+In the augmented space $\tilde{x}$, $x_1$ is more akin to a shifting of $x_0$. 
+We thus expect that all tests will perform poorly in the original space, and two-group tests to dominate in the augmented space. 
+This is confirmed in Figure~\ref{fig:logistic-interactions-only}.
 
 \begin{figure}[th]
 	\centering
@@ -233,7 +233,7 @@ When augmenting the $x$ space with interactions, then the problem collapses to a
 		\centering
 	\includegraphics[width=1\columnwidth]{"art/file42"}
 	\caption{Detection power in \textbf{original} space.} 
-	\label{fig:logistic-interactions-only}
+	\label{fig:logistic-interactions-only-original}
 	\end{subfigure}
 	\begin{subfigure}[t]{.3\columnwidth}
 	\centering
@@ -250,7 +250,7 @@ When augmenting the $x$ space with interactions, then the problem collapses to a
 		\eta=\beta_0+x'x; 
 		X \sim \mathcal{N}(0,\sigma^2 I_{p\times p})$.
 	}
-	\label{fig:dependence_1}
+	\label{fig:logistic-interactions-only}
 \end{figure}
 
 
@@ -261,7 +261,7 @@ When augmenting the $x$ space with interactions, then the problem collapses to a
 
 \subsection{Mixture Class}
 
-Another example where $X_1$ is not a shifted version of $X_0$ is a mixture class. 
+Another example where $x_1$ is not a shifted version of $x_0$ is a mixture class. 
 \cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
 The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
 They find that the power increases with the size of the test set.
@@ -303,7 +303,7 @@ From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland
 
 \section{Departure from Homoskedasticity and Scalar Invariance}
 
-Our previous simulations assume variables have unit variance. 
+Our previous simulations assume variables have unit variance (diagonal $\Sigma$). 
 Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
 Implicit z-scoring is sometime an integral part of a test statistic. 
 This is known as \emph{scalar invariance}.
@@ -341,7 +341,6 @@ We also see that two-group tests dominate accuracy-tests also in the heteroskeda
 \subsection{Tie Breaking}
 \label{sec:ties}
 
-As previously stated, the accuracy statistic is highly discrete. 
 Discrete test statistics lose power by not exhausting the permissible false positive rate. 
 A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
 Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
@@ -349,13 +348,13 @@ $\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$,
 is greater than  $\alpha$ then we reject the null with probability 
 $$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
 
-Figure~\ref{fig:file33} reports the same analysis as in Figure~\ref{fig:file2}, after allowing for random tie breaking. 
-It demonstrates that the power disadvantage of accuracy-tests, cannot be remedied by random tie breaking.
+Figure~\ref{fig:file33} reports the basic simulation setup while allowing for random tie breaking. 
+It demonstrates that the power disadvantage of accuracy-tests cannot be remedied by random tie breaking.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{art/file33}
-	\caption{The same as Figure~\ref{fig:file2}, with random tie breaking.}
+	\includegraphics[width=0.5\columnwidth]{art/file33}
+	\caption{\textbf{Tie breaking}: The basic simulation setup with random tie breaking.}
 	\label{fig:file33}
 \end{figure}
 
@@ -367,7 +366,7 @@ It demonstrates that the power disadvantage of accuracy-tests, cannot be remedie
 \label{sec:sparse}
 
 In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
-Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
+Dense alternatives are motivated by neuroimaging where most brain locations in a region carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
 Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
 As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
