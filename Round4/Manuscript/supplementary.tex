@@ -7,6 +7,8 @@
 
 \input{preamble.tex}
 
+\usepackage{float}
+
 \begin{document}
 
 % Title of paper
@@ -44,10 +46,8 @@
 
 We have focused on the him-dim--small-sample setup because it is appropriate for many problems in neuroimaging and genetics. 
 To show that our conclusions are not due to the \emph{small-sample}, but rather, to the \emph{high-dim}, we scale our basic setup ten-fold. 
-Fixing 
-
-
-The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample of Figure~\ref{fig:simulation_1}.
+Fixing $p/n$, we simulate with $p=230$ and $n=400$. 
+The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample in the main text.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file1"}
@@ -289,9 +289,9 @@ x_0 & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.
 From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are still preferred over accuracy-tests. 
 
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file12"}
+	\includegraphics[width=0.5\columnwidth]{"art/file12"}
 	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
 		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
@@ -371,10 +371,10 @@ In a genetic application, a ``sparse'' alternative may be more plausible.
 Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
 As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
 	\centering
-	\includegraphics[width=0.7\columnwidth]{"art/file34"}
+	\includegraphics[width=0.5\columnwidth]{"art/file34"}
 	\caption{Sparse $\mu$.}  
 	\label{fig:sparse}	
 \end{figure}
@@ -387,8 +387,8 @@ As usual, two-group tests dominate accuracy-tests, only this time, the winners a
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We fix the Kullback–Leibler Divergence (KLD) between distributions of sample means. 
-Formally, the KLD between two Gaussian populations is given by 
+We fix the Kullback–Leibler Divergence between distributions of sample means. 
+Formally, the Kullback–Leibler Divergence between two Gaussian populations is given by 
 \begin{align}
 \label{eq:KLD}
 	KL[x_1,x_0]=\frac{1}{2}\left(
@@ -396,7 +396,7 @@ Formally, the KLD between two Gaussian populations is given by
 	\right),
 \end{align}
 where $x_y\sim\mathcal{N}(\mu_y,\Sigma_y)$.
-In the case of the sample means, of two shifted groups of size $n$, then 
+In the case of the sample means of two shifted groups of size $n$, then 
 \begin{align}
 \label{eq:mahalanobis}
 	KL[\bar x_1,\bar x_0]=
