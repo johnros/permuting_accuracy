@@ -49,7 +49,7 @@
 	Via simulation, we compare test statistics that are based on classification accuracy, to others based on multivariate test statistics. 
 	We find that the probability of detecting differences between two distributions is lower for accuracy based statistics.
 	We examine several candidate causes for the low power of accuracy-tests. 
-	These causes include: the discrete nature of the accuracy-test statistic, the type of signal accuracy-tests are designed to detect, their inefficient use of the data, and their regularization. 
+	These causes include: the discrete nature of the accuracy-test statistic, the type of signal accuracy-tests are designed to detect, their inefficient use of the data, and their suboptimal regularization. 
 	When the purpose of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
 	In particular, to replace V-fold cross validation with the Leave-One-Out Bootstrap.
 	}
@@ -100,20 +100,12 @@ It is thus a \emph{high-dim--small-sample} problem.
 In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
 These can be classified along the following lines:
-\begin{itemize}
-	\item \textbf{High-dim GOF}: Tests that seek for any difference between two distributions, such as  \cite{hall2002permutation,szekely_brownian_2009,gretton_kernel_2012-1}.
-	
-	\item \textbf{High-dim location test for sparse shifts}: Tests the seek for a sparse shift in mean vectors such as \cite{tony2014two,chang2014simulation}.
-	
-	\item \textbf{High-dim location test for dense shifts}: Tests the seek for a dense shift in mean vectors such as  \cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_multivariate_2007,lopes2011more,nishiyama2013testing,thulin2014high,shen2015adaptive,xu2016adaptive,zhang2016high}.
-	
-	\item \textbf{High-dim location test for shifts with unknown sparsity}: Tests the seek for a shift in mean vectors, but adapt to the unknown sparsity, such as \cite{donoho2004higher,zhong2013tests,moscovich2016exact}.
-	
-\end{itemize}
+\textbf{Two-group, high-dim, goodness of fit tests}-- Tests that seek for any difference between two multivariate distributions. GOF in short.
+\textbf{Two-group, high-dim, location tests}-- Tests the seek for a shift in mean vectors. Shifts may be in many coordinates (dense), or only in a few (sparse). 
 
 At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging?
 In this manuscript, we do not provide a full answer to the matter.
-Instead, we merely seek to demonstrate that \textbf{accuracy-tests are never optimal, compared to high-dim two-group tests}.
+Instead, we merely seek to demonstrate that in high-dim \textbf{accuracy-tests never have more power than two-group tests}.
 Our recommendations to the practitioner in these high-dim problems:
 (i) Prefer a two-group test over an accuracy-test. 
 (ii) Appropriate regularization is crucial. 
@@ -121,13 +113,13 @@ Our recommendations to the practitioner in these high-dim problems:
 Various authors have compared accuracy-tests to two-group tests, often with contradicting conclusions.
 In \cite{yu2007two} for instance, authors find that an accuracy-test based on a tree predictor is preferable over a two-group test. 
 Their simulated shift is sparse, which may be favorable for tree type predictors, over linear ones. 
-Authors of \cite{olivetti2013kernel} compare the kernel test of Gretton et al. \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
+\citet{olivetti2013kernel} compare the kernel test of \cite{gretton_kernel_2012-1} to an accuracy-test based on logistic-regression.
 Their results are inconclusive with a slight advantage to the logistic regression.
 In \cite{lopez2016revisiting}, authors compare several accuracy-tests to several two-group tests and conclude that an accuracy-test based on a neural-net is preferable. 
 Their argument is that the neural-net is able to learn the features that best separate the samples. 
 Their examples, however, are low-dimensional (even if large-sample), and such feature learning may be impossible in high-dimension.
 
-Ramdas et al. \cite{ramdas_classification_2016} currently offer the only analytic analysis; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
+\cite{ramdas_classification_2016} currently offer the only analytic analysis; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
 By comparing the consistency rates \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent.
 Rates, however, are only a first stage when comparing test statistics. 
 
@@ -145,7 +137,7 @@ Since typical sample sizes in neuroscience and genetics are not large, we seek t
 Lacking a unifying mathematical framework for the finite sample power analysis, we opt for a simulation study. 
 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}.
+The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online supplementary material (SM). 
 We conclude with a discussion.
 
 
@@ -179,7 +171,6 @@ The comparison metric between statistics is power, i.e., the probability to infe
 
 The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing its observed value to it's permutation distribution. 
 Tests differ in the statistic they employ.
-Comparison metric is power, i.e., their true positive rate. 
 We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically poor.
 
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
@@ -193,15 +184,12 @@ $\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R+1} \sum_{\pi} I\{\ma
 (f) Declare $\mathcal{F}\neq \mathcal{G}$ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
 \bigskip
 
-We now detail the various test statistics that will be compared.
 
 
 \subsection{Two-Group Tests}
 The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions). 
 Difference in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
-In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \cite{hotelling_generalization_1931}. 
-Hotelling's statistic was later shown to be the generalized-likelihood-ratio statistic in the Gaussian shift class. 
-It can also be thought of as the empirical Mahalanobis norm of the mean difference, or the empirical Kullback–Leibler divergence between the distribution of averages from two shifted Gaussian distributions. 
+In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \citep{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
 The major difficulty with the $T^2$ statistic is that it requires estimating a covariance matrix, thus introducing $p(p+1)/2=\mathcal{O}(p^2)$ unknown parameters.
@@ -833,11 +821,14 @@ This intuition explains the fact that unregularized tests have more power than t
 
 \subsection{Sparse Alternatives}
 \label{sec:sparse}
-TODO
+In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
+Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
+In a genetic application, a ``sparse'' alternative may be more plausible. 
+In the SM we report the power when $\mu$ is sparse. 
+As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
 
 \subsection{Implications to Other Problems}
-
 Our work studies signal detection in the two-group multivariate testing framework, i.e., MANOVA framework.
 The same problem can be cast in the univariate generalized linear models framework, and in particular, as a Brenoulli Regression problem.
 If any of the predictors, $x$, carries any signal, then $x_0$ has a different distribution than $x_1$.
@@ -850,9 +841,11 @@ We conjecture that power differences in favor of two-group tests versus accuracy
 
 
 \subsection{Feature Mapping}
-It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS). 
+It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS).
 The \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, is an example where the a two-group test is performed after augmenting the features to RKHS.
-We thus disagree with this argument: accuracy-tests do not have any more flexibility than two-group tests. 
+We are also free, up to computational considerations, to augment the design matrix as we please. 
+The logistic regression with second order interactions in the SM is such an example.
+We thus disagree with the argument that accuracy-tests have more flexibility than two-group tests. 
 One can always perform a two-group test after mapping the original features to some augmented space. 
 
 
@@ -899,7 +892,7 @@ As put by \cite{ramdas_classification_2016}:
 
 
 \section{Supplementary Material}
-TODO
+The web supplementary material, available at [TODO: add url]. 
 
 
 
