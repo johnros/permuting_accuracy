@@ -214,8 +214,8 @@ We now explain how an accuracy-test is constructed.
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
 Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
-The accuracy of a predictor, also known as (the complement of) the \emph{test error}., $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
-The accuracy of a learning algorithm, also known  as (the complement of) the \emph{expected test error}., $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+The accuracy of a predictor, also known as (the complement of) the \emph{test error}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
+The accuracy of a learning algorithm, also known  as (the complement of) the \emph{expected test error}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
@@ -249,7 +249,7 @@ Estimating $\accEstim_{\algo}$ requires the following design choices:
 Should it be cross-validated and how? 
 If cross validating using V-fold CV then how many folds? 
 Should the folding be balanced?
-If estimation is part of a permutation test: should the data be refolded after each permutation? 
+Should the data be refolded after each permutation? 
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
@@ -401,9 +401,9 @@ This is most notable for the intermediate signal strength (green triangles).
 
 \subsubsection{Sample Size}
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
-Our results, however, hold also in high-dim--large-sample configurations.
-To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=4,00, p=2,30$. 
-The results are qualitatively similar to the high-dim--small-sample of, and reported in the SM.
+Our results, however, also  hold in the high-dim--large-sample configurations.
+To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=400, p=230$. 
+The results are qualitatively similar to the high-dim--small-sample of, and reported in the online supplementary material (SM).
 
 
 \subsection{Departure From Gaussianity}
@@ -448,7 +448,7 @@ There is no clear preference between two-group or accuracy-tests.
 Instead, the non-regularized tests are the clear victors. 
 This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
-This matter is further discussed in Section~\ref{sec:fix_snr}.
+This matter is further discussed in Section~\ref{sec:regularizaton}.
 
 \begin{figure}[h]
 	\centering
@@ -478,36 +478,47 @@ This matter is further discussed in Section~\ref{sec:fix_snr}.
 
 
 \subsection{Departure From Shift Alternatives}
-% importance of shifts
-% logistic regression
-% mixture class
 Shift alternatives are by far the most studied in the statistical literature. 
 This is due to mathematical convenience, but also for empirical reasons: 
-(a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale, or a second degree interaction in the augmented space. 
-(b) Many effects are not ``pure shifts'', but have a shift component. In fact, it would be quite unorthodox to assume an effect is manifested in higher moments alone. 
+(a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale. 
+(b) Many effects are not ``pure shifts'', but have a shift component. In fact, it would be quite controversial to assume an effect is manifested in higher moments alone. 
 
 For completeness, we also report power for logistic regression.
-Logistic regression is not a shift, because when fixing $P(Y|x)$, there is no marginal distribution of $X$ for which $X_1 $ is a shifted version of $X_0$.
+Logistic regression is not a shift, because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
 To further depart from a shift class, we add second order interactions.
 In Figure~\ref{fig:interactions} we report the usual power of our tests under these assumptions.
-The figure demonstrates that two-group tests still dominate in power, even when the problem gravely departs from the shift class. 
+In particular, we generate data from a logistic model with main effects and second order interactions, and analyze it both in the original space, $x$, and in the space with second order interactions: $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
+The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class. 
+
 
 \begin{figure}[th]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file42"}
-	\caption{\textbf{Interactions In Logistic Regression.} 
-		Data generated via $Y|x \sim Binom(1,p(x));p(x)=\exp(\eta)/[1+\exp(\eta)];\eta=x'Bx; X\sim \mathcal{N}(0,I_{p\times p})$.
-	Data analyzed in the original $x$ space.  } 
+	\begin{subfigure}[t]{.45\columnwidth}
+	\centering
+	\includegraphics[width=1\columnwidth]{"art/file42"}
+	\caption{Data analyzed in the original space ($x$).}
+	\label{fig:interactions-in-original-space}
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+	\centering
+%	TODO: \includegraphics[width=1\columnwidth]{"art/file42"}
+	\caption{Data analyzed in augmented interactions space ($\tilde x$).}
+	\label{fig:interactions-in-augmented-space}
+	\end{subfigure}
+	\caption{\textbf{Logistic regression with second order interactions.} 
+	Data generated via $y|x \sim Binom(1,p(x));
+	p(x)=\exp(\eta)/[1+\exp(\eta)];
+	\eta=x'\beta+x'Bx; 
+	X\sim \mathcal{N}(0,I_{p\times p})$. } 
 	\label{fig:interactions}
 \end{figure}
 
 
-More variations on the logistic setup can be found in the Supplementary Material (SM). 
+
+More variations on the logistic setup can be found in the SM. 
 In particular: 
 (i) Logistic regression with main effects only.
-(ii) Logistic regression with second order interactions only. 
-
-
+(ii) Logistic regression with second order interactions only. Analyzed in the original space $x$, and in the augmented space of second order interactions. 
 
 
 
@@ -517,12 +528,12 @@ In particular:
 \label{sec:bootstrap}
 
 In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
-This is the case whenever resampling without replacement. 
+This is the case whenever resampling \emph{without} replacement. 
 Intuition suggests we may alleviate the discretization of the accuracy statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \cite[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 	\label{def:bloo}
-	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy of the holdout observations, over all bootstrap samples. 
+	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy on the holdout observations, over all bootstrap samples. 
 	Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
 	Also denote by $C^{(i)}$ the index set of bootstrap samples not containing observation $i$.
 	The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
@@ -588,13 +599,15 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 Our best performing tests alleviate the high dimensionality of the problem by regularizing the estimation of $\Sigma$. 
 By comparing the non-regularized $T^2$ to its regularized versions we see that in our high-dim setup, regularization adds power. 
-Regularization is achieved by shrinking, or thresholding, the entries of $\hat{\Sigma}$.
+Regularization is achieved by thresholding the entries of $\hat{\Sigma}$, or inflating its diagonal, thus shrinking $\hat \Theta$. 
 Shrinking is used in the \emph{Schafer} statistic.
 Thresholding is used in the \emph{Goeman} and \emph{Srivastava} statistics.
 
 Can we explicitly regularize the covariance estimate of a classifier?
-To answer this question we augment the simulation with some accuracy-tests that have explicit covariance regularization in them. 
-These include shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} statistic.
+The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regulirizing classifiers. 
+See, for instance \cite{bickel2004some} or \cite{dobriban2018high}.
+We thus augment our simulations with some accuracy-tests that have explicit covariance regularization in them. 
+These include shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} two-group test.
 We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by thresholding, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
@@ -603,11 +616,10 @@ See, for instance, \emph{svm.CV.c001} which is clearly the best regularized SVM 
 Replacing the V-fold  with a bootstrap allows us to further increase the power, as done with \emph{lda.highdim.Pang.b50}.
 Even so, the out-of-the-box two-group tests outperform the accuracy-tests.
 
-Optimizing the regularization parameter for classification does not result in a good test, as can be seem from the performance.
-In SVMs, the cost parameter governs the magnitude of the margins, and thus the regularization. 
-The  \emph{svm.CV.cCV} statistic has a cost parameter optimized with an inner CV. 
-The \emph{svm.CV.c001} statistic has a large fixed regularization.
-The better power of \emph{svm.CV.c001} leads us to argue that the optimal regularization for prediction is not the same as the optimal for testing.
+Optimizing the regularization parameter for classification does not result in a good test.
+The \emph{svm.CV.cCV} statistic has a regularization parameter optimized with an inner CV. 
+The \emph{svm.CV.c001} statistic has a fixed ,large, regularization.
+The better power of \emph{svm.CV.c001} leads us to argue that the optimal regularization for prediction is larger than the optimal for testing.
 
 \bigskip
 
@@ -799,6 +811,7 @@ For verification, in the SM we also report the power when fixing the Euclidean n
 
 
 \subsection{Effect of Covariance Regularization}
+\label{sec:regularizaton}
 Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
 Why is that?
 
