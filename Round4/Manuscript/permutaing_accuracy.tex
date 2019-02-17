@@ -478,6 +478,7 @@ This matter is further discussed in Section~\ref{sec:regularizaton}.
 
 
 \subsection{Departure From Shift Alternatives}
+\label{sec:logistic}
 Shift alternatives are by far the most studied in the statistical literature. 
 This is due to mathematical convenience, but also for empirical reasons: 
 (a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale. 
@@ -714,8 +715,9 @@ We emphasize that both test statistics were compared with the same permutation s
 
 We have set out to understand which of the tests is more powerful: accuracy-tests or two-group tests. 
 Our current observation is that we have never found accuracy tests to be optimal in high-dim regimes; there was always a two-group test that dominated in power.
-We conjecture that accuracy are never optimal, simply because of the needless discretization of the test statistic. 
-Two-group tests are also typically easier to implement, and faster to run, since no resampling is required. 
+We conjecture that accuracy are never optimal, simply because of the needless discretization of the test statistic.
+We also conjecture the advantage of two-group tests will increase when scaling from two-class to multi-class classification.
+Two-group tests are typically easier to implement, and faster to run, since no resampling is required. 
 Statistics such as \emph{Schafer}, \emph{Goeman}, \emph{Srivastava}, \emph{dCOV}, and \emph{Gretton}, are particularly well suited for detecting dense signal in high-dim.
 
 
@@ -813,18 +815,10 @@ This explains the fact that unregularized tests have more power than the regular
 In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
 Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
-In the SM we report the power when $\mu$ is sparse. 
-As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
+In the SM we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
+As usual, two-group tests dominate accuracy-tests.
+This time, however, the winners are not the $T^2$ type statistics, but rather, tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
-
-\subsection{Implications to Other Problems}
-Our work studies signal detection in the two-group multivariate testing framework, i.e., MANOVA framework.
-The same problem can be cast in the univariate generalized linear models framework, and in particular, as a Brenoulli Regression problem.
-If any of the predictors, $x$, carries any signal, then $x_0$ has a different distribution than $x_1$.
-This view is the one adopted in \cite{goeman2006testing}.
-
-Another related problem is that of multinomial-regression, i.e., multi-class classification.
-We conjecture that power differences in favor of two-group tests versus accuracy-tests will increase as the number of classes increases.
 
 
 
@@ -833,15 +827,18 @@ We conjecture that power differences in favor of two-group tests versus accuracy
 It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS).
 The \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, is an example where the a two-group test is performed after augmenting the features to RKHS.
 We are also free, up to computational considerations, to augment the design matrix as we please. 
-The logistic regression with second order interactions in the SM is such an example.
+The logistic regression in Section~\ref{sec:logistic} is such an example, where we analyzed the data both in the original space, and in an augmented space. 
 We thus disagree with the argument that accuracy-tests have more flexibility than two-group tests. 
-One can always perform a two-group test after mapping the original features to some augmented space. 
+If one can perform an accuracy test after mapping the original features to some augmented space, then one can also perform a two-group test. 
 
 
 A different argument is that the feature mapping may not be known, but rather learned from the data. 
 This is true but requires large amounts of data: in high-dim problems data is barely sufficient to learn covariances in the original space. 
 We are thus very skeptical of the possibility of learning covariances in augmented spaces. 
 This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using a known covariance, and did not try to estimate it from data. 
+
+
+
 
 
 \subsection{A Good accuracy-test}
