@@ -488,7 +488,8 @@ For completeness, we also report power for logistic regression.
 Logistic regression is not a shift, because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
 To further depart from a shift class, we add second order interactions.
 In Figure~\ref{fig:interactions} we report the usual power of our tests under these assumptions.
-In particular, we generate data from a logistic model with main effects and second order interactions, and analyze it both in the original space, $x$, and in the space with second order interactions: $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
+In particular, we generate data from a logistic model with main effects and second order interactions, and analyze it both in the original space, $x$, and in the space with second order interactions: 
+$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class. 
 
 
