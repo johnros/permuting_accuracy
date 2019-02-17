@@ -51,7 +51,7 @@
 	We examine several candidate causes for the low power of accuracy-tests. 
 	These causes include: the discrete nature of the accuracy-test statistic, the type of signal accuracy-tests are designed to detect, their inefficient use of the data, and their suboptimal regularization. 
 	When the purpose of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
-	In particular, to replace V-fold cross validation with the Leave-One-Out Bootstrap.
+	In particular, to replace V-fold cross-validation with the Leave-One-Out Bootstrap.
 	}
 \end{abstract}
 
@@ -60,7 +60,7 @@
 \label{sec:introduction}
 
 Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether its prediction accuracy is better than chance. 
-The workflow consists of fitting a classifier, estimating its predictive accuracy using cross validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
+The workflow consists of fitting a classifier, estimating its predictive accuracy using cross-validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
 This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
 Other examples include 
@@ -223,7 +223,7 @@ $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
 where $\indicator{A}$ is the indicator function of the set $A$. 
 
 Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
-Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}, also known as (the complement of) the \emph{train-error}, and the V-fold Cross Validation (CV) estimate.
+Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}, also known as (the complement of) the \emph{train-error}, and the V-fold cross-validation (CV) estimate.
 \begin{definition}[Resubstitution accuracy]
 	\label{def:resubstitution}
 	The resubstitution accuracy estimator of a learning algorithm $\algo$, denoted $\accEstim_{\algo}^{Resub}$,  is defined as
@@ -247,16 +247,16 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accura
 
 Estimating $\accEstim_{\algo}$ requires the following design choices: 
 Should it be cross-validated and how? 
-If cross validating using V-fold CV then how many folds? 
+If cross-validating using V-fold CV then how many folds? 
 Should the folding be balanced?
 Should the data be refolded after each permutation? 
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
-\paragraph{Cross validate or not}
+\paragraph{cross-validate or not}
 For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, as long as it does not invalidate the error rate guarantees. 
 The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
-We will thus be considering both unbiased cross validated accuracies, and biased resubstitution accuracies.
+We will thus be considering both unbiased cross-validated accuracies, and biased resubstitution accuracies.
 
 
 \paragraph{Balanced folding}
@@ -313,7 +313,7 @@ We selected two-group tests based on their popularity, and so that various types
 		Two-group tests for sparse shifts include \textit{Cai}.
 		Two-group adaptive tests for shifts include \textit{Simes}.
 		The rest are accuracy-tests, marked with a \cue, and details given in the table. 	
-		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross validated accuracy, and cost parameter set at $100$ \citep{meyer_e1071:_2015}.
+		For example, \textit{svm.CV.c100} is a linear SVM, with V-fold cross-validated accuracy, and cost parameter set at $100$ \citep{meyer_e1071:_2015}.
 		\textit{svm.CV.cCV} is a linear SVM, with V-fold CV accuracy, and cost parameter optimized with (an inner) CV. 
 		\textit{lda.noCV.1} is Fisher's LDA, with a resubstituted accuracy estimate.
 		Also recall that in LIBSVM, the \emph{cost} is inversely proportional to the regularization \citep{chang2011libsvm}: larger cost implies less regularization. 
@@ -389,10 +389,10 @@ This is most notable for the intermediate signal strength (green triangles).
 	\includegraphics[width=0.5\columnwidth]{"art/file2"}
 	\caption{
 		The power of the permutation test with various test statistics. 
-		The power on the $x$ axis. 
+		The power on the x-axis. 
 		Effects are color and shape coded. 
 		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
-		The various statistics on the $y$ axis. 
+		The various statistics on the y-axis. 
 		Their details are given in Table~\ref{tab:collected}. 
 		Simulation details in Section~\ref{sec:simulation_details}.}	
 	\label{fig:simulation_1}
@@ -545,7 +545,7 @@ An algorithm that samples test sets with replacement is the \emph{leave-one-out 
 
 
 Simulation results are reported in Figure~\ref{fig:bootstrap} with naming conventions in Table~\ref{tab:collected_2}.
-As expected, sampling test sets with replacement does increase the power of accuracy-tests, when compared to V-fold cross validation, but still falls short from the power of two-group tests. 
+As expected, sampling test sets with replacement does increase the power of accuracy-tests, when compared to V-fold cross-validation, but still falls short from the power of two-group tests. 
 It can also be seen that power increases with the number of bootstrap replications, since more replications reduce the level of discretization.
 
 \bigskip
@@ -579,9 +579,9 @@ It can also be seen that power increases with the number of bootstrap replicatio
 	\caption{
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
-		The power on the $x$ axis. 
+		The power on the x-axis. 
 		Effects are color and shape coded. 
-		The various statistics on the $y$ axis. 
+		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
 		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
 		Simulation details in Appendix~\ref{sec:simulation_details}.
@@ -650,9 +650,9 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 	\caption{
 		\textbf{HighDim Classifier.} 
 		The power of a permutation test with various test statistics. 
-		The power on the $x$ axis. 
+		The power on the x-axis. 
 		Effects are color and shape coded. 
-		The various statistics on the $y$ axis. 
+		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
 		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
@@ -692,7 +692,7 @@ We emphasize that both test statistics were compared with the same permutation s
 	\caption{\footnotesize
 		Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy-test u and a two-group test (\emph{Srivastava}). 
-		The linear SVM was computed using $5$-fold cross validation, and a cost parameter of $1$. 
+		The linear SVM was computed using $5$-fold cross-validation, and a cost parameter of $1$. 
 		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \cite{benjamini_controlling_1995}.
 		Number of permutations equals $400$.
 		The two-group test detect $1,232$ regions, and the accuracy-test $441$, $399$ of which are common to both.
@@ -738,8 +738,8 @@ According to these authors, this superiority is due to the larger test-samples w
 \subsubsection{Inappropriate Regularization}
 From the fact that \emph{svm.CV.cCV} is less powerful than \emph{svm.CV.c001} we learn that testing requires different regularization than predicting.
 Does testing require more or less regularization?
-In our simulations, the optimal cross validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
-We thus conclude that that testing requires \emph{more} regularization  than predicting. 
+In our simulations, the optimal cross-validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
+We thus conclude that testing requires \emph{more} regularization  than predicting. 
 Why would this happen?
 Regularization introduces bias and reduces bias. 
 For testing, we only care about the bias in the largest coordinates of $\mu$. 
@@ -759,13 +759,13 @@ The concentration of resubstitution accuracy near $1$, and its discretization, r
 This explains the terrible power of \emph{svm.noCV.c100}, which has barely any regularization (recall that the cost parameter in LIBSVM is inversely proportional to the regularization). 
 
 The degree of discretization is governed by the sample size. 
-For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization. This actually holds for all power analyses relying on a \emph{contiguity} argument \cite[Ch.6]{vaart_asymptotic_1998}.
+For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization. 
 An asymptotic analysis, which eschews the discretization effect,  may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
 One of the effects of discretization is ties. 
-The canonical remedy for ties--- random tie breaking --- showed only a minor improvement (not reported herein).
+The canonical remedy for ties--- random tie breaking --- showed only a minor improvement as reported in the SM.
 
-Using our simulations we may quantify the power loss due to discretization, this is because Figher's LDA is equivalent to Hotelling's $T^2$ followed by a discretization stage. 
-From Figure~\ref{fig:simulation_1} we see that for the intermediate signals strength, \emph{Hotelling} has roughly twice the power of \emph{lda.noCV.1}.
+Using our simulations we may quantify the power loss due to discretization, this is because the resubstitution accuracy of Figher's LDA is equivalent to Hotelling's $T^2$ after binarizing predictions. 
+From Figure~\ref{fig:simulation_1} we see that for the intermediate signals strength, \emph{Hotelling} has roughly twice the power of LDA (\emph{lda.noCV.1}).
 We thus conclude that the effect of discretization may be considerable. 
 
 
@@ -778,58 +778,34 @@ The matter of discretization was addressed in a $2011$ post by Prof. Frank Harre
 
 
 
-\subsection{Interpretation}
-Two-group tests, and location tests in particular, are easier to interpret. 
-To do so we typically use a Neyman-Pearson Lemma type argument, and think:
-What type of signal is a test sensitive to?
-What is the direction of the effect? 
-Accuracy-tests are seen as ``black boxes'', even though they can be analyzed in the same way. 
-\citet{gilron2017s} demonstrate that the type of signal captured by accuracy-tests is less interpretable to neuroimaging practitioners than two-group tests. 
-
-Some authors prefer accuracy-tests because they can be seen as effect-size estimates, invariant to the sample size. 
-This is true, but the multivariate-statistics literature provides many multivariate effect-size estimators. 
-Examples can be found, for instance, in \cite{stevens2012applied} and references therein. 
-
-
-
 
 \subsection{Fixed SNR}
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We fix the Kullback–Leibler Divergence between distributions of sample means. 
-In the Gaussian shift-class examples, we fix $KL[\bar x_1,\bar x_0]=c^2 p$, which is the same as fixing $\Vert \mu \Vert^2_\Theta$.
+We fix the Mahalanobis norm between the sampling distribution of group means [TODO: be explicit]. 
+In the shifted Gaussian case, this is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$.
 
-Our choice implies that the Euclidean norm of $\mu:=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
 This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
 
-For verification, in the SM we also report the power when fixing the Euclidean norm between population means. 
-
-
+For verification, we report the power when fixing the Euclidean norm between population means in the SM.
 
 
 
 \subsection{Effect of Covariance Regularization}
 \label{sec:regularizaton}
-Figures \ref{fig:dependence_1}, \ref{fig:dependence_2}, \ref{fig:dependence_3} and \ref{fig:dependence_4}, demonstrate that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
+
+Figure~\ref{fig:dependence_1} demonstrate that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
 Why is that?
 
 We attribute this phenomenon to regularization.
 Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sigma$ does not. 
-We borrow intuition from ridge regression, for which closed form solutions are available (and is equivalent to LDA with Tikhonov regularization). 
-We first recall that in ridge regression 
-$$\hat y = X'(\hat \Sigma +\lambda I)^{-1}X'y,$$
-so that penalizing $\Vert \beta \Vert_2^2$, ends up with a Tikhonov regularization of the covariance estimator.
-Using the SVD decomposition of $X$, then 
-\begin{align}
-\label{eq:ridge-svd}
-\hat y= \sum_{j=1}^p \left( u_j \frac{d_j^2}{d_j^2+\lambda}u'_j \right)y,
-\end{align}
-where
-$X=(u_1,\dots,u_p)diag(d_1,\dots,d_p)(v'_1,\dots,v'_p)$.
-From Eq.(\ref{eq:ridge-svd}) we see that the bias is larger in the directions of the smaller $d_j^2$, i.e., the smaller PCs of $\hat \Sigma$. 
-This intuition explains the fact that unregularized tests have more power than the regularized, as seen in figures \ref{fig:dependence_12}, \ref{fig:dependence_22}, and \ref{fig:dependence_32}.
+We already know from ridge regression that a Tikhonov regularization of the covariance shrinks estimates. 
+We also know that shrinking is more aggressive in the the low PCs of the design \cite{hastie_elements_2003}. 
+If groups differ in the same direction where shrinking is most aggressive, then this regularization may mask the signal. 
+This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and SM.
 
 
 \subsection{Sparse Alternatives}
@@ -881,7 +857,7 @@ We find that the Shrinkage-based Diagonal Linear Discriminant Analysis of \cite{
 
 
 \paragraph{Smooth accuracy}
-Smooth accuracy estimate by cross validating with replacement. 
+Smooth accuracy estimate by cross-validating with replacement. 
 The bLOO estimator, in particular, is preferable over V-fold.
 This was also observed by \cite{yu2007two}, albeit attributed to the stability of the accuracy estimate, and not to its smoothness. 
 We believe bootstraping enjoys from both smoothing and stabilizing (compared to V-folding), but we currently cannot quantify the contributions of each. 
