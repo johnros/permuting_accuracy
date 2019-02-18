@@ -8,30 +8,32 @@ editor_options:
 ---
 
 
+```{r}
+n.permutations <- 3e2
+n.replications <-  1e2
+```
+
+
 ```{r preliminaries}
 file.name <- "file13"
-setwd('~/workspace/permuting_accuracy/Round3/')
+setwd('~/workspace/permuting_accuracy/Round4/')
 
-balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <- 1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
-n.permutations <- 3e2
 n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) # change in location
+effects <- seq(0, 20, length=3) # change in location
 
 ## Covariance
 Sigma <- diag(p)
+Sigma.inv <- solve(Sigma)
 # lattice::levelplot(Sigma)
 direction0 <- rep(1,p)
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
-direction <- 23 * direction0 / sqrt(n/2*maha)
+direction <-  direction0 / sqrt(n/2*maha)
 ```
 
 
@@ -48,23 +50,22 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
   labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
   
   # Gaussian noise
-  .noise <- rmvnorm(n=n, sigma = Sigma)
+  noise <- rmvnorm(n=n, sigma = Sigma)
 
   # Shift alternative:
   # effect <- effects[[3]]
-  noise <- .noise
   shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
   noise[labels,] <- noise[labels,] + shift
 
   # Asign observations to folds. Use the simple label structure to balance folds.
-  fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+  fold.ids <- balanced_folding(labels, n.folds, TRUE)
   # capture.output(table(fold.ids, labels), file=balanc.log, append = TRUE)
   
   # Compute observed statistic
   x1 <- noise[labels,]
   x2 <- noise[!labels,]
   
-  ts <- statisticsBootstrap(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+  ts <- statisticsBootstrap(x1,x2,Sigma.inv,noise,labels,fold.ids)
   
   # Initialize result containers
   permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
@@ -76,14 +77,14 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
     # i <- 1
     
     labels <- sample(labels) 
-    fold.ids <- balanced_folding(labels, n.folds, balance) # refolding.
+    fold.ids <- balanced_folding(labels, n.folds, TRUE) # refolding.
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
     
     # Checking balance:
     # capture.output(table(.fold.ids, .labels), file=balanc.log, append = TRUE)
     
-    permuted[i,] <- statisticsBootstrap(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    permuted[i,] <- statisticsBootstrap(x1,x2,Sigma.inv,noise,labels,fold.ids)
     
   } # End permutation
 
@@ -93,10 +94,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind)  %:% foreach(effect=eff
     pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
   }
   names(pvals) <- names(ts)
-  c(effect=effect, pvals) 
+  c(effect=effect, pvals, replication=j) 
+
 }
-pbPost("note", "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+pbPost(type = "note", body = "File2", title = the.message)
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 

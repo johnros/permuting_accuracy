@@ -62,6 +62,37 @@ ar1_cov <- function(n, rho, sigma=1){
 ## Testing
 # lattice::levelplot(ar1_cov(10,0.8))
 
+
+ar1_cov2 <- function(n, rho, sigma=1){
+  times <- 1:n
+  H <- abs(outer(times, times, "-"))
+  V <- sigma * rho^H
+  p <- nrow(V)
+  V[cbind(1:p, 1:p)] <- V[cbind(1:p, 1:p)] * sigma
+  V
+}
+## Testing:
+# lattice::levelplot(ar1_cov2(10,0.8))
+
+
+ar1_preci <- function(p, rho){
+  Q = matrix(0, p, p)
+  diag(Q) = 1+rho^2
+  for (i in 1:(p-1)) {
+    Q[i, i+1] = -rho
+    Q[i+1, i] = -rho
+  }
+  Q[1,1] = 1
+  Q[p,p] = 1
+  return(Q)
+}
+## Testing:
+# lattice::levelplot(solve(ar1_preci(10,0.8)))
+
+
+
+
+
 # The correlation implies by a brownian motion
 browninan_cov <- function(n){
   Sigma <- matrix(NA, n, n)
@@ -167,14 +198,4 @@ makeSymmetric <- function(n){
 # makeSymmetric(3)
 
 
-makePrecision <- function(X,p,SigmaRaw){
-  # X <- noise.augment
-  # SigmaRaw <- Sigma
-  
-  vars <- colnames(X)
-  new.p <- p+1+choose(p,2)
-  Sigma <- Matrix(0, nrow = new.p, ncol = new.p, sparse = TRUE)
-  Sigma[1:p,1:p] <- SigmaRaw
-  split ###
-  
-}
+
