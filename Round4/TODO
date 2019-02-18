@@ -1,8 +1,6 @@
 - Simulate interaction:
-    - Why isn't the null 5% ?!? Augmenting the design, even if multiplying by 0, adds signal?
-    - Do groups need to be balanced and how to make sure of that? file40 is not balanced and looks ok, so not a matter of balance.
-    - Are the hypotheses two sided?
-- Upward bias in two-group tests.
+   - Quadratic form, no drift. In original space and in augmented space.
+   - Quadratic form with drift.
 - Large sample (X100)
 
 

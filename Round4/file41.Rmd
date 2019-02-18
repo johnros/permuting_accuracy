@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (interactions)"
+title: "Logistic Regression (quadratic form in original space)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  5e2
+n.replications <-  1e2
 ```
 
 
@@ -25,8 +25,9 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-n.predictors <- choose(p,2)+p+1
-beta0 <- rnorm(n.predictors)
+p.quadratic <- choose(p,2)
+p.total <- p+1+p.quadratic
+beta0 <- c(rep(0,p+1),rep(1,p.quadratic))
 effects <- c(0,0.25,0.5)
 ```
 
@@ -55,16 +56,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
-    # sum(labels)
     
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
-    # plot(colMeans(x1)~colMeans(x2), xlim=c(-1,1), ylim=c(-1,1)); abline(0,1,lty=2, v=0, h=0)
-    # plot(colMeans(noise.augment[labels,])~colMeans(noise.augment[!labels,]), xlim=c(-1,1), ylim=c(-1,1), cex=0.1); abline(0,1,lty=2, v=0, h=0)
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
-    fold.ids <- balanced_folding(labels, n.folds, balance = FALSE)
+    fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
@@ -86,7 +84,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # i <- 1
       
       labels <- sample(labels) # label switching
-      fold.ids <- balanced_folding(labels, n.folds, FALSE) # refold
+      fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       

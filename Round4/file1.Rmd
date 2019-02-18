@@ -1,41 +1,52 @@
 ---
-title: "Large Sample"
+title: "Large sample"
 author: "Jonathan Rosenblatt"
-date: "8/2/2017"
+date: "16/2/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
 
 
+```{r}
+n.permutations <- 3e2
+n.replications <-  1e2
+```
+
+
 ```{r preliminaries}
 file.name <- "file1"
-setwd('~/workspace/permuting_accuracy/Round3/')
+setwd('~/workspace/permuting_accuracy/Round4/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e2
-large.sample <- 1e2
-p <- 23*large.sample
-n <- 40*large.sample # total sample size-> n/2 in each group.
-n.permutations <- 1e2
-n.folds <- 2
+p <- 230
+n <- 4e2 # total sample size-> n/2 in each group.
+n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
 effects <- seq(0, 0.5, length=3) # change in location
 
 Sigma <- diag(p)
+Sigma.inv <- solve(Sigma)
 # lattice::levelplot(Sigma)
+```
+
+SNR:
+$$\frac{n}{2} \mu'\Sigma^{-1}\mu=\frac{n}{2} c^2 e'\Sigma^{-1}e$$ where $e$ is a direction vector.
+
+```{r}
 direction0 <- rep(1,p)
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
-direction <- 23 * direction0 / sqrt(n/2*maha)
+direction <- direction0 / sqrt(n/2*maha)
 ```
+
 
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=30)
+registerDoMC(cores=100)
 ```
 
 ```{r independent noise variable folds}
@@ -45,12 +56,11 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
     ## Gaussian noise
-    .noise <- rmvnorm(n=n, sigma = Sigma)
+    noise <- matrix(dqrnorm(n*p), ncol=p, nrow=n)
     
     ## Shift alternative:
-    # effect <- effects[[3]]
+    # effect <- effects[[1]]
     
-    noise <- .noise
     shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
     noise[labels,] <- noise[labels,] + shift
     
@@ -63,7 +73,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- statisticsLargeSample(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+    ts <-statistics(x1 = x1, 
+                    x2 = x2, 
+                    Sigma.inv = Sigma.inv, 
+                    noise = noise, 
+                    labels = labels, 
+                    fold.ids = fold.ids)
     
     # Prepare to permute
     old.labels <- labels
@@ -75,31 +90,38 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in 1:n.permutations){
       # i <- 1
       
-      labels <- sample(labels) # make permutation
+      labels <- sample(labels) # label switching
       fold.ids <- balanced_folding(labels, n.folds, balance) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statisticsLargeSample(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
+      permuted[i,] <- statistics(x1 = x1, 
+                                 x2 = x2,
+                                 Sigma.inv =Sigma.inv, 
+                                 noise = noise,
+                                 labels = labels,
+                                 fold.ids = fold.ids)
     } # End permutation
     
     # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+      # i <- 1
+      pvals[i] <- mean(permuted[,i]>=ts[i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
     
-    c(effect=effect, pvals) 
+    c(effect=effect, pvals, replication=j) 
   }
 } 
 
-pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+pbPost(type = "note", body = "File2", title = the.message)
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 ```{r}
+# load('file2.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```
@@ -110,4 +132,31 @@ plot(plot.3)
 dev.off()
 ```
 
+There is indeed a problem with p-values:
+
+```{r}
+pvals.melt[effect==0,.(Power=mean(value<0.05)),.(effect,statistic)]
+pvals.melt[effect==0,value,.(effect,statistic)] %>% 
+  ggplot(aes(value))+
+  stat_ecdf(geom = "step")+
+  facet_wrap(~statistic)
+```
+
+     effect     statistic Power
+ 1:      0    Oracle.Cov 0.050
+ 2:      0     Hotelling 0.051
+ 3:      0       Schafer 0.049
+ 4:      0        Goeman 0.050
+ 5:      0    Srivastava 0.050
+ 6:      0       Gretton 0.057
+ 7:      0          dCOV 0.051
+ 8:      0         Simes 0.058
+ 9:      0           Cai 0.050
+10:      0      lda.CV.1 0.047
+11:      0    lda.noCV.1 0.023
+12:      0   svm.CV.c100 0.038
+13:      0   svm.CV.c001 0.053
+14:      0    svm.CV.cCV 0.043
+15:      0 svm.noCV.c100 0.000
+16:      0 svm.noCV.c001 0.037
 

@@ -1,7 +1,7 @@
 ---
-title: "Logistic Regression (main effects only, original space)"
+title: "Logistic Regression (main effects only, augmented space)"
 author: "Jonathan Rosenblatt"
-date: "23/1/2019"
+date: "18/2/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -9,12 +9,12 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  5e2
+n.replications <-  1e2
 ```
 
 
 ```{r preliminaries}
-file.name <- "file40"
+file.name <- "file44"
 setwd('~/workspace/permuting_accuracy/Round4/')
 
 p <- 23
@@ -24,10 +24,18 @@ n.folds <- 4
 source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
-Sigma.inv <- solve(Sigma)
+# Sigma.inv <- solve(Sigma)
 beta0 <- rnorm(p)
 effects <- c(0,1,2)
 ```
+
+```{r}
+noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
+noise.augment <- model.matrix(~.^2, as.data.frame(noise))
+vars <- colnames(noise.augment)
+
+```
+
 
 
 ## Fixed folds. Cross-Validated. All in one.
@@ -42,6 +50,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
+    noise.augment <- model.matrix(~.^2, as.data.frame(noise))
+
 
     ## Logistic regression
     # effect <- effects[[3]]
@@ -54,8 +64,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
     
     ## Compute observed statistic
-    x1 <- noise[labels,]
-    x2 <- noise[!labels,]
+    x1 <- noise.augment[labels,]
+    x2 <- noise.augment[!labels,]
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
@@ -65,7 +75,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ts <-statistics(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.inv, 
-                    noise = noise, 
+                    noise = noise.augment, 
                     labels = labels, 
                     fold.ids = fold.ids)
     
@@ -81,13 +91,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       
       labels <- sample(labels) # label switching
       fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
-      x1 <- noise[labels,]
-      x2 <- noise[!labels,]
+      x1 <- noise.augment[labels,]
+      x2 <- noise.augment[!labels,]
       
       permuted[i,] <- statistics(x1 = x1, 
                                  x2 = x2,
                                  Sigma.inv =Sigma.inv, 
-                                 noise = noise,
+                                 noise = noise.augment,
                                  labels = labels,
                                  fold.ids = fold.ids)
     } # End permutation

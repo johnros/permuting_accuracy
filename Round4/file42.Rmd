@@ -1,7 +1,7 @@
 ---
-title: "Logistic Regression (structured interactions)"
+title: "Logistic Regression (linear and quadratic form)"
 author: "Jonathan Rosenblatt"
-date: "23/1/2019"
+date: "15/2/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e3
+n.replications <-  1e1
 ```
 
 
@@ -25,10 +25,9 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-n.predictors <- choose(p,2)+p+1
-beta0 <- rnorm(n.predictors, sd = seq(n.predictors,1)/n.predictors)
-# beta0 <- runif(n.predictors, max = seq(n.predictors,1)/n.predictors)
-plot(beta0, type='h')
+p.quadratic <- choose(p,2)
+p.total <- p+1+p.quadratic
+beta0 <- rep(1, p+1+p.quadratic)
 effects <- c(0,0.5,1)
 ```
 
@@ -57,16 +56,14 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
-    # sum(labels)
     
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
-    # plot(colMeans(x1)~colMeans(x2), xlim=c(-1,1), ylim=c(-1,1)); abline(0,1,lty=2, v=0, h=0)
-    # plot(colMeans(noise.augment[labels,])~colMeans(noise.augment[!labels,]), xlim=c(-1,1), ylim=c(-1,1)); abline(0,1,lty=2, v=0, h=0)
+    
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
-    fold.ids <- balanced_folding(labels, n.folds, balance = FALSE)
+    fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
@@ -88,7 +85,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # i <- 1
       
       labels <- sample(labels) # label switching
-      fold.ids <- balanced_folding(labels, n.folds, FALSE) # refold
+      fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
@@ -118,7 +115,7 @@ save.image(file=paste(file.name,".RData", sep=''))
 
 ## Analysis
 ```{r}
-# load('file42.RData')
+# load('file41.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

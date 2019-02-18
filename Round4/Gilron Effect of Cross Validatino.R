@@ -158,4 +158,24 @@ randomizedTest <- function(alpha, pval, pval.strickt){
 
 source('statistics.R')
 
+makeSymmetric <- function(n){
+  x <- matrix(rnorm(n*n), n) 
+  ind <- lower.tri(x) 
+  x[ind] <- t(x)[ind] 
+  x
+}
+## Testing:
+# makeSymmetric(3)
 
+
+makePrecision <- function(X,p,SigmaRaw){
+  # X <- noise.augment
+  # SigmaRaw <- Sigma
+  
+  vars <- colnames(X)
+  new.p <- p+1+choose(p,2)
+  Sigma <- Matrix(0, nrow = new.p, ncol = new.p, sparse = TRUE)
+  Sigma[1:p,1:p] <- SigmaRaw
+  split ###
+  
+}
