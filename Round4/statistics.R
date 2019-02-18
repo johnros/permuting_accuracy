@@ -507,9 +507,9 @@ statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
 ## Testing:
 
 
-statisticsBootstrap <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+statisticsBootstrap <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
   c(
-    statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
+    statistics(x1,x2,Sigma.inv,noise,labels,fold.ids),
     svm.Boot.c100.b10=t_svm_boot(noise, labels, B=10, type2=2, cost=100, type=1),
     svm.Boot.c001.b10=t_svm_boot(noise, labels, B=10, type2=2, cost=0.01, type=1),
     svm.Boot.c100.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=100, type=1),
@@ -519,9 +519,9 @@ statisticsBootstrap <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2)
 }
 
 
-statisticsHighDim <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+statisticsHighDim <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
   c(
-    statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
+    statistics(x1,x2,Sigma.inv,noise,labels,fold.ids),
     svm.Boot.c100.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=10, type=1),
     svm.Boot.c001.b50=t_svm_boot(noise, labels, B=50, type2=2, cost=0.01,  type=1),
     lda.highdim.Dudoit.CV=t_dlda_cv(noise, labels, labels, fold.ids, type=1),

@@ -7,24 +7,25 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+n.permutations <- 3e2
+n.replications <-  1e2
+```
+
 ```{r preliminaries}
 file.name <- "file17"
-setwd('~/workspace/permuting_accuracy/Round3/')
+setwd('~/workspace/permuting_accuracy/Round4/')
 
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
-n.replications <-  1e3
 p <- 23
 n <- 4e1 # total sample size-> n/2 in each group.
-n.permutations <- 3e2
 n.folds <- 4
-cost.1 <- 1e1
-cost.2 <- 1e-1
 
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 0.5, length=3) 
+effects <- seq(0, 20, length=3) 
 
 ## Make correlation matrix
 # A <- matrix(rnorm(p^2), ncol = p, nrow=p)
@@ -34,11 +35,15 @@ effects <- seq(0, 0.5, length=3)
 # save(Sigma, file='Sigma.RData')
 
 load(file='Sigma.RData')
-# lattice::levelplot(Sigma)
+lattice::levelplot(Sigma)
+Sigma.inv <- solve(Sigma) %>% round(1)
+lattice::levelplot(Sigma.inv)
+Sigma.sqrt <- t(chol(Sigma))
+
 Sigma.eigen <- eigen(Sigma)
 direction0 <- Sigma.eigen$vectors[,which.min(abs(Sigma.eigen$values))] 
 maha <- direction0 %*% solve(Sigma) %*% direction0 %>% c
-direction <- 23 * direction0 / sqrt(n/2*maha)
+direction <- direction0 / sqrt(n/2*maha)
 ```
 
 
@@ -60,8 +65,8 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # matplot(t(.noise), type='l')
 
     ## Shift alternative:
-    noise <- .noise
-    shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
+    shift <- matrix(effect * direction, nrow=n/2, ncol=p, byrow = TRUE)
+    noise <-t(Sigma.sqrt%*%matrix(rnorm(n*p), ncol = n, nrow=p))
     noise[labels,] <- noise[labels,] + shift
     
     ## Compute observed statistic
@@ -69,10 +74,15 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     x2 <- noise[!labels,]
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
-    fold.ids <- balanced_folding(labels, n.folds, balance = balance)
+    fold.ids <- balanced_folding(labels, n.folds, TRUE)
     
     # Observables 
-    ts <-statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
+    ts <-statistics(x1 = x1, 
+                    x2 = x2, 
+                    Sigma.inv = Sigma.inv, 
+                    noise = noise, 
+                    labels = labels, 
+                    fold.ids = fold.ids)
     
     # Prepare to permute
     old.labels <- labels
@@ -85,11 +95,16 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       # i <- 1
       
       labels <- sample(labels) # make permutation
-      fold.ids <- balanced_folding(labels, n.folds, balance) # refold
+      fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2,effect*direction)
+      permuted[i,] <- statistics(x1 = x1, 
+                                 x2 = x2,
+                                 Sigma.inv =Sigma.inv, 
+                                 noise = noise,
+                                 labels = labels,
+                                 fold.ids = fold.ids)
       
     } # End permutation
     
@@ -100,7 +115,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     }
     names(pvals) <- names(ts)
 
-    c(effect=effect, pvals) 
+    c(effect=effect, pvals, replication=j) 
   }
 } 
   
