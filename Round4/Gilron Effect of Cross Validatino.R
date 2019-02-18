@@ -25,7 +25,6 @@ suppressPackageStartupMessages(library(RobPer))
 suppressPackageStartupMessages(library(kernlab))
 suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
-suppressPackageStartupMessages(library(dqrng))
 
 
 
