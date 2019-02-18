@@ -532,22 +532,30 @@ statisticsHighDim <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
 }
 
 
-statisticsLargeSample <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
+statisticsLargeSample <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
   result <- c(
-    Oracle=t_Oracle(x1, x2, Sigma),
+    ### Two Group Tests:
+    Oracle.Cov=t_Oracle(x1, x2, Sigma.inv),
     Hotelling=t_Hotelling(x1, x2, FALSE),
     Schafer=t_Hotelling(x1, x2, TRUE),
     Goeman=t_goeman(x1, x2),
     Srivastava=t_SD(x1, x2),
-    Gretton=t_kmmd(x1, x2),
+    # Gretton=t_kmmd(x1, x2),
     dCOV=t_dcov(x1,x2),
     Simes=t_Simes(x1,x2),
     Cai=t_CLX(x1,x2),
+    ### Accuracy Tests:
+    lda.CV.1=t_lda_cv(noise, labels, labels, fold.ids, type=1),
+    lda.noCV.1=t_lda(noise, labels, noise, labels, type=1),
+    svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
     svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
+    # svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids),
+    svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
     svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )
   return(result)
 }
+## Testing:
 
 
 statisticsSparse <- function(){

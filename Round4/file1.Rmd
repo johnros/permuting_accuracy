@@ -10,7 +10,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e2
+n.replications <-  5e2
 ```
 
 
@@ -25,7 +25,7 @@ n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
-effects <- seq(0, 0.5, length=3) # change in location
+effects <- seq(0, 20, length=3) # change in location
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
@@ -56,7 +56,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     labels <- sample(c(rep(TRUE, n/2), rep(FALSE,n/2))) # group assignemt labels
     
     ## Gaussian noise
-    noise <- matrix(dqrnorm(n*p), ncol=p, nrow=n)
+    noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
     
     ## Shift alternative:
     # effect <- effects[[1]]
@@ -73,7 +73,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statistics(x1 = x1, 
+    ts <-statisticsLargeSample(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
@@ -95,7 +95,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- statistics(x1 = x1, 
+      permuted[i,] <- statisticsLargeSample(x1 = x1, 
                                  x2 = x2,
                                  Sigma.inv =Sigma.inv, 
                                  noise = noise,
