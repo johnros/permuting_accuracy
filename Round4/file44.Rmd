@@ -34,8 +34,8 @@ noise <- matrix(rnorm(n*4e3*p), ncol=p, nrow=n*4e3)
 noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
 Sigma.augment <- cov(noise.augment) %>% round(0) %>% as("dsCMatrix")
 sum(Sigma.augment)
-Sigma.augment.inverse <- solve(Sigma.augment)
-sum(Sigma.augment.inverse)
+Sigma.aug.inv <- solve(Sigma.augment)
+rm(noise, noise.augment)
 ```
 
 
@@ -74,7 +74,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Observables 
     ts <-statistics(x1 = x1, 
                     x2 = x2, 
-                    Sigma.inv = Sigma.augment.inverse, 
+                    Sigma.inv = Sigma.aug.inv, 
                     noise = noise.augment, 
                     labels = labels, 
                     fold.ids = fold.ids)
@@ -96,7 +96,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       
       permuted[i,] <- statistics(x1 = x1, 
                                  x2 = x2,
-                                 Sigma.inv =Sigma.augment.inverse, 
+                                 Sigma.inv =Sigma.aug.inv, 
                                  noise = noise.augment,
                                  labels = labels,
                                  fold.ids = fold.ids)

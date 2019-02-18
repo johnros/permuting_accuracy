@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (quadratic form in augmented space)"
+title: "Logistic Regression (interactions only, augented space)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
@@ -24,13 +24,23 @@ n.folds <- 4
 source('Gilron Effect of Cross Validatino.R')
 
 Sigma0 <- diag(p)
-
 Sigma.inv <- solve(Sigma)
+
 p.quadratic <- choose(p,2)
 p.total <- p+1+p.quadratic
 beta0 <- c(rep(0,p+1),rep(1,p.quadratic))
 effects <- c(0,0.25,0.5)
 ```
+
+```{r}
+noise <- matrix(rnorm(n*4e3*p), ncol=p, nrow=n*4e3)
+noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
+Sigma.augment <- cov(noise.augment) %>% round(0) %>% as("dsCMatrix")
+sum(Sigma.augment)
+Sigma.aug.inv <- solve(Sigma.augment)
+rm(noise, noise.augment)
+```
+
 
 
 ## Fixed folds. Cross-Validated. All in one.
@@ -46,7 +56,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
     noise.augment <- model.matrix(~.^2, as.data.frame(noise))
-    Sigma.inv <- makePrecision(noise.augment)
     
     ## Logistic regression
     # effect <- effects[[1]]
@@ -68,11 +77,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statisticsNoOracle(x1 = x1, 
-                            x2 = x2,
-                            noise = noise, 
-                            labels = labels, 
-                            fold.ids = fold.ids)
+    ts <- statistics(x1 = x1, 
+                    x2 = x2, 
+                    Sigma.inv = Sigma.aug.inv, 
+                    noise = noise.augment, 
+                    labels = labels, 
+                    fold.ids = fold.ids)
+    
     
     # Prepare to permute
     old.labels <- labels
@@ -89,11 +100,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise.augment[labels,]
       x2 <- noise.augment[!labels,]
       
-      permuted[i,] <- statisticsNoOracle(x1 = x1, 
-                                         x2 = x2,
-                                         noise = noise, 
-                                         labels = labels, 
-                                         fold.ids = fold.ids)
+      permuted[i,] <- statistics(x1 = x1, 
+                                 x2 = x2, 
+                                 Sigma.inv = Sigma.aug.inv, 
+                                 noise = noise.augment, 
+                                 labels = labels, 
+                                 fold.ids = fold.ids)
     } # End permutation
     
     # Compute p-vals for each statistic
@@ -108,13 +120,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File2", title = the.message)
+pbPost(type = "note", body = "File43", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 ## Analysis
 ```{r}
-# load('file41.RData')
+# load('file43.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

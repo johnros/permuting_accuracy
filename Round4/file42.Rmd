@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (linear and quadratic form)"
+title: "Logistic Regression (interactions only, original space)"
 author: "Jonathan Rosenblatt"
 date: "15/2/2019"
 output: html_document
@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e1
+n.replications <-  1e2
 ```
 
 
@@ -25,10 +25,11 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
+
 p.quadratic <- choose(p,2)
 p.total <- p+1+p.quadratic
-beta0 <- rep(1, p+1+p.quadratic)
-effects <- c(0,0.5,1)
+beta0 <- c(rep(0,p+1),rep(1,p.quadratic))
+effects <- c(0,0.25,0.5)
 ```
 
 
@@ -52,7 +53,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     beta <- beta0*effect
     link <- noise.augment%*%beta
     probs <- plogis(link)
-    # plot(probs, type='h')
     
     # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
@@ -60,7 +60,6 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
-    
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)

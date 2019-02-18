@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (main effects only, augmented space)"
+title: "Logistic Regression (main and interactions, augmented space)"
 author: "Jonathan Rosenblatt"
 date: "18/2/2019"
 output: html_document

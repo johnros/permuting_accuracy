@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression (quadratic form in original space)"
+title: "Logistic Regression (main and interactions, original space)"
 author: "Jonathan Rosenblatt"
 date: "23/1/2019"
 output: html_document
