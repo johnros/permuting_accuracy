@@ -1,0 +1,456 @@
+\documentclass[]{bio}
+%\documentclass[oupdraft]{bio}
+%\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+
+% Add history information for the article if required
+\history{xxx}
+
+\input{preamble.tex}
+
+\usepackage{float}
+
+\begin{document}
+
+% Title of paper
+\title{Better-Than-Chance Classification for Signal Detection-- Supplementary}
+
+\author{Jonathan D. Rosenblatt$^\ast$ \\ 
+	\textit{Department of IE\&M and Zlotowsky Center for Neuroscience, 
+		Ben Gurion University of the Negev, Israel.} 
+	\\ Yuval Benjamini \\
+	\textit{Department of Statistics, Hebrew University, Israel}	
+	\\ Roee Gilron \\ 
+	\textit{Movement Disorders and Neuromodulation Center, University of California, San Francisco.}
+	\\ Roy Mukamel \\ 
+	\textit{School of Psychological Science Tel Aviv University, Israel.}
+	\\ Jelle Goeman \\ 
+	\textit{Department of Medical Statistics and Bioinformatics, Leiden University Medical Center, The Netherlands.}
+}
+
+
+% Running headers of paper:
+\markboth%
+% First field is the short list of authors
+{J.D.Rosenblatt and others}
+% Second field is the short title of the paper
+{Classification for detection}
+
+\maketitle
+
+% Add a footnote for the corresponding author if one has been
+% identified in the author list
+\footnotetext{johnros@bgu.ac.il}
+
+
+\section{Large Sample}
+
+We have focused on the him-dim--small-sample setup because it is appropriate for many problems in neuroimaging and genetics. 
+To show that our conclusions are not due to the \emph{small-sample}, but rather, to the \emph{high-dim}, we scale our basic setup ten-fold. 
+Fixing $p/n$, we simulate with $p=230$ and $n=400$. 
+The results, reported in Figure~\ref{fig:large-sample}, are qualitatively similar to the high-dim--small-sample in the main text. 
+In particular with respect to the dominance of two-group tests. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file1"}
+	\caption{\textbf{Large sample}: The basic simulation setup scaled ten-fold: $n=400; p=230$.}
+	\label{fig:large-sample}
+\end{figure}
+
+
+
+
+
+%%%% Sphericity
+\section{Departure From Sphericity}
+In the main text, we have departed from the sphericity assumption, by allowing $\Sigma$ to be an $AR(1)$ covariance. 
+We try other covariance structures: a long-memory Brownian motion correlation structure, and an arbitrary (random) covariance structure. 
+As seen in Figures \ref{fig:dependence_2} and \ref{fig:dependence_3}, our findings hold for these correlation structures. 
+In particular: two-group tests dominate accuracy tests, and signal is masked in the low PCs of the noise. 
+
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file22"}
+		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
+		\label{fig:dependence_21}
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file23"}
+		\caption{Signal in direction of lowest lowest variance PC of $\Sigma$.} 
+		\label{fig:dependence_22}
+	\end{subfigure}
+	%	\begin{subfigure}[t]{.3\columnwidth}
+	%		\centering
+	%		\includegraphics[width=1\columnwidth]{"art/file16"}
+	%		\caption{Signal in direction of identity vector.} 
+	%		\label{fig:dependence_23}
+	%	\end{subfigure}
+	\caption{Long-memory Brownian motion correlation: $\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R_{k,l}=\min\{k,l\}$.}	
+	\label{fig:dependence_2}
+\end{figure}
+
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file18"}
+		\caption{Signal in direction of highest variance PC of $\Sigma$.} 
+		\label{fig:dependence_31}
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file17"}
+		\caption{Signal in direction of lowest variance PC of $\Sigma$.} 
+		\label{fig:dependence_32}
+	\end{subfigure}
+	%	\begin{subfigure}[t]{.3\columnwidth}
+	%		\centering
+	%		\includegraphics[width=1\columnwidth]{"art/file19"}
+	%		\caption{Signal in direction of identity vector.} 
+	%		\label{fig:dependence_33}
+	%	\end{subfigure}
+	\caption{Arbitrary Correlation. 
+		$\Sigma=D^{-1} R D^{-1}$ where $D$ is diagonal with $D_{jj}=\sqrt{R_{jj}}$, and $R=A'A$ where $A$ is a Gaussian $p\times p$ random matrix with independent $\mathcal{N}(0,1)$ entries.
+	}
+	\label{fig:dependence_3}
+\end{figure}
+
+
+
+
+
+
+\section{Departure From Shift Alternatives}
+
+In the main text we have argued that shift alternatives are the most common in the univariate statistical literature. 
+They are also very common in the multivariate literature, as they are implied by Fisher's LDA model, and in multivariate analysis of variance (MANOVA).
+On the other hand, effects may manifest themselves in many ways. 
+We thus verify our statements in models which are not ``pure shifts''. 
+These include logistic regression, and a mixture class. 
+
+
+\subsection{Logistic Regression}
+
+In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power simulation, when generating from a logistic regression setup with both main effects, and second order interactions.
+This setup is also reported in the main text.
+
+Formally, the logistic assumption implies that 
+$P(y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
+Main-effects and second order interaction imply that 
+$\eta=x'\beta+x'Bx$, for some $p$-vector $\beta$, and symmetric matrix $B$.
+We also assume $X\sim \mathcal{N}(0,I_{p\times p})$.
+We perform the various tests in the original space, $x$, but also in the augmented space of second order interactions: 
+$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_p x_p).$$
+
+
+\begin{figure}[th]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file42"}
+		\caption{Data analyzed in the original space ($x$).}
+		\label{fig:interactions-in-original-space}
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		%	TODO: \includegraphics[width=1\columnwidth]{"art/file42"}
+		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
+		\label{fig:interactions-in-augmented-space}
+	\end{subfigure}
+	\caption{\textbf{Logistic regression with second order interactions.} 
+		Data generated via $y|x \sim Binom(1,p(x));
+		p(x)=\exp(\eta)/[1+\exp(\eta)];
+		\eta=x'\beta+x'Bx; 
+		X\sim \mathcal{N}(0,I_{p\times p})$. } 
+	\label{fig:logistic-main-and-interactions}
+\end{figure}
+
+
+
+
+
+The logistic assumption differs from our original setup in that it states $y|x$, instead of $x|y$. 
+The logistic assumption implies that $x_0$ is no longer a shifted versions of $x_1$, even in the presence of main effects alone ($B=0$).
+While not a ``pure shift'', the logistic model with main effects has a strong shift component. 
+We thus expect it to behave like the basic setup. 
+This is verified in Figure \ref{fig:logistic-main-only}.
+
+
+
+
+\begin{figure}[th]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file40"}
+		\caption{Data analyzed in the original space ($x$).}
+		\label{fig:main-only-original-space}
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		%	TODO: \includegraphics[width=1\columnwidth]{"art/file42"}
+		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
+		\label{fig:main-only-augmented-space}
+	\end{subfigure}
+	\caption{\textbf{Logistic Regression. Main effects only.} 
+	Data generated via 
+	$Y|x \sim Binom(1,p(x));
+	p(x)=\exp(\eta)/[1+\exp(\eta)];
+	\eta=x'\beta; 
+	X\sim \mathcal{N}(0,I_{p\times p})$.  } 
+	\label{fig:logistic-main-only}
+\end{figure}
+
+
+
+
+
+
+It is possible to use the logistic setup to generate data with no shift at all. 
+For instance, if effects have a quadratic form in link scale: $\eta=\beta_0+x'x$. 
+In this case, $x_1$ is akin to a rescaling of $x_0$.
+This is depicted for $p=2$ in Figure~\ref{fig:quadratic-form}.
+This example is typically encountered in the machine learning literature, to motivate learning with kernels. 
+
+When analyzing the quadratic form logistic regression we need to distinguish between analysis in the original $x$ space, and in the augmented interaction space. 
+In the original space, $x_1$ is more akin to a rescaling of $x_0$ than a shift.
+In the augmented space $\tilde{x}$, $x_1$ is more akin to a shifting of $x_0$. 
+We thus expect that all tests will perform poorly in the original space, and two-group tests to dominate in the augmented space. 
+This is confirmed in Figure~\ref{fig:logistic-interactions-only}.
+
+\begin{figure}[th]
+	\centering
+	\begin{subfigure}[t]{.3\columnwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{art/quadratic-form}
+		\caption{Illustration with $p=2$.}
+		\label{fig:quadratic-form}
+	\end{subfigure}
+	\begin{subfigure}[t]{.3\columnwidth}
+		\centering
+	\includegraphics[width=1\columnwidth]{"art/file42"}
+	\caption{Detection power in \textbf{original} space.} 
+	\label{fig:logistic-interactions-only-original}
+	\end{subfigure}
+	\begin{subfigure}[t]{.3\columnwidth}
+	\centering
+%	\includegraphics[width=1\columnwidth]{"art/file43"}
+	\caption{Detection power in \textbf{augmented} space.} 
+	\label{fig:logistic-interactions-only-augmented}
+	\end{subfigure}
+	\caption{\textbf{Logistic Regression. No main effects.}
+		An example of a ``pure rescaling'', with no shift.
+		First class in red squares. Second class in black rhombus.
+		Data generated via 
+		$Y|x \sim Binom(1,p(x));
+		p(x)=\exp(\eta)/[1+\exp(\eta)];
+		\eta=\beta_0+x'x; 
+		X \sim \mathcal{N}(0,\sigma^2 I_{p\times p})$.
+	}
+	\label{fig:logistic-interactions-only}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{Mixture Class}
+
+Another example where $x_1$ is not a shifted version of $x_0$ is a mixture class. 
+\cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
+The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+They find that the power increases with the size of the test set.
+This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
+We attribute this to the reduced discretization of the accuracy statistic.
+
+When discussing the power of the resubstitution accuracy, \cite{golland_permutation_2005} simulate power by sampling from a Gaussian mixture family of models, and not from a location family as our own simulations. 
+Under their model (with some abuse of notation)
+\begin{align*}
+\begin{split}
+x_1 & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
+x_0 & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
+\end{split}
+\end{align*}
+Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
+We now perform the same simulation as \cite{golland_permutation_2005}, but in the same dimensionality of our previous simulations.
+We re-parameterize so that $\pi=0$ corresponds to the null model:
+\begin{align}
+\begin{split}
+\label{eq:mixture_alternative}
+x_1 & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
+x_0 & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
+\end{split}
+\end{align}
+From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are still preferred over accuracy-tests. 
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file12"}
+	\caption{\textbf{Mixture Alternatives.} $\x_i$ is distributed as in Eq.(\ref{eq:mixture_alternative}). 
+		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
+		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
+	\label{fig:file12}
+\end{figure}
+
+
+
+
+\section{Departure from Homoskedasticity and Scalar Invariance}
+
+Our previous simulations assume variables have unit variance (diagonal $\Sigma$). 
+Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
+Implicit z-scoring is sometime an integral part of a test statistic. 
+This is known as \emph{scalar invariance}.
+The \emph{Srivastava} statistic, for instance, is scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
+The \emph{Goeman} statistic, for instance, is not scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
+Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. 
+\emph{Srivastava} will give all coordinates the same importance.
+
+In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. 
+We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file26"}
+		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_11}	
+	\end{subfigure}
+	\begin{subfigure}[t]{0.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file24"}
+		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_12}	
+	\end{subfigure}
+	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
+	\label{fig:heteroskedastic}	
+\end{figure}
+
+
+
+
+\subsection{Tie Breaking}
+\label{sec:ties}
+
+Discrete test statistics lose power by not exhausting the permissible false positive rate. 
+A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
+Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
+is greater than  $\alpha$ then we reject the null with probability 
+$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
+
+Figure~\ref{fig:file33} reports the basic simulation setup while allowing for random tie breaking. 
+It demonstrates that the power disadvantage of accuracy-tests cannot be remedied by random tie breaking.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{art/file33}
+	\caption{\textbf{Tie breaking}: The basic simulation setup with random tie breaking.}
+	\label{fig:file33}
+\end{figure}
+
+
+
+
+
+\section{Sparse Alternatives}
+\label{sec:sparse}
+
+In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
+Dense alternatives are motivated by neuroimaging where most brain locations in a region carry signal.
+In a genetic application, a ``sparse'' alternative may be more plausible. 
+Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
+As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
+
+\begin{figure}[h]
+	\centering
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file34"}
+	\caption{Sparse $\mu$.}  
+	\label{fig:sparse}	
+\end{figure}
+
+
+
+
+
+\section{Fixed SNR}
+\label{sec:fix_snr}
+
+For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
+We fix the Kullback–Leibler Divergence between distributions of sample means. 
+Formally, the Kullback–Leibler Divergence between two Gaussian populations is given by 
+\begin{align}
+\label{eq:KLD}
+	KL[x_1,x_0]=\frac{1}{2}\left(
+	\log \frac{\det \Sigma_0}{\det \Sigma_1}-p+Tr(\Sigma_0^{-1}\Sigma_1)+(\mu_0-\mu_1)'\Sigma^{-1}_0(\mu_0-\mu_1)
+	\right),
+\end{align}
+where $x_y\sim\mathcal{N}(\mu_y,\Sigma_y)$.
+In the case of the sample means of two shifted groups of size $n$, then 
+\begin{align}
+\label{eq:mahalanobis}
+	KL[\bar x_1,\bar x_0]=
+	\frac{n}{2}\mu'\Sigma^{-1}\mu=
+	\frac{n}{2}\Vert \mu \Vert_\Theta^2,
+\end{align}
+where $\mu:=\mu_1-\mu_0$. 
+%For spherical populations, $\Sigma=I$, and thus $\Vert \mu \Vert_\Theta^2=\Vert \mu \Vert_2^2$.
+%For a dense shift of equal magnitude, $\mu=(c,\dots,c)$, so that $\Vert \mu \Vert_2^2=p \, c^2$. 
+
+In most of our simulations we fixed $n \Vert \mu \Vert_\Theta^2$. 
+The logistic regression setup is an exception because... [TODO: relate to logistic regression]
+
+Fixing $n \Vert \mu \Vert_\Theta^2$ implies that the Euclidean norm of $\mu$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
+
+For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed.
+We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
+The intuition that it is easier to detect signal in the low variance directions is confirmed. 
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file32"}
+		\caption{$\mu$ in PC7 of $\Sigma$.}  
+		\label{fig:dependence_41}	
+	\end{subfigure}
+	\begin{subfigure}[t]{0.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file31"}
+		\caption{$\mu$ in PC15 of $\Sigma$.}  
+		\label{fig:dependence_42}	
+	\end{subfigure}
+	\caption{Short memory, AR(1) correlation. $\Vert \mu \Vert_2$ fixed. }	
+	\label{fig:dependence_4}		
+\end{figure}
+
+Other authors have also observed the need for fixing the SNR for a fair comparison between tests.
+In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
+With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
+In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
+Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
+For this reason, we prefer fixing $\Vert \mu \Vert_\Theta$.
+
+
+
+\newpage
+\bibliographystyle{abbrvnat}
+\bibliography{Permuting_Accuracy.bib}
+
+\end{document}
+
