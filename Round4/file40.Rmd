@@ -25,7 +25,7 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-beta0 <- rnorm(p)
+beta0 <- rep(1,p)
 effects <- c(0,0.5,2)
 ```
 

@@ -28,7 +28,7 @@ Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
 p.total <- p+p.quadratic
 beta0 <- c(rep(1,p+p.quadratic))
-effects <- c(0,.5,2)
+effects <- c(0,5,10)
 ```
 
 ```{r}
@@ -77,7 +77,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statistics(x1 = x1, 
+    ts <-statisticsAugmented(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.inv, 
                     noise = noise.augment, 
@@ -99,7 +99,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise.augment[labels,]
       x2 <- noise.augment[!labels,]
       
-      permuted[i,] <- statistics(x1 = x1, 
+      permuted[i,] <- statisticsAugmented(x1 = x1, 
                                  x2 = x2,
                                  Sigma.inv =Sigma.inv, 
                                  noise = noise.augment,

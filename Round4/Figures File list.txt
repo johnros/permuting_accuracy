@@ -581,7 +581,7 @@ File name: file41 (logistic regression, linear with interactions, original space
   Trial dependence (n): none
 
 
-File name: file45 (logistic regression, linear with interactions, augented space)
+File name: file45 (logistic regression, linear with interactions, augmented space)
   Status: 
   Null: Gaussian
   Effects: Signal in augmented space. Isotropic Interactions. [0,0.25, 0.5]
