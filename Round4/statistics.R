@@ -55,9 +55,7 @@ t_Oracle <- function(x,y,S.inv){
   return(T2)
 }
 ### Testing:
-# t_Oracle(x = rmvnorm(1e2, rep(0,1e1)),
-#          y = rmvnorm(1e2, rep(0,1e1)),
-#          Sx=diag(1e1), Sy=diag(1e1))
+# t_Oracle(x1,x2,Sigma.aug.inv)
 
 
 t_Oracle_NP <- function(x,y, mu.x, mu.y, S){
@@ -574,5 +572,30 @@ statisticsGausSVM <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
   return(result)
 }
 
-
-
+statisticsAugmented <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
+  result <- c(
+    ### Two Group Tests:
+    Oracle.Cov=t_Oracle(x1, x2, Sigma.inv),
+    Schafer=t_Hotelling(x1, x2, TRUE),
+    Goeman=t_goeman(x1, x2),
+    Srivastava=t_SD(x1, x2),
+    Gretton=t_kmmd(x1, x2),
+    dCOV=t_dcov(x1,x2),
+    Simes=t_Simes(x1,x2),
+    Cai=t_CLX(x1,x2),
+    ### Accuracy Tests:
+    svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
+    svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
+    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids),
+    svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
+    svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
+  )
+  return(result)
+}
+## Testing
+# statisticsAugmented(x1 = x1, 
+#                     x2 = x2, 
+#                     Sigma.inv = Sigma.aug.inv, 
+#                     noise = noise.augment, 
+#                     labels = labels, 
+#                     fold.ids = fold.ids)

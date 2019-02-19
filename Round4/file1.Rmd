@@ -20,7 +20,7 @@ setwd('~/workspace/permuting_accuracy/Round4/')
 
 balance <- TRUE   # set for TRUE for balanced folding ana refolding.
 p <- 230
-n <- 4e2 # total sample size-> n/2 in each group.
+n <- 400 # total sample size-> n/2 in each group.
 n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')

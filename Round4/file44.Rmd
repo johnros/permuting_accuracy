@@ -26,7 +26,7 @@ source('Gilron Effect of Cross Validatino.R')
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 beta0 <- rnorm(p)
-effects <- c(0,1,2)
+effects <- c(0,0.5,2)
 ```
 
 ```{r}
@@ -35,6 +35,7 @@ noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
 Sigma.augment <- cov(noise.augment) %>% round(0) %>% as("dsCMatrix")
 sum(Sigma.augment)
 Sigma.aug.inv <- solve(Sigma.augment)
+# dim(Sigma.aug.inv)
 rm(noise, noise.augment)
 ```
 
@@ -52,7 +53,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    noise.augment <- model.matrix(~.^2, as.data.frame(noise))
+    noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
 
     ## Logistic regression
     # effect <- effects[[3]]
@@ -72,7 +73,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <-statistics(x1 = x1, 
+    ts <-statisticsAugmented(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.aug.inv, 
                     noise = noise.augment, 
@@ -94,12 +95,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise.augment[labels,]
       x2 <- noise.augment[!labels,]
       
-      permuted[i,] <- statistics(x1 = x1, 
+      try(permuted[i,] <- statisticsAugmented(x1 = x1, 
                                  x2 = x2,
                                  Sigma.inv =Sigma.aug.inv, 
                                  noise = noise.augment,
                                  labels = labels,
-                                 fold.ids = fold.ids)
+                                 fold.ids = fold.ids))
     } # End permutation
     
     # Compute p-vals for each statistic

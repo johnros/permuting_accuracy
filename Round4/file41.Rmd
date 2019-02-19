@@ -26,9 +26,9 @@ source('Gilron Effect of Cross Validatino.R')
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
-p.total <- p+1+p.quadratic
-beta0 <- c(rep(0,p+1),rep(1,p.quadratic))
-effects <- c(0,0.25,0.5)
+p.total <- p+p.quadratic
+beta0 <- c(rep(1,p+p.quadratic))
+effects <- c(0,5,10)
 ```
 
 
@@ -44,7 +44,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    noise.augment <- model.matrix(~.^2, as.data.frame(noise))
+    noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
     
     ## Logistic regression
     # effect <- effects[[1]]

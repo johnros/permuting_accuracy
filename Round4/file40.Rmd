@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e2
+n.replications <-  5e2
 ```
 
 
