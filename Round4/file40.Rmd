@@ -104,7 +104,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File40", title = the.message)
+pbPost(type = "note", body = "Done", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
