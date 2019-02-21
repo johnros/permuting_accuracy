@@ -52,7 +52,7 @@ t_Oracle <- function(x,y,S.inv){
   delta <- x.bar - y.bar
   
   T2 <- delta %*% S.inv %*% delta
-  return(T2)
+  return(as.numeric(T2))
 }
 ### Testing:
 # t_Oracle(x1,x2,Sigma.aug.inv)
@@ -590,12 +590,12 @@ statisticsAugmented <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
     svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
     svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )
-  return(result)
+  return(unlist(result))
 }
 ## Testing
-# statisticsAugmented(x1 = x1, 
-#                     x2 = x2, 
-#                     Sigma.inv = Sigma.aug.inv, 
-#                     noise = noise.augment, 
-#                     labels = labels, 
+# fff <- statisticsAugmented(x1 = x1,
+#                     x2 = x2,
+#                     Sigma.inv = Sigma.aug.inv,
+#                     noise = noise.augment,
+#                     labels = labels,
 #                     fold.ids = fold.ids)

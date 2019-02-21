@@ -31,7 +31,7 @@ suppressPackageStartupMessages(library(HDtest))
 balance.log <- 'balance_log.txt'
 file.remove(balance.log)
 file.create(balance.log)
-the.message <- paste(file.name)
+the.message <- paste(file.name, Sys.info()[["nodename"]], sep=' ')
 
 
 
@@ -199,3 +199,9 @@ makeSymmetric <- function(n){
 
 
 
+getIp <- function(){
+  x <- system("ifconfig", intern=TRUE)
+  x[grep("IPv4", x)]
+}
+## Testing
+getIp()

@@ -14,7 +14,7 @@ n.replications <-  1e2
 
 
 ```{r preliminaries}
-file.name <- "file44"
+file.name <- "file45"
 setwd('~/workspace/permuting_accuracy/Round4/')
 
 p <- 23
@@ -28,7 +28,7 @@ Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
 p.total <- p+p.quadratic
 beta0 <- c(rep(1,p+p.quadratic))
-effects <- c(0,5,10)
+effects <- c(0,5,100)
 ```
 
 ```{r}
@@ -40,8 +40,6 @@ Sigma.aug.inv <- solve(Sigma.augment)
 # dim(Sigma.aug.inv)
 rm(noise, noise.augment)
 ```
-
-
 
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
@@ -57,11 +55,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
     noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
 
-
     ## Logistic regression
     # effect <- effects[[3]]
     beta <- beta0*effect
-    link <- noise%*%beta
+    link <- noise.augment%*%beta
     probs <- plogis(link)
     # plot(probs, type='h')
     
@@ -79,7 +76,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     # Observables 
     ts <-statisticsAugmented(x1 = x1, 
                     x2 = x2, 
-                    Sigma.inv = Sigma.inv, 
+                    Sigma.inv = Sigma.aug.inv, 
                     noise = noise.augment, 
                     labels = labels, 
                     fold.ids = fold.ids)
@@ -99,12 +96,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise.augment[labels,]
       x2 <- noise.augment[!labels,]
       
-      permuted[i,] <- statisticsAugmented(x1 = x1, 
+      try(permuted[i,] <- statisticsAugmented(x1 = x1, 
                                  x2 = x2,
-                                 Sigma.inv =Sigma.inv, 
+                                 Sigma.inv =Sigma.aug.inv, 
                                  noise = noise.augment,
                                  labels = labels,
-                                 fold.ids = fold.ids)
+                                 fold.ids = fold.ids), silent=TRUE)
     } # End permutation
     
     # Compute p-vals for each statistic
@@ -119,13 +116,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File40", title = the.message)
+pbPost(type = "note", body = "Done", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
 ```{r}
-# load('file40.RData')
+# load('file45.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```
