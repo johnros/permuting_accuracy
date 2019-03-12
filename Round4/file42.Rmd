@@ -26,10 +26,12 @@ source('Gilron Effect of Cross Validatino.R')
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 
+Sigma <- diag(p)
+Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
 p.total <- p+p.quadratic
-beta0 <- c(rep(0,p),rep(1,p.quadratic))
-effects <- c(0,0.25,0.5)
+beta0 <- c(rep(0,p),rep(0.01,p.quadratic))
+effects <- c(0,0.5,2)
 ```
 
 
@@ -48,8 +50,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
     
     ## Logistic regression
-    # effect <- effects[[1]]
-    # effect <- 3
+    # effect <- effects[[3]]
     beta <- beta0*effect
     link <- noise.augment%*%beta
     probs <- plogis(link)
@@ -108,13 +109,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File2", title = the.message)
+pbPost(type = "note", body = "Done", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 ## Analysis
 ```{r}
-# load('file41.RData')
+# load('file42.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

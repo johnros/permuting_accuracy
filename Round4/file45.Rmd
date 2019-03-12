@@ -27,8 +27,8 @@ Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
 p.total <- p+p.quadratic
-beta0 <- c(rep(1,p+p.quadratic))
-effects <- c(0,5,100)
+beta0 <- c(rep(1,p),rep(0.01,p.quadratic))
+effects <- c(0,0.5,2)
 ```
 
 ```{r}
@@ -96,12 +96,12 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise.augment[labels,]
       x2 <- noise.augment[!labels,]
       
-      try(permuted[i,] <- statisticsAugmented(x1 = x1, 
+      permuted[i,] <- statisticsAugmented(x1 = x1, 
                                  x2 = x2,
                                  Sigma.inv =Sigma.aug.inv, 
                                  noise = noise.augment,
                                  labels = labels,
-                                 fold.ids = fold.ids), silent=TRUE)
+                                 fold.ids = fold.ids)
     } # End permutation
     
     # Compute p-vals for each statistic

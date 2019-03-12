@@ -27,8 +27,8 @@ Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 p.quadratic <- choose(p,2)
 p.total <- p+p.quadratic
-beta0 <- c(rep(1,p+p.quadratic))
-effects <- c(0,5,100)
+beta0 <- c(rep(1,p),rep(0.01,p.quadratic))
+effects <- c(0,0.5,2)
 ```
 
 

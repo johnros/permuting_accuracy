@@ -1,8 +1,6 @@
 - Simulate interaction:
-   - Quadratic form, no drift. In original space and in augmented space.
-   - Quadratic form with drift.
-   - Fix effect size for logistic regression
-- Large sample (X100)
+   - Decrease SNR when generating logistic regressions.
+   - z-score predictors. 
 
 
     
