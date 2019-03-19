@@ -504,8 +504,11 @@ In the SM we separate between main effects and second order interactions, and di
 	\caption{\textbf{Logistic regression with second order interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
-		\eta=x'\beta+x'Bx; 
-		x\sim \mathcal{N}(0,I_{p\times p})$. } 
+		\eta=x'\beta+x'Bx$ where 
+		$\beta$ is a scaled vector of ones, and $B$ a scaled matrix of ones.
+		The scaling is selected to (roughly) keep the SNR of the basic setup. 
+		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$.
+	 } 
 	\label{fig:logistic-main-and-interactions}
 \end{figure}
 
