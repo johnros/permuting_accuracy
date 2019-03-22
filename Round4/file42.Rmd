@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e3
+n.replications <-  1e2
 ```
 
 
@@ -25,12 +25,9 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-
-Sigma <- diag(p)
-Sigma.inv <- solve(Sigma)
-p.quadratic <- choose(p,2)
-p.total <- p+p.quadratic
-beta0 <- c(rep(0,p),rep(0.01,p.quadratic))
+b0 <- -1
+beta0 <- rep(0,p)
+B0 <- matrix(1, ncol = p, nrow = p)/p
 effects <- c(0,0.5,2)
 ```
 
@@ -47,17 +44,18 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
     
     ## Logistic regression
     # effect <- effects[[3]]
     beta <- beta0*effect
-    link <- noise.augment%*%beta
+    B <- B0*effect
+    link <- b0 + noise%*%beta + colSums(t(noise) * (B %*% t(noise)))
     probs <- plogis(link)
-    
+
     # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
-    
+    plot(probs,type='h', col=labels+1)
+
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
