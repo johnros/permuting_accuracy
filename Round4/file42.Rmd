@@ -27,7 +27,7 @@ Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
 b0 <- -1
 beta0 <- rep(0,p)
-B0 <- matrix(1, ncol = p, nrow = p)/p
+B0 <- matrix(1, ncol = p, nrow = p)
 effects <- c(0,0.5,2)
 ```
 
@@ -46,16 +46,19 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
     
     ## Logistic regression
-    # effect <- effects[[3]]
+    # effect <- effects[[1]]
     beta <- beta0*effect
     B <- B0*effect
     link <- b0 + noise%*%beta + colSums(t(noise) * (B %*% t(noise)))
     probs <- plogis(link)
 
-    # Force balanced groups:
-    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
-    plot(probs,type='h', col=labels+1)
-
+    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1]
+    # table(labels)
+    # plot(probs,type='h', col=labels+1)
+    while(sum(labels)<10 || sum(labels)>30){
+      labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    }
+      
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]

@@ -1,7 +1,7 @@
 ---
-title: "Logistic Regression (interactions only, augented space)"
+title: "Logistic Regression (interactions only, original space, large sample)"
 author: "Jonathan Rosenblatt"
-date: "23/1/2019"
+date: "15/2/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -14,31 +14,25 @@ n.replications <-  1e2
 
 
 ```{r preliminaries}
-file.name <- "file43"
+file.name <- "file46"
 setwd('~/workspace/permuting_accuracy/Round4/')
 
-p <- 23
-n <- 4e1 # total sample size-> n/2 in each group.
+p <- 2
+n <- 4e2 # total sample size-> n/2 in each group.
 n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-b0 <- -1
-beta0 <- rep(0,p)
-B0 <- matrix(1, ncol = p, nrow = p)/sqrt(p)
+
+Sigma <- diag(p)
+Sigma.inv <- solve(Sigma)
+p.quadratic <- p*(p+1)/2
+p.total <- p+p.quadratic
+beta0 <- c(rep(0,p),rep(1,p.quadratic))
 effects <- c(0,0.5,2)
 ```
-
-```{r}
-noise <- matrix(rnorm(n*4e3*p), ncol=p, nrow=n*4e3)
-noise.augment <- augmentDesign(noise)
-Sigma.augment <- cov(noise.augment) %>% round(0) %>% as("dsCMatrix")
-Sigma.aug.inv <- solve(Sigma.augment)
-rm(noise, noise.augment)
-```
-
 
 
 ## Fixed folds. Cross-Validated. All in one.
@@ -51,40 +45,35 @@ registerDoMC(cores=100)
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
     
-    ## Logistic regression
-    noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    
+    ## Gaussian noise
+    noise <- matrix(rnorm(n*p, sd=10), ncol=p, nrow=n)
+    noise.augment <- augmentDesign(noise)    
     ## Logistic regression
     # effect <- effects[[3]]
     beta <- beta0*effect
-    B <- B0*effect
-    link <- b0 + noise%*%beta + colSums(t(noise) * (B %*% t(noise)))
+    link <- noise.augment%*%beta
     probs <- plogis(link)
-
-    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1]
-    # table(labels)
-    # plot(probs,type='h', col=labels+1)
-    while(sum(labels)<10 || sum(labels)>30){
-      labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
-    }
     
+    # Force balanced groups:
+    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    plot(noise, col=labels+1, pch=ifelse(labels,15,9))
+
     ## Compute observed statistic
-    noise.augment <- augmentDesign(noise)
-    x1 <- noise.augment[labels,]
-    x2 <- noise.augment[!labels,]
+    x1 <- noise[labels,]
+    x2 <- noise[!labels,]
+    
     
     ## Asign observations to folds. Use the simple label structure to balance folds.
     fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
     
     # Observables 
-    ts <- statisticsAugmented(x1 = x1, 
+    ts <-statistics(x1 = x1, 
                     x2 = x2, 
-                    Sigma.inv = Sigma.aug.inv, 
-                    noise = noise.augment, 
+                    Sigma.inv = Sigma.inv, 
+                    noise = noise, 
                     labels = labels, 
                     fold.ids = fold.ids)
-    
     
     # Prepare to permute
     old.labels <- labels
@@ -98,14 +87,14 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       
       labels <- sample(labels) # label switching
       fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
-      x1 <- noise.augment[labels,]
-      x2 <- noise.augment[!labels,]
+      x1 <- noise[labels,]
+      x2 <- noise[!labels,]
       
-      permuted[i,] <- statisticsAugmented(x1 = x1, 
-                                 x2 = x2, 
-                                 Sigma.inv = Sigma.aug.inv, 
-                                 noise = noise.augment, 
-                                 labels = labels, 
+      permuted[i,] <- statistics(x1 = x1, 
+                                 x2 = x2,
+                                 Sigma.inv =Sigma.inv, 
+                                 noise = noise,
+                                 labels = labels,
                                  fold.ids = fold.ids)
     } # End permutation
     
@@ -121,13 +110,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File43", title = the.message)
+pbPost(type = "note", body = "Done", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 ## Analysis
 ```{r}
-# load('file43.RData')
+# load('file42.RData')
 source('prepare_graphics.R')
 plot(plot.3)
 ```

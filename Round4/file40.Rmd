@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  5e2
+n.replications <-  1e2
 ```
 
 
@@ -25,6 +25,7 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
+b0 <- -1
 beta0 <- rep(1,p)
 effects <- c(0,0.5,2)
 ```
@@ -46,12 +47,13 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     ## Logistic regression
     # effect <- effects[[3]]
     beta <- beta0*effect
-    link <- noise%*%beta
+    B <- B0*effect
+    link <- b0 + noise%*%beta
     probs <- plogis(link)
-    # plot(probs, type='h')
     
     # Force balanced groups:
     labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    # plot(probs,type='h', col=labels+1)
     
     ## Compute observed statistic
     x1 <- noise[labels,]

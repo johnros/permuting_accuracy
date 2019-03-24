@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e3
+n.replications <-  1e2
 ```
 
 
@@ -25,7 +25,7 @@ source('Gilron Effect of Cross Validatino.R')
 
 Sigma <- diag(p)
 Sigma.inv <- solve(Sigma)
-p.quadratic <- choose(p,2)
+p.quadratic <- p*(p+1)/2
 p.total <- p+p.quadratic
 beta0 <- c(rep(1,p),rep(0.01,p.quadratic))
 effects <- c(0,0.5,2)
@@ -33,7 +33,7 @@ effects <- c(0,0.5,2)
 
 ```{r}
 noise <- matrix(rnorm(n*4e3*p), ncol=p, nrow=n*4e3)
-noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
+noise.augment <- augmentDesign(noise)
 Sigma.augment <- cov(noise.augment) %>% round(0) %>% as("dsCMatrix")
 sum(Sigma.augment)
 Sigma.aug.inv <- solve(Sigma.augment)
@@ -53,7 +53,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     
     ## Gaussian noise
     noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    noise.augment <- model.matrix(~.^2-1, as.data.frame(noise))
+    noise.augment <- augmentDesign(noise)
 
     ## Logistic regression
     # effect <- effects[[3]]

@@ -25,6 +25,7 @@ suppressPackageStartupMessages(library(RobPer))
 suppressPackageStartupMessages(library(kernlab))
 suppressPackageStartupMessages(library(energy))
 suppressPackageStartupMessages(library(HDtest))
+suppressPackageStartupMessages(library(emulator))
 
 
 
@@ -204,4 +205,27 @@ getIp <- function(){
   x[grep("IPv4", x)]
 }
 ## Testing
-getIp()
+# getIp()
+
+my.outer <- function(x){
+  xx <- outer(x,x)
+  xx[lower.tri(xx, diag = TRUE)]
+}
+##Testing:
+# my.outer(1:3)
+
+augmentDesign <- function(x){
+  n <- nrow(x)
+  p <- ncol(x)
+  cbind(x,t(apply(x,1,my.outer)))
+}
+## Testing:
+# x <- matrix(1:9, ncol=3, byrow = TRUE)
+# augmentDesign(x)
+
+my.quad.form <- function(x,A){
+  apply(x, 2, function (y) quad.form(A,y))
+}
+## Testing:
+
+
