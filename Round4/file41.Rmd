@@ -1,7 +1,7 @@
 ---
 title: "Logistic Regression (main and interactions, original space)"
 author: "Jonathan Rosenblatt"
-date: "23/1/2019"
+date: "24/3/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -9,7 +9,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e2
+n.replications <-  1e3
 ```
 
 
@@ -23,12 +23,8 @@ n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
-Sigma <- diag(p)
-Sigma.inv <- solve(Sigma)
-b0 <- -1
-beta0 <- rep(1,p)
-B0 <- matrix(1, ncol = p, nrow = p)/p
-effects <- c(0,0.5,2)
+makeLogisticSetup(p, beta00=1/p, B00=1/p)
+effects <- c(0,5,10)
 ```
 
 
@@ -42,41 +38,34 @@ registerDoMC(cores=100)
 pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   foreach(effect=effects, .combine=rbind)  %do% {
     
-    ## Gaussian noise
-    noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
-    
     ## Logistic regression
+    noise <- matrix(rnorm(n*p), ncol=p, nrow=n)
+
     # effect <- effects[[3]]
-    beta <- beta0*effect
-    B <- B0*effect
-    link <- b0 + noise%*%beta + colSums(t(noise) * (B %*% t(noise)))
-    probs <- plogis(link)
-    
-    # Force balanced groups:
-    labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    probs <- makeLogisticProbs(beta0, B0, effect, noise)
+
+    labels <- makeLogisticLabels(probs,n)
+    # table(labels)
     # plot(probs,type='h', col=labels+1)
+
 
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
-    
-    ## Asign observations to folds. Use the simple label structure to balance folds.
+   
     fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
-    
-    # Observables 
-    ts <-statistics(x1 = x1, 
+    ts <- statistics(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
                     labels = labels, 
                     fold.ids = fold.ids)
     
-    # Prepare to permute
+    
+    # Permute
     old.labels <- labels
     old.folds.ids <- fold.ids
-    
-    # Initialize permuted statistics
     permuted <- matrix(NA, ncol=length(ts), nrow=n.permutations)
     
     for(i in 1:n.permutations){
@@ -107,7 +96,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
   }
 } 
 
-pbPost(type = "note", body = "File2", title = the.message)
+pbPost(type = "note", body = "Done", title = the.message)
 save.image(file=paste(file.name,".RData", sep=''))
 ```
 

@@ -217,7 +217,8 @@ my.outer <- function(x){
 augmentDesign <- function(x){
   n <- nrow(x)
   p <- ncol(x)
-  cbind(x,t(apply(x,1,my.outer)))
+  x.aug <- cbind(x,t(apply(x,1,my.outer)))
+  scale(x.aug)
 }
 ## Testing:
 # x <- matrix(1:9, ncol=3, byrow = TRUE)
@@ -229,3 +230,34 @@ my.quad.form <- function(x,A){
 ## Testing:
 
 
+makeLogisticSetup <- function(p, beta00, B00, b00=-1){
+  Sigma <<- diag(p)
+  Sigma.inv <<- solve(Sigma)
+  b0 <<- b00
+  beta0 <<- rep(beta00,p)
+  # B0 <<- matrix(B00, ncol = p, nrow = p)
+  B0 <<- diag(B00, p)
+}
+## Testing
+
+
+makeLogisticProbs <- function(beta0, B0, effect, noise){
+  beta <- beta0*effect
+  B <- B0*effect
+  link0 <- noise%*%beta + colSums(t(noise) * (B %*% t(noise)))
+  link <- link0-median(link0)
+  probs <- plogis(link)
+  return(probs)
+}
+## Testing
+
+
+makeLogisticLabels <- function(probs,n, balance=FALSE){
+  labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1]
+  if(balance){
+    while(sum(labels)<10 || sum(labels)>30){
+      labels <- c(TRUE,FALSE)[rbinom(n,1, probs)+1] # group assignemt labels
+    }
+  }
+  return(labels)
+}

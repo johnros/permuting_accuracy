@@ -631,7 +631,7 @@ File name: file45 (logistic regression, linear with interactions, augmented spac
 
 
 File name: file42 (logistic regression, interactions only, original space)
-  Status: OK (need more replications)
+  Status: 
   Null: Gaussian
   Effects: Signal in augmented space. Non-Isotropic Interactions. [0,0.25, 0.5]
   Original: unbalanced
@@ -645,7 +645,7 @@ File name: file42 (logistic regression, interactions only, original space)
   Trial dependence (n): none
 
 File name: file43 (logistic regression, interactions only, augmented space)
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: Signal in augmented space. Non-Isotropic Interactions. [0,0.25, 0.5]
   Original: unbalanced

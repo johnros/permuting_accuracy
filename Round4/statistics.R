@@ -586,7 +586,7 @@ statisticsAugmented <- function(x1,x2,Sigma.inv,noise,labels,fold.ids){
     ### Accuracy Tests:
     svm.CV.c100=t_svm_cv(noise, labels, labels, fold.ids, cost=100, type=1),
     svm.CV.c001=t_svm_cv(noise, labels, labels, fold.ids, cost=0.01, type=1),
-    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids),
+    # svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids),
     svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
     svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )

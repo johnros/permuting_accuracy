@@ -1,6 +1,3 @@
-- Simulate interaction:
-   - Decrease SNR when generating logistic regressions.
-   - z-score predictors. 
-
+- Center augmented space predictors.
 
     
