@@ -181,8 +181,10 @@ Surprisingly, the two-group GOF tests have no power either.
 	\caption{\textbf{Logistic regression with second order interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
-		\eta=x'\beta+x'Bx; 
-		x\sim \mathcal{N}(0,I_{p\times p})$. } 
+		\eta=x'\beta+x'Bx$ where 
+		$\beta$ is a scaled vector of ones, and $B$ a scaled matrix of ones.
+		The scaling is selected to (roughly) keep the SNR of the basic setup. 
+		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$ } 
 	\label{fig:logistic-main-and-interactions}
 \end{figure}
 
@@ -205,11 +207,11 @@ Surprisingly, the two-group GOF tests have no power either.
 		\label{fig:main-only-augmented-space}
 	\end{subfigure}
 	\caption{\textbf{Logistic Regression. Main effects only.} 
-	Data generated via 
-	$y|x \sim Binom(1,p(x));
+	Data generated via $y|x \sim Binom(1,p(x));
 	p(x)=\exp(\eta)/[1+\exp(\eta)];
-	\eta=x'\beta; 
-	x\sim \mathcal{N}(0,I_{p\times p})$.  } 
+	\eta=x'\beta$ where 
+	$\beta$ is a scaled vector of ones.
+	Finally, $x\sim \mathcal{N}(0,I_{p\times p})$. } 
 	\label{fig:logistic-main-only}
 \end{figure}
 
@@ -237,11 +239,10 @@ Surprisingly, the two-group GOF tests have no power either.
 	\label{fig:logistic-interactions-only-augmented}
 	\end{subfigure}
 	\caption{\textbf{Logistic regression. Second order interactions only.}
-		Data generated via 
-		$y|x \sim Binom(1,p(x));
+		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
-		\eta=\beta_0+x'x; 
-		x \sim \mathcal{N}(0,\sigma^2 I_{p\times p})$.
+		\eta=x'Bx$ where $B$ is a scaled matrix of ones.
+		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$
 	}
 	\label{fig:logistic-interactions-only}
 \end{figure}

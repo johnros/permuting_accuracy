@@ -473,18 +473,24 @@ This matter is further discussed in Section~\ref{sec:regularizaton}.
 
 \subsection{Departure From Shift Alternatives}
 \label{sec:logistic}
-Shift alternatives are (arguably) the most studied signal model in the statistical literature. 
+Shift alternatives are a popular signal model in the statistical literature. 
 This is due to mathematical convenience, but also for empirical reasons: 
-(a) Many effects are mere shifts after a scale transformation. For instance, a multiplicative effect in log scale. 
-(b) Many effects are not ``pure shifts'', but have a shift component. In fact, it would be quite controversial to assume an effect is manifested in higher moments alone. 
+(a) Many effects are ``pure shifts'' after a scale transformation. For instance, a multiplicative effect in log scale.
+(b) Many effects are not pure shifts, but have a shift component. 
+In fact, it would be quite controversial to assume an effect is manifested in higher moments alone. 
 
 For completeness, we now report power for logistic regression.
-Logistic regression is not a class shift, because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
-In Figure~\ref{fig:interactions} we report the usual power of our tests under these assumptions.
-In particular, we generate data from a logistic model with main effects and second order interactions, and analyze it both in the original space, $x$, and in the space with second order interactions:
+Logistic regression is not a shift class. 
+This is because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
+In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power of our tests for a logistic model with main effects and second order interactions.
+We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions:
 $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
-In the SM we separate between main effects and second order interactions, and discover that the shift-like main effects drive the power of these tests. 
+
+Strong main effects imply that $\mathbb{E}[x_1]$ departs from $\mathbb{E}[x_0]$.
+We can remove main effects, and assume that $P(y|x)$ is a quadratic form in link scale.
+We consider this a mathematical pathology, but it allows to isolate the power of the tests: do they detects shifts, or do they detect any departure from $\mathcal{F}=\mathcal{G}$.
+These simulations, reported in the SM, confirm that is the absence of a shift, only the two group GOF tests maintain any power. 
 
 
 \begin{figure}[th]
@@ -707,10 +713,10 @@ We emphasize that both test statistics were compared with the same permutation s
 
 We have set out to understand which of the tests is more powerful: accuracy-tests or two-group tests. 
 Our current observation is that we have never found accuracy tests to be optimal in high-dim regimes; there was always a two-group test that dominated in power.
-We conjecture that accuracy are never optimal, simply because of the needless discretization of the test statistic.
+We conjecture that accuracy are never optimal, simply because of the needless discretization built in the test statistic.
 We also conjecture the advantage of two-group tests will increase when scaling from two-class to multi-class classification.
 Two-group tests are typically easier to implement, and faster to run, since no resampling is required. 
-Statistics such as \emph{Schafer}, \emph{Goeman}, \emph{Srivastava}, \emph{dCOV}, and \emph{Gretton}, are particularly well suited for detecting dense signal in high-dim.
+Statistics such as \emph{Schafer}, \emph{Goeman}, \emph{Srivastava}, \emph{dCOV}, and \emph{Gretton}, are particularly well suited for detecting multivariate signal in high-dim.
 
 
 
