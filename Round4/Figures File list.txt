@@ -567,7 +567,7 @@ File name: file39 (run time)
 
 
 File name: file40 (logistic regression, main effects only, original space)
-  Status: 
+  Status: john-04
   Null: Gaussian
   Effects: Signal in original space. No interaction [0,0.25, 0.5]
   Original: unbalanced
@@ -597,8 +597,8 @@ File name: file44 (logistic regression, main effects only, augmented space)
 
 
 
-File name: file41 (logistic regression, linear with interactions, original space)
-  Status: 
+File name: file41 (logistic regression, main with interactions, original space)
+  Status: OK
   Null: Gaussian
   Effects: Signal in augmented space. Isotropic Interactions. [0,0.25, 0.5]
   Original: unbalanced
@@ -613,7 +613,7 @@ File name: file41 (logistic regression, linear with interactions, original space
 
 
 File name: file45 (logistic regression, linear with interactions, augmented space)
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: Signal in augmented space. Isotropic Interactions. [0,0.25, 0.5]
   Original: unbalanced
@@ -631,7 +631,7 @@ File name: file45 (logistic regression, linear with interactions, augmented spac
 
 
 File name: file42 (logistic regression, interactions only, original space)
-  Status: 
+  Status: OK
   Null: Gaussian
   Effects: Signal in augmented space. Non-Isotropic Interactions. [0,0.25, 0.5]
   Original: unbalanced
