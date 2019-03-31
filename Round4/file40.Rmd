@@ -55,7 +55,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
    
     fold.ids <- balanced_folding(labels, n.folds, balance = TRUE)
     # capture.output(table(fold.ids, labels), file=balance.log, append = TRUE)
-    ts <-statistics(x1 = x1, 
+    ts <- statistics(x1 = x1, 
                     x2 = x2, 
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
