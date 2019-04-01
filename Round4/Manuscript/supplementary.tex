@@ -145,18 +145,19 @@ $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots
 From Figure~\ref{fig:logistic-main-and-interactions} we learn that two-group tests dominate accuracy tests also in the logistic setup.
 Was this to be expected, given our conclusions on multivariate shifts?
 In the logistic setup $x_1$ is not a shifted version of $x_0$, but their location certainly differ. 
-The larger the main effects, the larger the different in location.
+The larger the main effects, the larger the difference in location.
 This suggests that a main-effect-only model ($B=0$) will be roughly similar to a shift class, and a second-order-interactions-only model may be very different than a shift class.
-To isolate these two cases, we simulate a main-effects-only setup (Fig.~\ref{fig:logistic-main-only}), and an interaction-only setup (Fig.~\ref{fig:logistic-interactions-only}).
+To isolate these two cases, we simulate a main-effects-only setup (Fig.\ref{fig:logistic-main-only}), and an interaction-only setup (Fig.\ref{fig:logistic-interactions-only}).
 
 
 The main-effect-only case in Figure~\ref{fig:logistic-main-only} is not very surprising: 
 the groups differ in their first moment, so that our conclusions are almost identical to the ``pure shift'' examples in the main text.
 Analyzing the data in the augmented $276$ dimensional space decreases power, since the problems increases in dimension, and many more parameters need to be estimated. 
 
-It may also be surprising that in the original space, $x$, it is easier to detect main effects only, than main effects with interactions (Fig.\ref{fig:interactions-in-original-space} vs. Fig.\ref{fig:main-only-original-space}). 
-Why does adding more signal (i.e. effects) reduces power? 
-Well, the signal added is not part of the $x$ space, so for detection algorithm operating in $x$ (not $\tilde{x}$), this is actually part of the noise. 
+It may also be surprising that in the original space, $x$, signal detection is easier in the absence of second order interactions. 
+Put differently, all tests have more power when $B=0$ than when $B \neq 0$ (Fig.\ref{fig:interactions-in-original-space} vs. Fig.\ref{fig:main-only-original-space}). 
+Why does more signal/effects reduce power? 
+The signal added is not in the span of the $x$ space, so for detection algorithm operating in $x$ (not $\tilde{x}$), this is actually part of the noise. 
 This intuition is confirmed when analyzing in $\tilde x$: it is indeed easier to detect signal with interactions, than main effects only (Fig.\ref{fig:interactions-in-augmented-space} vs. Fig.\ref{fig:main-only-augmented-space}).
 
 The second-order-interactions-only case in Figure~\ref{fig:logistic-interactions-only} is of particular interest. 
@@ -179,15 +180,16 @@ Most importantly for practitioners, the high-dim GOF tests detect the change in 
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file45"}
-		\caption{TODO: update. Data analyzed in augmented interactions space ($\tilde x$).}
+		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
 		\label{fig:interactions-in-augmented-space}
 	\end{subfigure}
-	\caption{\textbf{Logistic regression. Main effects and interactions.} 
+	\caption{\textbf{
+		Logistic regression. Main effects and interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
-		\eta=x'\beta+x'Bx$ where 
-		$\beta$ is a scaled vector of ones, and $B$ a scaled matrix of ones.
-		The scaling is selected to (roughly) keep the SNR of the basic setup. 
+		\eta=\beta_0 + x'\beta + x'Bx$ where 
+		$\beta$ is a scaled vector of ones, 
+		$B$ a scaled identity matrix, and $\beta_0$ set so that the median $\eta \approx0$.
 		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$ } 
 	\label{fig:logistic-main-and-interactions}
 \end{figure}
@@ -213,8 +215,8 @@ Most importantly for practitioners, the high-dim GOF tests detect the change in 
 	\caption{\textbf{Logistic Regression. Main effects only.} 
 	Data generated via $y|x \sim Binom(1,p(x));
 	p(x)=\exp(\eta)/[1+\exp(\eta)];
-	\eta=x'\beta$ where 
-	$\beta$ is a scaled vector of ones.
+	\eta=\beta_0+x'\beta$ where 
+	$\beta$ is a scaled vector of ones, and $\beta_0$ set so that the median $\eta \approx0$.
 	Finally, $x\sim \mathcal{N}(0,I_{p\times p})$. } 
 	\label{fig:logistic-main-only}
 \end{figure}
@@ -245,8 +247,9 @@ Most importantly for practitioners, the high-dim GOF tests detect the change in 
 	\caption{\textbf{Logistic regression. Second order interactions only.}
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
-		\eta=x'Bx$ where $B$ is a scaled matrix of ones.
-		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$
+		\eta=\beta_0+x'Bx$ 
+		where $B$ is a scaled identity matrix.
+		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$.	
 	}
 	\label{fig:logistic-interactions-only}
 \end{figure}
