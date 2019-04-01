@@ -486,12 +486,11 @@ In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power of 
 We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions:
 $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
-
-Strong main effects imply that $\mathbb{E}[x_1]$ departs from $\mathbb{E}[x_0]$.
-We can remove main effects, and assume that $P(y|x)$ is a quadratic form in link scale.
-We consider this a mathematical pathology, but it allows to isolate the power of the tests: do they detects shifts, or do they detect any departure from $\mathcal{F}=\mathcal{G}$.
-These simulations, reported in the SM, confirm that is the absence of a shift, only the two group GOF tests maintain any power. 
-
+They also confirm that augmenting the feature space takes a toll in power, because many more covariance parameters need to be estimated. 
+Sometimes, this tolls is needed, because the signal resides in the augmented space. 
+Sometimes, this toll is needless, because the signal resides in the original space. 
+Figure~\ref{fig:interactions-in-augmented-space} is an example of the latter. 
+In the SM we provide an example of the former. 
 
 \begin{figure}[th]
 	\centering
