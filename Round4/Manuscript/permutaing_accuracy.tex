@@ -137,7 +137,7 @@ This allows us to evaluate theoretical results such as \citet{ramdas_classificat
 We find this setup particularly important for neuroimaging, and genetic applications, where the sample acquisition is expensive, and the samples high-dimensional. 
 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online supplementary material (SM). 
+The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online Supplementary Material. 
 We conclude with a discussion.
 
 
@@ -187,7 +187,7 @@ $\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R} \sum_{\pi} I\{\math
 
 
 \subsection{Two-Group Tests}
-The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions). 
+The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counterexample where equal means do not imply equal distributions). 
 Difference only in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \citep{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
@@ -274,7 +274,7 @@ We will report results only with balanced folding, mostly because we will conclu
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels, as done by \cite{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though that for statistically independent features, it is computationally more efficient to permute features instead of labels \citep[e.g.][]{golland_permutation_2005} .
 
 
 \paragraph{How many folds}
@@ -409,14 +409,17 @@ This is most notable for the intermediate signal strength (green triangles).
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
 Our results, however, also  hold in the high-dim--large-sample configurations.
 To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=400, p=230$. 
-The results are qualitatively similar to the high-dim--small-sample in Fig.\ref{fig:simulation_1}, and reported in the online supplementary material (SM).
+The results are qualitatively similar to the high-dim--small-sample in Fig.\ref{fig:simulation_1}, and reported in the online Supplementary Material.
+We also note that further increasing $n$ and $p$ requires tremendous amounts of computation. 
+This is because the number of test statistics computed is in the order of the number of replications, times permutations, times K-folds, times statistics to compute. 
+In our current setup, this means roughly $8 \times 10^6$ operations, that scale polynomially with $n$ and $p$. 
 
 
 \subsection{Departure From Gaussianity}
 \label{sec:heavytailed}
-The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not Gaussian.
-This is because Hotelling's $T^2$ statistic is no longer a generalized-likelihood-ratio test. 
-To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
+Hotelling's $T^2$ is a generalized likelihood ratio test in the Gaussian shift class. 
+This Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not Gaussian.
+To verify our conclusions in the non-Gaussian case, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
 In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the light-tailed Gaussian case (Figure~\ref{fig:t_null}).
 
 \begin{figure}[th]
@@ -493,10 +496,10 @@ We analyzed it both in the original space, $x$, and in an augmented space, $\til
 $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
 They also confirm that augmenting the feature space takes a toll in power, because many more covariance parameters need to be estimated. 
-Sometimes, this tolls is needed, because the signal resides in the augmented space. 
+Sometimes, this toll is worthwhile, because the signal resides in the augmented space. 
 Sometimes, this toll is needless, because the signal resides in the original space. 
 Figure~\ref{fig:interactions-in-augmented-space} is an example of the latter. 
-In the SM we provide an example of the former. 
+In the Supplementary Material we provide an example of the former. 
 
 \begin{figure}[th]
 	\centering
@@ -528,7 +531,7 @@ In the SM we provide an example of the former.
 
 
 % Resampling with replacement
-\subsection{Departure from V-fold CV}
+\subsection{Beyond V-fold CV}
 \label{sec:bootstrap}
 
 In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
@@ -608,11 +611,11 @@ Shrinking is used in the \emph{Schafer} statistic.
 Thresholding is used in the \emph{Goeman} and \emph{Srivastava} statistics.
 
 Can we explicitly regularize the covariance estimate of a classifier?
-The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regulirizing classifiers. 
+The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regularized classifiers. 
 See, for instance \cite{bickel2004some} or \cite{dobriban2018high}.
 We thus augment our simulations with some accuracy-tests that have explicit covariance regularization in them. 
 These include shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} two-group test.
-We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by thresholding, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
+We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by canceling non-diagonal entries, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
@@ -622,7 +625,7 @@ Even so, the out-of-the-box two-group tests outperform the accuracy-tests.
 
 Optimizing the regularization parameter for classification does not result in a good test.
 The \emph{svm.CV.cCV} statistic has a regularization parameter optimized with an inner CV. 
-The \emph{svm.CV.c001} statistic has a fixed ,large, regularization.
+The \emph{svm.CV.c001} statistic has a fixed, large, regularization.
 The better power of \emph{svm.CV.c001} leads us to argue that the optimal regularization for prediction is larger than the optimal for testing.
 
 \bigskip
@@ -746,9 +749,9 @@ Does testing require more or less regularization?
 In our simulations, the optimal cross-validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
 We thus conclude that testing requires \emph{more} regularization  than predicting. 
 Why would this happen?
-Regularization introduces bias and reduces bias. 
-For testing, we only care about the bias in the largest coordinates of $\mu$. 
+Regularization introduces bias and reduces variance. 
 For predictions we care about the bias in all coordinates of $\mu$. 
+For testing, we only care about the bias in the largest coordinates of $\mu$. 
 This means that when testing, the bias introduced by regularization is not limited by the smaller coordinates of $\mu$, permitting to remove more variance. 
 This phenomenon was also observed in \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization (i.e. smoothing) than the \emph{matched filter theorem}, optimal for recovering the whole function.
 
@@ -757,7 +760,7 @@ This phenomenon was also observed in \cite{cheng2017multiple}, which observe tha
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \citep{hemerik_exact_2014}.
 Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
-Thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data.
+Thirdly, because a highly discrete test statistic is insensitive to mild perturbations of the data.
 For an intuition consider the usage of the \emph{resubstitution accuracy}, i.e. the train-accuracy, as a test statistic. 
 In a very high-dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
@@ -818,7 +821,7 @@ This explains the fact that unregularized tests have more power than the regular
 In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
 Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
-In the SM we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
+In the Supplementary Material we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
 As usual, two-group tests dominate accuracy-tests.
 This time, however, the winners are not the $T^2$ type statistics, but rather, tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
@@ -843,7 +846,7 @@ This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using th
 
 
 
-\subsection{A Good accuracy-test}
+\subsection{A good accuracy-test}
 Brain-computer interfaces and clinical diagnostics \citep{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract this information. 
 For the cases an accuracy-test cannot be replaced with other tests, we collect the following observations.
 
@@ -880,8 +883,9 @@ As put by \cite{ramdas_classification_2016}:
 
 
 \section{Supplementary Material}
-The web supplementary material is available at [TODO: add url]. 
-It includes 
+The Supplementary Material is available at [TODO: add url once online]. 
+It includes further simulation results: large sample, extension of the non-spherical case, extension of the logistic regression case, a mixture class, sparse signal, heteroskedasticity, and tie breaking. 
+It also includes a discussion of our choice of SNR measure.
 
 
 
