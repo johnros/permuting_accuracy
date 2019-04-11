@@ -52,7 +52,8 @@ In particular with respect to the dominance of two-group tests.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.45\columnwidth]{"art/file1"}
-	\caption{\textbf{Large sample}: The basic simulation setup scaled ten-fold: $n=400; p=230$.}
+	\caption{[TODO: replace oracle.cov caption]
+		\textbf{Large sample}: The basic simulation setup scaled ten-fold: $n=400; p=230$.}
 	\label{fig:large-sample}
 \end{figure}
 
@@ -65,7 +66,7 @@ In particular with respect to the dominance of two-group tests.
 In the main text we have departed from the sphericity assumption by allowing $\Sigma$ to be an $AR(1)$ covariance. 
 We now try other covariance structures: a long-memory Brownian motion correlation, and an arbitrary (random) covariance structure. 
 As seen in Figures \ref{fig:dependence_2} and \ref{fig:dependence_3}, the findings in the main test hold also for the ``long-memory'', and ``arbitrary'' correlation structures.
-In particular: two-group tests dominate accuracy tests, and signal is masked in the low PCs of the noise. 
+In particular: two-group tests dominate accuracy tests, and signal in the low PCs of the noise is masked. 
 
 
 
@@ -136,28 +137,28 @@ This setup is also reported in the main text.
 
 Formally, the logistic assumption implies that 
 $P(y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
-Main-effects and second order interaction imply that 
+Main-effects and second order interactions imply that 
 $\eta=\beta_0+x'\beta +x'Bx$, for some $p$-vector $\beta$, and symmetric $p \times p$ matrix $B$.
 We also assume $x \sim \mathcal{N}(0,I_{p\times p})$.
-We perform the various tests in the original space, $x$, but also in the $276$~dimensional pace of main effects and second order interactions: 
+We perform the various tests in the original space, $x$, but also in the $276$~dimensional space of main effects and second order interactions: 
 $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_p x_p).$$
 
 From Figure~\ref{fig:logistic-main-and-interactions} we learn that two-group tests dominate accuracy tests also in the logistic setup.
 Was this to be expected, given our conclusions on multivariate shifts?
-In the logistic setup $x_1$ is not a shifted version of $x_0$, but their location certainly differ. 
-The larger the main effects, the larger the difference in location.
+In the logistic setup $x_1$ cannot be a shifted version of $x_0$, but their means certainly differ. 
+The larger the main effects, the larger the difference in means.
 This suggests that a main-effect-only model ($B=0$) will be roughly similar to a shift class, and a second-order-interactions-only model may be very different than a shift class.
 To isolate these two cases, we simulate a main-effects-only setup (Fig.\ref{fig:logistic-main-only}), and an interaction-only setup (Fig.\ref{fig:logistic-interactions-only}).
 
 
 The main-effect-only case in Figure~\ref{fig:logistic-main-only} is not very surprising: 
 the groups differ in their first moment, so that our conclusions are almost identical to the ``pure shift'' examples in the main text.
-Analyzing the data in the augmented $276$ dimensional space decreases power, since the problems increases in dimension, and many more parameters need to be estimated. 
+Analyzing the data in the augmented $276$ dimensional space decreases power, since the problem increases in dimension, and many more parameters need to be estimated. 
 
 It may also be surprising that in the original space, $x$, signal detection is easier in the absence of second order interactions. 
 Put differently, all tests have more power when $B=0$ than when $B \neq 0$ (Fig.\ref{fig:interactions-in-original-space} vs. Fig.\ref{fig:main-only-original-space}). 
 Why does more signal/effects reduce power? 
-The signal added is not in the span of the $x$ space, so for detection algorithm operating in $x$ (not $\tilde{x}$), this is actually part of the noise. 
+The signal added is not in the span of the $x$ space, so for detection algorithms operating in $x$ (not $\tilde{x}$), this is actually part of the noise. 
 This intuition is confirmed when analyzing in $\tilde x$: it is indeed easier to detect signal with interactions, than main effects only (Fig.\ref{fig:interactions-in-augmented-space} vs. Fig.\ref{fig:main-only-augmented-space}).
 
 The second-order-interactions-only case in Figure~\ref{fig:logistic-interactions-only} is of particular interest. 
@@ -167,6 +168,7 @@ When all signal is in the scatter of the distribution, we expect that tests for 
 This intuition is confirmed: in the original space $x_0$ and $x_1$ have the same location and shift detectors have no power at all (Fig.\ref{fig:logistic-interactions-only-original}). 
 In the augmented space, $x_0$ and $x_1$ differ in location so that shift detectors are re-powered (Fig.\ref{fig:logistic-interactions-only-augmented}). 
 Most importantly for practitioners, the high-dim GOF tests detect the change in scatter in all these cases. 
+Why the GOF tests perform so much better in the augmented space may be the topic of future research.
 
 
 \begin{figure}[th]
@@ -183,14 +185,14 @@ Most importantly for practitioners, the high-dim GOF tests detect the change in 
 		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
 		\label{fig:interactions-in-augmented-space}
 	\end{subfigure}
-	\caption{\textbf{
-		Logistic regression. Main effects and interactions.} 
+	\caption{[TODO: replace oracle.cov caption]
+		\textbf{Logistic regression. Main effects and interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
 		\eta=\beta_0 + x'\beta + x'Bx$ where 
 		$\beta$ is a scaled vector of ones, 
 		$B$ a scaled identity matrix, and $\beta_0$ set so that the median $\eta \approx0$.
-		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$ } 
+		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$. } 
 	\label{fig:logistic-main-and-interactions}
 \end{figure}
 
@@ -228,8 +230,10 @@ Most importantly for practitioners, the high-dim GOF tests detect the change in 
 	\begin{subfigure}[t]{.3\columnwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{art/quadratic-form}
-		\caption{Illustration with $p=2$. 
-			$y=1$ in red squares. $y=0$ in black rhombus.}
+		\caption{
+			Illustration with $p=2$. 
+			$y=1$ in red squares. 
+			$y=0$ in black diamonds.}
 		\label{fig:quadratic-form}
 	\end{subfigure}
 	\begin{subfigure}[t]{.3\columnwidth}
@@ -277,7 +281,7 @@ x_1 & \sim \pi \gauss{\mu_1,I}+ (1-\pi) \gauss{\mu_2,I}, \\
 x_0 & \sim (1-\pi) \gauss{\mu_1,I}+ \pi \gauss{\mu_2,I}.
 \end{split}
 \end{align*}
-Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a location shift model $(\pi=0)$. 
+Varying $\pi$ interpolates between the null distribution $(\pi=0.5)$ and a shift model $(\pi=0)$. 
 We now perform the same simulation as \cite{golland_permutation_2005}, but in the same dimensionality of our previous simulations.
 We re-parameterize so that $\pi=0$ corresponds to the null model:
 \begin{align}
@@ -287,7 +291,7 @@ x_1 & \sim (1/2-\pi) \gauss{\mu_1,I}+ (1/2+\pi) \gauss{\mu_2,I}, \\
 x_0 & \sim (1/2+\pi) \gauss{\mu_1,I}+ (1/2-\pi) \gauss{\mu_2,I}.	
 \end{split}
 \end{align}
-From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} locations tests are still preferred over accuracy-tests. 
+From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland_permutation_2005} location tests are still preferred over accuracy-tests. 
 
 
 \begin{figure}[h]
@@ -297,6 +301,89 @@ From Figure~\ref{fig:file12}, we see that for the mixture class of \cite{golland
 		$\mu$ is a $p$-vector with $3/\sqrt{p}$ in all coordinates.
 		The effect, $\pi$, is color and shape coded and varies over $0$ (red circle), $1/4$ (green triangle) and $1/2$ (blue square). }
 	\label{fig:file12}
+\end{figure}
+
+
+
+
+
+
+\section{Sparse Alternatives}
+\label{sec:sparse}
+
+In our set of simulations we discussed ``dense'' alternatives.
+Dense alternatives are motivated by neuroimaging where most brain locations in a region carry signal.
+In a genetic application, a sparse alternative may be more plausible. 
+Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
+As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
+
+\begin{figure}[h]
+	\centering
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"art/file34"}
+	\caption{Sparse $\mu$.}  
+	\label{fig:sparse}	
+\end{figure}
+
+
+
+
+
+\section{Departure from Homoskedasticity and Scalar Invariance}
+
+In our simulations variables have unit variance. 
+Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
+Implicit z-scoring is sometime an integral part of a test statistic. 
+This is known as \emph{scalar invariance}.
+The \emph{Srivastava} statistic, for instance, is scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
+The \emph{Goeman} statistic, for instance, is not scalar invariant. 
+It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
+Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. 
+\emph{Srivastava} will give all coordinates the same importance.
+
+In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the \emph{Goeman} statistic, and the scalar-invariant \emph{Srivastava} statistic. 
+We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file26"}
+		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_11}	
+	\end{subfigure}
+	\begin{subfigure}[t]{0.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"art/file24"}
+		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
+		\label{fig:heteroskedastic_12}	
+	\end{subfigure}
+	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
+	\label{fig:heteroskedastic}	
+\end{figure}
+
+
+
+
+\section{Tie Breaking}
+\label{sec:ties}
+
+Discrete test statistics lose power by not exhausting the permissible false positive rate. 
+A common remedy is a \emph{randomized test} with tie-breaking, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
+Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
+is greater than  $\alpha$ then we reject the null with probability 
+$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
+
+Figure~\ref{fig:file33} reports the basic simulation setup while allowing for random tie breaking. 
+It demonstrates that the power disadvantage of accuracy-tests cannot be remedied by random tie breaking.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{art/file33}
+	\caption{\textbf{Tie breaking}: The basic simulation setup with random tie breaking.}
+	\label{fig:file33}
 \end{figure}
 
 
@@ -360,89 +447,6 @@ With sparse alternatives, the difficulty of the problem is governed by the spars
 In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
 Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
 For this reason, we prefer fixing $\Vert \mu \Vert_\Sigma$.
-
-
-
-
-
-
-\section{Sparse Alternatives}
-\label{sec:sparse}
-
-In our set of simulations we discussed ``dense'' alternatives.
-Dense alternatives are motivated by neuroimaging where most brain locations in a region carry signal.
-In a genetic application, a sparse alternative may be more plausible. 
-Figure~\ref{fig:sparse} reports power when $\mu$ is sparse. 
-As usual, two-group tests dominate accuracy-tests, only this time, the winners are not the $T^2$ type statistics, but rather, the tests for sparse shifts (\emph{Cai}, \emph{Simes}).
-
-\begin{figure}[h]
-	\centering
-	\centering
-	\includegraphics[width=0.5\columnwidth]{"art/file34"}
-	\caption{Sparse $\mu$.}  
-	\label{fig:sparse}	
-\end{figure}
-
-
-
-
-
-\section{Departure from Homoskedasticity and Scalar Invariance}
-
-Our previous simulations assume variables have unit variance (diagonal $\Sigma$). 
-Practitioners are already accustomed to z-score features before learning a regularized predictor (e.g. ridge regression) so this is not an unrealistic setup.
-Implicit z-scoring is sometime an integral part of a test statistic. 
-This is known as \emph{scalar invariance}.
-The \emph{Srivastava} statistic, for instance, is scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of coordinate-wise t-statistics.
-The \emph{Goeman} statistic, for instance, is not scalar invariant. 
-It can be (roughly) thought of as the $l_2$ norm of the $p$-vector of variable-wise mean differences.
-Under heteroskedasticity, the \emph{Goeman} statistic will give less importance to signal in the high-variance directions than signal in the low-variance directions. 
-\emph{Srivastava} will give all coordinates the same importance.
-
-In Figure~\ref{fig:heteroskedastic_11} we can see the difference between the scalar-invariant \emph{Srivastava} and \emph{Goeman} statistics. 
-We also see that two-group tests dominate accuracy-tests also in the heteroskedastic case. 
-
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[t]{.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file26"}
-		\caption{$\mu$ in the high variance PC of $\Sigma$.}  
-		\label{fig:heteroskedastic_11}	
-	\end{subfigure}
-	\begin{subfigure}[t]{0.45\columnwidth}
-		\centering
-		\includegraphics[width=1\columnwidth]{"art/file24"}
-		\caption{$\mu$ in the low variance PC of $\Sigma$.}  
-		\label{fig:heteroskedastic_12}	
-	\end{subfigure}
-	\caption{Heteroskedasticity: $\Sigma$ is diagonal with $\Sigma_{jj}=j$.}	
-	\label{fig:heteroskedastic}	
-\end{figure}
-
-
-
-
-\section{Tie Breaking}
-\label{sec:ties}
-
-Discrete test statistics lose power by not exhausting the permissible false positive rate. 
-A common remedy is a \emph{randomized test}, in which the rejection of the null is decided at random in a manner that exhausts the false positive rate. 
-Formally, denoting by $\mathcal{T}$ the observed test statistic, by $\mathcal{T}_\pi$, its value after under permutation $\pi$, and by $\mathbb{P}\{A\}$ the proportion of permutations satisfying $A$ then the randomized version of our tests imply that if the permutation p-value, 
-$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}$, 
-is greater than  $\alpha$ then we reject the null with probability 
-$$ max\left\{\frac{\alpha - \mathbb{P}\{\mathcal{T}_\pi > \mathcal{T}\}}{\mathbb{P}\{\mathcal{T}_\pi = \mathcal{T}\}},0 \right\}.$$
-
-Figure~\ref{fig:file33} reports the basic simulation setup while allowing for random tie breaking. 
-It demonstrates that the power disadvantage of accuracy-tests cannot be remedied by random tie breaking.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.5\columnwidth]{art/file33}
-	\caption{\textbf{Tie breaking}: The basic simulation setup with random tie breaking.}
-	\label{fig:file33}
-\end{figure}
 
 
 
