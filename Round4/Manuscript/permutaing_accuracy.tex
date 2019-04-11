@@ -357,7 +357,7 @@ We then compute a permutation p-value by permuting the class labels, and recompu
 We perform $300$ such permutations. 
 We then reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
 The reported power is the proportion of replicates where the permutation p-value fell below $0.05$.
-The number of replicates is above $500$, so that the standard errors of our estimates are no larger than $1.5\%$, and $0.6\%$ under the null. 
+The number of replicates is $1,000$, so that the standard errors of our estimates are no larger than $1.5\%$, and $0.6\%$ under the null. 
 
 
 
@@ -380,20 +380,22 @@ We may thus proceed and compare the power of each test statistic.
 \subsubsection{Power}
 \label{sec:power}
 
-From Figure (\ref{fig:simulation_1}) we learn that in our first simulation setup, two-group tests are more powerful than accuracy-tests.
+From Figure~\ref{fig:simulation_1} we learn that in our first simulation setup, two-group tests are more powerful than accuracy-tests.
 This is most notable for the intermediate signal strength (green triangles). 
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file2"}
 	\caption{
+		[TODO: update with Oracle caption.]
 		The power of the permutation test with various test statistics. 
 		The power on the x-axis. 
 		Effects are color and shape coded. 
-		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
 		The various statistics on the y-axis. 
 		Their details are given in Table~\ref{tab:collected}. 
-		Simulation details in Section~\ref{sec:simulation_details}.}	
+		Simulation details in Section~\ref{sec:simulation_details}.
+		\R code in \url{http://www.john-ros.com/permuting_accuracy/}.}	
 	\label{fig:simulation_1}
 \end{figure}
 
@@ -404,8 +406,8 @@ Our results, however, also  hold in the high-dim--large-sample configurations.
 To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=400, p=230$. 
 The results are qualitatively similar to the high-dim--small-sample in Fig.\ref{fig:simulation_1}, and reported in the online Supplementary Material.
 We also note that further increasing $n$ and $p$ requires tremendous amounts of computation. 
-This is because the number of test statistics computed is in the order of the number of replications, times permutations, times K-folds, times statistics to compute. 
-In our current setup, this means roughly $8 \times 10^6$ operations, that scale polynomially with $n$ and $p$. 
+This is because the number of test statistics computed is in the order of the number of replications, times permutations, times data folds, times statistics to compute. 
+In our current setup, this means roughly $8 \times 10^6$ operations, each scaling polynomially with $n$ and $p$. 
 
 
 \subsection{Departure From Gaussianity}
@@ -429,7 +431,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 \subsection{Departure from Sphericity}
 \label{sec:dependence}
 
-We now test the robustness of our results to the correlations in $x$. 
+We now test the robustness of our results to correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Some tests try to account for $\Sigma$ by estimating it. 
 Estimating $\Sigma$ reduces possible bias at the cost of some variance. 
@@ -437,18 +439,19 @@ We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig
 
 We simulate various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$ and in the low variance PC. 
-To keep the comparisons fair as the correlations vary, we kept $\Vert \mu \Vert_\Sigma:=\sqrt{\mu'\Sigma^{-1}\mu}$ fixed.
+To keep the comparisons fair as the correlations vary, we kept $\SNR$ fixed.
 This matter is discussed in Section~\ref{sec:fix_snr}.
 
 
 The simulation results reveal some non trivial phenomena.
-First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accuracy-tests. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
+First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accl
+acy-tests. 
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
 
 When the signal is in the direction of the low variance PC, a different phenomenon appears.
 There is no clear preference between two-group or accuracy-tests.
 Instead, the non-regularized tests are the clear victors. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
 This matter is further discussed in Section~\ref{sec:regularizaton}.
 
@@ -583,7 +586,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
 		Simulation details in Appendix~\ref{sec:simulation_details}.
 	} 
 	\label{fig:bootstrap}
@@ -654,7 +657,7 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:highdim}
@@ -763,7 +766,7 @@ The degree of discretization is governed by the sample size.
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization. 
 An asymptotic analysis, which eschews the discretization effect,  may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
 One of the effects of discretization is ties. 
-The canonical remedy for ties--- random tie breaking --- showed only a minor improvement as reported in the SM.
+The canonical remedy for ties--- random tie breaking --- showed only a minor improvement as reported in the Supplementary Material.
 
 Using our simulations we may quantify the power loss due to discretization, this is because the resubstitution accuracy of Figher's LDA is equivalent to Hotelling's $T^2$ after binarizing predictions. 
 From Figure~\ref{fig:simulation_1} we see that for the intermediate signals strength, \emph{Hotelling} has roughly twice the power of LDA (\emph{lda.noCV.1}).
@@ -791,7 +794,7 @@ Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
 This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Sigma}$.
 
-For verification, we report the power when fixing the Euclidean norm between population means in the SM.
+For verification, we report the power when fixing the Euclidean norm between population means in the Supplementary Material.
 
 
 
@@ -806,7 +809,7 @@ Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sig
 We already know from ridge regression that a Tikhonov regularization of the covariance shrinks estimates. 
 We also know that shrinking is more aggressive in the the low PCs of the design \cite{hastie_elements_2003}. 
 If groups differ in the same direction where shrinking is most aggressive, then this regularization may mask the signal. 
-This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and SM.
+This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and Supplementary Material.
 
 
 \subsection{Sparse Alternatives}
