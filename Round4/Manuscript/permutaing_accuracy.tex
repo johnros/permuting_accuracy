@@ -63,16 +63,6 @@ Many neuroscientists and geneticists detect signal by fitting a classifier and t
 The workflow consists of fitting a classifier, estimating its predictive accuracy using cross-validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
 This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
-Other examples include 
-speaker verification \citep{gretton_kernel_2012-1}, 
-text classification \citep{dhillon2003divisive,lopez2016revisiting}, 
-distinguishing between facial expressions \citep{lopez2016revisiting}, 
-data integration \citep{gretton_kernel_2012-1}, 
-record linkage in databases systems \citep{gretton_kernel_2012-1,hall2002permutation,zhou2018statistical}, 
-optical character recognition \citep{perez2009estimation}, 
-multimedia \citep{moreno2004kullback}, 
-and functional data analysis \citep{hall2002permutation}.
-
 Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
 
 To fix ideas, we will adhere to a concrete example.
@@ -100,10 +90,12 @@ It is thus a \emph{high-dim--small-sample} problem.
 In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
 These can be classified along the following lines:
-\textbf{Two-group, high-dim, goodness of fit tests}-- Tests that seek for any difference between two multivariate distributions. GOF in short.
-\textbf{Two-group, high-dim, location tests}-- Tests the seek for a shift in mean vectors. Shifts may be in many coordinates (dense), or only in a few (sparse). 
+\textbf{High-dim goodness of fit tests}-- Tests that seek for any difference between two multivariate distributions. GOF in short.
+\textbf{High-dim location tests}-- Tests the seek for a shift in mean vectors. 
+Shifts may be in many coordinates (dense), or only in a few (sparse).
+We collectively call GOF tests and location tests \emph{two-group tests}. 
 
-At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging.
+At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging: two-group tests or accuracy tests?
 In this manuscript, we do not provide a full answer to the matter.
 Instead, we seek to demonstrate that in the high dimensional regime \textbf{accuracy-tests never have more power than two-group tests}.
 Our recommendations to the practitioner in these high-dim problems:
@@ -160,7 +152,7 @@ Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector.
 In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
 
 We denote with $x_y$ a sample of $x$ from group $y$ .
-We denote the distribution of $x_1$ by $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
+We denote the distribution of $x_1$ with $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
 A two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
 For example, we can test whether multivariate voxel activation patterns are similarly distributed when given a vocal stimulus ($x_1$) or a non-vocal one ($x_0$).
 The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
@@ -217,14 +209,14 @@ Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathca
 The accuracy of a predictor, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction for a new data point. 
 It is also known as (the complement of) the \emph{test error}.
 The accuracy of a learning algorithm, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
-It is also known as also known as (the complement of) the \emph{expected test error}
+It is also known as (the complement of) the \emph{expected test error}
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
 $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
 where $\indicator{A}$ is the indicator function of the set $A$. 
 
-If $y$ is independent of $x$, then $\hyp$ cannot capture any signal and is no more accurate than a coin flip (for balanced classes). 
+If $y$ is independent of $x$, then $\hyp$ cannot capture any signal and is no more accurate than a coin toss (for balanced classes). 
 This is known as \emph{chance level}.
 A statistically significant better-than-chance-level estimate of $\acc_{\algo}$, or $\acc_{\hyp}$, is evidence that the classes are distinct. 
 Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}, also known as (the complement of) the \emph{train-error}, and the V-fold cross-validation (CV) estimate.
@@ -259,14 +251,14 @@ Should the data be refolded after each permutation?
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
 \paragraph{Cross-validate or not?}
-For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, as long as it does not invalidate false positive rate guarantees. 
+For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, since  it does not inflate the error rates of the accuracy-tests. 
 The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
 We will thus be considering both unbiased cross-validated accuracies, and biased resubstitution accuracies.
 
 
 \paragraph{Balanced folding}
 The standard practice in V-fold CV is to constrain the data folds to be balanced, a.k.a.\ stratified \cite[for example]{ojala_permutation_2010}.
-This means that each fold has the same number of examples from each class. 
+This means that each fold has the same number of samples from each class. 
 We will report results only with balanced folding, mostly because we will conclude that V-fold CV should not be used for our detection problem. 
 
 
@@ -274,7 +266,7 @@ We will report results only with balanced folding, mostly because we will conclu
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though that for statistically independent features, it is computationally more efficient to permute features instead of labels \citep[e.g.][]{golland_permutation_2005} .
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels \citep[e.g.][]{golland_permutation_2005} .
 
 
 \paragraph{How many folds}
@@ -309,7 +301,7 @@ We selected two-group tests based on their popularity, and so that various types
 		Goeman & \cite{goeman2006testing} & Resubstitution & -- \\ 
 		Schafer & \cite{schafer_shrinkage_2005} & Resubstitution & -- \\ 
 		Hotelling & \cite{hotelling_generalization_1931} & Resubstitution & -- \\
-		Oracle & $T^2$ & Resubstitution & Known $\Sigma$\\ 
+		Oracle & $T^2$ with Known $\Sigma$ & Resubstitution & -- \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
@@ -355,9 +347,10 @@ The covariance $\Sigma=I$.
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
 Shifts are dense and equal in all $p$ coordinates of $\mu$.
 We set $\mu:=c \, \textbf{e}$ where $\textbf{e}$ is a $p$-vector of ones. 
-We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
-With $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Sigma^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$ [TODO:verify]. 
-These can be thought as measures of signal-to-noise (SNR). 
+We will use $c$ to index the signal's strength.
+We use the Mahalanobis norm between means as a measure of signal-to-noise (SNR): 
+$\frac{n}{2}\Vert \mu \Vert_\Sigma^2=\frac{n}{2} \mu' \Sigma^{-1} \mu$.
+We vary $c$ so that $\frac{n}{2}\Vert \mu \Vert_\Sigma^2$ is fixed over various setups, and equals $0$ for no signal, $25$ for intermediate signal, and $100$ for strong signal.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 

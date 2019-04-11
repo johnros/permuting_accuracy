@@ -320,19 +320,17 @@ In the case of the sample means of two shifted groups of size $n$, then
 \label{eq:mahalanobis}
 KL[\bar x_1,\bar x_0]=
 \frac{n}{2}\mu'\Sigma^{-1}\mu=
-\frac{n}{2}\Vert \mu \Vert_\Theta^2,
+\frac{n}{2}\Vert \mu \Vert_\Sigma^2,
 \end{align}
 where $\mu:=\mu_1-\mu_0$. 
-%For spherical populations, $\Sigma=I$, and thus $\Vert \mu \Vert_\Theta^2=\Vert \mu \Vert_2^2$.
-%For a dense shift of equal magnitude, $\mu=(c,\dots,c)$, so that $\Vert \mu \Vert_2^2=p \, c^2$. 
 
-In most of our simulations we fixed $n \Vert \mu \Vert_\Theta^2$. 
+In most of our simulations we fixed $n \Vert \mu \Vert_\Sigma^2$. 
 The logistic regression setup is an exception because the signal is not a shift. 
 We did set effect sizes so that power in the logistic regression is comparable to power in the other examples.
 
-Fixing $n \Vert \mu \Vert_\Theta^2$ implies that the Euclidean norm of $\mu$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+Fixing $n \Vert \mu \Vert_\Sigma^2$ implies that the Euclidean norm of $\mu$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
-This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Sigma}$.
 
 For completeness, Figure~\ref{fig:dependence_4} reports the power analysis under $AR(1)$ correlations, but with $\Vert \mu \Vert_2$ fixed.
 We compare the power of a shift in the direction of some high variance PC (Figure~\ref{fig:dependence_41}), versus a shift in the direction of a low variance PC (Figure~\ref{fig:dependence_42}).
@@ -361,7 +359,7 @@ In \cite{ramdas2015decreasing}, authors prefer to use sparse alternatives.
 With sparse alternatives, the difficulty of the problem is governed by the sparsity of the signal and not only the dimension of the data. 
 In \cite{chen2010two}, authors fix $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ where $\Vert \Sigma \Vert^2_{Frob}=\Tr(\Sigma'\Sigma)$ is the Frobenius matrix norm. 
 Clearly, $\Vert \mu \Vert_2^2/\Vert \Sigma \Vert^2_{Frob}$ is invariant to the direction of the signal with respect to the noise. 
-For this reason, we prefer fixing $\Vert \mu \Vert_\Theta$.
+For this reason, we prefer fixing $\Vert \mu \Vert_\Sigma$.
 
 
 
