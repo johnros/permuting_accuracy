@@ -489,13 +489,13 @@ Logistic regression is not a shift class.
 This is because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
 In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power of our tests for a logistic model with main effects and second order interactions.
 We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions:
-$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
+$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{p}x_{p}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
 They also confirm that augmenting the feature space takes a toll in power, because many more covariance parameters need to be estimated. 
 Sometimes, this toll is worthwhile, because the signal resides in the augmented space. 
 Sometimes, this toll is needless, because the signal resides in the original space. 
 Figure~\ref{fig:interactions-in-augmented-space} is an example of the latter. 
-In the Supplementary Material we provide an example of the former. 
+In the Supplementary Material we provide an example of the former by simulating a logistic regression with main effects only.
 
 \begin{figure}[th]
 	\centering
@@ -508,15 +508,17 @@ In the Supplementary Material we provide an example of the former.
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file45"}
-		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
+		\caption{Data analyzed in augmented interactions space ($\tilde x$).
+		Some tests that are possible in $x$ but not in $\tilde{x}$ are omited.}
 		\label{fig:interactions-in-augmented-space}
 	\end{subfigure}
-	\caption{\textbf{Logistic regression with second order interactions.} 
+	\caption{[TODO: replace oracle caption]
+		\textbf{Logistic regression with second order interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
 		\eta=x'\beta+x'Bx$ where 
-		$\beta$ is a scaled vector of ones, and $B$ a scaled matrix of ones.
-		The scaling is selected to (roughly) keep the SNR of the basic setup. 
+		$\beta$ is a scaled vector of ones, and $B$ a scaled identity matrix.
+		Scaling is selected to (roughly) keep the SNR of the basic setup. 
 		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$.
 	 } 
 	\label{fig:logistic-main-and-interactions}
