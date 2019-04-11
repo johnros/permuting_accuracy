@@ -535,7 +535,7 @@ In the Supplementary Material we provide an example of the former by simulating 
 In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
 This is the case whenever resampling \emph{without} replacement. 
 Intuition suggests we may alleviate the discretization of the accuracy statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
-An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \cite[Sec 7.11]{hastie_elements_2003}.
+An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 	\label{def:bloo}
 	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy on the holdout observations, over all bootstrap samples. 
@@ -589,7 +589,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
 		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
-		Simulation details in Appendix~\ref{sec:simulation_details}.
+		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:bootstrap}
 \end{figure}
@@ -698,7 +698,7 @@ We emphasize that both test statistics were compared with the same permutation s
 		Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy-test u and a two-group test (\emph{Srivastava}). 
 		The linear SVM was computed using $5$-fold cross-validation, and a cost parameter of $1$. 
-		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \cite{benjamini_controlling_1995}.
+		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 		Number of permutations equals $400$.
 		The two-group test detect $1,232$ regions, and the accuracy-test $441$, $399$ of which are common to both.
 		For the details of the analysis see \cite{gilron_quantifying_2016}.  
@@ -744,11 +744,11 @@ According to these authors, this superiority is due to the larger test-samples w
 \subsubsection{Inappropriate Regularization}
 From the fact that \emph{svm.CV.cCV} is less powerful than \emph{svm.CV.c001} we learn that testing requires different regularization than predicting.
 Does testing require more or less regularization?
-In our simulations, the optimal cross-validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
+In our simulations, the optimal cross-validated regularization for SVM (the inverse of the cost of \emph{svm.CV.cCV}) was smaller then that of the most powerful SVM (\emph{svm.CV.c001}).
 We thus conclude that testing requires \emph{more} regularization  than predicting. 
 Why would this happen?
 Regularization introduces bias and reduces variance. 
-For predictions we care about the bias in all coordinates of $\mu$. 
+For prediction we care about the bias in all coordinates of $\mu$. 
 For testing, we only care about the bias in the largest coordinates of $\mu$. 
 This means that when testing, the bias introduced by regularization is not limited by the smaller coordinates of $\mu$, permitting to remove more variance. 
 This phenomenon was also observed in \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization (i.e. smoothing) than the \emph{matched filter theorem}, optimal for recovering the whole function.
@@ -757,7 +757,7 @@ This phenomenon was also observed in \cite{cheng2017multiple}, which observe tha
 \subsubsection{Discretization}
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \citep{hemerik_exact_2014}.
-Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
+Secondly, because of the presence of ties, which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
 Thirdly, because a highly discrete test statistic is insensitive to mild perturbations of the data.
 For an intuition consider the usage of the \emph{resubstitution accuracy}, i.e. the train-accuracy, as a test statistic. 
 In a very high-dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
@@ -789,10 +789,11 @@ The matter of discretization was addressed in a $2011$ post by Prof. Frank Harre
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We fix the Mahalanobis norm between the sampling distribution of group means [TODO: be explicit]. 
-In the shifted Gaussian case, this is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$.
+We would have like to fix the power of the oracle test, but for some cases (e.g., the heavy-tails), that would have been hard to perform. 
+We thus decided to fix $\SNR$, as a proxy.
+In the shifted Gaussian case, $\SNR$ is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$, which seems a good index of a problem's difficulty. 
 
-Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size $n$, the dimension $p$, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
 This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Sigma}$.
 
@@ -809,7 +810,7 @@ Why is that?
 We attribute this phenomenon to regularization.
 Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sigma$ does not. 
 We already know from ridge regression that a Tikhonov regularization of the covariance shrinks estimates. 
-We also know that shrinking is more aggressive in the the low PCs of the design \cite{hastie_elements_2003}. 
+We also know that shrinking is more aggressive in the the low PCs of the design \citep{hastie_elements_2003}. 
 If groups differ in the same direction where shrinking is most aggressive, then this regularization may mask the signal. 
 This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and Supplementary Material.
 
@@ -829,7 +830,7 @@ This time, however, the winners are not the $T^2$ type statistics, but rather, t
 
 \subsection{Feature Mapping}
 It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS).
-The \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, is an example where the a two-group test is performed after augmenting the features to RKHS.
+The \emph{Gretton} statistic \citep{gretton_kernel_2012-1}, is an example where a two-group test is performed after an implicit augmentation of $x$ to RKHS.
 We are also free, up to computational considerations, to augment the design matrix as we please. 
 The logistic regression in Section~\ref{sec:logistic} is such an example, where we analyzed the data both in the original space, and in an augmented space. 
 We thus disagree with the argument that accuracy-tests have more flexibility than two-group tests. 
