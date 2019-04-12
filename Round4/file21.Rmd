@@ -25,7 +25,7 @@ n.folds <- 4
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 20, length=3) 
+effects <- seq(0, 10, length=3) 
 
 ## Dependence
 Sigma <- ar1_cov(n = p, rho=0.6)

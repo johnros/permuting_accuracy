@@ -11,21 +11,22 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e2
+n.replications <-  1e3
 ```
 
 ```{r preliminaries}
 file.name <- "file20"
 setwd('~/workspace/permuting_accuracy/Round4/')
 
+balance <- TRUE   # set for TRUE for balanced folding ana refolding.
+with.cv <- FALSE
 p <- 23
-n <- 4e1 # total sample size-> n/2 in each group.
+n <- 40 # total sample size-> n/2 in each group.
 n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
-## Signal in location
-effects <- seq(0, 20, length=3) 
+effects <- seq(0, 10, length=3) # change in location
 
 ## Dependence
 Sigma <- ar1_cov(n = p, rho=0.6)
@@ -59,7 +60,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     shift <- matrix(effect * direction, nrow=20, ncol=23, byrow = TRUE)
     noise <-t(Sigma.sqrt%*%matrix(rnorm(n*p), ncol = n, nrow=p))
     noise[labels,] <- noise[labels,] + shift
-
+    
     ## Compute observed statistic
     x1 <- noise[labels,]
     x2 <- noise[!labels,]
@@ -74,9 +75,10 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                     Sigma.inv = Sigma.inv, 
                     noise = noise, 
                     labels = labels, 
-                    fold.ids = fold.ids)
+                    fold.ids = fold.ids, 
+                    with.cv=with.cv)
     
-        # Prepare to permute
+    # Prepare to permute
     old.labels <- labels
     old.folds.ids <- fold.ids
     
@@ -86,7 +88,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
     for(i in 1:n.permutations){
       # i <- 1
       
-      labels <- sample(labels) # make permutation
+      labels <- sample(labels) # label switching
       fold.ids <- balanced_folding(labels, n.folds, TRUE) # refold
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
@@ -96,22 +98,24 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
                                  Sigma.inv =Sigma.inv, 
                                  noise = noise,
                                  labels = labels,
-                                 fold.ids = fold.ids)
+                                 fold.ids = fold.ids,
+                                 with.cv=with.cv)
     } # End permutation
     
-    ## Compute p-vals for each statistic
+    # Compute p-vals for each statistic
     pvals <- rep(NA, length(ts))
     for(i in seq_along(ts)){
-      pvals[i] <- mean(ts[i]<=permuted[,i], na.rm=TRUE)
+      # i <- 1
+      pvals[i] <- mean(permuted[,i]>=ts[i], na.rm=TRUE)
     }
     names(pvals) <- names(ts)
-
+    
     c(effect=effect, pvals, replication=j) 
   }
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 

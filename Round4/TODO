@@ -1,3 +1,7 @@
-- Center augmented space predictors.
+- Figure out effects. Is file 1 the only exception? 
+   - file2 works with 0,5,10 (verify)
+   - file1 works with 0,10,20 (verify)
+   - file20, and other AR, work with (0,5,10)
+   
 
     

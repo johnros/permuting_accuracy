@@ -23,7 +23,7 @@ n.folds <- 4
 
 source('Gilron Effect of Cross Validatino.R')
 
-effects <- seq(0, 20, length=3) # change in location
+effects <- seq(0, 0.5, length=3) # change in location
 
 Sigma <- diag(p)
 # lattice::levelplot(Sigma)

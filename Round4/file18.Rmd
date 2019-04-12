@@ -24,7 +24,7 @@ n.folds <- 4
 source('Gilron Effect of Cross Validatino.R')
 
 ## Signal in location
-effects <- seq(0, 20, length=3) 
+effects <- seq(0, 10, length=3) 
 
 ## Covariance between features
 load(file='Sigma.RData')

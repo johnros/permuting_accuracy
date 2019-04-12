@@ -479,10 +479,10 @@ t_CLX <- function(x,y,alpha=0.05,input='dummy'){
 #' @export
 #'
 #' @examples
-statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids,shift.vec){
+statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids,with.cv=FALSE,shift.vec){
   result <- c(
     ### Two Group Tests:
-    Oracle.Cov=t_Oracle(x1, x2, Sigma.inv),
+    Oracle=t_Oracle(x1, x2, Sigma.inv),
     # Oracle.Cov.Mu=t_Oracle_NP(x1, x2, mu.x=0, mu.y=shift.vec, Sigma),
     Hotelling=t_Hotelling(x1, x2, FALSE),
     Schafer=t_Hotelling(x1, x2, TRUE),
@@ -500,6 +500,13 @@ statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids,shift.vec){
     svm.noCV.c100=t_svm(noise, labels, noise, labels, cost=100, type=1),
     svm.noCV.c001=t_svm(noise, labels, noise, labels, cost=0.01, type=1)
   )
+  
+  
+  if(with.cv) {
+    result <- c(result, 
+                svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids)
+                )
+  }
   return(result)
 }
 ## Testing:
@@ -510,7 +517,7 @@ statistics <- function(x1,x2,Sigma.inv,noise,labels,fold.ids,shift.vec){
 statisticsWithCV <- function(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2){
   c(
     statistics(x1,x2,Sigma,noise,labels,fold.ids,cost.1,cost.2),
-    svm.CV.cCV=t_svm_cvCV(noise, labels, labels, fold.ids)
+    
   )
 }
 
