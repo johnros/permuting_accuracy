@@ -50,7 +50,7 @@
 	We find that the probability of detecting differences between two distributions is lower for accuracy based statistics.
 	We examine several candidate causes for the low power of accuracy-tests. 
 	These causes include: the discrete nature of the accuracy-test statistic, the type of signal accuracy-tests are designed to detect, their inefficient use of the data, and their suboptimal regularization. 
-	When the purpose of the analysis is not signal detection, but rather, the evaluation of a particular classifier, we suggest several improvements to increase power. 
+	When the purpose of the analysis is the evaluation of a particular classifier, not signal detection, we suggest several improvements to increase power. 
 	In particular, to replace V-fold cross-validation with the Leave-One-Out Bootstrap.
 	}
 \end{abstract}
@@ -63,16 +63,6 @@ Many neuroscientists and geneticists detect signal by fitting a classifier and t
 The workflow consists of fitting a classifier, estimating its predictive accuracy using cross-validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
 This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
 Examples in the genetics literature include \cite{golub_molecular_1999,slonim_class_2000,radmacher_paradigm_2002,mukherjee_estimating_2003,juan_prediction_2004,jiang_calculating_2008,yu2007two}.
-Other examples include 
-speaker verification \citep{gretton_kernel_2012-1}, 
-text classification \citep{dhillon2003divisive,lopez2016revisiting}, 
-distinguishing between facial expressions \citep{lopez2016revisiting}, 
-data integration \citep{gretton_kernel_2012-1}, 
-record linkage in databases systems \citep{gretton_kernel_2012-1,hall2002permutation,zhou2018statistical}, 
-optical character recognition \citep{perez2009estimation}, 
-multimedia \citep{moreno2004kullback}, 
-and functional data analysis \citep{hall2002permutation}.
-
 Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,schreiber2013statistical,olivetti2013kernel,varoquaux_assessing_2016}, and especially the recently popularized \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
 
 To fix ideas, we will adhere to a concrete example.
@@ -100,12 +90,14 @@ It is thus a \emph{high-dim--small-sample} problem.
 In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
 These can be classified along the following lines:
-\textbf{Two-group, high-dim, goodness of fit tests}-- Tests that seek for any difference between two multivariate distributions. GOF in short.
-\textbf{Two-group, high-dim, location tests}-- Tests the seek for a shift in mean vectors. Shifts may be in many coordinates (dense), or only in a few (sparse). 
+High-dim goodness of fit tests-- Tests that seek for any difference between two multivariate distributions. GOF in short.
+High-dim location tests-- Tests the seek for a shift in mean vectors. 
+Shifts may be in many coordinates (dense), or only in a few (sparse).
+We collectively call GOF tests and location tests \emph{two-group tests}. 
 
-At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging?
+At this point, it becomes unclear which test is preferable, in particular for genetics and neuroimaging: two-group tests or accuracy tests?
 In this manuscript, we do not provide a full answer to the matter.
-Instead, we merely seek to demonstrate that in high-dim \textbf{accuracy-tests never have more power than two-group tests}.
+Instead, we seek to demonstrate that in the high dimensional regime \textbf{accuracy-tests never have more power than two-group tests}.
 Our recommendations to the practitioner in these high-dim problems:
 (i) Prefer a two-group test over an accuracy-test. 
 (ii) Appropriate regularization is crucial. 
@@ -132,12 +124,22 @@ This means that Fisher's LDA requires at least $6.3$ times more samples to achie
 In this light, the accuracy-test is remarkably inefficient.  
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
 
-The analysis in \cite{ramdas_classification_2016} is asymptotic. 
-Since typical sample sizes in neuroscience and genetics are not large, we seek to study which test is to be preferred in finite samples, and not only asymptotically.
-Lacking a unifying mathematical framework for the finite sample power analysis, we opt for a simulation study. 
+We study the power of many accuracy, and two-sample methods, in a large scale simulation study. 
+This allows us to evaluate theoretical results such as \citet{ramdas_classification_2016}, in various small-sample configurations.
+Our configurations include various two-group effect models. 
+A particular emphasis is given to multivariate shift effects, but also include other effect models such as logistic regression and  mixtures. 
+We focus on two-group problems, because studying multi-group problems can be derived from multiple binary decisions \citep{zheng2018extrapolating}.
+
+The simulation scenarios were designed with neuroimaging and genetic applications in mind. 
+In these applications the sample acquisition is expensive, and the samples high-dimensional, leading to the high-dim--small-sample setup.
+Binary outcomes correspond to healthy/sick individuals, or active/inactive brain regions.
+Highly correlated contentious predictors correspond to blood oxygenation levels in a brain region, or gene expressions.
+Average blood oxygenation levels are expected to vary when a brain region is active, thus justifying our interest in shift alternatives. 
+The same holds in genetics, where average expression levels of disease encoding genes are expected to vary between healthy and sick individuals. 
+
 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
-The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online supplementary material (SM). 
+The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online Supplementary Material. 
 We conclude with a discussion.
 
 
@@ -160,7 +162,7 @@ Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector.
 In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
 
 We denote with $x_y$ a sample of $x$ from group $y$ .
-We denote the distribution of $x_1$ by $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
+We denote the distribution of $x_1$ with $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
 A two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
 For example, we can test whether multivariate voxel activation patterns are similarly distributed when given a vocal stimulus ($x_1$) or a non-vocal one ($x_0$).
 The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
@@ -180,15 +182,15 @@ The sketch of our permutation test is the following: \newline
 (c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
 (d) Repeat (b)-(c) $R$ times. \newline
 (e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed $\mathcal{T}$. Formally: 
-$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R+1} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
+$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
 (f) Declare $\mathcal{F}\neq \mathcal{G}$ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
 \bigskip
 
 
 
 \subsection{Two-Group Tests}
-The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions). 
-Difference in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
+The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counterexample where equal means do not imply equal distributions). 
+Difference only in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \citep{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
@@ -214,15 +216,19 @@ We now explain how an accuracy-test is constructed.
 \subsection{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
 Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
-The accuracy of a predictor, also known as (the complement of) the \emph{test error}, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction. 
-The accuracy of a learning algorithm, also known  as (the complement of) the \emph{expected test error}, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+The accuracy of a predictor, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction for a new data point. 
+It is also known as (the complement of) the \emph{test error}.
+The accuracy of a learning algorithm, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
+It is also known as (the complement of) the \emph{expected test error}
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
 $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
 where $\indicator{A}$ is the indicator function of the set $A$. 
 
-Denoting an estimate of $\acc_{\hyp}$ by $\accEstim_{\hyp}$, and $\acc_{\algo}$ by $\accEstim_{\algo}$, a statistically significant ``better than chance'' estimate of either, is evidence that the classes are distinct. 
+If $y$ is independent of $x$, then $\hyp$ cannot capture any signal and is no more accurate than a coin toss (for balanced classes). 
+This is known as \emph{chance level}.
+A statistically significant better-than-chance-level estimate of $\acc_{\algo}$, or $\acc_{\hyp}$, is evidence that the classes are distinct. 
 Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accuracy}, also known as (the complement of) the \emph{train-error}, and the V-fold cross-validation (CV) estimate.
 \begin{definition}[Resubstitution accuracy]
 	\label{def:resubstitution}
@@ -233,7 +239,8 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accura
 
 \begin{definition}[V-fold CV accuracy]
 	\label{def:v-fold}
-	Denoting by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement, so that $\data^{v} \union \data^{(v)}=\union_{v=1}^V \data^{v}=\data$, the V-fold CV accuracy estimator, denoted $\accEstim_{\algo}^{Vfold}$, is defined as 	
+	Denote by $\data^{v}$ the $v$'th partition, or \emph{fold}, of the dataset, and by $\data^{(v)}$ its complement.
+	The V-fold CV accuracy estimator, denoted $\accEstim_{\algo}^{Vfold}$, is defined as 	
 	$\accEstim_{\algo}^{Vfold} := 
 	\frac 1V \sum_{v=1}^{V} \frac{1}{|\data^v|} \sum_{i \in \data^{v}} \indicator{\hypFun{\data^{(v)}}{x_i}=y_i},$
 	where $|A|$ denotes the cardinality of a set $A$.
@@ -253,15 +260,15 @@ Should the data be refolded after each permutation?
 
 We will now address these questions while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
 
-\paragraph{cross-validate or not}
-For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, as long as it does not invalidate the error rate guarantees. 
+\paragraph{Cross-validate or not?}
+For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, since  it does not inflate the error rates of the accuracy-tests. 
 The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
 We will thus be considering both unbiased cross-validated accuracies, and biased resubstitution accuracies.
 
 
 \paragraph{Balanced folding}
-The standard practice in V-fold CV is to constrain the data folds to be balanced, i.e. stratified \cite[for e.g.]{ojala_permutation_2010}.
-This means that each fold has the same number of examples from each class. 
+The standard practice in V-fold CV is to constrain the data folds to be balanced, a.k.a.\ stratified \cite[for example]{ojala_permutation_2010}.
+This means that each fold has the same number of samples from each class. 
 We will report results only with balanced folding, mostly because we will conclude that V-fold CV should not be used for our detection problem. 
 
 
@@ -269,12 +276,14 @@ We will report results only with balanced folding, mostly because we will conclu
 In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
 The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
 This is done because permuting labels will unbalance the original balanced folding.
-We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels, as done by \cite{golland_permutation_2005}.
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels \citep[e.g.][]{golland_permutation_2005} .
 
 
 \paragraph{How many folds}
 Different authors suggest different rules for the number of folds. 
-We fix the number of folds to $V=4$, and do dot discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
+We fix the number of folds to $V=4$.
+A different number of folds does not change our conclusions. 
+We do not discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
 
 \bigskip
 
@@ -304,7 +313,7 @@ We selected two-group tests based on their popularity, and so that various types
 		Goeman & \cite{goeman2006testing} & Resubstitution & -- \\ 
 		Schafer & \cite{schafer_shrinkage_2005} & Resubstitution & -- \\ 
 		Hotelling & \cite{hotelling_generalization_1931} & Resubstitution & -- \\
-		Oracle & $T^2$ & Resubstitution & Known $\Sigma$\\ 
+		Oracle & $T^2$ with Known $\Sigma$ & Resubstitution & -- \\ 
 	\end{tabular} 
 	\captionsetup{type=table}
 	\caption{\footnotesize
@@ -332,7 +341,7 @@ We now compare the power of our various statistics in various configurations.
 We do so via simulation.
 The basic simulation setup is presented in Section~\ref{sec:simulation_details}.
 Following sections present variations on the basic setup.
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
+The \R code for the simulations can be found in [TODO: update github repo] \url{http://www.john-ros.com/permuting_accuracy/}.
 
 
 \subsection{Basic Simulation Setup-- Fisher's LDA}
@@ -349,16 +358,18 @@ where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of observation $i$, $\m
 The covariance $\Sigma=I$. 
 In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
 Shifts are dense and equal in all $p$ coordinates of $\mu$.
-We set $\mu:=c \, e$ where $e$ is a $p$-vector of ones. 
-We will use $c$ to index the signal's strength, and vary it over $c \in \set{0,1/4,1/2}$.
-With $\Sigma=I$ then the (squared) Euclidean and Mahalanobis norms of the signal are $\Vert \mu \Vert_2^2=\Vert \mu \Vert_\Theta^2=\mu' \Sigma^{-1} \mu= c^2 p\approx \{0,1.4,5.7\}$ [TODO:verify], where $\Theta:=\Sigma^{-1}$. 
-These can be thought as the SNR. 
+We set $\mu:=c \, \textbf{e}$ where $\textbf{e}$ is a $p$-vector of ones. 
+We will use $c$ to index the signal's strength.
+We use the Mahalanobis norm between means as a measure of signal-to-noise (SNR): 
+$\frac{n}{2}\Vert \mu \Vert_\Sigma^2=\frac{n}{2} \mu' \Sigma^{-1} \mu$.
+We vary $c$ so that $\frac{n}{2}\Vert \mu \Vert_\Sigma^2$ is fixed over various setups, and equals $0$ for no signal, $25$ for intermediate signal, and $100$ for strong signal.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
 We then reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
-The reported power is the proportion of replication where the permutation p-value fell below $0.05$.
+The reported power is the proportion of replicates where the permutation p-value fell below $0.05$.
+The number of replicates is $1,000$, so that the standard errors of our estimates are no larger than $1.5\%$, and $0.6\%$ under the null. 
 
 
 
@@ -381,20 +392,22 @@ We may thus proceed and compare the power of each test statistic.
 \subsubsection{Power}
 \label{sec:power}
 
-From Figure (\ref{fig:simulation_1}) we learn that in our simulation setup, two-group tests are more powerful than accuracy-tests.
+From Figure~\ref{fig:simulation_1} we learn that in our first simulation setup, two-group tests are more powerful than accuracy-tests.
 This is most notable for the intermediate signal strength (green triangles). 
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file2"}
 	\caption{
+		[TODO: update with Oracle caption.]
 		The power of the permutation test with various test statistics. 
 		The power on the x-axis. 
 		Effects are color and shape coded. 
-		Effects vary over $c=0$ (red circle), $c=1/4$ (green triangle), and $c=1/2$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
 		The various statistics on the y-axis. 
 		Their details are given in Table~\ref{tab:collected}. 
-		Simulation details in Section~\ref{sec:simulation_details}.}	
+		Simulation details in Section~\ref{sec:simulation_details}.
+		\R code in \url{http://www.john-ros.com/permuting_accuracy/}.}	
 	\label{fig:simulation_1}
 \end{figure}
 
@@ -403,14 +416,17 @@ This is most notable for the intermediate signal strength (green triangles).
 We focus on high-dim--small-sample configurations because of our motivation in neuroimaging and genetics. 
 Our results, however, also  hold in the high-dim--large-sample configurations.
 To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=400, p=230$. 
-The results are qualitatively similar to the high-dim--small-sample of, and reported in the online supplementary material (SM).
+The results are qualitatively similar to the high-dim--small-sample in Fig.\ref{fig:simulation_1}, and reported in the online Supplementary Material.
+We also note that further increasing $n$ and $p$ requires tremendous amounts of computation. 
+This is because the number of test statistics computed is in the order of the number of replications, times permutations, times data folds, times statistics to compute. 
+In our current setup, this means roughly $8 \times 10^6$ operations, each scaling polynomially with $n$ and $p$. 
 
 
 \subsection{Departure From Gaussianity}
 \label{sec:heavytailed}
-The Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not Gaussian.
-This is because Hotelling's $T^2$ statistic is no longer a generalized-likelihood-ratio test. 
-To check this, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
+Hotelling's $T^2$ is a generalized likelihood ratio test in the Gaussian shift class. 
+This Neyman-Pearson Lemma (NPL) type reasoning that favors two-group location-tests over accuracy-tests in our simulations may fail when the data is not Gaussian.
+To verify our conclusions in the non-Gaussian case, we replaced the multivariate Gaussian distribution of $\eta$ in Eq.(\ref{eq:distribution}) with a heavy-tailed multivariate-$t$ distribution with $3$ degrees of freedom.
 In this heavytailed setup, the dominance of the two-group tests was preserved, even if less evident than in the light-tailed Gaussian case (Figure~\ref{fig:t_null}).
 
 \begin{figure}[th]
@@ -427,7 +443,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 \subsection{Departure from Sphericity}
 \label{sec:dependence}
 
-We now test the robustness of our results to the correlations in $x$. 
+We now test the robustness of our results to correlations in $x$. 
 In terms of Eq.(\ref{eq:distribution}), $\Sigma$ will no longer be the identity matrix. 
 Some tests try to account for $\Sigma$ by estimating it. 
 Estimating $\Sigma$ reduces possible bias at the cost of some variance. 
@@ -435,18 +451,19 @@ We thus do not know if the conclusions from the uncorrelated case (Fig.~\ref{fig
 
 We simulate various correlation structures.
 We also vary the direction of the signal, $\mu$, and distinguish between signal in high variance principal component (PC) of $\Sigma$ and in the low variance PC. 
-To keep the comparisons fair as the correlations vary, we kept $\Vert \mu \Vert_\Theta:=\sqrt{\mu'\Theta\mu}$ fixed.
+To keep the comparisons fair as the correlations vary, we kept $\SNR$ fixed.
 This matter is discussed in Section~\ref{sec:fix_snr}.
 
 
 The simulation results reveal some non trivial phenomena.
-First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accuracy-tests. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
+First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accl
+acy-tests. 
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
 
 When the signal is in the direction of the low variance PC, a different phenomenon appears.
 There is no clear preference between two-group or accuracy-tests.
 Instead, the non-regularized tests are the clear victors. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the SM, and the arbitrary correlation in the SM.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
 This matter is further discussed in Section~\ref{sec:regularizaton}.
 
@@ -484,13 +501,13 @@ Logistic regression is not a shift class.
 This is because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
 In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power of our tests for a logistic model with main effects and second order interactions.
 We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions:
-$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{pp}).$$
+$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{p}x_{p}).$$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
 They also confirm that augmenting the feature space takes a toll in power, because many more covariance parameters need to be estimated. 
-Sometimes, this tolls is needed, because the signal resides in the augmented space. 
+Sometimes, this toll is worthwhile, because the signal resides in the augmented space. 
 Sometimes, this toll is needless, because the signal resides in the original space. 
 Figure~\ref{fig:interactions-in-augmented-space} is an example of the latter. 
-In the SM we provide an example of the former. 
+In the Supplementary Material we provide an example of the former by simulating a logistic regression with main effects only.
 
 \begin{figure}[th]
 	\centering
@@ -503,15 +520,17 @@ In the SM we provide an example of the former.
 	\begin{subfigure}[t]{.45\columnwidth}
 		\centering
 		\includegraphics[width=1\columnwidth]{"art/file45"}
-		\caption{Data analyzed in augmented interactions space ($\tilde x$).}
+		\caption{Data analyzed in augmented interactions space ($\tilde x$).
+		Some tests that are possible in $x$ but not in $\tilde{x}$ are omited.}
 		\label{fig:interactions-in-augmented-space}
 	\end{subfigure}
-	\caption{\textbf{Logistic regression with second order interactions.} 
+	\caption{[TODO: replace oracle caption]
+		\textbf{Logistic regression with second order interactions.} 
 		Data generated via $y|x \sim Binom(1,p(x));
 		p(x)=\exp(\eta)/[1+\exp(\eta)];
 		\eta=x'\beta+x'Bx$ where 
-		$\beta$ is a scaled vector of ones, and $B$ a scaled matrix of ones.
-		The scaling is selected to (roughly) keep the SNR of the basic setup. 
+		$\beta$ is a scaled vector of ones, and $B$ a scaled identity matrix.
+		Scaling is selected to (roughly) keep the SNR of the basic setup. 
 		Finally, $x\sim \mathcal{N}(0,I_{p\times p})$.
 	 } 
 	\label{fig:logistic-main-and-interactions}
@@ -522,13 +541,13 @@ In the SM we provide an example of the former.
 
 
 % Resampling with replacement
-\subsection{Departure from V-fold CV}
+\subsection{Beyond V-fold CV}
 \label{sec:bootstrap}
 
 In V-fold CV, the discretization of the accuracy statistic is governed by the number of samples. 
 This is the case whenever resampling \emph{without} replacement. 
 Intuition suggests we may alleviate the discretization of the accuracy statistic by replacing the V-fold CV, and resampling \emph{with replacement}.
-An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \cite[Sec 7.11]{hastie_elements_2003}.
+An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives, such as the \emph{0.632 bootstrap}, and \emph{0.632+ bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 	\label{def:bloo}
 	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy on the holdout observations, over all bootstrap samples. 
@@ -574,15 +593,15 @@ It can also be seen that power increases with the number of bootstrap replicatio
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file13"}
-	\caption{
+	\caption{[TODO: replace oracle.cov caption]
 		\textbf{Bootstrap.}
 		The power of a permutation test with various test statistics. 
 		The power on the x-axis. 
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
-		Simulation details in Appendix~\ref{sec:simulation_details}.
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
+		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:bootstrap}
 \end{figure}
@@ -597,16 +616,16 @@ It can also be seen that power increases with the number of bootstrap replicatio
 
 Our best performing tests alleviate the high dimensionality of the problem by regularizing the estimation of $\Sigma$. 
 By comparing the non-regularized $T^2$ to its regularized versions we see that in our high-dim setup, regularization adds power. 
-Regularization is achieved by thresholding the entries of $\hat{\Sigma}$, or inflating its diagonal, thus shrinking $\hat \Theta$. 
+Regularization is achieved by thresholding the entries of $\hat{\Sigma}$, or inflating its diagonal, thus shrinking $\hat \Sigma^{-1}$. 
 Shrinking is used in the \emph{Schafer} statistic.
 Thresholding is used in the \emph{Goeman} and \emph{Srivastava} statistics.
 
 Can we explicitly regularize the covariance estimate of a classifier?
-The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regulirizing classifiers. 
+The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regularized classifiers. 
 See, for instance \cite{bickel2004some} or \cite{dobriban2018high}.
 We thus augment our simulations with some accuracy-tests that have explicit covariance regularization in them. 
 These include shrinkage based LDA \citep{pang_shrinkage-based_2009,ramey_high-dimensional_2016}, where Tikhonov regularization of $\hat \Sigma$ is used; just like the \emph{Schafer} two-group test.
-We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by thresholding, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
+We also try a diagonalized LDA~\citep{dudoit_comparison_2002}, also known as \emph{Gaussian Na\"ive Bayes}, which regularizes by canceling non-diagonal entries, similarly to the \emph{Srivastava} and \emph{Goeman} statistics.
 
 Simulation results are reported in Figure~\ref{fig:highdim} with naming conventions in Table~\ref{tab:collected_3}.
 The proper regularization of the covariance of a classifier, just like a two-group test, can improve power. 
@@ -616,7 +635,7 @@ Even so, the out-of-the-box two-group tests outperform the accuracy-tests.
 
 Optimizing the regularization parameter for classification does not result in a good test.
 The \emph{svm.CV.cCV} statistic has a regularization parameter optimized with an inner CV. 
-The \emph{svm.CV.c001} statistic has a fixed ,large, regularization.
+The \emph{svm.CV.c001} statistic has a fixed, large, regularization.
 The better power of \emph{svm.CV.c001} leads us to argue that the optimal regularization for prediction is larger than the optimal for testing.
 
 \bigskip
@@ -652,7 +671,7 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
-		Effects vary over $0$ (red circle), $0.25$ (green triangle), and $0.5$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:highdim}
@@ -677,7 +696,10 @@ Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenNeuro website (\url{http://reproducibility.stanford.edu/}).
 
-We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
+We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}. 
+Our test statistics account for dependence in space, but require independence in time. 
+For this purpose, parameters were estimated with an orthogonal design, and an AR(6) temporal model.
+The verification of temporal independence, and further details of the analysis, are reported in \cite{gilron_quantifying_2016}. 
 
 In agreement with our simulation results, the two-group test (\emph{Srivastava}) discovers more brain regions of interest when compared to an accuracy-test.
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
@@ -691,7 +713,7 @@ We emphasize that both test statistics were compared with the same permutation s
 		Brain regions encoding information discriminating between vocal and non-vocal stimuli.
 		Map reports the centers of $27$-voxel sized spherical regions, as discovered by an accuracy-test u and a two-group test (\emph{Srivastava}). 
 		The linear SVM was computed using $5$-fold cross-validation, and a cost parameter of $1$. 
-		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \cite{benjamini_controlling_1995}.
+		Region-wise significance was determined using the permutation scheme of \cite{stelzer_statistical_2013}, followed by region-wise $FDR \leq 0.05$ control using the Benjamini-Hochberg procedure \citep{benjamini_controlling_1995}.
 		Number of permutations equals $400$.
 		The two-group test detect $1,232$ regions, and the accuracy-test $441$, $399$ of which are common to both.
 		For the details of the analysis see \cite{gilron_quantifying_2016}.  
@@ -737,12 +759,12 @@ According to these authors, this superiority is due to the larger test-samples w
 \subsubsection{Inappropriate Regularization}
 From the fact that \emph{svm.CV.cCV} is less powerful than \emph{svm.CV.c001} we learn that testing requires different regularization than predicting.
 Does testing require more or less regularization?
-In our simulations, the optimal cross-validated cost parameter for SVM (the cost of \emph{svm.CV.cCV}) was larger then that of the most powerful SVM (\emph{svm.CV.c001}).
+In our simulations, the optimal cross-validated regularization for SVM (the inverse of the cost of \emph{svm.CV.cCV}) was smaller then that of the most powerful SVM (\emph{svm.CV.c001}).
 We thus conclude that testing requires \emph{more} regularization  than predicting. 
 Why would this happen?
-Regularization introduces bias and reduces bias. 
+Regularization introduces bias and reduces variance. 
+For prediction we care about the bias in all coordinates of $\mu$. 
 For testing, we only care about the bias in the largest coordinates of $\mu$. 
-For predictions we care about the bias in all coordinates of $\mu$. 
 This means that when testing, the bias introduced by regularization is not limited by the smaller coordinates of $\mu$, permitting to remove more variance. 
 This phenomenon was also observed in \cite{cheng2017multiple}, which observe that recovering the support of a function requires different regularization (i.e. smoothing) than the \emph{matched filter theorem}, optimal for recovering the whole function.
 
@@ -750,8 +772,8 @@ This phenomenon was also observed in \cite{cheng2017multiple}, which observe tha
 \subsubsection{Discretization}
 Permutation testing with discrete test statistics are known to be conservative.
 Firstly, because a Monte-Carlo sample of permutations will always be conservative compared to a full enumeration of permutations \citep{hemerik_exact_2014}.
-Secondly, because of the presence of ties which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
-Thirdly, because a highly discrete test-statistic, is insensitive to mild perturbations of the data.
+Secondly, because of the presence of ties, which does not allow to exhaust the permissible false positive rate, unless randomization is introduced.
+Thirdly, because a highly discrete test statistic is insensitive to mild perturbations of the data.
 For an intuition consider the usage of the \emph{resubstitution accuracy}, i.e. the train-accuracy, as a test statistic. 
 In a very high-dimensional regime, the resubstitution accuracy may be as high as $1$ for the observed data \cite[Theorem 1]{mclachlan_bias_1976}, but also for any permutation.
 The concentration of resubstitution accuracy near $1$, and its discretization, render this test completely useless, with power tending to $0$ for any (fixed) effect size, as the dimension of the model grows. 
@@ -761,7 +783,7 @@ The degree of discretization is governed by the sample size.
 For this reason, an asymptotic analysis such as \cite{ramdas_classification_2016}, or \cite{golland_permutation_2005}, will not capture power loss due to discretization. 
 An asymptotic analysis, which eschews the discretization effect,  may suggest resubstitution accuracy estimates are good test statistics, while they suffer from very low finite-sample power. 
 One of the effects of discretization is ties. 
-The canonical remedy for ties--- random tie breaking --- showed only a minor improvement as reported in the SM.
+The canonical remedy for ties--- random tie breaking --- showed only a minor improvement as reported in the Supplementary Material.
 
 Using our simulations we may quantify the power loss due to discretization, this is because the resubstitution accuracy of Figher's LDA is equivalent to Hotelling's $T^2$ after binarizing predictions. 
 From Figure~\ref{fig:simulation_1} we see that for the intermediate signals strength, \emph{Hotelling} has roughly twice the power of LDA (\emph{lda.noCV.1}).
@@ -782,14 +804,17 @@ The matter of discretization was addressed in a $2011$ post by Prof. Frank Harre
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We fix the Mahalanobis norm between the sampling distribution of group means [TODO: be explicit]. 
-In the shifted Gaussian case, this is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$.
+We would have like to fix the power of the oracle test, but for some simulation setups that is possible only via a lengthy numerical search. 
+We thus decided to fix $\SNR$, as a proxy.
+In the shifted Gaussian case, $\SNR$ is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$, which seems a good index of a problem's difficulty: it governs power, and is easy to compute. 
+Exceptions to this rule are those where $\mu$ does not index signal, such as logistic regression, and the mixture class in the Supplementary Material. 
+Another exception is the large-sample setup where we had to vary $\SNR$ to make power comparable. 
+We attribute this to the fact that power depends on $n$ and $p$, not only via $\SNR$.
 
-Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size, and with the direction of the signal.
+Fixing $\SNR$ implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size $n$, the dimension $p$, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
-This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Theta}$.
-
-For verification, we report the power when fixing the Euclidean norm between population means in the SM.
+This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Sigma}$.
+For verification, we report the power when fixing the Euclidean norm between population means in the Supplementary Material.
 
 
 
@@ -802,9 +827,9 @@ Why is that?
 We attribute this phenomenon to regularization.
 Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sigma$ does not. 
 We already know from ridge regression that a Tikhonov regularization of the covariance shrinks estimates. 
-We also know that shrinking is more aggressive in the the low PCs of the design \cite{hastie_elements_2003}. 
+We also know that shrinking is more aggressive in the the low PCs of the design \citep{hastie_elements_2003}. 
 If groups differ in the same direction where shrinking is most aggressive, then this regularization may mask the signal. 
-This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and SM.
+This explains the fact that unregularized tests have more power than the regularized, as seen in Figures~\ref{fig:dependence_12} and Supplementary Material.
 
 
 \subsection{Sparse Alternatives}
@@ -812,7 +837,7 @@ This explains the fact that unregularized tests have more power than the regular
 In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
 Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
-In the SM we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
+In the Supplementary Material we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
 As usual, two-group tests dominate accuracy-tests.
 This time, however, the winners are not the $T^2$ type statistics, but rather, tests for sparse shifts (\emph{Cai}, \emph{Simes}).
 
@@ -822,7 +847,7 @@ This time, however, the winners are not the $T^2$ type statistics, but rather, t
 
 \subsection{Feature Mapping}
 It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS).
-The \emph{Gretton} statistic \cite{gretton_kernel_2012-1}, is an example where the a two-group test is performed after augmenting the features to RKHS.
+The \emph{Gretton} statistic \citep{gretton_kernel_2012-1}, is an example where a two-group test is performed after an implicit augmentation of $x$ to some RKHS.
 We are also free, up to computational considerations, to augment the design matrix as we please. 
 The logistic regression in Section~\ref{sec:logistic} is such an example, where we analyzed the data both in the original space, and in an augmented space. 
 We thus disagree with the argument that accuracy-tests have more flexibility than two-group tests. 
@@ -837,7 +862,7 @@ This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using th
 
 
 
-\subsection{A Good accuracy-test}
+\subsection{A good accuracy-test}
 Brain-computer interfaces and clinical diagnostics \citep{olivetti_induction_2012,wager_fmri-based_2013} are examples in which we want to know not only if information is encoded in a region, but rather, that a particular predictor can extract this information. 
 For the cases an accuracy-test cannot be replaced with other tests, we collect the following observations.
 
@@ -874,8 +899,9 @@ As put by \cite{ramdas_classification_2016}:
 
 
 \section{Supplementary Material}
-The web supplementary material is available at [TODO: add url]. 
-It includes 
+The Supplementary Material is available at [TODO: add url once online]. 
+It includes further simulation results: large sample, extension of the non-spherical case, extension of the logistic regression case, a mixture class, sparse signal, heteroskedasticity, and tie breaking. 
+It also includes a discussion of our choice of SNR measure.
 
 
 
