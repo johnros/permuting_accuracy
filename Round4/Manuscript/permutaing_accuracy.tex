@@ -90,8 +90,8 @@ It is thus a \emph{high-dim--small-sample} problem.
 In a seminal contribution, \citet{bai1996effect} noted that in high-dimension, multivariate tests tend to be low powered unless some regularization is involved. 
 Since then, many high-dimensional tests have been proposed. 
 These can be classified along the following lines:
-\textbf{High-dim goodness of fit tests}-- Tests that seek for any difference between two multivariate distributions. GOF in short.
-\textbf{High-dim location tests}-- Tests the seek for a shift in mean vectors. 
+High-dim goodness of fit tests-- Tests that seek for any difference between two multivariate distributions. GOF in short.
+High-dim location tests-- Tests the seek for a shift in mean vectors. 
 Shifts may be in many coordinates (dense), or only in a few (sparse).
 We collectively call GOF tests and location tests \emph{two-group tests}. 
 
@@ -125,8 +125,18 @@ In this light, the accuracy-test is remarkably inefficient.
 For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
 
 We study the power of many accuracy, and two-sample methods, in a large scale simulation study. 
-This allows us to evaluate theoretical results such as \citet{ramdas_classification_2016}, in a small-sample setup.
-We find this setup particularly important for neuroimaging, and genetic applications, where the sample acquisition is expensive, and the samples high-dimensional. 
+This allows us to evaluate theoretical results such as \citet{ramdas_classification_2016}, in various small-sample configurations.
+Our configurations include various two-group effect models. 
+A particular emphasis is given to multivariate shift effects, but also include other effect models such as logistic regression and  mixtures. 
+We focus on two-group problems, because studying multi-group problems can be derived from multiple binary decisions \citep{zheng2018extrapolating}.
+
+The simulation scenarios were designed with neuroimaging and genetic applications in mind. 
+In these applications the sample acquisition is expensive, and the samples high-dimensional, leading to the high-dim--small-sample setup.
+Binary outcomes correspond to healthy/sick individuals, or active/inactive brain regions.
+Highly correlated contentious predictors correspond to blood oxygenation levels in a brain region, or gene expressions.
+Average blood oxygenation levels are expected to vary when a brain region is active, thus justifying our interest in shift alternatives. 
+The same holds in genetics, where average expression levels of disease encoding genes are expected to vary between healthy and sick individuals. 
+
 
 We start with formalizing the problem in Section~\ref{sec:problem_setup}.
 The main findings are reported in Sections~\ref{sec:results}, and \ref{sec:example}, with extensions in the online Supplementary Material. 
@@ -271,7 +281,9 @@ We will adhere to this practice due to its popularity, even though it is computa
 
 \paragraph{How many folds}
 Different authors suggest different rules for the number of folds. 
-We fix the number of folds to $V=4$, and do not discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
+We fix the number of folds to $V=4$.
+A different number of folds does not change our conclusions. 
+We do not discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
 
 \bigskip
 
@@ -329,7 +341,7 @@ We now compare the power of our various statistics in various configurations.
 We do so via simulation.
 The basic simulation setup is presented in Section~\ref{sec:simulation_details}.
 Following sections present variations on the basic setup.
-The \R code for the simulations can be found in \url{http://www.john-ros.com/permuting_accuracy/}.
+The \R code for the simulations can be found in [TODO: update github repo] \url{http://www.john-ros.com/permuting_accuracy/}.
 
 
 \subsection{Basic Simulation Setup-- Fisher's LDA}
@@ -684,7 +696,10 @@ Each subject was exposed to $20$ sounds of each type, totaling in $n=40$ trials.
 The study was rather large and consisted of about $200$ subjects.
 The data was kindly made available by the authors at the OpenNeuro website (\url{http://reproducibility.stanford.edu/}).
 
-We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}, which was also reported in \cite{gilron_quantifying_2016}. 
+We perform group inference using within-subject permutations along the analysis pipeline of \cite{stelzer_statistical_2013}. 
+Our test statistics account for dependence in space, but require independence in time. 
+For this purpose, parameters were estimated with an orthogonal design, and an AR(6) temporal model.
+The verification of temporal independence, and further details of the analysis, are reported in \cite{gilron_quantifying_2016}. 
 
 In agreement with our simulation results, the two-group test (\emph{Srivastava}) discovers more brain regions of interest when compared to an accuracy-test.
 The former discovers $1,232$ regions, while the latter only $441$, as depicted in Figure~\ref{fig:read_data}.
@@ -789,14 +804,16 @@ The matter of discretization was addressed in a $2011$ post by Prof. Frank Harre
 \label{sec:fix_snr}
 
 For a fair comparison between simulations, in particular between those with different $\Sigma$, we needed to fix the difficulty of the problem.
-We would have like to fix the power of the oracle test, but for some cases (e.g., the heavy-tails), that would have been hard to perform. 
+We would have like to fix the power of the oracle test, but for some simulation setups that is possible only via a lengthy numerical search. 
 We thus decided to fix $\SNR$, as a proxy.
-In the shifted Gaussian case, $\SNR$ is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$, which seems a good index of a problem's difficulty. 
+In the shifted Gaussian case, $\SNR$ is equivalent to fixing the Kullback–Leibler Divergence between sample means $KL[\bar x_1,\bar x_0]$, which seems a good index of a problem's difficulty: it governs power, and is easy to compute. 
+Exceptions to this rule are those where $\mu$ does not index signal, such as logistic regression, and the mixture class in the Supplementary Material. 
+Another exception is the large-sample setup where we had to vary $\SNR$ to make power comparable. 
+We attribute this to the fact that power depends on $n$ and $p$, not only via $\SNR$.
 
-Our choice implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size $n$, the dimension $p$, and with the direction of the signal.
+Fixing $\SNR$ implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size $n$, the dimension $p$, and with the direction of the signal.
 An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
 This is true when fixing $\Vert \mu \Vert_2$, but not when fixing $\Vert \mu \Vert_{\Sigma}$.
-
 For verification, we report the power when fixing the Euclidean norm between population means in the Supplementary Material.
 
 
