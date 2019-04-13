@@ -1,3 +1,17 @@
+## Cover to re-submission:
+The attached is a resubmission of BIOSTS-18303. 
+
+In their reports, the referees raised some interesting questions. These led us to expand our results with valuable new insights. The most notable insight regard the logistic regression setup. 
+From logistic regression we have learned that: while logistic regression is not a shift model, the presence of strong main effects changes means, and thus behaves like a shift, and our initial insights apply. Second order interactions, however, may behave quite differently than shifts in the original space. This may be remedied by analyzing the data in the augmented space of second order interactions, where mean-differences re-appear, and our original insights apply.
+
+These new results increased the length of the manuscript. It has thus been restructured, and is now accompanying by  Supplementary Material. 
+
+We thank the editor and referees for the comments. We have learned a lot in the process of addressing their concerns and hope they enjoy the new insights we now provide. We believe the manuscript may be of great value to practitioners, and fuel future theoretical research. 
+
+
+
+## Cover to original submission:
+
 In our contribution we compare various multivariate signal detection algorithms. Starting with Hotelling's classical T2 statistic from 1931, to cutting-edge detectors based on supervised learning. Lacking a mathematical framework allowing this analysis for finite samples, we revert to simulations.
 
 The main motivating question was the comparison of signal detectors based on two-class classifiers ("accuracy tests"), versus more classical statistics such as Hotelling's T2 (a two-group GLR test), and its variants. 
