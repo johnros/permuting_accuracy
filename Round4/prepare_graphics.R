@@ -10,6 +10,12 @@ pvals.melt[,c("reject","effect.factor"):=list(as.numeric(value <= 0.05), as.fact
 # Reorder levels
 pvals.melt$statistic <- factor(pvals.melt$statistic)
 
+# Rename statistics
+old.levels <- levels(pvals.melt$statistic)
+new.levels <- old.levels
+new.levels[new.levels=='Oracle.Cov'] <- 'Oracle'
+setattr(pvals.melt$statistic, "levels", new.levels)
+
 # Filter statistics
 pvals.melt <- pvals.melt[!is.na(statistic),,]
 
