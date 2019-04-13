@@ -9,8 +9,8 @@ editor_options:
 
 
 ```{r}
-n.permutations <- 5e2
-n.replications <-  1e3
+n.permutations <- 1e3
+n.replications <-  2e5
 ```
 
 
@@ -113,7 +113,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
 } 
   
 pbPost(type = "note", body = "Done", the.message)
-save.image(file=paste(file.name,".RData", sep=''))
+# save.image(file=paste(file.name,".RData", sep=''))
 ```
 
 
