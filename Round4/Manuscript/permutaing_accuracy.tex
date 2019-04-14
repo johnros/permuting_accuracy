@@ -298,9 +298,9 @@ We selected two-group tests based on their popularity, and so that various types
 		Name & Algorithm & Resampling & Remark\\ 
 		\hline
 		\hline
-		\cue svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
 		\cue svm.noCV.c001 	& SVM & Resubstitution  & cost=$0.01$ \\ 
 		\cue svm.noCV.c100 	& SVM & Resubstitution  & cost=$100$ \\ 
+		\cue svm.CV.cCV 	& SVM & V-fold  & cost=CV \\ 
 		\cue svm.CV.c001	& SVM & V-fold 		    & cost=$0.01$ \\ 
 		\cue svm.CV.c100	& SVM & V-fold 		    & cost=$100$ \\ 
 		\cue lda.noCV.1 	& LDA & Resubstitution 	&  --\\ 
@@ -431,8 +431,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 \begin{figure}[th]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file9"}
-	\caption{[TODO: power of svm.cv? And ordering.]
-		\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
+	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
 	\label{fig:t_null}
 \end{figure}
 
@@ -458,12 +457,12 @@ This matter is discussed in Section~\ref{sec:fix_snr}.
 The simulation results reveal some non trivial phenomena.
 First, when the signal is in the direction of the high variance PC, the high-dim two-group tests are far superior than accl
 acy-tests. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_11}, the long memory correlations of a Brownian motion in the Supplementary Material, and an arbitrary correlation, also in the Supplementary Material.
 
 When the signal is in the direction of the low variance PC, a different phenomenon appears.
 There is no clear preference between two-group or accuracy-tests.
 Instead, the non-regularized tests are the clear victors. 
-This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the Supplementary Material, and the arbitrary correlation in the Supplementary Material.
+This holds true for various correlation structures: the short memory correlations of $AR(1)$ in Figure~\ref{fig:dependence_12}, the long memory correlations of a Brownian motion in the Supplementary Material, and an arbitrary correlation, also in the Supplementary Material.
 We attribute this phenomenon to the bias introduced by the regularization, which masks the signal.
 This matter is further discussed in Section~\ref{sec:regularizaton}.
 
