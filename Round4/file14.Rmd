@@ -10,7 +10,7 @@ editor_options:
 
 ```{r}
 n.permutations <- 3e2
-n.replications <-  1e2
+n.replications <-  5e2
 ```
 
 
@@ -40,7 +40,7 @@ direction <-  direction0 / sqrt(n/2*maha)
 ## Fixed folds. Cross-Validated. All in one.
 ```{r}
 RhpcBLASctl::blas_set_num_threads(1)
-registerDoMC(cores=100)
+registerDoMC(cores=40)
 ```
 
 
@@ -83,7 +83,7 @@ pvals.1.9 <- foreach(j=1:n.replications, .combine=rbind) %dopar%{
       x1 <- noise[labels,]
       x2 <- noise[!labels,]
       
-      permuted[i,] <- <-statisticsHighDim(x1,x2,Sigma.inv,noise,labels,fold.ids) 
+      permuted[i,]  <-statisticsHighDim(x1,x2,Sigma.inv,noise,labels,fold.ids) 
         
     } # End permutation
     
