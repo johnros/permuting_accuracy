@@ -850,8 +850,9 @@ If one can perform an accuracy test after mapping the original features to some 
 
 
 A different argument is that the feature mapping may not be known, but rather learned from the data. 
-This is true but requires large amounts of data: in high-dim problems data is barely sufficient to learn covariances in the original space, let alone in an augmented space.  
-This is perhaps the reason why \cite{harchaoui2009kernel}, who proposed using the covariance of the feature maps in RKHS, demonstrated their solution using an oracle covariance, and did not try to estimate it from data. 
+This is true in low-dimension, where data is abundant compared to the model's complexity.
+In high-dim problems data is barely sufficient to learn covariances in the original space, let alone to learn a space augmentation and covariances in the augmented space.  
+
 
 
 
@@ -903,7 +904,8 @@ It also includes a discussion of our choice of SNR measure.
 % use section* for acknowledgment
 \section*{Acknowledgment}
 JDR wishes to thank, Jesse B.A. Hemerik, Yakir Brechenko, Omer Shamir, Joshua Vogelstein, Gilles Blanchard, and Jason Stein for their valuable inputs. 
-JDR was funded by the Israeli Science Foundation grants 900/16 and 924/16. 
+JDR is supported by the Israeli Science Foundation grants 900/16 and 924/16. 
+YB is supported by NIH grant R01GM083084.
 
 
 \newpage
