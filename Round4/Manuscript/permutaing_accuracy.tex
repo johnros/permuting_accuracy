@@ -171,9 +171,9 @@ The comparison metric between statistics is power, i.e., the probability to infe
 
 \subsection{From a Test Statistic to a Permutation Test}
 
-The multivariate tests we will be considering rely on fixing some test statistic, $\mathcal{T}$, and comparing its observed value to it's permutation distribution. 
+The multivariate tests we consider rely on fixing some test statistic, $\mathcal{T}$, and comparing its observed value to it's permutation distribution. 
 Tests differ in the statistic they employ.
-We adhere to permutation tests and not parametric inference because in our problems of interest central limit approximations are typically poor.
+We adhere to permutation tests and not parametric inference because in high-dim--small-sample problems central limit approximations are typically poor.
 
 Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
 The sketch of our permutation test is the following: \newline
@@ -181,8 +181,8 @@ The sketch of our permutation test is the following: \newline
 (b) Sample a random permutation of the class labels, $\pi(y)$. \newline
 (c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
 (d) Repeat (b)-(c) $R$ times. \newline
-(e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed $\mathcal{T}$. Formally: 
-$\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
+(e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed: 
+$\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
 (f) Declare $\mathcal{F}\neq \mathcal{G}$ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
 \bigskip
 
@@ -190,7 +190,7 @@ $\mathbb{P}\{\mathcal{T}_\pi \geq \mathcal{T}\}:=\frac{1}{R} \sum_{\pi} I\{\math
 
 \subsection{Two-Group Tests}
 The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counterexample where equal means do not imply equal distributions). 
-Difference only in means leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
+Difference in means only leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \citep{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
@@ -219,7 +219,7 @@ Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathca
 The accuracy of a predictor, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction for a new data point. 
 It is also known as (the complement of) the \emph{test error}.
 The accuracy of a learning algorithm, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
-It is also known as (the complement of) the \emph{expected test error}
+It is also known as (the complement of) the \emph{expected test error}.
 Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
@@ -348,28 +348,27 @@ The \R code for the simulations can be found in \url{http://www.john-ros.com/per
 \label{sec:simulation_details}
 
 The basic simulation setup is essentially the sampling distribution underlying Fisher's Linear Discriminant Analysis. 
-Each simulation is based on $1,000$ replications. 
 In each replication, we generate $n$ independent samples from a shift class 
 \begin{align}
 \label{eq:distribution}
 \x_i = \mu \y_i + \eta_i,
 \end{align}
-where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of observation $i$, $\mu$ is a $p$-dimensional shift vector, the noise $\eta_i$ is distributed as $\gaussp{p}{0,\Sigma}$, the sample size $n=40$, and the dimension of the data is $p=23$. 
+where $\y_i \in \mathcal{Y}=\set{0,1}$ encodes the class of observation $i$, $\mu$ is a $p$-dimensional shift vector, the measurement, $\eta_i$, is distributed as $\gaussp{p}{0,\Sigma}$.
+The sample size is set to $n=40$, and the dimension of the data set to $p=23$. 
 The covariance $\Sigma=I$. 
-In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift effect is captured by $\mu$. 
-Shifts are dense and equal in all $p$ coordinates of $\mu$.
+
+In this basic setup, reported in Figure~\ref{fig:simulation_1}, the shift is denoted by $\mu$. 
 We set $\mu:=c \, \textbf{e}$ where $\textbf{e}$ is a $p$-vector of ones. 
-We will use $c$ to index the signal's strength.
+This implies that shifts are dense and equal in all $p$ coordinates.
 We use the Mahalanobis norm between means as a measure of signal-to-noise (SNR): 
 $\frac{n}{2}\Vert \mu \Vert_\Sigma^2=\frac{n}{2} \mu' \Sigma^{-1} \mu$.
-We vary $c$ so that $\frac{n}{2}\Vert \mu \Vert_\Sigma^2$ is fixed over various setups, and equals $0$ for no signal, $25$ for intermediate signal, and $100$ for strong signal.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
 We perform $300$ such permutations. 
-We then reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
+We reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
 The reported power is the proportion of replicates where the permutation p-value fell below $0.05$.
-The number of replicates is $1,000$, so that the standard errors of our estimates are no larger than $1.5\%$, and $0.6\%$ under the null. 
+The number of replicates is $1,000$, so that the standard errors of our estimates are no larger than $0.6\%$ under the null, and $1.5\%$ in general. 
 
 
 
@@ -403,7 +402,7 @@ This is most notable for the intermediate signal strength (green triangles).
 		The power of the permutation test with various test statistics. 
 		The power on the x-axis. 
 		Effects are color and shape coded. 
-		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $25$ (green triangle), and $100$ (blue square). 
 		The various statistics on the y-axis. 
 		Their details are given in Table~\ref{tab:collected}. 
 		Simulation details in Section~\ref{sec:simulation_details}.
@@ -432,7 +431,8 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 \begin{figure}[th]
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file9"}
-	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
+	\caption{[TODO: power of svm.cv? And ordering.]
+		\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
 	\label{fig:t_null}
 \end{figure}
 
@@ -598,7 +598,7 @@ It can also be seen that power increases with the number of bootstrap replicatio
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_2}. 
-		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $25$ (green triangle), and $100$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:bootstrap}
@@ -669,7 +669,7 @@ The better power of \emph{svm.CV.c001} leads us to argue that the optimal regula
 		Effects are color and shape coded. 
 		The various statistics on the y-axis. 
 		Their details are given in tables~\ref{tab:collected} and \ref{tab:collected_3}. 
-		Effects vary over $\SNR=0$ (red circle), $100$ (green triangle), and $400$ (blue square). 
+		Effects vary over $\SNR=0$ (red circle), $25$ (green triangle), and $100$ (blue square). 
 		Simulation details in Section~\ref{sec:simulation_details}.
 	} 
 	\label{fig:highdim}
