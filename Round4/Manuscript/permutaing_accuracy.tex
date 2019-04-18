@@ -365,7 +365,7 @@ $\frac{n}{2}\Vert \mu \Vert_\Sigma^2=\frac{n}{2} \mu' \Sigma^{-1} \mu$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
-We perform $300$ such permutations. 
+We perform $300$ such permutations (with one exception, explained in Sec.~\ref{sec:type_i})
 We reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
 The reported power is the proportion of replicates where the permutation p-value fell below $0.05$.
 The number of replicates is $1,000$, so that the standard errors of our estimates are no larger than $0.6\%$ under the null, and $1.5\%$ in general. 
@@ -376,14 +376,11 @@ The number of replicates is $1,000$, so that the standard errors of our estimate
 \label{sec:type_i}
 
 We start with a sanity check. 
-Theory suggests that all test statistics should control their false positive rate. 
-Our simulations confirm this.
-In all our results, such as Figure~\ref{fig:simulation_1}, we encode the null case, where $\mathcal{F}=\mathcal{G}$, by a red circle. 
-Since the red circles are always below the desired $0.05$ error rate then the false positive rate of all test statistics, in all simulations, is controlled. 
+Theory suggests that a (random) permutation test with the identity permutation is slightly conservative, and without the identity, it is slightly liberal.
+Theory also suggests that this bias vanishes with the number of permutations \citep{hemerik_exact_2014}.
+We thus ran the initial simulation setup with $1,000$ permutations, and confirmed that all permutation tests control their false positive rates. 
+This can be seen in Figure~\ref{fig:simulation_1}, where the power under the null (red circles) is no larger than the nominal error rate of $\alpha=0.05$. 
 We may thus proceed and compare the power of each test statistic. 
-
-
-
 
 
 
@@ -398,7 +395,6 @@ This is most notable for the intermediate signal strength (green triangles).
 	\centering
 	\includegraphics[width=0.5\columnwidth]{"art/file2"}
 	\caption{
-		[TODO: verify anti-conservatism.]
 		The power of the permutation test with various test statistics. 
 		The power on the x-axis. 
 		Effects are color and shape coded. 
