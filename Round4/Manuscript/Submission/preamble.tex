@@ -1,0 +1,83 @@
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{todonotes} % for grayed boxes
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[boxruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{lineno}
+\usepackage{tcolorbox}
+%\AtBeginDocument{\let\textlabel\label}
+%\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+\usepackage{wasysym}
+
+%\usepackage[perpage]{footmisc}
+%\renewcommand{\footnote}{\arabic{footnote}}	
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+%\renewcommand{\thefootnote}{\arabic{footnote}}
+
+
+
+%\pagestyle{fancy}
+
+%\providecommand{\keywords}[1]{\textbf{\textit{Keywords:}} #1}
+
+
+\captionsetup[figure]{labelfont=it,textfont={it},textfont=footnotesize}
+\captionsetup[subfigure]{width=0.8\hsize,labelfont=bf,textfont=footnotesize,singlelinecheck=off,justification=raggedright,format=hang}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+
+
+
+
+%% OPTIONAL MACRO DEFINITIONS
+%\def\s{\sigma}
+\newcommand{\set}[1]{\{ #1 \}} % A set
+\newcommand{\indicator}[1]{\mathcal{I}{\set{#1}}} % The indicator function.
+\newcommand{\reals}{\mathbb{R}} % the set of real numbers
+\newcommand{\xS}{\mathcal{X}} % The feature space
+\newcommand{\yS}{\mathcal{Y}} % The feature space
+\newcommand{\expect}[1]{\mathbf{E}\left[ #1 \right]} % The expectation operator
+\newcommand{\acc}{\mathcal{E}} 
+\newcommand{\accEstim}{\hat{\mathcal{E}}} 
+\newcommand{\accZ}{\hat{\mathcal{Z}}} 
+\newcommand{\hyp}{\algo_{\data}} % A hypothesis
+\newcommand{\hypFun}[2]{\algo_{#1}(#2)} % A hypothesis
+\newcommand{\hypEstim}{\algo(\data)} %{\hat{\hyp}} % A hypothesis
+\newcommand{\hypclass}{\mathcal{F}}
+\newcommand{\prob}[1]{Prob( #1 )} % the probability of an event
+\newcommand{\rv}[1]{\mathbf{#1}} % A random variable
+\newcommand{\x}{\rv x} % The random variable x 
+\newcommand{\y}{\rv y} % The random variable x 
+\newcommand{\X}{\rv X} % The random variable x 
+\newcommand{\Y}{\rv Y} % The random variable y
+\newcommand{\gauss}[1]{\mathcal{N}\left(#1\right)} % The Gaussian distribution
+\newcommand{\gaussp}[2]{\mathcal{N}_{#1}\left(#2\right)} % The Gaussian distribution
+\newcommand{\mycaption}{Simulation details in Section\ref{sec:simulation_details}, except the changes in the sub-captions.}
+\newcommand{\argmin}[2]{\mathop{argmin} _{#1}\set{#2}} % The argmin operator
+\newcommand{\argmax}[2]{\mathop{argmax} _{#1}\set{#2}} % The argmin operator
+\newcommand{\R}{\textsf{R }}
+\newcommand{\algo}{\mathcal{A}}
+\newcommand{\data}{\mathcal{S}}
+\newcommand{\measure}{\mathcal{P}}
+\newcommand{\measuren}{\measure_\data}
+\newcommand{\union}{\cup}
+\newcommand{\intersect}{\cap}
+\newcommand{\majority}{\accEstim_{Maj}}
+\newcommand{\statistic}{\mathcal{T}}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand\given[1][]{\:#1\vert\:}
+\newcommand{\SNR}{\frac{n}{2}\Vert \mu \Vert^2_\Sigma}
+
+\newcommand{\citeJR}[1]{\citeauthor{#1} \citep{#1}}
+\newcommand{\citeJRfull}[1]{\citeauthor*{#1} \citep{#1}}
+
+\newcommand{\cue}{\kreuz}
