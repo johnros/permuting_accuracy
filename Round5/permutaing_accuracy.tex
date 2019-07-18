@@ -679,8 +679,6 @@ This is clearly inefficient.
 In V-fold validation scheme, the statistic is the average over all test sets, so the effective sample size is less obvious. 
 We argue that this is still an inefficient use of the data, as seen in the distributed learning literature, where splitting the sample and averaging is less accurate then learning with the whole data \citep{rosenblatt2016optimality}.
 
-The superiority of the Bootstrap over V-fold was independently observed in \cite{yu2007two}. 
-According to these authors, this superiority is due to the larger test-samples when Bootstrapping, compared to V-folding.
 
 
 \subsubsection{Inappropriate Regularization}
@@ -724,7 +722,7 @@ In those cases, we may prefer accuracy tests. Here are some observations for inc
 \paragraph{Test-set size} Larger test-sets reduce the effect of discretization on the power of accuracy-tests.
 \paragraph{Regularize} Regularization proves crucial to detection power in low SNR regimes ($n \approx p$) or under strong correlations. We find that Shrinkage-based Diagonal LDA \citep{pang_shrinkage-based_2009} performs well overall. More research is required on optimal regularization for testing. 
 \paragraph{Resample with Replacement}
-Smoothing the accuracy estimates by cross-validating with replacement (e.g. the bLOO method) improves power for accuracy tests compared to V-Fold. We believe this is primarily due to the smoothing effect. (See \cite{yu2007two} for more discussion).  
+Smoothing the accuracy estimates by cross-validating with replacement (e.g. the bLOO method) improves power for accuracy tests compared to V-Fold. We believe this is primarily due to the smoothing effect. 
 
 
 
@@ -741,8 +739,8 @@ Smoothing the accuracy estimates by cross-validating with replacement (e.g. the 
 Figure~\ref{fig:dependence_1} demonstrates that detecting signal in the direction of the high variance PCs is very different than detecting in the low variance PCs.
 We attribute this phenomenon to regularization.
 Whereas the signal, $\mu$, varies in direction, the regularization of $\hat \Sigma$ does not. 
-Tikhonov regularization of the covariance shrinks estimates more aggressively on the low PCs of the design \citep{hastie_elements_2003}. 
-Regularization might mask the signal if the group mean difference points toward the aggressive shrinking. 
+From ridge regression we know that Tikhonov regularization of the covariance shrinks estimates more aggressively on the low PCs of the design. 
+Signal is thus masked if the difference between group means is the directions of smaller variance. 
 In those cases, unregularized tests dominate the regularized ones.
 
 
