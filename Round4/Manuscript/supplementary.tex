@@ -40,6 +40,8 @@
 \footnotetext{johnros@bgu.ac.il}
 
 
+
+
 \section{Large Sample}
 
 We have focused on the him-dim--small-sample setup because it is appropriate for many problems in neuroimaging and genetics. 
@@ -55,6 +57,36 @@ In particular with respect to the dominance of two-group tests.
 	\label{fig:large-sample}
 \end{figure}
 
+
+
+
+
+\section{Departure From Gaussianity}
+(Figure~\ref{fig:t_null}).
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"file2"}
+		\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
+	\end{subfigure}
+	\begin{subfigure}[t]{.45\columnwidth}
+		\centering
+		\includegraphics[width=1\columnwidth]{"file9"}
+		\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
+	\end{subfigure}
+	\caption{Short memory, AR(1) correlation. 
+		$\Sigma_{k,l}=\rho^{|k-l|}; \rho=0.6$.}
+	\label{fig:dependence_1}
+\end{figure}
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{"file9"}
+	\caption{\textbf{Heavytailed.} $\eta_i$ is $p$-variate t distributed, with $df=3$ .  } 
+	\label{fig:t_null}
+\end{figure}
 
 
 
@@ -382,6 +414,38 @@ It demonstrates that the power disadvantage of accuracy-tests cannot be remedied
 	\caption{\textbf{Tie breaking}: The basic simulation setup with random tie breaking.}
 	\label{fig:file33}
 \end{figure}
+
+
+
+
+\section{Design Choices for Cross Validation}
+We now address several design choices when cross validating, while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
+
+\paragraph{Cross-validate or not?}
+For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, since  it does not inflate the error rates of the accuracy-tests. 
+The underlying intuition is that if the same bias is introduced in all permutations, it will not affect the properties of the permutation test. 
+We will thus be considering both unbiased cross-validated accuracies, and biased resubstitution accuracies.
+
+
+\paragraph{Balanced folding}
+The standard practice in V-fold CV is to constrain the data folds to be balanced, a.k.a.\ stratified \cite[for example]{ojala_permutation_2010}.
+This means that each fold has the same number of samples from each class. 
+We will report results only with balanced folding, mostly because we will conclude that V-fold CV should not be used for our detection problem. 
+
+
+\paragraph{Refolding}
+In V-fold CV, \emph{folding} the data means assigning each observation to one of the $V$ data folds. 
+The standard practice in neuroimaging is to permute labels and refold the data after each permutation. 
+This is done because permuting labels will unbalance the original balanced folding.
+We will adhere to this practice due to its popularity, even though it is computationally more efficient to permute features instead of labels \citep[e.g.][]{golland_permutation_2005} .
+
+
+\paragraph{How many folds}
+Different authors suggest different rules for the number of folds. 
+We fix the number of folds to $V=4$.
+A different number of folds does not change our conclusions. 
+We do not discuss the effect of $V$ because we will ultimately show that V-fold CV is dominated by other cross-validation procedures, and thus, never recommended. 
+
 
 
 
