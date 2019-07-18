@@ -139,7 +139,10 @@ This setup is also reported in the main text.
 Formally, the logistic assumption implies that 
 $P(y=1|x)=\exp(\eta)/[1+\exp(\eta)]$.
 Main-effects and second order interactions imply that 
-$\eta=\beta_0+x'\beta +x'Bx$, for some $p$-vector $\beta$, and symmetric $p \times p$ matrix $B$.
+\begin{align}
+	\eta=\beta_0+x'\beta +x'Bx,
+\end{align}
+for some $p$-vector $\beta$, and symmetric $p \times p$ matrix $B$.
 We also assume $x \sim \mathcal{N}(0,I_{p\times p})$.
 We perform the various tests in the original space, $x$, but also in the $276$~dimensional space of main effects and second order interactions: 
 $$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_p x_p).$$
@@ -148,7 +151,7 @@ From Figure~\ref{fig:logistic-main-and-interactions} we learn that two-group tes
 Was this to be expected, given our conclusions on multivariate shifts?
 In the logistic setup $x_1$ cannot be a shifted version of $x_0$, but their means certainly differ. 
 The larger the main effects, the larger the difference in means.
-This suggests that a main-effect-only model ($B=0$) will be roughly similar to a shift class, and a second-order-interactions-only model may be very different than a shift class.
+This suggests that a main-effect-only model ($B=0$) will be roughly similar to a shift class, and a second-order-interactions-only model ($\beta=0$) may be very different than a shift class.
 To isolate these two cases, we simulate a main-effects-only setup (Fig.\ref{fig:logistic-main-only}), and an interaction-only setup (Fig.\ref{fig:logistic-interactions-only}).
 
 
@@ -268,7 +271,7 @@ Why the GOF tests perform so much better in the augmented space may be the topic
 
 Another example where $x_1$ is not a shifted version of $x_0$ is a mixture class. 
 \cite{golland_permutation_2003} and \cite{golland_permutation_2005} study accuracy-tests using simulation, neuroimaging data, genetic data, and analytically.
-The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies a the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
+The finite Vapnik–Chervonenkis dimension requirement \cite[Sec 4.3]{golland_permutation_2005} implies the problem is low dimensional and prevents the permutation p-value from (asymptotically) concentrating near $1$. 
 They find that the power increases with the size of the test set.
 This is seen in Fig.4 of \cite{golland_permutation_2005}, where the size of the test-set, $K$, governs the discretization. 
 We attribute this to the reduced discretization of the accuracy statistic.
@@ -401,7 +404,7 @@ In this heavytailed setup, the dominance of the two-group tests was preserved, e
 
 \section{Designing The Cross Validation}
 
-We will now address the design of the cross validation scheme, while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased estimate of $\acc_{\algo}$, but rather in the detection of its departure from chance level. 
+We will now address the design of the cross validation scheme, while bearing in mind that unlike the typical supervised learning setup, we are not interested in an unbiased accuracy estimates ($\acc_{\algo}$), but rather, in the detection of its departure from chance level. 
 
 \paragraph{Cross-validate or not?}
 For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, since  it does not inflate the error rates of the accuracy-tests. 
@@ -522,7 +525,7 @@ For this reason, we prefer fixing $\Vert \mu \Vert_\Sigma$.
 \section{R Packages}
 
 Many \R packages were used in this project. 
-The following deserve many thanks:
+We wish to mention and thank the following:
 \cite{mvtnorm,foreach,Hotelling,rpushbullet,sparsediscrim,glmnet,globaltest,kernlab,energy,hdtest}	
 
 
