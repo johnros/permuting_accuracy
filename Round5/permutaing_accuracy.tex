@@ -204,7 +204,7 @@ The accuracy of a predictor, $\acc_{\hyp}$, is defined as the probability of $\h
 It is also known as (the complement of) the \emph{test error}.
 The accuracy of a learning algorithm, $\acc_{\algo}$, is defined as the expected accuracy over all possible data sets $\data$. 
 It is also known as (the complement of) the \emph{expected test error}.
-Formalizing, we denote by $\measure$ the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
+Formalizing, let $\measure$ be the probability measure of $(x, y)$, and by $\measuren$ the joint probability measure of the sample $\data$. 
 We can then write $\acc_{\hyp}:=\int_{(x,y)} \indicator{\hyp(x)=y} \; d\measure,$
 and
 $\acc_{\algo}:=\int_\data \acc_{\algo_\data} \; d\measuren,$
@@ -236,10 +236,10 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accura
 \paragraph{How to Estimate Accuracies?}
 
 Estimating $\accEstim_{\algo}$ requires design choices regarding the estimation of accuracies. 
-In particular, are the accuracies estimated via cross-validation. 
+In particular, are the accuracies estimated via cross-validation?
 For the purpose of statistical testing, bias in $\hat\acc_{\algo}$ is not a problem, since  it does not inflate the error rates of the accuracy-tests. We will thus be considering both unbiased cross-validated accuracies, and biased resubstitution accuracies.
 For V-fold cross-validation, we will use V=4 and will constrain the data folds to be  balanced, a.k.a.\ stratified
-% \cite[for example]{ojala_permutation_2010}. More discussion of the choices can be found in the appendix. 
+More on resampling estimators of accuracy, in the Supplementary Material. 
 
 
 
@@ -323,7 +323,7 @@ $\frac{n}{2}\Vert \mu \Vert_\Sigma^2=\frac{n}{2} \mu' \Sigma^{-1} \mu$.
 
 Having generated the data, we compute each of the test statistics in Table~\ref{tab:collected}.
 We then compute a permutation p-value by permuting the class labels, and recomputing each test statistic. 
-We perform $300$ permutations (with one exception, explained in Sec.~\ref{sec:type_i})
+We perform $300$ permutations (with one exception, explained in Sec.~\ref{sec:type_i}).
 We reject the $\mathcal{F}=\mathcal{G}$ null hypothesis if the permutation p-value is smaller than $0.05$.
 The reported power is the proportion of replicates where the permutation p-value fell below $0.05$.
 We use $R=1,000$  replicates, so that the standard errors of our estimates are $\leq0.6\%$ under the null and $\leq1.5\%$ in general. 
@@ -370,9 +370,6 @@ We focus on high-dim--small-sample configurations because of our motivation in n
 Our results, however, also  hold in the high-dim--large-sample configurations.
 To prove this point, we increase the scale of the problem by one order of magnitude: we fix $p/n$ at $23/40$, and set $n=400, p=230$. 
 The results are qualitatively similar to the high-dim--small-sample in Fig.\ref{fig:simulation_1}, and reported in the online Supplementary Material.
-We also note that further increasing $n$ and $p$ requires tremendous amounts of computation. 
-This is because the number of test statistics computed is in the order of the number of replications, times permutations, times data folds, times statistics to compute. 
-In our current setup, this means roughly $8 \times 10^6$ operations, each scaling polynomially with $n$ and $p$. 
 
 
 \subsection{Departure From Gaussianity}
@@ -391,7 +388,7 @@ We also vary the direction of the signal, $\mu$, and distinguish between signal 
 
 To keep the comparisons fair, we kept $\SNR$ fixed.
 Note that this induces differences in the Euclidean norm between population means $\Vert \mu \Vert_2$ between the two settings.
-In the Supplementary Material we report the power when fixing$\Vert \mu \Vert_2$ instead.
+In the Supplementary Material we report the power when fixing $\Vert \mu \Vert_2$ instead.
 
 %Fixing $\SNR$ implies that the Euclidean norm of $\mu=\mathbb{E}(x_1)-\mathbb{E}(x_0)$ varies with $\Sigma$, with the sample size $n$, the dimension $p$, and with the direction of the signal.
 %An initial intuition may suggest that detecting signal in the low variance PCs is easier than in the high variance PCs. 
@@ -438,8 +435,8 @@ For completeness, we now report power for logistic regression.
 Logistic regression is not a shift class. 
 This is because when fixing $P(y|x)$, there is no marginal distribution of $x$ for which $x_1 $ is a shifted version of $x_0$.
 In Figure~\ref{fig:logistic-main-and-interactions} we report the usual power of our tests for a logistic model with main effects and second order interactions.
-We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions:
-$$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{p}x_{p}).$$
+We analyzed it both in the original space, $x$, and in an augmented space, $\tilde x$ with second order interactions: 
+$\tilde{x}:=\Phi(x)=(x_1,\dots,x_j,\dots,x_p,\dots,x_1x_1,\dots x_jx_{j'},\dots,x_{p}x_{p}).$
 The figure demonstrates that two-group tests still dominate in power, even when the problem departs from the shift class.
 They also confirm that augmenting the feature space takes a toll in power, because many more covariance parameters need to be estimated. 
 Sometimes, this toll is worthwhile, because the signal resides in the augmented space. 
@@ -486,14 +483,10 @@ Intuition suggests we may alleviate the discretization of the accuracy statistic
 An algorithm that samples test sets with replacement is the \emph{leave-one-out bootstrap estimator},  and its derivatives such as the \emph{0.632 bootstrap} \citep[Sec 7.11]{hastie_elements_2003}.
 \begin{definition}[bLOO]
 	\label{def:bloo}
-	The \emph{leave-one-out bootstrap} estimate, bLOO, is the average accuracy on the holdout observations, over all bootstrap samples. 
 	Denote by $\data^b$, a bootstrap sample $b$ of size $n$, sampled with replacement from $\data$. 
 	Also denote by $C^{(i)}$ the index set of bootstrap samples not containing observation $i$.
 	The leave-one-out bootstrap estimate, $\accEstim_{\algo}^{bLOO}$,  is defined as:
 	$\accEstim_{\algo}^{bLOO}:= \frac 1n \sum_{i=1}^{n} \frac{1}{|C^{(i)}|} \sum_{b \in C^{(i)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.$
-	An equivalent formulation, which stresses the Bootstrap nature of the algorithm is the following. 
-	Denoting by $S^{(b)}$ the indexes of observations that are \emph{not} in the bootstrap sample $b$ and are not empty, 
-	$\accEstim_{\algo}^{bLOO} = \frac 1B \sum_{b=1}^{B} \frac{1}{|S^{(b)}|} \sum_{i \in S^{(b)}} \indicator{\hypFun{\data^b}{x_i}=y_i}.$
 \end{definition}
 
 
@@ -549,9 +542,9 @@ It can also be seen that power increases with the number of bootstrap replicatio
 \subsection{High-Dim Regularized Accuracy Tests}
 \label{sec:highdim}
 
-Our best performing tests alleviate the high dimensionality of the problem by regularizing the estimation of $\Sigma$. 
+Our best performing tests regularize the estimation of $\Sigma$. 
 In our high-dim setup regularization adds power, as seen by comparing the non-regularized $T^2$ to its regularized versions.
-Regularization is achieved by thresholding the entries of $\hat{\Sigma}$ (\emph{Goeman}, \emph{Srivastava} statistics), or inflating its diagonal, thus shrinking $\hat \Sigma^{-1}$ (\emph{Schaffer}). 
+Regularization is achieved by thresholding the entries of $\hat{\Sigma}$ (\emph{Goeman}, \emph{Srivastava} statistics), or inflating the diagonal of $\hat \Sigma$ (\emph{Schaffer}). 
 
 Can we explicitly regularize the covariance estimate of a classifier?
 The answer is affirmative and quite a lot of research effort has been devoted to the matter of covariance-regularized classifiers. 
