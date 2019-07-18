@@ -746,7 +746,6 @@ In those cases, unregularized tests dominate the regularized ones.
 
 \subsubsection{Sparse Alternatives}
 \label{sec:sparse}
-In our set of simulations we discussed ``dense'' alternatives, in the sense that all coordinates carry signal.
 Dense alternatives are motivated by neuroimaging where most brain locations in a regions carry signal.
 In a genetic application, a ``sparse'' alternative may be more plausible. 
 In the Supplementary Material we report the power when $\mu$ carries signal in a single coordinate, making it very sparse. 
@@ -759,7 +758,7 @@ This time, however, tests for sparse shifts  (\emph{Cai}, \emph{Simes}) dominate
 \subsubsection{Feature Mapping}
 It may be argued that only accuracy-tests permit the separation between classes in augmented feature spaces, such as in \emph{reproducing kernel Hilbert spaces} (RKHS).
 The \emph{Gretton} statistic \citep{gretton_kernel_2012-1}, is an example where a two-group test is performed after an implicit augmentation of $x$ to some RKHS.
-More generally, the design matrix may be augmented as we pleased, up to computational considerations.
+More generally, the design matrix may be augmented as we please, up to computational considerations.
 We thus disagree with the argument that accuracy-tests have more flexibility than two-group tests. 
 For example, in Section~\ref{sec:logistic} we analyze the data both in the original space and in an augmented space.
 %If one can perform an accuracy test after mapping the original features to some augmented space, then one can also perform a two-group test. 
@@ -777,13 +776,6 @@ Given all the above, we find the popularity of accuracy-tests for signal detecti
 We believe this is due to a reversal of the inference cascade. 
 Researchers first fit a classifier, and then ask if the classes are any different.
 Were they to start by asking if classes are any different, and only then try to classify, then two-group tests would naturally arise as the preferred method. 
-As put by \cite{ramdas_classification_2016}:
-\begin{quote}
-	The recent popularity of machine learning has resulted in the extensive teaching and use
-	of prediction in theoretical and applied communities and the relative lack of awareness or
-	popularity of the topic of Neyman-Pearson style hypothesis testing in the computer science
-	and related ``data science'' communities.
-\end{quote}
 
 
 \section{Supplementary Material}
