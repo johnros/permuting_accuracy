@@ -64,13 +64,9 @@
 
 Many neuroscientists and geneticists detect signal by fitting a classifier and testing whether its prediction accuracy is better than chance. 
 The workflow consists of fitting a classifier, estimating its predictive accuracy using cross-validation, and testing the hypothesis that this accuracy can be attributed to chance alone. 
-This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep{eric2008testing,ojala_permutation_2010,lopez2016revisiting}.
-Examples in the genetics literature include \cite{golub_molecular_1999,slonim_class_2000,
-% radmacher_paradigm_2002,mukherjee_estimating_2003,
-juan_prediction_2004,jiang_calculating_2008,yu2007two}.
-Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009,
-%schreiber2013statistical,olivetti2013kernel,
-varoquaux_assessing_2016}, and the very popular \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}.
+This general idea has been promoted in the statistical literature \citep{friedman2003multivariate}, and separately in the machine-learning literature \citep[e.g.][]{eric2008testing,lopez2016revisiting}.
+Examples in the genetics literature include \cite{golub_molecular_1999,yu2007two,jiang_calculating_2008} and many more. 
+Examples in the neuroscientific literature, which is our motivating use-case, include \cite{golland_permutation_2003,pereira_machine_2009}, the very popular \emph{multivariate pattern analysis} (MVPA) framework in \cite{kriegeskorte_information-based_2006}, and many more. 
 
 To fix ideas, we will adhere to a concrete example.
 In \cite{gilron_quantifying_2016}, the authors seek to detect brain regions that encode differences between vocal and non-vocal stimuli. 
@@ -79,10 +75,7 @@ We call this an \emph{accuracy-test}, because it uses prediction accuracy as a t
 
 This same signal detection task can also be approached as a multivariate \emph{two-group} test.
 Inferring that a region encodes vocal/non-vocal information, is essentially inferring that the spatial distribution of brain activations is different given a vocal/non-vocal stimulus. 
-As put by ~\cite{pereira_machine_2009}: 
-\begin{quote}
-	... the problem of deciding whether the classifier learned to discriminate the classes can be subsumed into the more general question as to whether there is evidence that the underlying distributions of each class are equal or not.
-\end{quote}
+
 A practitioner may thus approach the signal detection problem with a two-group hypothesis test.
 Multivariate two-group hypothesis-tests may be divided into tests for equality of location (i.e. means), and two-sample goodness of fit tests (equality of the distributions, GOF in short).
 The former generalizing the t-test, and the latter (roughly) generalizing Kolmogorov-Smirnov's test.
@@ -119,17 +112,9 @@ Their argument is that the neural-net is able to learn the features that best se
 Their examples, however, are low-dimensional (even if large-sample), and such feature learning may be impossible in high-dimension.
 
 \cite{ramdas_classification_2016} currently offer the only analytic analysis; comparing Hotelling's $T^2$ location test to \emph{Fisher's linear discriminant analysis} (LDA) accuracy-test. 
-By comparing the consistency rates \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate equivalent.
+By comparing the consistency rates \cite{ramdas_classification_2016} conclude LDA and $T^2$ are rate-equivalent.
 Rates, however, are only a first stage when comparing test statistics. 
-
-Asymptotic relative efficiency measures (ARE) are typically used by statisticians to compare between rate-equivalent test statistics \citep{vaart_asymptotic_1998}.
-ARE is the limiting ratio of the sample sizes required by two statistics to achieve similar power. 
-\citet{ramdas_classification_2016} derive the asymptotic power functions of the two test statistics, with which we are able to compute the ARE between Hotelling's $T^2$ (two-group) test and Fisher's LDA (accuracy) test.
-Theorem~14.7 of \cite{vaart_asymptotic_1998} relates asymptotic power functions to ARE.
-Using this theorem and the results of \cite{ramdas_classification_2016} we deduce that the ARE is lower bounded by $2 \pi \approx 6.3$.
-This means that Fisher's LDA requires at least $6.3$ times more samples to achieve the same (asymptotic) power as the $T^2$ test. 
-In this light, the accuracy-test is remarkably inefficient.  
-For comparison, the t-test is only $1.04$ more (asymptotically) efficient than Wilcoxon's rank-sum test \citep{lehmann_parametric_2009}, so that an ARE of $6.3$ is strong evidence in favor of the two-group test. 
+Two statistics may be rate-equivalent, yet one much more efficient than the other. 
 
 We study the power of many accuracy, and two-sample methods, in a large scale simulation study. 
 This allows us to evaluate theoretical results such as \citet{ramdas_classification_2016}, in various small-sample configurations.
@@ -160,12 +145,11 @@ We conclude with a discussion.
 \label{sec:problem_setup}
 
 
-\subsection{Multivariate Testing}
+\paragraph{Multivariate Testing:}
 
 Let $y \in \mathcal{Y}$ be a class encoding. 
 Let $x \in \mathcal{X}$ be a $p$ dimensional feature vector. 
 In our vocal/non-vocal example we have $\mathcal{Y}=\set{0,1}$ and $p=27$, the number of voxels in a brain region so that $\mathcal{X}=\reals^{27}$. 
-
 We denote with $x_y$ a sample of $x$ from group $y$ .
 We denote the distribution of $x_1$ with $\mathcal{F}$ and $x_0$ with $\mathcal{G}$.
 A two-group test amounts to testing whether $\mathcal{F}=\mathcal{G}$.
@@ -174,36 +158,33 @@ The tests are calibrated to have a fixed false positive rate ($\alpha=0.05$).
 The comparison metric between tests is \emph{power}, the probability to infer that $\mathcal{F}\neq\mathcal{G}$.
 
 
-\subsection{From a Test Statistic to a Permutation Test}
+\paragraph{From a Test Statistic to a Permutation Test:}
 
 The multivariate tests we consider rely on fixing some test statistic, $\mathcal{T}$, and comparing its observed value to it's permutation distribution. 
 Tests differ in the statistic they employ.
 We adhere to permutation tests and not parametric inference because in high-dim--small-sample problems central limit approximations are typically poor.
 
-Because we focus on two-group testing under an independent sampling assumption, we know that a label-switching permutation test is valid. 
-The sketch of our permutation test is the following: \newline
-(a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. \newline
-(b) Sample a random permutation of the class labels, $\pi(y)$. \newline
-(c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. \newline
-(d) Repeat (b)-(c) $R$ times. \newline
+The sketch of our permutation test is the following: 
+(a) Fix a test statistic $\mathcal{T}$ with a right tailed rejection region. 
+(b) Sample a random permutation of the class labels, $\pi(y)$. 
+(c) Permute labels and recompute the statistic $\mathcal{T}_\pi$. 
+(d) Repeat (b)-(c) $R$ times. 
 (e) The permutation p-value is the proportion of  $\mathcal{T}_\pi$ larger than the observed: 
-$\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.\newline
+$\frac{1}{R} \sum_{\pi} I\{\mathcal{T}_\pi \geq \mathcal{T}\}$.
 (f) Declare $\mathcal{F}\neq \mathcal{G}$ if the permutation p-value is smaller than $\alpha$, which we set to $\alpha=0.05$.
-\bigskip
 
 
 
-\subsection{Two-Group Tests}
-The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means (this is not a logical equivalence, but rather a prevalent convention. The Behrnes-Fisher problem is a counterexample where equal means do not imply equal distributions). 
-Difference in means only leads to the \emph{shift class} of alternatives, which is by far the most studied class in the statistical literature. 
+\paragraph{Two-Group Tests:}
+The most prevalent interpretation of $\mathcal{F}\neq \mathcal{G}$ is to assume they differ in means, i.e., a \emph{shift class} of alternatives. 
+This is not a logical equivalence, but rather a prevalent convention (the Behrnes-Fisher problem is a counter example where equal means do not imply equal distributions). 
 In his seminal work in 1931, Harold Hotelling proposed the $T^2$ test as a straightforward generalization of the t-test, for testing the equality in means of two multivariate distributions \citep{hotelling_generalization_1931}. 
 For more background see, for example, \cite{anderson_introduction_2003}.
 
-The major difficulty with the $T^2$ statistic is that it requires estimating a covariance matrix, thus introducing $p(p+1)/2=\mathcal{O}(p^2)$ unknown parameters.
-If $n$ is not much larger than $p$, or in low signal-to-noise (SNR), the test is very low powered, as shown by \cite{bai1996effect}. 
-In these cases, high-dimensional versions of the $T^2$ should be applied, which essentially regularize the estimator of $\Sigma$, thus reducing the dimensionality of the problem and improving SNR and power.
+In high-dimension, when $n$ is not much larger than $p$, the $T^2$ test is very low powered \citep{bai1996effect}. 
+Many high-dimensional versions of the $T^2$ test exist, which consist of regularizing the estimator of $\Sigma$.
 Examples of high-dim tests for (dense) shifts include 
-\cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008,chen_two-sample_2010,lopes2011more,ahmad2014u,thulin2014high,feng2015note}.
+\cite{dempster1958high,bai1996effect,schafer_shrinkage_2005,goeman2006testing,srivastava_test_2008}, and many more.
 
 If $\mathbb{E}(x_1)$ differs from $\mathbb{E}(x_0)$ in few coordinates we say the \emph{signal is sparse}.
 Examples of high-dim test statistics for sparse shifts include \cite{cai_two-sample_2013} and \cite{chang2014simulation}.
@@ -218,7 +199,7 @@ As previously mentioned, a classifier's accuracy may also be used as a test stat
 We now explain how an accuracy-test is constructed. 
 
 
-\subsection{Prediction Accuracy as a Test Statistic}
+\paragraph{Prediction Accuracy as a Test Statistic}
 An accuracy-test amounts to using a predictor's accuracy as a test statistic.  
 Denoting a dataset by $\data:=\{(x_i,y_i)\}_{i=1}^n$, a predictor, $\hyp:\mathcal{X} \to \mathcal{Y}$, is the output of a learning algorithm $\algo$ when applied to the dataset $\data$. 
 The accuracy of a predictor, $\acc_{\hyp}$, is defined as the probability of $\hyp$ making a correct prediction for a new data point. 
@@ -254,8 +235,7 @@ Two popular estimates of $\accEstim_{\algo}$ are the \emph{resubstitution accura
 
 
 
-\subsection{How to Estimate Accuracies?}
-\label{sec:considerations}
+\paragraph{How to Estimate Accuracies?}
 
 Estimating $\accEstim_{\algo}$ requires design choices regarding the estimation of accuracies. 
 In particular, are the accuracies estimated via cross-validation. 
